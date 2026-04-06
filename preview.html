@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>VitaGen – Vorschau</title>
+
+  <!-- CSS unverändert -->
+  <link rel="stylesheet" href="style.css">
+  <link id="theme-style" rel="stylesheet" href="styles/classic.css">
+  <!-- <link rel="stylesheet" href="print.css" media="print"> -->
+</head>
+<body>
+
+<!-- Style-Switch -->
+<div class="style-switch">
+  <button data-style="classic.css">Classic</button>
+  <button data-style="classic2.css">Classic2</button>
+  <button data-style="basic.css">Basic</button>
+  <button data-style="basic2.css">Basic2</button>
+  <button data-style="report.css">Report</button>
+  <button data-style="report2.css">Report2</button>
+  <button data-style="modern.css">Modern</button>
+  <button data-style="modern2.css">Modern2</button>
+  <button data-style="headerbar.css">H-bar</button>
+  <button data-style="headerbarlight.css">H-light</button>
+  <button data-style="simmons.css">Simmons</button>
+  <button data-style="simmons2.css">Simmons2</button>
+  <button data-style="crosser.css">Crosser</button>
+  <button data-style="crosser2.css">Crosser2</button>
+</div>
+
+<hr>
+
+<!-- Buttons -->
+<div style="margin-top:10px; text-align:center;">
+  <button id="backBtn" style="padding: 8px 16px; font-size: 14px; background-color:#777; color:white; border:none; border-radius:4px; cursor:pointer;">
+    ← Zurück zur Eingabe
+  </button>
+</div>
+
+<div style="margin-top:10px; text-align:center;">
+  <button id="printBtn" style="padding: 8px 16px; font-size: 14px; background-color:#445b87; color:white; border:none; border-radius:4px; cursor:pointer;">
+    🖨 Druckvorschau
+  </button>
+</div>
+
+<div style="margin-top:10px; text-align:center;">
+  <button id="buyBtn" style="padding: 10px 20px; font-size: 16px; background-color:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
+    Kaufen
+  </button>
+</div>
+
+<!-- Modal -->
+<div id="buyModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color: rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
+  <div style="background:white; padding:20px; border-radius:8px; max-width:400px; width:90%;">
+    <h3>Bewerbung kaufen & herunterladen</h3>
+    <label>Name:<br><input type="text" id="buyerName" style="width:100%;"></label><br><br>
+    <label>Email:<br><input type="email" id="buyerEmail" style="width:100%;"></label><br><br>
+    
+    <label>Zahlungsart:</label><br>
+    <select id="paymentMethod" style="width:100%; padding:5px;">
+      <option value="card">Kreditkarte</option>
+      <option value="twint">Twint</option>
+      <option value="invoice">Rechnung</option>
+    </select><br><br>
+    
+    <button id="payBtn" style="padding:10px 20px; background-color:#007bff; color:white; border:none; border-radius:4px; cursor:pointer;">Jetzt bezahlen</button>
+    <button onclick="document.getElementById('buyModal').style.display='none';" style="padding:10px 20px; background-color:#ccc; border:none; border-radius:4px; cursor:pointer; margin-left:10px;">Abbrechen</button>
+  </div>
+</div>
+
+<!-- Vorschau Wrapper -->
+<div id="preview-wrapper">
+  <div id="preview">
+    <div class="watermark">VORSCHAU – PREVIEW</div>
+
+    <!-- Deckblatt -->
+    <div class="cover">
+      <h1>Bewerbung</h1>
+      <h3 id="pv-posten"></h3>
+      <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:block; margin:10px auto; max-width:250px; height:auto; border-radius:4px;">
+      <h4 id="pv-name">||</h4>
+      <h5 id="pv-adresse">||</h5>
+      <h5 id="pv-kontakt">||</h5>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Motivationsschreiben -->
+    <div class="anschreiben">
+      <div class="header">
+        <div class="adresse" id="pv-arbeitgeber">
+          Firma<br>Straße<br>Ort
+        </div>
+        <div class="datum" id="pv-datum">01.01.2026</div>
+      </div>
+
+      <h2 id="pv-funktion"></h2>
+      <p id="pv-stichwoerter"></p>
+      <p id="pv-stichwoerter2"></p>
+      <br>
+      <p id="pv-stichwoerter3"></p>
+      <br><br>
+
+      <footer>
+        <p>_________________________<br><span id="pv-unterschrift">Max Mustermann</span></p>
+      </footer>
+    </div>
+
+  </div>
+</div>
+
+<script src="preview.js"></script>
+</body>
+</html>
