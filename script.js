@@ -33,7 +33,7 @@ if (fileInput) {
       aiImageCount = 0;
       updateCounter();
 
-     container.innerHTML = `
+      container.innerHTML = `
   <img src="${e.target.result}" 
        onclick="selectImage(this)"
        style="width:150px; height:auto; display:block; margin:10px auto; cursor:pointer;">
@@ -75,7 +75,8 @@ if (aiBtn) {
 
       console.log("Sende Datei...");
 
-      const response = await fetch("http://127.0.0.1:3000/generate-ai-photo", {
+      // ✅ HIER ANGEPASST
+      const response = await fetch("https://motivation-backend-production-2800.up.railway.app/generate-ai-photo", {
         method: "POST",
         body: formData
       });
@@ -123,12 +124,8 @@ function selectImage(element) {
 
   element.style.border = "3px solid green";
 
-  // 👉 bestehende Daten holen
   let data = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
-
-  // 👉 Bild speichern
   data.foto = element.src;
-
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
 
   console.log("Bild gespeichert:", data.foto);
@@ -167,12 +164,12 @@ if (textBtn) {
       return;
     }
 
-    // Button Status ändern
     textBtn.disabled = true;
     textBtn.innerText = "Generiere Text...";
 
     try {
-      const response = await fetch("http://127.0.0.1:3000/generate-text", {
+      // ✅ HIER ANGEPASST
+      const response = await fetch("https://motivation-backend-production-2800.up.railway.app/generate-text", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -198,7 +195,6 @@ if (textBtn) {
       alert("Fehler beim Generieren");
     }
 
-    // Button zurücksetzen
     textBtn.disabled = false;
     textBtn.innerText = "🛠 KI Hilfe zum Fließtext erstellen";
   });
