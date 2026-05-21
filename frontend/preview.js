@@ -1,23 +1,109 @@
-console.log("preview.js geladen");
+console.log("✅ preview.js geladen");
 
 // =============================
-// === Style-Switching
+// DATEN AUS LOCALSTORAGE LADEN
+// =============================
+const savedData = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
+console.log("📦 Daten aus localStorage:", savedData);
+
+if (Object.keys(savedData).length === 0) {
+  console.warn("⚠️ localStorage ist LEER – keine Formulardaten gefunden!");
+} else {
+  console.log("✅ Daten gefunden, Felder werden befüllt");
+}
+
+// =============================
+// VORSCHAU BEFÜLLEN
+// =============================
+function updatePreview(data) {
+  console.log("🔄 updatePreview() aufgerufen mit:", data);
+
+  if (!data) {
+    console.warn("⚠️ updatePreview: data ist null/undefined");
+    return;
+  }
+
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = value || "";
+      console.log(`✅ setText("${id}"):`, value || "(leer)");
+    } else {
+      console.warn(`⚠️ Element "${id}" NICHT gefunden`);
+    }
+  };
+
+  setText("pv-name",         data.name);
+  setText("pv-adresse",      data.adresse);
+  setText("pv-kontakt",      data.kontakt);
+  setText("pv-kontakt-text", data.kontakt);
+  setText("pv-posten",       data.posten);
+  setText("pv-posten-cover", data.posten);
+  setText("pv-funktion",     data.funktion);
+  setText("pv-stichwoerter", data.stichwoerter);
+  setText("pv-stichwoerter2",data.stichwoerter2);
+  setText("pv-stichwoerter3",data.stichwoerter3);
+  setText("pv-datum",        data.datum);
+  setText("pv-unterschrift", data.unterschrift);
+  setText("pv-hallo",        data.hallo);
+  setText("pv-adieu",        data.adieu);
+
+  // Adresse mit Zeilenumbruch
+  const adresseEl = document.getElementById("pv-adresse");
+  if (adresseEl) {
+    adresseEl.innerHTML = (data.adresse || "").replace(/\n/g, "<br>");
+    console.log("✅ pv-adresse (HTML):", adresseEl.innerHTML);
+  }
+
+  // Arbeitgeber mit Zeilenumbruch
+  const arbeitgeberEl = document.getElementById("pv-arbeitgeber");
+  if (arbeitgeberEl) {
+    arbeitgeberEl.innerHTML = (data.arbeitgeber || "").replace(/\n/g, "<br>");
+    console.log("✅ pv-arbeitgeber (HTML):", arbeitgeberEl.innerHTML);
+  }
+
+  // Foto
+  const img = document.getElementById("pv-foto");
+  if (img) {
+    if (data.foto) {
+      img.src = data.foto;
+      img.style.display = "block";
+      console.log("✅ Foto gesetzt (base64 Länge):", data.foto.length);
+    } else {
+      img.style.display = "none";
+      console.warn("⚠️ Kein Foto in den Daten");
+    }
+  } else {
+    console.warn("⚠️ pv-foto Element NICHT gefunden");
+  }
+}
+
+updatePreview(savedData);
+
+// =============================
+// STYLE-SWITCHING
 // =============================
 const themeLink = document.getElementById("theme-style");
 const buttons = document.querySelectorAll(".style-switch button");
 
+console.log("🎨 themeLink:", themeLink ? "gefunden" : "NICHT gefunden");
+console.log("🎨 Style-Buttons gefunden:", buttons.length);
+
 if (themeLink) {
   const savedStyle = localStorage.getItem("vitagen_style");
+  console.log("🎨 Gespeicherter Style:", savedStyle);
+
   if (savedStyle) {
     themeLink.href = "styles/" + savedStyle;
+    console.log("🎨 Style gesetzt:", themeLink.href);
   }
+
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       const file = button.dataset.style;
+      console.log("🎨 Style-Button geklickt:", file);
       themeLink.href = "styles/" + file;
       localStorage.setItem("vitagen_style", file);
-
-      // Aktiven Button markieren
       buttons.forEach(btn => btn.classList.remove("active"));
       button.classList.add("active");
     });
@@ -25,130 +111,80 @@ if (themeLink) {
 }
 
 // =============================
-// === Vorschau-Daten aus localStorage
+// ZURÜCK BUTTON
 // =============================
-const savedData = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
-
-// =============================
-// === Funktion: Update Preview
-// =============================
-function updatePreview(data) {
-  if (!data) return;
-
-  const setText = (id, value) => {
-    const el = document.getElementById(id);
-    if (el) el.textContent = value || "";
-  };
-
-  // Basisinformationen
-  setText("pv-adresse", data.adresse);
-  setText("pv-kontakt", data.kontakt);
-  setText("pv-kontakt-text", data.kontakt);
-  setText("pv-name", data.name);
-  setText("pv-posten", data.posten);
-  setText("pv-posten-cover", data.posten);
-  setText("pv-funktion", data.funktion); // Korrekt: Funktion statt posten
-  setText("pv-text", data.text);
-  setText("pv-stichwoerter", data.stichwoerter);
-  setText("pv-stichwoerter2", data.stichwoerter2);
-  setText("pv-stichwoerter3", data.stichwoerter3);
-  setText("pv-hallo", data.hallo);
-  setText("pv-adieu", data.adieu);
-  setText("pv-datum", data.datum);
-  setText("pv-unterschrift", data.unterschrift);
-
-  // Adresse mit Zeilenumbruch
-  const adresseEl = document.getElementById("pv-adresse");
-  if (adresseEl) {
-    adresseEl.innerHTML = (data.adresse || "").replace(/\n/g, "<br>");
-  }
-
-  // Arbeitgeber mit Zeilenumbruch
-  const arbeitgeberEl = document.getElementById("pv-arbeitgeber");
-  if (arbeitgeberEl) {
-    arbeitgeberEl.innerHTML = (data.arbeitgeber || "").replace(/\n/g, "<br>");
-  }
-
-  // Optionaler Fliesstext
-  const textEl = document.getElementById("pv-text");
-  if (textEl) {
-    textEl.textContent = data.stichwoerter || "";
-  }
-
-  // Bewerbungsfoto
-  const img = document.getElementById("pv-foto");
-  if (img) {
-    if (data.foto) {
-      img.src = data.foto;
-      img.style.display = "block";
-    } else {
-      img.style.display = "none";
-    }
-  }
-}
-
-// Vorschau beim Laden setzen
-updatePreview(savedData);
-
-// =============================
-// === Buttons
-// =============================
-
-// Zurück-zur-Eingabe
 const backBtn = document.getElementById("backBtn");
 if (backBtn) {
+  console.log("⬅️ backBtn gefunden");
   backBtn.addEventListener("click", () => {
+    console.log("⬅️ Zurück zur Eingabe geklickt");
     window.location.href = "formular.html";
   });
+} else {
+  console.warn("⚠️ backBtn NICHT gefunden");
 }
 
-// Druckvorschau
+// =============================
+// DRUCK BUTTON
+// =============================
 const printBtn = document.getElementById("printBtn");
 if (printBtn) {
+  console.log("🖨 printBtn gefunden");
   printBtn.addEventListener("click", () => {
+    console.log("🖨 Druckvorschau geklickt");
     window.print();
   });
+} else {
+  console.warn("⚠️ printBtn NICHT gefunden");
 }
 
 // =============================
-// === Live-Update für Feld "Funktion"
+// KAUFEN / PDF BUTTON
 // =============================
-const inputFunktion = document.getElementById("funktion");
-const pvFunktion = document.getElementById("pv-funktion");
+const payBtn = document.getElementById("payBtn");
+if (payBtn) {
+  console.log("💳 payBtn gefunden");
+  payBtn.addEventListener("click", async () => {
+    console.log("💳 Bezahlen Button geklickt");
 
-if (inputFunktion && pvFunktion) {
-  // Gespeicherten Wert beim Laden setzen
-  pvFunktion.textContent = savedData.funktion || "||";
+    const htmlContent = document.getElementById("preview")?.innerHTML;
+    const stylePath = document.getElementById("theme-style")?.getAttribute("href");
 
-  // Live-Update beim Tippen
-  inputFunktion.addEventListener("input", () => {
-    pvFunktion.textContent = inputFunktion.value.trim() || "||";
+    console.log("📤 Sende an /generate-pdf ...");
+    console.log("📄 stylePath:", stylePath);
+
+    try {
+      const response = await fetch("/generate-pdf", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ htmlContent, stylePath })
+      });
+
+      console.log("📥 Response Status:", response.status);
+
+      if (!response.ok) {
+        const errText = await response.text();
+        console.error("❌ /generate-pdf Fehler:", errText);
+        alert("PDF Fehler: " + errText);
+        return;
+      }
+
+      const blob = await response.blob();
+      console.log("✅ PDF Blob erhalten, Grösse:", blob.size);
+
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Bewerbung.pdf";
+      a.click();
+      window.URL.revokeObjectURL(url);
+      console.log("✅ PDF Download gestartet");
+
+    } catch (err) {
+      console.error("❌ PDF Fehler:", err);
+      alert("Fehler beim PDF erstellen");
+    }
   });
+} else {
+  console.warn("⚠️ payBtn NICHT gefunden");
 }
-
-document.getElementById("payBtn").addEventListener("click", async () => {
-
-  const htmlContent = document.getElementById("preview").innerHTML;
-  const stylePath = document.getElementById("theme-style").getAttribute("href");
-
-  const response = await fetch("/generate-pdf", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      htmlContent,
-      stylePath,
-    }),
-  });
-
-  const blob = await response.blob();
-  const url = window.URL.createObjectURL(blob);
-
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "Bewerbung.pdf";
-  a.click();
-
-  window.URL.revokeObjectURL(url);
-});
