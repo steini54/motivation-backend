@@ -21,7 +21,7 @@ app.use(express.static("frontend"));
 
 // Test
 app.get("/", (req, res) => {
-  res.send("Backend läuft ✅");
+  res.redirect("/formular.html");
 });
 
 // ==============================
