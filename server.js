@@ -17,6 +17,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 app.use(cors());
 app.use(bodyParser.json());
+app.use(express.static("frontend"));
 
 // Test
 app.get("/", (req, res) => {
