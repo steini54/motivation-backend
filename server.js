@@ -141,36 +141,89 @@ app.get("/", (req, res) => {
 // ==============================
 // KI FOTO
 // ==============================
+// app.post("/generate-ai-photo", upload.single("photo"), async (req, res) => {
+//   console.log("=== KI FOTO REQUEST ===");
+//   try {
+//     if (!req.file) return res.status(400).json({ error: "Kein Bild erhalten" });
+
+//     const formData = new FormData();
+//     formData.append("model", "gpt-image-1");
+//     formData.append("prompt", `
+// You are editing a professional portrait photo for a job application (Bewerbungsfoto).
+
+// YOUR ONLY TASK: Replace the background with a clean, neutral, light gray or soft white studio background.
+
+// ABSOLUTE RULES — these must be followed exactly:
+// 1. The person's face must remain 100% identical — same features, skin tone, expression, age, and details.
+// 2. The person's hair must remain exactly the same — same color, style, and shape.
+// 3. The person's clothing must remain exactly the same — same colors, style, and fit.
+// 4. The person's body, posture, and proportions must not change at all.
+// 5. Do NOT add any effects, filters, or enhancements to the person.
+// 6. Do NOT retouch, smooth, or alter the face in any way.
+// 7. Do NOT change the zoom level, crop, or framing.
+// 8. ONLY replace what is behind the person with a soft neutral studio background (light gray or off-white).
+// 9. The result must look like a professional passport or ID photo background.
+// 10. Keep the lighting on the person natural and unchanged.
+
+// The person must look IDENTICAL to the original — only the background changes.
+// `);
+//     formData.append("size", "1024x1536");
+//     formData.append("image", req.file.buffer, {
+//       filename: "upload.png",
+//       contentType: req.file.mimetype
+//     });
+
+//     const response = await fetch("https://api.openai.com/v1/images/edits", {
+//       method: "POST",
+//       headers: { "Authorization": `Bearer ${process.env.OPENAI_API_KEY}` },
+//       body: formData
+//     });
+
+//     const data = await response.json();
+//     console.log("OpenAI Antwort:", data);
+
+//     const generatedImage = data?.data?.[0]?.b64_json;
+//     if (!generatedImage) return res.status(500).json({ error: "Kein Bild erhalten", details: data });
+
+//     res.json({ aiFoto: `data:image/png;base64,${generatedImage}` });
+
+//   } catch (err) {
+//     console.error("KI FOTO FEHLER:", err);
+//     res.status(500).json({ error: "KI Fehler" });
+//   }
+// });
+// ==============================
+// KI FOTO
+// ==============================
 app.post("/generate-ai-photo", upload.single("photo"), async (req, res) => {
   console.log("=== KI FOTO REQUEST ===");
   try {
     if (!req.file) return res.status(400).json({ error: "Kein Bild erhalten" });
 
+    // IMPORTANT: OpenAI's dall-e-2 /images/edits endpoint expects a square PNG image (256x256, 512x512, or 1024x1024).
+    // Your input image might need to be preprocessed to fit these requirements.
+    // If your input is not square, the API might crop or resize it automatically,
+    // which could affect framing.
+
     const formData = new FormData();
-    formData.append("model", "gpt-image-1");
+    formData.append("model", "dall-e-2"); // Use dall-e-2 for image edits
+
     formData.append("prompt", `
-You are editing a professional portrait photo for a job application (Bewerbungsfoto).
-
-YOUR ONLY TASK: Replace the background with a clean, neutral, light gray or soft white studio background.
-
-ABSOLUTE RULES — these must be followed exactly:
-1. The person's face must remain 100% identical — same features, skin tone, expression, age, and details.
-2. The person's hair must remain exactly the same — same color, style, and shape.
-3. The person's clothing must remain exactly the same — same colors, style, and fit.
-4. The person's body, posture, and proportions must not change at all.
-5. Do NOT add any effects, filters, or enhancements to the person.
-6. Do NOT retouch, smooth, or alter the face in any way.
-7. Do NOT change the zoom level, crop, or framing.
-8. ONLY replace what is behind the person with a soft neutral studio background (light gray or off-white).
-9. The result must look like a professional passport or ID photo background.
-10. Keep the lighting on the person natural and unchanged.
-
-The person must look IDENTICAL to the original — only the background changes.
+A professional portrait photo for a job application (Bewerbungsfoto).
+The person in the photo must remain absolutely identical to the original in every detail: face, facial features, skin tone, expression, age, hair (color, style, shape), clothing (colors, style, fit), body, posture, and proportions.
+Do NOT alter the person in any way. Do NOT apply any retouching, smoothing, or filters to the person.
+Do NOT change the zoom level, crop, or framing of the person.
+The ONLY change allowed is to replace the current background with a clean, neutral, light gray or soft white studio background.
+The result must look like a professional passport or ID photo background.
+Maintain the original natural lighting on the person.
 `);
-    formData.append("size", "1024x1536");
+    formData.append("size", "1024x1024"); // Changed to 1024x1024 to match DALL-E 2 square requirement
+                                       // NOTE: Your input image also needs to be this size and square.
+
     formData.append("image", req.file.buffer, {
       filename: "upload.png",
-      contentType: req.file.mimetype
+      contentType: req.file.mimetype // Ensure this is 'image/png' if you're sending PNG,
+                                     // or handle conversion if the original is JPG.
     });
 
     const response = await fetch("https://api.openai.com/v1/images/edits", {
@@ -189,10 +242,9 @@ The person must look IDENTICAL to the original — only the background changes.
 
   } catch (err) {
     console.error("KI FOTO FEHLER:", err);
-    res.status(500).json({ error: "KI Fehler" });
+    res.status(500).json({ error: "KI Fehler", details: err.message });
   }
 });
-
 // ==============================
 // KI TEXT
 // ==============================
