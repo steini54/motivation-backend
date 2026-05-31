@@ -209,21 +209,51 @@ app.post("/generate-ai-photo", upload.single("photo"), async (req, res) => {
     formData.append("model", "dall-e-2"); // Use dall-e-2 for image edits
 
     formData.append("prompt", `
-A professional portrait photo for a job application (Bewerbungsfoto).
-The person in the photo must remain absolutely identical to the original in every detail: face, facial features, skin tone, expression, age, hair (color, style, shape), clothing (colors, style, fit), body, posture, and proportions.
-Do NOT alter the person in any way. Do NOT apply any retouching, smoothing, or filters to the person.
-Do NOT change the zoom level, crop, or framing of the person.
-The ONLY change allowed is to replace the current background with a clean, neutral, light gray or soft white studio background.
-The result must look like a professional passport or ID photo background.
-Maintain the original natural lighting on the person.
+Create a professional LinkedIn and job application portrait from the uploaded photo.
+
+IMPORTANT REQUIREMENTS:
+
+The person must remain the same individual:
+- Keep the exact same face and facial features.
+- Keep the same skin tone and complexion.
+- Keep the same age and natural appearance.
+- Keep the same hairstyle and hair color.
+- Keep the same eye color and facial characteristics.
+- Do not make the person look younger or older.
+- Do not change ethnicity or identity.
+- Maintain a natural and realistic appearance.
+
+Professional Enhancement:
+- Upgrade the overall portrait to a high-quality professional LinkedIn and corporate headshot.
+- Dress the person in professional business attire suitable for office, corporate, engineering, management, IT, and professional job applications.
+- Use elegant business clothing such as a suit jacket, blazer, dress shirt, or other professional attire appropriate for LinkedIn.
+- Ensure the clothing looks realistic and naturally fitted.
+
+Background:
+- Replace the background with a clean professional studio background.
+- Use neutral light gray, soft white, or modern corporate office-style background.
+- Keep the background simple, clean, and distraction-free.
+
+Photo Quality:
+- Improve image quality, sharpness, lighting, and professionalism.
+- Maintain natural skin texture.
+- Do not over-retouch the face.
+- Do not apply beauty filters.
+- Keep the person looking authentic and trustworthy.
+
+Composition:
+- Keep the original pose and framing as much as possible.
+- Ensure the result looks like a premium LinkedIn profile photo and a professional photo suitable for CVs, motivation letters, resumes, job applications, and corporate profiles.
+
+The final image should look like a professional studio headshot while preserving the person's real identity, age, facial features, and skin tone.
 `);
     formData.append("size", "1024x1024"); // Changed to 1024x1024 to match DALL-E 2 square requirement
-                                       // NOTE: Your input image also needs to be this size and square.
+    // NOTE: Your input image also needs to be this size and square.
 
     formData.append("image", req.file.buffer, {
       filename: "upload.png",
       contentType: req.file.mimetype // Ensure this is 'image/png' if you're sending PNG,
-                                     // or handle conversion if the original is JPG.
+      // or handle conversion if the original is JPG.
     });
 
     const response = await fetch("https://api.openai.com/v1/images/edits", {
