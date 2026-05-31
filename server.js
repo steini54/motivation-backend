@@ -206,7 +206,7 @@ app.post("/generate-ai-photo", upload.single("photo"), async (req, res) => {
     // which could affect framing.
 
     const formData = new FormData();
-    formData.append("model", "dall-e-2"); // Use dall-e-2 for image edits
+    formData.append("model", "gpt-image-1"); 
 
     formData.append("prompt", `
 Create a professional LinkedIn and job application portrait from the uploaded photo.
