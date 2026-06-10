@@ -1,16 +1,270 @@
-@import url("./theme-base.css");
+/* =========================================================
+   GRUNDLAYOUT
+   ========================================================= */
 
-#preview {
-  --accent: #183b56;
-  --accent-soft: #dfeaf1;
-  --heading-font: "Segoe UI", Arial, sans-serif;
+body {
+  font-family: Calibri, sans-serif;
+  background: #fff;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  line-height: 2.0;
 }
 
-#preview .cover::before,
-#preview .anschreiben::before {
-  content: "";
+/* =========================================================
+   WRAPPER
+   ========================================================= */
+
+#preview-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; 
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   A4-PREVIEW
+   ========================================================= */
+
+#preview {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+/* =========================================================
+   DECKBLATT
+   ========================================================= */
+
+.cover {
+  background: #445b87;
+  width: 100%;
+  height: 297mm;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cover * {
+  color: #fff !important;
+}
+
+.cover h1 {
+  font-size: 30pt;
+  font-weight: 100;
+  
+  margin: 0 0 0 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.cover #pv-posten {
+ font-size: 28pt;
+  font-weight: 200;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+	
+.cover #pv-name {
+ font-size: 20pt;
+  font-weight: 250;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+h2 {
+  text-align: center;
+  color: white;
+  margin: 30px 0 15px;
+  background: #445b87;
+  border: 1px solid #445b87;
+  border-radius: 4px;
+  display:block;
+  box-sizing: border-box;
+}
+
+h2::before {
   position: absolute;
-  inset: 0 0 auto;
-  height: 34px;
-  background: var(--accent);
+  left: 0;
+  top: 0;
+  font-size: 26px;
+}
+
+h5 {
+ font-size: 12pt;
+  font-weight: 250;
+  color: #fff;
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.anschreiben {
+  padding: 30mm 25mm 25mm 25mm;
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+}
+/* =========================================================
+   ÜBERSCHRIFTEN (NICHT DECKBLATT)
+   ========================================================= */
+/* =========================================================
+   ALLGEMEINE SCHRIFTEN & FARBEN
+   ========================================================= */
+
+h1 {
+    text-align: center;
+	color: white;
+}
+
+p, ul, li {
+  color: #000;
+}
+
+/* =========================================================
+   LEBENSLAUF BEREICH
+   ========================================================= */
+
+p {
+  line-height: 1.4;
+  font-size: 11.5pt;
+  margin: 0 0 4px 0;
+}
+
+/* =============================
+   NEUE EINTRAGS-OPTIK
+   ============================= */
+
+.pv-entry {
+  margin-bottom: 22px;
+  padding-bottom: 12px;
+  line-height: 1.4;	
+}
+
+.pv-entry:last-child {
+  border-bottom: none;
+}
+
+/* Titelzeile */
+.pv-row {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.pv-row span:first-child {
+  flex: 1;
+}
+
+/* Datum */
+.pv-date {
+  text-align: right;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* =========================================================
+   DRUCKANSICHT
+   ========================================================= */
+
+@media print { 
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  button,
+  .style-switch,
+  .navigation,
+  .top-buttons {
+    display: none !important;
+  }
+
+  html, body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #preview, #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+  }
+
+   /* =============================
+     Deckblatt
+     ============================= */
+
+  .cover {
+    width: 210mm;
+    height: 297mm;
+    background: #445b87;
+    page-break-after: always;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* =============================
+     Anschreiben Seite
+     ============================= */
+
+  .anschreiben {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
+  }
+
+  /* =============================
+     Seitenumbruch Utility
+     ============================= */
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* =============================
+     Content nicht splitten
+     ============================= */
+
+  .pv-entry {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
 }

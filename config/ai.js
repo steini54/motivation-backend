@@ -1,4 +1,3 @@
-const SUPPORTED_AI_PROVIDERS = new Set(["gemini", "openai"]);
 const DEFAULT_AI_PROVIDER = "gemini";
 
 function getAiProvider(env = process.env) {
@@ -6,14 +5,13 @@ function getAiProvider(env = process.env) {
 }
 
 function validateAiProvider(provider) {
-  return SUPPORTED_AI_PROVIDERS.has(provider)
+  return provider === DEFAULT_AI_PROVIDER
     ? []
-    : [`AI_PROVIDER must be one of: ${[...SUPPORTED_AI_PROVIDERS].join(", ")}`];
+    : ["AI_PROVIDER must be gemini"];
 }
 
 module.exports = {
   DEFAULT_AI_PROVIDER,
-  SUPPORTED_AI_PROVIDERS,
   getAiProvider,
   validateAiProvider,
 };

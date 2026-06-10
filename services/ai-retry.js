@@ -1,16 +1,30 @@
 const DEFAULT_RETRY_ATTEMPTS = 3;
 const DEFAULT_RETRY_BASE_DELAY_MS = 1500;
+const TRANSIENT_NETWORK_CODES = new Set([
+  "EAI_AGAIN",
+  "ECONNRESET",
+  "ENETUNREACH",
+  "ETIMEDOUT",
+  "UND_ERR_CONNECT_TIMEOUT",
+  "UND_ERR_HEADERS_TIMEOUT",
+  "UND_ERR_SOCKET",
+]);
+
+function getAiErrorCode(error) {
+  return error?.code || error?.cause?.code || null;
+}
 
 function isTransientAiError(error) {
   const status = Number(error?.status);
+  const code = getAiErrorCode(error);
 
   return (
     status === 408 ||
     status === 503 ||
     status === 504 ||
     error?.name === "AbortError" ||
-    error?.code === "ETIMEDOUT" ||
-    error?.code === "EMPTY_AI_RESPONSE"
+    TRANSIENT_NETWORK_CODES.has(code) ||
+    code === "EMPTY_AI_RESPONSE"
   );
 }
 
@@ -44,6 +58,7 @@ async function withAiRetry(
 module.exports = {
   DEFAULT_RETRY_ATTEMPTS,
   DEFAULT_RETRY_BASE_DELAY_MS,
+  getAiErrorCode,
   isTransientAiError,
   withAiRetry,
 };

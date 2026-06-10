@@ -79,6 +79,15 @@ test("every preview theme is served as CSS", async () => {
         const response = await fetch(`${url}/styles/${theme}`);
         assert.equal(response.status, 200, theme);
         assert.match(response.headers.get("content-type"), /^text\/css/);
+
+        const productionPathResponse = await fetch(
+          `${url}/bewerbungs-generator/motivation/styles/${theme}`
+        );
+        assert.equal(productionPathResponse.status, 200, theme);
+        assert.match(
+          productionPathResponse.headers.get("content-type"),
+          /^text\/css/
+        );
       }
     }
   );
@@ -293,6 +302,41 @@ test("AI capacity errors return a retryable service response", async () => {
       assert.deepEqual(await response.json(), {
         error:
           "The AI model is temporarily busy. Please wait a moment and try again.",
+      });
+    }
+  );
+});
+
+test("AI network connection timeouts return a timeout response", async () => {
+  const timeoutService = {
+    ...service,
+    async generateApplicationText() {
+      throw new TypeError("fetch failed", {
+        cause: { code: "UND_ERR_CONNECT_TIMEOUT" },
+      });
+    },
+  };
+
+  await withServer(
+    createApp({
+      aiService: timeoutService,
+      aiProvider: "gemini",
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/generate-text`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stichpunkte: "Teamarbeit",
+          funktion: "Projektleiter",
+        }),
+      });
+
+      assert.equal(response.status, 504);
+      assert.deepEqual(await response.json(), {
+        error: "The AI service timed out. Please try again.",
       });
     }
   );

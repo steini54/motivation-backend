@@ -1,14 +1,241 @@
-@import url("./theme-base.css");
-
-#preview {
-  --accent: #22354d;
+/* ============================= 
+   Grundlayout
+   ============================= */
+body {
+  font-family: Times New Roman, serif;
+  color: #333;
+  background: #fff;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  line-height: 2.1;
 }
 
-#preview .cover::before,
-#preview .anschreiben::before {
-  content: "";
-  position: absolute;
-  inset: 28px;
-  border: 1px solid #bdc6cf;
-  pointer-events: none;
+/* =============================
+   Wrapper
+   ============================= */
+#preview-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+/* =============================
+   Preview-Container (A4)
+   ============================= */
+#preview {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: left;
+}
+
+/* =============================
+   Deckblatt
+   ============================= */
+.cover {
+  background: #e8f7fa;
+  width: 100%;
+  min-height: 297mm;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.cover h1 {
+  font-size: 28pt;
+  font-weight: 200;
+  color: #031045;
+  margin-top: 0 0 0 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.cover #pv-posten {
+ font-size: 30pt;
+  font-weight: 300;
+  color: #031045;
+  margin: 20mm 0 0 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+	
+.cover #pv-name {
+ font-size: 18pt;
+  font-weight: 200;
+  color: #031045;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.cover #pv-foto {
+	margin: 0;
+}
+
+h5 {
+ font-size: 12pt;
+  font-weight: 200;
+  color: #031045;
+  margin: 0;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+} 
+
+.anschreiben {
+  padding: 30mm 25mm 25mm 25mm;
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+}
+/* =============================
+   Überschriften
+   ============================= */
+h2 {
+  font-size: 18pt;
+  margin-bottom: 12px;
+}
+
+/* =============================
+   Text
+   ============================= */
+p {
+  font-size: 12pt;
+  margin: 4px 0;
+}
+
+/* =============================
+   Einträge
+   ============================= */
+.pv-entry {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.pv-entry:last-child {
+  border-bottom: none;
+}
+
+/* Erste Zeile (Titel + Datum) */
+.pv-row {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.pv-row span:first-child {
+  flex: 1;
+}
+
+/* Klassischer Strich als Bullet */
+.pv-entry .pv-row::before {
+  content: "–";
+  margin-right: 8px;
+}
+
+/* Datum rechts */
+.pv-date {
+  text-align: right;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* ==================================================
+   PRINT
+   ================================================== */
+
+@media print { 
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  button,
+  .style-switch,
+  .navigation,
+  .top-buttons {
+    display: none !important;
+  }
+
+  html, body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #preview, #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+  }
+
+  /* =============================
+     Deckblatt
+     ============================= */
+
+  .cover {
+    width: 210mm;
+    height: 297mm;
+    background: #e8f7fa;
+    page-break-after: always;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* =============================
+     Anschreiben Seite
+     ============================= */
+
+  .anschreiben {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
+  }
+
+  /* =============================
+     Seitenumbruch Utility
+     ============================= */
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* =============================
+     Content nicht splitten
+     ============================= */
+
+  .pv-entry {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
 }

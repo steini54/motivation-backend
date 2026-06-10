@@ -4,6 +4,7 @@ const cors = require("cors");
 const helmet = require("helmet");
 const multer = require("multer");
 const { rateLimit } = require("express-rate-limit");
+const { getAiErrorCode } = require("./services/ai-retry");
 
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://syntext.ch",
@@ -169,7 +170,8 @@ function classifyAiError(error) {
     status === 408 ||
     status === 504 ||
     error?.name === "AbortError" ||
-    error?.code === "ETIMEDOUT"
+    getAiErrorCode(error) === "ETIMEDOUT" ||
+    getAiErrorCode(error)?.startsWith("UND_ERR_")
   ) {
     return {
       status: 504,
@@ -188,7 +190,7 @@ function logAiError(logger, route, provider, error) {
     route,
     provider,
     status: Number(error?.status) || null,
-    code: error?.code || null,
+    code: getAiErrorCode(error),
     name: error?.name || "Error",
   });
 }
@@ -303,7 +305,15 @@ function createApp({
     }
   });
 
-  app.use(express.static(path.join(__dirname, "frontend")));
+  const frontendPath = path.join(__dirname, "frontend");
+  app.use(
+    "/bewerbungs-generator/motivation",
+    express.static(frontendPath)
+  );
+  app.get("/bewerbungs-generator/motivation", (req, res) => {
+    res.redirect("/bewerbungs-generator/motivation/formular.html");
+  });
+  app.use(express.static(frontendPath));
   app.get("/", (req, res) => {
     res.redirect("/formular.html");
   });

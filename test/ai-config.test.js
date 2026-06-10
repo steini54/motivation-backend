@@ -6,15 +6,16 @@ const {
   validateAiProvider,
 } = require("../config/ai");
 
-test("AI provider defaults to Gemini and accepts OpenAI", () => {
+test("AI provider only accepts Gemini", () => {
   assert.equal(getAiProvider({}), "gemini");
-  assert.equal(getAiProvider({ AI_PROVIDER: " OpenAI " }), "openai");
   assert.deepEqual(validateAiProvider("gemini"), []);
-  assert.deepEqual(validateAiProvider("openai"), []);
+  assert.deepEqual(validateAiProvider("openai"), [
+    "AI_PROVIDER must be gemini",
+  ]);
 });
 
 test("AI provider rejects unsupported values", () => {
   assert.deepEqual(validateAiProvider("other"), [
-    "AI_PROVIDER must be one of: gemini, openai",
+    "AI_PROVIDER must be gemini",
   ]);
 });

@@ -24,7 +24,7 @@ test("startServer remains unready when Gemini configuration is missing", async (
   assert.match(messages.join("\n"), /GEMINI_API_KEY is missing/);
 });
 
-test("startServer validates OpenAI configuration when selected", async () => {
+test("startServer rejects non-Gemini providers", async () => {
   const messages = [];
   const logger = {
     log() {},
@@ -42,6 +42,5 @@ test("startServer validates OpenAI configuration when selected", async () => {
 
   assert.equal(server, null);
   assert.equal(typeof app, "function");
-  assert.match(messages.join("\n"), /OPENAI_API_KEY is missing/);
-  assert.doesNotMatch(messages.join("\n"), /GEMINI_API_KEY/);
+  assert.match(messages.join("\n"), /AI_PROVIDER must be gemini/);
 });

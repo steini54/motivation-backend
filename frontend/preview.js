@@ -5,7 +5,6 @@ console.log("✅ preview.js geladen");
 // =============================
 const savedData = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
 console.log("📦 Daten aus localStorage:", savedData);
-let photoReadyPromise = Promise.resolve();
 
 if (Object.keys(savedData).length === 0) {
   console.warn("⚠️ localStorage ist LEER – keine Formulardaten gefunden!");
@@ -24,49 +23,47 @@ function updatePreview(data) {
     return;
   }
 
-  const setText = (id, value) => {
+  // Use innerHTML + replace \n with <br> so line breaks are preserved
+  const setHTML = (id, value) => {
     const el = document.getElementById(id);
     if (el) {
-      el.textContent = value || "";
-      console.log(`✅ setText("${id}"):`, value || "(leer)");
+      el.innerHTML = (value || "").replace(/\n/g, "<br>");
+      console.log(`✅ setHTML("${id}"):`, value || "(leer)");
     } else {
       console.warn(`⚠️ Element "${id}" NICHT gefunden`);
     }
   };
 
-  setText("pv-name",         data.name);
-  setText("pv-adresse",      data.adresse);
-  setText("pv-kontakt",      data.kontakt);
-  setText("pv-kontakt-text", data.kontakt);
-  setText("pv-posten",       data.posten);
-  setText("pv-posten-cover", data.posten);
-  setText("pv-funktion",     data.funktion);
-  setText("pv-stichwoerter", data.stichwoerter);
-  setText("pv-stichwoerter2",data.stichwoerter2);
-  setText("pv-stichwoerter3",data.stichwoerter3);
-  setText("pv-datum",        data.datum);
-  setText("pv-unterschrift", data.unterschrift);
-  setText("pv-hallo",        data.hallo);
-  setText("pv-adieu",        data.adieu);
+  setHTML("pv-name",          data.name);
+  setHTML("pv-adresse",       data.adresse);
+  setHTML("pv-kontakt",       data.kontakt);
+  setHTML("pv-kontakt-text",  data.kontakt);
+  setHTML("pv-posten",        data.posten);
+  setHTML("pv-posten-cover",  data.posten);
+  setHTML("pv-funktion",      data.funktion);
+  setHTML("pv-stichwoerter",  data.stichwoerter);
+  setHTML("pv-stichwoerter2", data.stichwoerter2);
+  setHTML("pv-stichwoerter3", data.stichwoerter3);
+  setHTML("pv-datum",         data.datum);
+  setHTML("pv-unterschrift",  data.unterschrift);
+  setHTML("pv-arbeitgeber",   data.arbeitgeber);
 
-  // Adresse mit Zeilenumbruch
-  const adresseEl = document.getElementById("pv-adresse");
-  if (adresseEl) {
-    adresseEl.innerHTML = (data.adresse || "").replace(/\n/g, "<br>");
-    console.log("✅ pv-adresse (HTML):", adresseEl.innerHTML);
-  }
-
-  // Arbeitgeber mit Zeilenumbruch
-  const arbeitgeberEl = document.getElementById("pv-arbeitgeber");
-  if (arbeitgeberEl) {
-    arbeitgeberEl.innerHTML = (data.arbeitgeber || "").replace(/\n/g, "<br>");
-    console.log("✅ pv-arbeitgeber (HTML):", arbeitgeberEl.innerHTML);
-  }
-
-  // Foto wird separat asynchron aus IndexedDB geladen.
+  // Foto
   const img = document.getElementById("pv-foto");
   if (img) {
-    img.style.display = "none";
+    if (
+      data.foto &&
+      data.foto !== window.PhotoStorage?.STORAGE_MARKER
+    ) {
+      img.src = data.foto;
+      img.style.display = "block";
+      console.log("✅ Foto gesetzt (base64 Länge):", data.foto.length);
+    } else {
+      img.style.display = "none";
+      if (!data.foto) {
+        console.warn("⚠️ Kein Foto in den Daten");
+      }
+    }
   } else {
     console.warn("⚠️ pv-foto Element NICHT gefunden");
   }
@@ -74,66 +71,46 @@ function updatePreview(data) {
 
 updatePreview(savedData);
 
-async function loadSelectedPhoto(data) {
+async function loadStoredPhoto(data) {
   const img = document.getElementById("pv-foto");
-  if (!img || !window.PhotoStorage) return;
+  const photoStorage = window.PhotoStorage;
+
+  if (
+    !img ||
+    !photoStorage ||
+    data.foto !== photoStorage.STORAGE_MARKER
+  ) {
+    return;
+  }
 
   try {
-    let blob = await window.PhotoStorage.getSelectedPhoto();
+    const blob = await photoStorage.getSelectedPhoto();
 
-    if (!blob && data.foto?.startsWith("data:image/")) {
-      blob = await window.PhotoStorage.migrateLegacyPhoto(data.foto);
-      data.foto = window.PhotoStorage.STORAGE_MARKER;
-      localStorage.setItem("vitagen_motivation", JSON.stringify(data));
-    }
-
-    if (blob) {
-      img.src = window.PhotoStorage.createPhotoUrl(blob);
-      img.style.display = "block";
-      await img.decode().catch(() => {});
-      console.log("✅ Foto aus lokalem Medienspeicher geladen");
+    if (!(blob instanceof Blob) || !blob.type.startsWith("image/")) {
+      img.removeAttribute("src");
+      img.style.display = "none";
+      console.warn("⚠️ Gespeichertes Foto wurde nicht gefunden");
       return;
     }
 
-    if (data.foto && !data.foto.startsWith("indexeddb:")) {
-      img.src = data.foto;
-      img.style.display = "block";
-      await img.decode().catch(() => {});
-    }
+    img.src = photoStorage.createPhotoUrl(blob);
+    img.style.display = "block";
+    await img.decode().catch(() => {});
+    console.log("✅ Foto aus IndexedDB geladen");
   } catch (error) {
-    console.error("Foto konnte nicht geladen werden:", error);
+    img.removeAttribute("src");
     img.style.display = "none";
+    console.error("❌ Foto konnte nicht aus IndexedDB geladen werden:", error);
   }
 }
 
-photoReadyPromise = loadSelectedPhoto(savedData);
+loadStoredPhoto(savedData);
 
 // =============================
 // STYLE-SWITCHING
 // =============================
 const themeLink = document.getElementById("theme-style");
 const buttons = document.querySelectorAll(".style-switch button");
-const availableStyles = new Set(
-  Array.from(buttons, button => button.dataset.style).filter(Boolean)
-);
-const defaultStyle = "classic.css";
-
-function applyPreviewStyle(file, persist = true) {
-  if (!themeLink) return;
-
-  const selectedStyle = availableStyles.has(file) ? file : defaultStyle;
-  themeLink.href = `/styles/${selectedStyle}`;
-  buttons.forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.style === selectedStyle
-    );
-  });
-
-  if (persist) {
-    localStorage.setItem("vitagen_style", selectedStyle);
-  }
-}
 
 console.log("🎨 themeLink:", themeLink ? "gefunden" : "NICHT gefunden");
 console.log("🎨 Style-Buttons gefunden:", buttons.length);
@@ -143,23 +120,18 @@ if (themeLink) {
   console.log("🎨 Gespeicherter Style:", savedStyle);
 
   if (savedStyle) {
-    applyPreviewStyle(savedStyle);
+    themeLink.href = "styles/" + savedStyle;
     console.log("🎨 Style gesetzt:", themeLink.href);
-  } else {
-    applyPreviewStyle(defaultStyle, false);
   }
-
-  themeLink.addEventListener("error", () => {
-    if (!themeLink.href.endsWith(`/styles/${defaultStyle}`)) {
-      applyPreviewStyle(defaultStyle);
-    }
-  });
 
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       const file = button.dataset.style;
       console.log("🎨 Style-Button geklickt:", file);
-      applyPreviewStyle(file);
+      themeLink.href = "styles/" + file;
+      localStorage.setItem("vitagen_style", file);
+      buttons.forEach(btn => btn.classList.remove("active"));
+      button.classList.add("active");
     });
   });
 }
@@ -193,6 +165,21 @@ if (printBtn) {
 }
 
 // =============================
+// KAUFEN BUTTON → MODAL ÖFFNEN
+// =============================
+const buyBtn = document.getElementById("buyBtn");
+if (buyBtn) {
+  console.log("🛒 buyBtn gefunden");
+  buyBtn.addEventListener("click", () => {
+    console.log("🛒 Kaufen Button geklickt – Modal öffnen");
+    const modal = document.getElementById("buyModal");
+    if (modal) modal.style.display = "flex";
+  });
+} else {
+  console.warn("⚠️ buyBtn NICHT gefunden");
+}
+
+// =============================
 // KAUFEN / PDF BUTTON
 // =============================
 const payBtn = document.getElementById("payBtn");
@@ -201,7 +188,6 @@ if (payBtn) {
   payBtn.addEventListener("click", async () => {
     console.log("💳 Bezahlen Button geklickt");
 
-    await photoReadyPromise;
     const htmlContent = document.getElementById("preview")?.innerHTML;
     const stylePath = document.getElementById("theme-style")?.getAttribute("href");
 
@@ -209,7 +195,7 @@ if (payBtn) {
     console.log("📄 stylePath:", stylePath);
 
     try {
-      const response = await fetch("/generate-pdf", {
+      const response = await fetch("https://motivation-backend-production-2800.up.railway.app/generate-pdf", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ htmlContent, stylePath })

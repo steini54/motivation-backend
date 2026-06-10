@@ -5,19 +5,11 @@ const {
   getGeminiConfig,
   validateGeminiConfig,
 } = require("../config/gemini");
-const {
-  getOpenAIConfig,
-  validateOpenAIConfig,
-} = require("../config/openai");
 
 const provider = getAiProvider();
 const providerErrors = validateAiProvider(provider);
-const config =
-  provider === "openai" ? getOpenAIConfig() : getGeminiConfig();
-const configErrors =
-  provider === "openai"
-    ? validateOpenAIConfig(config)
-    : validateGeminiConfig(config);
+const config = getGeminiConfig();
+const configErrors = validateGeminiConfig(config);
 const errors = [...providerErrors, ...configErrors];
 
 if (errors.length > 0) {
@@ -33,10 +25,6 @@ if (errors.length > 0) {
   console.log(
     `Image identity threshold: ${config.imageIdentityMinConfidence}`
   );
-  if (provider === "openai") {
-    console.log(`Image quality: ${config.imageQuality}`);
-  } else {
-    console.log(`Image size: ${config.imageSize}`);
-  }
+  console.log(`Image size: ${config.imageSize}`);
   console.log("No AI API request was made.");
 }

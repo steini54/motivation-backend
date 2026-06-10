@@ -205,9 +205,9 @@ button:hover, .add-btn:hover {
 }
 
 #foto-container {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+	display: flex;
+	gap: 10px;
+	flex-wrap: wrap;
 }
 
 .img-box {
