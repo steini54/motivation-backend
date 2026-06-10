@@ -65,7 +65,7 @@ test("image-backed themes preserve the production Hosttech paths", () => {
   }
 });
 
-test("frontend preserves production markup and only routes AI locally in development", () => {
+test("frontend preserves production markup and routes AI to Railway", () => {
   const formHtml = fs.readFileSync(
     path.join(frontendPath, "formular.html"),
     "utf8"
@@ -87,10 +87,11 @@ test("frontend preserves production markup and only routes AI locally in develop
     previewHtml,
     /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>/
   );
-  assert.match(script, /window\.location\.hostname === "localhost"/);
+  assert.doesNotMatch(script, /window\.location\.hostname/);
+  assert.doesNotMatch(script, /window\.location\.origin/);
   assert.match(
     script,
-    /https:\/\/motivation-backend-production-2800\.up\.railway\.app/
+    /const AI_API_BASE_URL = "https:\/\/motivation-backend-production-2800\.up\.railway\.app";/
   );
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-ai-photo`/);
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-text`/);

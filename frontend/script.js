@@ -1,10 +1,6 @@
 console.log("✅ script.js geladen");
 
-const AI_API_BASE_URL =
-  window.location.hostname === "localhost" ||
-  window.location.hostname === "127.0.0.1"
-    ? window.location.origin
-    : "https://motivation-backend-production-2800.up.railway.app";
+const AI_API_BASE_URL = "https://motivation-backend-production-2800.up.railway.app";
 
 // =============================
 // HILFSFUNKTION: Alle Felder speichern

@@ -53,11 +53,15 @@ For example, its `preview.html` contains JavaScript rather than HTML.
 
 ## API Routing
 
-Only the two AI requests in `frontend/script.js` use environment-aware routing:
+Only the two AI requests in `frontend/script.js` use the Railway backend:
 
-- `localhost` uses the local backend on the same origin.
-- `syntext.ch` uses
-  `https://motivation-backend-production-2800.up.railway.app`.
+```text
+https://motivation-backend-production-2800.up.railway.app
+```
+
+This is intentional for both local real testing and the Hosttech deployment.
+Running the static frontend on `localhost:3000` still calls the production
+Railway API, so local tests match the live backend behavior.
 
 The remaining production frontend structure is preserved. In particular, the
 14 theme files come directly from the Hosttech backup. The Kaufen/payment UI
