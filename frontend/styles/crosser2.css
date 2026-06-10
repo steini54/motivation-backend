@@ -1,0 +1,25 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #184f63;
+  --accent-soft: #dcecf1;
+  --heading-font: "Segoe UI", Arial, sans-serif;
+  --photo-radius: 0;
+}
+
+#preview .cover::after {
+  content: "";
+  position: absolute;
+  left: -160px;
+  bottom: 90px;
+  width: 520px;
+  height: 95px;
+  transform: rotate(-34deg);
+  background: var(--accent-soft);
+}
+
+#preview .anschreiben {
+  background:
+    linear-gradient(135deg, var(--accent-soft) 0 70px, transparent 70px),
+    var(--paper);
+}

@@ -1,0 +1,194 @@
+#preview {
+  --accent: #25364d;
+  --accent-soft: #e9eef4;
+  --paper: #fff;
+  --ink: #17202a;
+  --muted: #65717e;
+  --heading-font: Georgia, "Times New Roman", serif;
+  --body-font: Arial, Helvetica, sans-serif;
+  --photo-radius: 4px;
+  --page-padding: 64px;
+  width: min(100%, 794px);
+  margin: 28px auto;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: var(--body-font);
+  line-height: 1.55;
+  box-shadow: 0 12px 36px rgba(22, 31, 42, 0.12);
+}
+
+#preview .cover,
+#preview .anschreiben {
+  position: relative;
+  box-sizing: border-box;
+  min-height: 1123px;
+  padding: var(--page-padding);
+  overflow: hidden;
+  background: var(--paper);
+}
+
+#preview h1,
+#preview h2,
+#preview h3,
+#preview h4,
+#preview h5,
+#preview p {
+  margin-top: 0;
+}
+
+#preview h1,
+#preview h2 {
+  color: var(--accent);
+  font-family: var(--heading-font);
+}
+
+#preview .cover {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+#preview .cover h1 {
+  margin-bottom: 22px;
+  font-size: 46px;
+  letter-spacing: 0.03em;
+}
+
+#preview .cover h3 {
+  margin-bottom: 34px;
+  color: var(--muted);
+  font-size: 19px;
+  font-weight: 500;
+}
+
+#preview .cover h4 {
+  margin: 24px 0 5px;
+  font-size: 22px;
+}
+
+#preview .cover h5 {
+  margin: 2px 0;
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+#preview #pv-foto {
+  display: block;
+  width: 250px;
+  max-width: 60%;
+  height: auto;
+  margin: 10px auto;
+  border-radius: var(--photo-radius);
+  object-fit: cover;
+  box-shadow: 0 8px 24px rgba(20, 30, 40, 0.16);
+}
+
+#preview .anschreiben .header {
+  display: flex;
+  justify-content: space-between;
+  gap: 30px;
+  margin-bottom: 90px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+#preview .anschreiben h2 {
+  margin-bottom: 32px;
+  font-size: 27px;
+}
+
+#preview .anschreiben p {
+  margin-bottom: 18px;
+}
+
+#preview footer {
+  margin-top: 80px;
+}
+
+.style-switch {
+  flex-wrap: wrap;
+}
+
+.style-switch button {
+  min-width: 88px;
+}
+
+@media (max-width: 700px) {
+  #preview .cover,
+  #preview .anschreiben {
+    min-height: 0;
+    padding: 38px 28px;
+  }
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    background: #fff;
+    line-height: normal;
+  }
+
+  .style-switch,
+  body > hr,
+  body > div:not(#preview-wrapper):not(#buyModal),
+  #backBtn,
+  #printBtn,
+  #buyBtn,
+  #buyModal,
+  .watermark {
+    display: none !important;
+  }
+
+  #preview-wrapper {
+    width: 210mm;
+    margin: 0;
+    padding: 0;
+  }
+
+  #preview {
+    width: 210mm;
+    margin: 0;
+    box-shadow: none;
+  }
+
+  #preview .cover,
+  #preview .anschreiben {
+    box-sizing: border-box;
+    width: 210mm;
+    height: 297mm;
+    min-height: 297mm;
+    margin: 0;
+    padding: 18mm;
+    overflow: hidden;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  #preview .cover {
+    break-after: page;
+    page-break-after: always;
+  }
+
+  #preview .anschreiben {
+    break-after: auto;
+    page-break-after: auto;
+  }
+
+  #preview .page-break {
+    display: none;
+  }
+}

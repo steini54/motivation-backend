@@ -1,0 +1,16 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #183b56;
+  --accent-soft: #dfeaf1;
+  --heading-font: "Segoe UI", Arial, sans-serif;
+}
+
+#preview .cover::before,
+#preview .anschreiben::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 34px;
+  background: var(--accent);
+}

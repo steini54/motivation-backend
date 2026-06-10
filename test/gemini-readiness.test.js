@@ -15,18 +15,18 @@ test("verifyGeminiAccess checks both configured production models", async () => 
   };
   const config = {
     textModel: "gemini-2.5-flash",
-    imageModel: "gemini-2.5-flash-image",
+    imageModel: "gemini-3.1-flash-image",
   };
 
   const verifiedModels = await verifyGeminiAccess({ client, config });
 
   assert.deepEqual(calls, [
     "gemini-2.5-flash",
-    "gemini-2.5-flash-image",
+    "gemini-3.1-flash-image",
   ]);
   assert.deepEqual(verifiedModels, [
     "models/gemini-2.5-flash",
-    "models/gemini-2.5-flash-image",
+    "models/gemini-3.1-flash-image",
   ]);
 });
 
@@ -45,7 +45,7 @@ test("verifyGeminiAccess stops when a configured model is unavailable", async ()
       },
       config: {
         textModel: "gemini-2.5-flash",
-        imageModel: "gemini-2.5-flash-image",
+        imageModel: "gemini-3.1-flash-image",
       },
     }),
     error

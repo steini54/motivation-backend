@@ -132,7 +132,7 @@ async function validateGeneratedImage(base64Data) {
     };
   } catch {
     throw createImageError(
-      "Gemini returned an invalid image.",
+      "The AI provider returned an invalid image.",
       "INVALID_GENERATED_IMAGE"
     );
   }

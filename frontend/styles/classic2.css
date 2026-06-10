@@ -1,0 +1,13 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #6d2434;
+  --muted: #6f5e62;
+  --photo-radius: 50%;
+}
+
+#preview .cover h1,
+#preview .anschreiben h2 {
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--accent);
+}

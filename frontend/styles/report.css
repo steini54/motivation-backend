@@ -1,0 +1,17 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #0f6b60;
+  --accent-soft: #dff2ee;
+  --heading-font: Arial, Helvetica, sans-serif;
+}
+
+#preview .cover {
+  border-top: 18px solid var(--accent);
+}
+
+#preview .anschreiben h2 {
+  padding: 12px 16px;
+  border-left: 6px solid var(--accent);
+  background: var(--accent-soft);
+}

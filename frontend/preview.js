@@ -113,6 +113,27 @@ photoReadyPromise = loadSelectedPhoto(savedData);
 // =============================
 const themeLink = document.getElementById("theme-style");
 const buttons = document.querySelectorAll(".style-switch button");
+const availableStyles = new Set(
+  Array.from(buttons, button => button.dataset.style).filter(Boolean)
+);
+const defaultStyle = "classic.css";
+
+function applyPreviewStyle(file, persist = true) {
+  if (!themeLink) return;
+
+  const selectedStyle = availableStyles.has(file) ? file : defaultStyle;
+  themeLink.href = `/styles/${selectedStyle}`;
+  buttons.forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.style === selectedStyle
+    );
+  });
+
+  if (persist) {
+    localStorage.setItem("vitagen_style", selectedStyle);
+  }
+}
 
 console.log("🎨 themeLink:", themeLink ? "gefunden" : "NICHT gefunden");
 console.log("🎨 Style-Buttons gefunden:", buttons.length);
@@ -122,18 +143,23 @@ if (themeLink) {
   console.log("🎨 Gespeicherter Style:", savedStyle);
 
   if (savedStyle) {
-    themeLink.href = "styles/" + savedStyle;
+    applyPreviewStyle(savedStyle);
     console.log("🎨 Style gesetzt:", themeLink.href);
+  } else {
+    applyPreviewStyle(defaultStyle, false);
   }
+
+  themeLink.addEventListener("error", () => {
+    if (!themeLink.href.endsWith(`/styles/${defaultStyle}`)) {
+      applyPreviewStyle(defaultStyle);
+    }
+  });
 
   buttons.forEach(button => {
     button.addEventListener("click", () => {
       const file = button.dataset.style;
       console.log("🎨 Style-Button geklickt:", file);
-      themeLink.href = "styles/" + file;
-      localStorage.setItem("vitagen_style", file);
-      buttons.forEach(btn => btn.classList.remove("active"));
-      button.classList.add("active");
+      applyPreviewStyle(file);
     });
   });
 }

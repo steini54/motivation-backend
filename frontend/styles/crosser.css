@@ -1,0 +1,23 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #c0392b;
+  --accent-soft: #f8e5e2;
+  --heading-font: "Segoe UI", Arial, sans-serif;
+}
+
+#preview .cover::before {
+  content: "";
+  position: absolute;
+  top: -120px;
+  right: -190px;
+  width: 520px;
+  height: 250px;
+  transform: rotate(28deg);
+  background: var(--accent);
+}
+
+#preview .anschreiben h2 {
+  display: inline-block;
+  border-bottom: 5px solid var(--accent);
+}

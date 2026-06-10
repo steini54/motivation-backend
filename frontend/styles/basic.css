@@ -1,0 +1,14 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #111;
+  --muted: #555;
+  --heading-font: Arial, Helvetica, sans-serif;
+  --page-padding: 58px;
+  border: 1px solid #d8d8d8;
+  box-shadow: none;
+}
+
+#preview #pv-foto {
+  box-shadow: none;
+}

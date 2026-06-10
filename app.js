@@ -121,6 +121,16 @@ function classifyAiError(error) {
     };
   }
 
+  if (error?.code === "IMAGE_GENERATION_REJECTED") {
+    return {
+      status: 422,
+      body: {
+        error:
+          "The AI model could not safely generate an edited result from this photo. Please try another clear photo.",
+      },
+    };
+  }
+
   if (status === 429) {
     return {
       status: 429,
@@ -134,6 +144,16 @@ function classifyAiError(error) {
       body: {
         error:
           "The AI service authentication is not configured correctly. Please contact the administrator.",
+      },
+    };
+  }
+
+  if (status === 503) {
+    return {
+      status: 503,
+      body: {
+        error:
+          "The AI model is temporarily busy. Please wait a moment and try again.",
       },
     };
   }
@@ -163,10 +183,10 @@ function classifyAiError(error) {
   };
 }
 
-function logAiError(logger, route, error) {
+function logAiError(logger, route, provider, error) {
   logger.error("AI request failed", {
     route,
-    provider: "gemini",
+    provider,
     status: Number(error?.status) || null,
     code: error?.code || null,
     name: error?.name || "Error",
@@ -174,10 +194,13 @@ function logAiError(logger, route, error) {
 }
 
 function createApp({
+  aiService = null,
+  aiProvider = "gemini",
   geminiService = null,
   env = process.env,
   logger = console,
 } = {}) {
+  const service = aiService || geminiService;
   const app = express();
   const upload = createUpload(env);
 
@@ -209,10 +232,12 @@ function createApp({
   });
 
   app.get("/ready", (req, res) => {
-    const ready = Boolean(geminiService);
+    const ready = Boolean(service);
     res.status(ready ? 200 : 503).json({
       status: ready ? "ready" : "not_ready",
-      geminiConfigured: ready,
+      aiConfigured: ready,
+      provider: aiProvider,
+      geminiConfigured: ready && aiProvider === "gemini",
     });
   });
 
@@ -221,7 +246,7 @@ function createApp({
     aiLimiter,
     upload.single("photo"),
     async (req, res) => {
-      if (!geminiService) {
+      if (!service) {
         res.status(503).json({ error: "AI service is not configured." });
         return;
       }
@@ -232,7 +257,7 @@ function createApp({
       }
 
       try {
-        const result = await geminiService.editApplicationPhoto({
+        const result = await service.editApplicationPhoto({
           buffer: req.file.buffer,
           mimeType: req.file.mimetype,
         });
@@ -244,7 +269,7 @@ function createApp({
           message: "Application photo generated successfully.",
         });
       } catch (error) {
-        logAiError(logger, "/generate-ai-photo", error);
+        logAiError(logger, "/generate-ai-photo", aiProvider, error);
         const mapped = classifyAiError(error);
         res.status(mapped.status).json(mapped.body);
       }
@@ -252,7 +277,7 @@ function createApp({
   );
 
   app.post("/generate-text", aiLimiter, async (req, res) => {
-    if (!geminiService) {
+    if (!service) {
       res.status(503).json({ error: "AI service is not configured." });
       return;
     }
@@ -266,13 +291,13 @@ function createApp({
     }
 
     try {
-      const text = await geminiService.generateApplicationText({
+      const text = await service.generateApplicationText({
         stichpunkte,
         funktion,
       });
       res.json({ text });
     } catch (error) {
-      logAiError(logger, "/generate-text", error);
+      logAiError(logger, "/generate-text", aiProvider, error);
       const mapped = classifyAiError(error);
       res.status(mapped.status).json(mapped.body);
     }

@@ -1,13 +1,22 @@
 require("dotenv").config({ quiet: true });
 
 const { createApp } = require("./app");
+const { getAiProvider, validateAiProvider } = require("./config/ai");
 const {
   createGeminiClient,
   getGeminiConfig,
   validateGeminiConfig,
 } = require("./config/gemini");
+const {
+  createOpenAIClient,
+  getOpenAIConfig,
+  validateOpenAIConfig,
+} = require("./config/openai");
 const { verifyGeminiAccess } = require("./services/gemini-readiness");
 const { createGeminiService } = require("./services/gemini-service");
+const { verifyOpenAIAccess } = require("./services/openai-readiness");
+const { createOpenAIService } = require("./services/openai-service");
+const { createFallbackAiService } = require("./services/fallback-ai-service");
 
 async function createVerifiedGeminiService(config) {
   const readinessClient = createGeminiClient({
@@ -23,22 +32,99 @@ async function createVerifiedGeminiService(config) {
   });
 }
 
+async function createVerifiedOpenAIService(config) {
+  const readinessClient = createOpenAIClient({
+    ...config,
+    timeoutMs: Math.min(config.timeoutMs, 15000),
+  });
+
+  await verifyOpenAIAccess({ client: readinessClient, config });
+
+  return createOpenAIService({
+    client: createOpenAIClient(config),
+    config,
+  });
+}
+
+async function createVerifiedProviderService(provider, env) {
+  if (provider === "openai") {
+    const config = getOpenAIConfig(env);
+    const errors = validateOpenAIConfig(config);
+    if (errors.length > 0) {
+      throw new Error(errors.join("; "));
+    }
+    return createVerifiedOpenAIService(config);
+  }
+
+  const config = getGeminiConfig(env);
+  const errors = validateGeminiConfig(config);
+  if (errors.length > 0) {
+    throw new Error(errors.join("; "));
+  }
+  return createVerifiedGeminiService(config);
+}
+
 async function startServer({
   env = process.env,
   logger = console,
   listen = true,
 } = {}) {
-  const config = getGeminiConfig(env);
-  const configErrors = validateGeminiConfig(config);
-  let geminiService = null;
+  const aiProvider = getAiProvider(env);
+  const providerErrors = validateAiProvider(aiProvider);
+  let aiService = null;
 
-  if (configErrors.length > 0) {
-    logger.warn("Gemini is not ready:", configErrors.join("; "));
+  if (providerErrors.length > 0) {
+    logger.warn("AI provider is not ready:", providerErrors.join("; "));
   } else {
+    const config =
+      aiProvider === "openai" ? getOpenAIConfig(env) : getGeminiConfig(env);
+    const configErrors =
+      aiProvider === "openai"
+        ? validateOpenAIConfig(config)
+        : validateGeminiConfig(config);
+
+    if (configErrors.length > 0) {
+      logger.warn(`${aiProvider} is not ready:`, configErrors.join("; "));
+    } else {
+      try {
+        aiService =
+          aiProvider === "openai"
+            ? await createVerifiedOpenAIService(config)
+            : await createVerifiedGeminiService(config);
+      } catch (error) {
+        logger.error(`${aiProvider} access verification failed`, {
+          status: Number(error?.status) || null,
+          code: error?.code || null,
+          name: error?.name || "Error",
+        });
+      }
+    }
+  }
+
+  const fallbackProvider = (env.AI_FALLBACK_PROVIDER || "")
+    .trim()
+    .toLowerCase();
+  if (
+    aiService &&
+    fallbackProvider &&
+    fallbackProvider !== aiProvider &&
+    validateAiProvider(fallbackProvider).length === 0
+  ) {
     try {
-      geminiService = await createVerifiedGeminiService(config);
+      const fallbackService = await createVerifiedProviderService(
+        fallbackProvider,
+        env
+      );
+      aiService = createFallbackAiService({
+        primaryService: aiService,
+        fallbackService,
+        primaryProvider: aiProvider,
+        fallbackProvider,
+        logger,
+      });
     } catch (error) {
-      logger.error("Gemini access verification failed", {
+      logger.warn("AI fallback provider is not ready", {
+        provider: fallbackProvider,
         status: Number(error?.status) || null,
         code: error?.code || null,
         name: error?.name || "Error",
@@ -46,7 +132,7 @@ async function startServer({
     }
   }
 
-  const app = createApp({ geminiService, env, logger });
+  const app = createApp({ aiService, aiProvider, env, logger });
   if (!listen) {
     return { app, server: null };
   }
@@ -83,5 +169,7 @@ if (require.main === module) {
 
 module.exports = {
   createVerifiedGeminiService,
+  createVerifiedOpenAIService,
+  createVerifiedProviderService,
   startServer,
 };

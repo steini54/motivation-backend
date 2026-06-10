@@ -9,8 +9,11 @@ const {
 
 const config = {
   textModel: "gemini-2.5-flash",
-  imageModel: "gemini-2.5-flash-image",
+  imageModel: "gemini-3.1-flash-image",
+  imageSize: "1K",
   imageIdentityMinConfidence: 0.85,
+  retryAttempts: 3,
+  retryBaseDelayMs: 1,
 };
 
 const passingQuality = {
@@ -113,15 +116,19 @@ test("editApplicationPhoto uses image-to-image and verifies identity", async () 
   assert.equal(result.quality.verified, true);
   assert.equal(result.quality.identityConfidence, 0.96);
   assert.equal(requests.length, 2);
-  assert.equal(requests[0].model, "gemini-2.5-flash-image");
-  assert.match(requests[0].contents[0].text, /Identity lock/);
-  assert.equal(requests[0].contents[1].inlineData.mimeType, "image/jpeg");
+  assert.equal(requests[0].model, "gemini-3.1-flash-image");
+  assert.equal(requests[0].contents[0].inlineData.mimeType, "image/jpeg");
   assert.equal(
-    requests[0].contents[1].inlineData.data,
+    requests[0].contents[0].inlineData.data,
     Buffer.from("source-image").toString("base64")
   );
+  assert.match(requests[0].contents[1].text, /Identity lock/);
   assert.deepEqual(requests[0].config.responseModalities, ["IMAGE"]);
-  assert.equal(requests[0].config.imageConfig.aspectRatio, "3:4");
+  assert.equal(
+    requests[0].config.responseFormat.image.aspectRatio,
+    "3:4"
+  );
+  assert.equal(requests[0].config.responseFormat.image.imageSize, "1K");
   assert.equal(requests[1].model, "gemini-2.5-flash");
   assert.equal(requests[1].config.responseMimeType, "application/json");
   assert.equal(requests[1].contents.length, 3);
@@ -196,4 +203,75 @@ test("isQualityAccepted enforces every preservation signal", () => {
     isQualityAccepted({ ...passingQuality, identityConfidence: 0.84 }, 0.85),
     false
   );
+});
+
+test("Gemini requests retry transient 503 errors", async () => {
+  let calls = 0;
+  const delays = [];
+  const service = createGeminiService({
+    config,
+    retry(operation, options) {
+      const { withAiRetry } = require("../services/ai-retry");
+      return withAiRetry(operation, {
+        ...options,
+        sleep: async (delay) => delays.push(delay),
+      });
+    },
+    client: {
+      models: {
+        async generateContent() {
+          calls += 1;
+          if (calls < 3) {
+            const error = new Error("high demand");
+            error.status = 503;
+            throw error;
+          }
+          return { text: "Erfolgreich nach Retry." };
+        },
+      },
+    },
+  });
+
+  const text = await service.generateApplicationText({
+    stichpunkte: "Zuverlaessig",
+    funktion: "Sachbearbeiter",
+  });
+
+  assert.equal(text, "Erfolgreich nach Retry.");
+  assert.equal(calls, 3);
+  assert.deepEqual(delays, [1, 2]);
+});
+
+test("Gemini image safety rejection is not retried", async () => {
+  let calls = 0;
+  const service = createGeminiService({
+    config,
+    imageProcessor,
+    retry(operation, options) {
+      const { withAiRetry } = require("../services/ai-retry");
+      return withAiRetry(operation, {
+        ...options,
+        sleep: async () => {},
+      });
+    },
+    client: {
+      models: {
+        async generateContent() {
+          calls += 1;
+          return {
+            candidates: [{ finishReason: "IMAGE_SAFETY", content: {} }],
+          };
+        },
+      },
+    },
+  });
+
+  await assert.rejects(
+    service.editApplicationPhoto({
+      buffer: Buffer.from("source-image"),
+      mimeType: "image/jpeg",
+    }),
+    { code: "IMAGE_GENERATION_REJECTED" }
+  );
+  assert.equal(calls, 1);
 });

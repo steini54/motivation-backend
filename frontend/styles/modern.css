@@ -1,0 +1,20 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #1565c0;
+  --accent-soft: #e5f0fc;
+  --heading-font: "Segoe UI", Arial, sans-serif;
+  --body-font: "Segoe UI", Arial, sans-serif;
+  --photo-radius: 18px;
+}
+
+#preview .cover h1 {
+  font-size: 52px;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+#preview .anschreiben h2 {
+  padding-bottom: 14px;
+  border-bottom: 5px solid var(--accent);
+}

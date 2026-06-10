@@ -1,0 +1,16 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #27323a;
+  --heading-font: Arial, Helvetica, sans-serif;
+  --photo-radius: 0;
+}
+
+#preview .cover {
+  align-items: flex-start;
+  text-align: left;
+}
+
+#preview #pv-foto {
+  margin-left: 0;
+}

@@ -1,0 +1,14 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #22354d;
+}
+
+#preview .cover::before,
+#preview .anschreiben::before {
+  content: "";
+  position: absolute;
+  inset: 28px;
+  border: 1px solid #bdc6cf;
+  pointer-events: none;
+}

@@ -1,0 +1,22 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #374d72;
+  --accent-soft: #e6ebf4;
+  --heading-font: Arial, Helvetica, sans-serif;
+}
+
+#preview .cover::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 44%;
+  height: 14px;
+  background: var(--accent);
+}
+
+#preview .anschreiben .header {
+  padding-bottom: 18px;
+  border-bottom: 3px solid var(--accent);
+}

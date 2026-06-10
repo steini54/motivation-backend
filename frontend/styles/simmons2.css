@@ -1,0 +1,20 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #355348;
+  --accent-soft: #e2ece8;
+  --paper: #fbfdfc;
+}
+
+#preview .cover {
+  justify-content: flex-start;
+  padding-top: 130px;
+}
+
+#preview .cover h1 {
+  font-style: italic;
+}
+
+#preview .anschreiben {
+  border-left: 20px solid var(--accent-soft);
+}

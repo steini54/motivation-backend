@@ -19,6 +19,7 @@ if (errors.length > 0) {
   console.log(`API key source: ${config.apiKeySource}`);
   console.log(`Text model: ${config.textModel}`);
   console.log(`Image model: ${config.imageModel}`);
+  console.log(`Image size: ${config.imageSize}`);
   console.log(`Request timeout: ${config.timeoutMs}ms`);
   console.log(
     `Image identity threshold: ${config.imageIdentityMinConfidence}`

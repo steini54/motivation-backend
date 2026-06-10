@@ -37,7 +37,7 @@ const service = {
   },
 };
 
-test("health is available while readiness reflects Gemini configuration", async () => {
+test("health is available while readiness reflects AI configuration", async () => {
   await withServer(
     createApp({ env: {}, logger: { error() {} } }),
     async (url) => {
@@ -54,9 +54,44 @@ test("health is available while readiness reflects Gemini configuration", async 
   );
 });
 
+test("every preview theme is served as CSS", async () => {
+  const themes = [
+    "classic.css",
+    "classic2.css",
+    "basic.css",
+    "basic2.css",
+    "report.css",
+    "report2.css",
+    "modern.css",
+    "modern2.css",
+    "headerbar.css",
+    "headerbarlight.css",
+    "simmons.css",
+    "simmons2.css",
+    "crosser.css",
+    "crosser2.css",
+  ];
+
+  await withServer(
+    createApp({ env: {}, logger: { error() {} } }),
+    async (url) => {
+      for (const theme of themes) {
+        const response = await fetch(`${url}/styles/${theme}`);
+        assert.equal(response.status, 200, theme);
+        assert.match(response.headers.get("content-type"), /^text\/css/);
+      }
+    }
+  );
+});
+
 test("generate-text preserves the frontend response contract", async () => {
   await withServer(
-    createApp({ geminiService: service, env: {}, logger: { error() {} } }),
+    createApp({
+      aiService: service,
+      aiProvider: "openai",
+      env: {},
+      logger: { error() {} },
+    }),
     async (url) => {
       const response = await fetch(`${url}/generate-text`, {
         method: "POST",
@@ -77,7 +112,12 @@ test("generate-text preserves the frontend response contract", async () => {
 
 test("generate-ai-photo preserves the frontend response contract", async () => {
   await withServer(
-    createApp({ geminiService: service, env: {}, logger: { error() {} } }),
+    createApp({
+      aiService: service,
+      aiProvider: "openai",
+      env: {},
+      logger: { error() {} },
+    }),
     async (url) => {
       const form = new FormData();
       form.append(
@@ -118,7 +158,7 @@ test("invalid input and disallowed origins are rejected", async () => {
   );
 });
 
-test("unsupported uploads are rejected before calling Gemini", async () => {
+test("unsupported uploads are rejected before calling the AI provider", async () => {
   let calls = 0;
   const guardedService = {
     ...service,
@@ -153,7 +193,7 @@ test("unsupported uploads are rejected before calling Gemini", async () => {
   );
 });
 
-test("Gemini quota errors return a stable client-safe response", async () => {
+test("AI quota errors return a stable client-safe response", async () => {
   const quotaService = {
     ...service,
     async generateApplicationText() {
@@ -187,7 +227,7 @@ test("Gemini quota errors return a stable client-safe response", async () => {
   );
 });
 
-test("Gemini authentication errors return a stable operational response", async () => {
+test("AI authentication errors return a stable operational response", async () => {
   const authenticationService = {
     ...service,
     async generateApplicationText() {
@@ -217,6 +257,42 @@ test("Gemini authentication errors return a stable operational response", async 
       assert.deepEqual(await response.json(), {
         error:
           "The AI service authentication is not configured correctly. Please contact the administrator.",
+      });
+    }
+  );
+});
+
+test("AI capacity errors return a retryable service response", async () => {
+  const unavailableService = {
+    ...service,
+    async generateApplicationText() {
+      const error = new Error("high demand");
+      error.status = 503;
+      throw error;
+    },
+  };
+
+  await withServer(
+    createApp({
+      aiService: unavailableService,
+      aiProvider: "gemini",
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/generate-text`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stichpunkte: "Teamarbeit",
+          funktion: "Projektleiter",
+        }),
+      });
+
+      assert.equal(response.status, 503);
+      assert.deepEqual(await response.json(), {
+        error:
+          "The AI model is temporarily busy. Please wait a moment and try again.",
       });
     }
   );

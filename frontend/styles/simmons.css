@@ -1,0 +1,17 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #b06a2c;
+  --accent-soft: #f5eadf;
+  --paper: #fffdfa;
+  --muted: #735f50;
+}
+
+#preview .cover h1 {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+}
+
+#preview #pv-foto {
+  border: 8px solid #f3e4d5;
+}

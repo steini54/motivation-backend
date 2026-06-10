@@ -1,0 +1,17 @@
+@import url("./theme-base.css");
+
+#preview {
+  --accent: #6a3fc0;
+  --accent-soft: #eee8fa;
+  --heading-font: "Segoe UI", Arial, sans-serif;
+  --body-font: "Segoe UI", Arial, sans-serif;
+  --photo-radius: 50%;
+}
+
+#preview .cover {
+  background: linear-gradient(145deg, #f7f3ff, #fff 55%);
+}
+
+#preview .cover h1 {
+  font-weight: 300;
+}
