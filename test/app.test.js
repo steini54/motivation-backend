@@ -22,7 +22,18 @@ const service = {
     return "Generierter Bewerbungstext.";
   },
   async editApplicationPhoto() {
-    return "data:image/png;base64,aW1hZ2U=";
+    return {
+      dataUrl: "data:image/png;base64,aW1hZ2U=",
+      quality: {
+        identityConfidence: 0.96,
+        verified: true,
+      },
+      image: {
+        aspectRatio: "3:4",
+        width: 864,
+        height: 1184,
+      },
+    };
   },
 };
 
@@ -83,6 +94,7 @@ test("generate-ai-photo preserves the frontend response contract", async () => {
 
       assert.equal(response.status, 200);
       assert.equal(body.aiFoto, "data:image/png;base64,aW1hZ2U=");
+      assert.equal(body.quality.verified, true);
     }
   );
 });
@@ -171,6 +183,78 @@ test("Gemini quota errors return a stable client-safe response", async () => {
       assert.deepEqual(await response.json(), {
         error: "AI request limit reached. Please try again shortly.",
       });
+    }
+  );
+});
+
+test("Gemini authentication errors return a stable operational response", async () => {
+  const authenticationService = {
+    ...service,
+    async generateApplicationText() {
+      const error = new Error("provider credential rejected");
+      error.status = 401;
+      throw error;
+    },
+  };
+
+  await withServer(
+    createApp({
+      geminiService: authenticationService,
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/generate-text`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stichpunkte: "Teamarbeit",
+          funktion: "Projektleiter",
+        }),
+      });
+
+      assert.equal(response.status, 503);
+      assert.deepEqual(await response.json(), {
+        error:
+          "The AI service authentication is not configured correctly. Please contact the administrator.",
+      });
+    }
+  );
+});
+
+test("identity-mismatched generated photos are rejected safely", async () => {
+  const mismatchService = {
+    ...service,
+    async editApplicationPhoto() {
+      const error = new Error("internal quality details");
+      error.code = "IMAGE_IDENTITY_MISMATCH";
+      throw error;
+    },
+  };
+
+  await withServer(
+    createApp({
+      geminiService: mismatchService,
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const form = new FormData();
+      form.append(
+        "photo",
+        new Blob([Buffer.from("image")], { type: "image/png" }),
+        "photo.png"
+      );
+
+      const response = await fetch(`${url}/generate-ai-photo`, {
+        method: "POST",
+        body: form,
+      });
+      const body = await response.json();
+
+      assert.equal(response.status, 422);
+      assert.match(body.error, /changed the person too much/i);
+      assert.doesNotMatch(JSON.stringify(body), /internal quality details/);
     }
   );
 });

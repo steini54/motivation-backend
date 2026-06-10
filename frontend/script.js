@@ -1,5 +1,49 @@
 console.log("✅ script.js geladen");
 
+const PHOTO_MARKER = window.PhotoStorage?.STORAGE_MARKER;
+
+function setPhotoStatus(message, isError = false) {
+  const status = document.getElementById("foto-status");
+  if (!status) return;
+
+  status.textContent = message || "";
+  status.style.color = isError ? "#b42318" : "#166534";
+}
+
+function createPhotoElement(blob, { selected = false, generated = false } = {}) {
+  const image = document.createElement("img");
+  image.src = window.PhotoStorage.createPhotoUrl(blob);
+  image.alt = generated ? "KI-generiertes Bewerbungsfoto" : "Originalfoto";
+  image.photoBlob = blob;
+  image.dataset.generated = generated ? "true" : "false";
+  image.style.width = "150px";
+  image.style.height = "auto";
+  image.style.display = "block";
+  image.style.margin = "10px auto";
+  image.style.cursor = "pointer";
+  image.style.border = selected ? "3px solid green" : "none";
+  image.addEventListener("click", () => selectImage(image));
+  return image;
+}
+
+async function restoreSelectedPhoto(saved) {
+  if (!window.PhotoStorage) return;
+
+  let blob = await window.PhotoStorage.getSelectedPhoto();
+  if (!blob && saved.foto?.startsWith("data:image/")) {
+    blob = await window.PhotoStorage.migrateLegacyPhoto(saved.foto);
+    saved.foto = PHOTO_MARKER;
+    localStorage.setItem("vitagen_motivation", JSON.stringify(saved));
+  }
+
+  if (!blob) return;
+
+  const container = document.getElementById("foto-container");
+  if (container) {
+    container.replaceChildren(createPhotoElement(blob, { selected: true }));
+  }
+}
+
 // =============================
 // HILFSFUNKTION: Alle Felder speichern
 // =============================
@@ -29,7 +73,7 @@ function saveAllFields() {
 // =============================
 // GESPEICHERTE DATEN BEIM LADEN WIEDERHERSTELLEN
 // =============================
-window.addEventListener("DOMContentLoaded", () => {
+window.addEventListener("DOMContentLoaded", async () => {
   console.log("📄 DOM geladen – Felder wiederherstellen");
 
   const saved = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
@@ -46,17 +90,11 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // Foto wiederherstellen
-  if (saved.foto) {
-    console.log("🖼 Foto vorhanden, wird in Container geladen");
-    const container = document.getElementById("foto-container");
-    if (container) {
-      container.innerHTML = `
-        <img src="${saved.foto}"
-             onclick="selectImage(this)"
-             style="width:150px; height:auto; display:block; margin:10px auto; cursor:pointer; border:3px solid green;">
-      `;
-    }
+  try {
+    await restoreSelectedPhoto(saved);
+  } catch (error) {
+    console.error("Foto konnte nicht wiederhergestellt werden:", error);
+    setPhotoStatus("Das gespeicherte Foto konnte nicht geladen werden.", true);
   }
 });
 
@@ -81,7 +119,7 @@ const fileInput = document.getElementById("foto-upload");
 
 if (fileInput) {
   console.log("📁 foto-upload Element gefunden");
-  fileInput.addEventListener("change", function (event) {
+  fileInput.addEventListener("change", async function (event) {
     console.log("📁 Datei ausgewählt:", event.target.files[0]?.name);
     const file = event.target.files[0];
     if (!file) {
@@ -89,23 +127,27 @@ if (fileInput) {
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      console.log("✅ Datei gelesen, Vorschau wird angezeigt");
-      aiImageCount = 0;
-      updateCounter();
+    if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+      setPhotoStatus("Bitte JPEG, PNG oder WebP verwenden.", true);
+      event.target.value = "";
+      return;
+    }
 
-      const container = document.getElementById("foto-container");
-      container.innerHTML = `
-        <img src="${e.target.result}"
-             onclick="selectImage(this)"
-             style="width:150px; height:auto; display:block; margin:10px auto; cursor:pointer;">
-      `;
-    };
-    reader.onerror = function(e) {
-      console.error("❌ FileReader Fehler:", e);
-    };
-    reader.readAsDataURL(file);
+    aiImageCount = 0;
+    updateCounter();
+    setPhotoStatus("");
+
+    const container = document.getElementById("foto-container");
+    const image = createPhotoElement(file, { selected: true });
+    container.replaceChildren(image);
+
+    try {
+      await window.PhotoStorage.saveSourcePhoto(file);
+      await selectImage(image);
+    } catch (error) {
+      console.error("Foto konnte nicht gespeichert werden:", error);
+      setPhotoStatus("Das Foto konnte nicht lokal gespeichert werden.", true);
+    }
   });
 } else {
   console.warn("⚠️ foto-upload Element NICHT gefunden");
@@ -114,16 +156,23 @@ if (fileInput) {
 // =============================
 // BILD AUSWÄHLEN
 // =============================
-function selectImage(element) {
+async function selectImage(element) {
   console.log("🖼 Bild ausgewählt");
   const allImages = document.querySelectorAll("#foto-container img");
   allImages.forEach(img => img.style.border = "none");
   element.style.border = "3px solid green";
 
-  let data = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
-  data.foto = element.src;
+  const blob = await window.PhotoStorage.blobFromImageElement(element);
+  await window.PhotoStorage.saveSelectedPhoto(blob);
+
+  const data = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
+  data.foto = PHOTO_MARKER;
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
-  console.log("✅ Foto gespeichert (base64, Länge):", data.foto?.length);
+  setPhotoStatus(
+    element.dataset.generated === "true"
+      ? "KI-Foto ausgewählt und lokal gespeichert."
+      : "Originalfoto ausgewählt und lokal gespeichert."
+  );
 }
 
 // =============================
@@ -143,9 +192,23 @@ if (aiBtn) {
     }
 
     const fileInput = document.getElementById("foto-upload");
-    const file = fileInput?.files[0];
+    const uploadedFile = fileInput?.files[0];
+    let sourcePhoto = uploadedFile;
 
-    if (!file) {
+    if (!sourcePhoto) {
+      try {
+        sourcePhoto = await window.PhotoStorage.getSourcePhoto();
+      } catch (error) {
+        console.error("Originalfoto konnte nicht geladen werden:", error);
+        setPhotoStatus(
+          "Das Originalfoto konnte nicht lokal geladen werden.",
+          true
+        );
+        return;
+      }
+    }
+
+    if (!sourcePhoto) {
       console.warn("⚠️ Kein Bild ausgewählt");
       alert("Bitte zuerst ein Bild auswählen");
       return;
@@ -153,9 +216,17 @@ if (aiBtn) {
 
     const loader = document.getElementById("loader");
     if (loader) loader.style.display = "block";
+    aiBtn.disabled = true;
+    setPhotoStatus(
+      "Foto wird bearbeitet und anschliessend auf Identität geprüft..."
+    );
 
     const formData = new FormData();
-    formData.append("photo", file);
+    formData.append(
+      "photo",
+      sourcePhoto,
+      uploadedFile?.name || "bewerbungsfoto-source.jpg"
+    );
 
     console.log("📤 Sende Foto an /generate-ai-photo ...");
 
@@ -165,32 +236,37 @@ if (aiBtn) {
         body: formData
       });
 
-      console.log("📥 Response Status:", response.status);
-
       const data = await response.json();
-      console.log("📥 Response Daten:", data);
 
-      if (loader) loader.style.display = "none";
-
-      if (data.aiFoto) {
-        aiImageCount++;
-        updateCounter();
-        const container = document.getElementById("foto-container");
-        container.innerHTML += `
-          <img src="${data.aiFoto}"
-               onclick="selectImage(this)"
-               style="max-width:150px; height:auto; object-fit:cover; display:block; margin:10px auto; cursor:pointer;">
-        `;
-        console.log("✅ KI Foto hinzugefügt");
-      } else {
-        console.error("❌ Kein aiFoto in Response:", data);
-        alert("Kein Bild erhalten");
+      if (!response.ok) {
+        throw new Error(data.error || "Das Foto konnte nicht erstellt werden.");
       }
 
+      if (!data.aiFoto) {
+        throw new Error("Die KI hat kein Bild zurückgegeben.");
+      }
+
+      const generatedBlob = await window.PhotoStorage.dataUrlToBlob(data.aiFoto);
+      const generatedImage = createPhotoElement(generatedBlob, {
+        generated: true,
+      });
+      document.getElementById("foto-container").appendChild(generatedImage);
+
+      aiImageCount++;
+      updateCounter();
+      const confidence = Number(data.quality?.identityConfidence);
+      const confidenceText = Number.isFinite(confidence)
+        ? ` Identitätsprüfung: ${Math.round(confidence * 100)}%.`
+        : "";
+      setPhotoStatus(
+        `KI-Foto erstellt und geprüft.${confidenceText} Klicke es an, um es auszuwählen.`
+      );
     } catch (err) {
       console.error("❌ KI Foto Fehler:", err);
+      setPhotoStatus(err.message || "Fehler beim Generieren.", true);
+    } finally {
       if (loader) loader.style.display = "none";
-      alert("Fehler beim Generieren");
+      aiBtn.disabled = false;
     }
   });
 } else {

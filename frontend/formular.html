@@ -17,8 +17,12 @@
  <!-- FOTO-UPLOAD UND KI GENERATOR -->
 <div id="foto-section">
   <label for="foto-upload">📷 Foto hochladen:</label>
-  <input type="file" id="foto-upload" accept="image/*">
-  <div id="foto-container"></div>
+  <input type="file" id="foto-upload" accept="image/jpeg,image/png,image/webp">
+  <p id="foto-hinweis">
+    Verwende ein scharfes, gut beleuchtetes Foto. Die KI bearbeitet den
+    Hintergrund und prüft anschliessend, ob die Person erkennbar gleich bleibt.
+  </p>
+  <div id="foto-container" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
 
 <div id="counter" style="margin:10px; font-weight:bold;">
   0 / 3 Bilder generiert
@@ -42,7 +46,7 @@
   ⏳ Trommelwirbel, es wird generiert...
 </div>
 
-<div id="foto-container" style="display:flex; gap:10px; flex-wrap:wrap;"></div>
+<div id="foto-status" role="status" aria-live="polite"></div>
 
 <br>
 <hr>
@@ -105,6 +109,7 @@
 
 </form>
 
+<script src="photo-storage.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

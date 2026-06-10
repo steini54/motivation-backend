@@ -5,6 +5,7 @@ console.log("✅ preview.js geladen");
 // =============================
 const savedData = JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
 console.log("📦 Daten aus localStorage:", savedData);
+let photoReadyPromise = Promise.resolve();
 
 if (Object.keys(savedData).length === 0) {
   console.warn("⚠️ localStorage ist LEER – keine Formulardaten gefunden!");
@@ -62,23 +63,50 @@ function updatePreview(data) {
     console.log("✅ pv-arbeitgeber (HTML):", arbeitgeberEl.innerHTML);
   }
 
-  // Foto
+  // Foto wird separat asynchron aus IndexedDB geladen.
   const img = document.getElementById("pv-foto");
   if (img) {
-    if (data.foto) {
-      img.src = data.foto;
-      img.style.display = "block";
-      console.log("✅ Foto gesetzt (base64 Länge):", data.foto.length);
-    } else {
-      img.style.display = "none";
-      console.warn("⚠️ Kein Foto in den Daten");
-    }
+    img.style.display = "none";
   } else {
     console.warn("⚠️ pv-foto Element NICHT gefunden");
   }
 }
 
 updatePreview(savedData);
+
+async function loadSelectedPhoto(data) {
+  const img = document.getElementById("pv-foto");
+  if (!img || !window.PhotoStorage) return;
+
+  try {
+    let blob = await window.PhotoStorage.getSelectedPhoto();
+
+    if (!blob && data.foto?.startsWith("data:image/")) {
+      blob = await window.PhotoStorage.migrateLegacyPhoto(data.foto);
+      data.foto = window.PhotoStorage.STORAGE_MARKER;
+      localStorage.setItem("vitagen_motivation", JSON.stringify(data));
+    }
+
+    if (blob) {
+      img.src = window.PhotoStorage.createPhotoUrl(blob);
+      img.style.display = "block";
+      await img.decode().catch(() => {});
+      console.log("✅ Foto aus lokalem Medienspeicher geladen");
+      return;
+    }
+
+    if (data.foto && !data.foto.startsWith("indexeddb:")) {
+      img.src = data.foto;
+      img.style.display = "block";
+      await img.decode().catch(() => {});
+    }
+  } catch (error) {
+    console.error("Foto konnte nicht geladen werden:", error);
+    img.style.display = "none";
+  }
+}
+
+photoReadyPromise = loadSelectedPhoto(savedData);
 
 // =============================
 // STYLE-SWITCHING
@@ -147,6 +175,7 @@ if (payBtn) {
   payBtn.addEventListener("click", async () => {
     console.log("💳 Bezahlen Button geklickt");
 
+    await photoReadyPromise;
     const htmlContent = document.getElementById("preview")?.innerHTML;
     const stylePath = document.getElementById("theme-style")?.getAttribute("href");
 

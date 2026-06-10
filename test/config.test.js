@@ -15,6 +15,7 @@ test("getGeminiConfig uses the required stable Gemini models", () => {
   assert.equal(config.imageModel, DEFAULT_GEMINI_IMAGE_MODEL);
   assert.equal(config.apiKeySource, "GEMINI_API_KEY");
   assert.equal(config.timeoutMs, 120000);
+  assert.equal(config.imageIdentityMinConfidence, 0.85);
   assert.deepEqual(validateGeminiConfig(config), []);
 });
 

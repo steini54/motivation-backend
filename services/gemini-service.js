@@ -1,17 +1,81 @@
-const IMAGE_EDIT_PROMPT = `
-Edit this image into a professional, realistic application portrait.
+const {
+  prepareSourceImage,
+  validateGeneratedImage,
+} = require("./image-processing");
 
-Strict preservation rules:
-- Keep the person's identity, face, facial features, expression, hair, skin tone,
-  body, pose, clothing, proportions, framing, and camera angle unchanged.
-- Do not beautify, reshape, retouch, crop, zoom, or add/remove body features.
-- Change only the background to a clean neutral white or softly blurred
-  professional office background.
-- Improve lighting and color balance only very subtly, without changing facial
-  details.
-- The result must look like a natural photograph, not an illustration.
-- If the requested edit cannot be made while preserving the person exactly,
-  return the original image unchanged.
+const IMAGE_EDIT_PROMPT = `
+Purpose: create a professional application photo by editing the supplied
+reference photo, not by inventing a new person.
+
+Identity lock:
+- The supplied person is the immutable subject of the photograph.
+- Preserve the exact same identity, facial structure, eyes, eyebrows, nose,
+  mouth, jawline, ears, hairline, hairstyle, skin texture, skin tone, expression,
+  age appearance, body shape, pose, clothing, proportions, framing, and camera
+  angle.
+- Preserve natural facial asymmetry and distinguishing details from the source.
+- Keep the subject photorealistic and recognizably identical to the reference.
+
+Requested edit:
+- Replace only the surrounding background with a clean, understated,
+  professional application-photo background.
+- Use a neutral warm white, light gray, or softly blurred modern office setting.
+- Match the source camera perspective and create natural, subtle studio lighting
+  around the subject.
+- Keep the composition uncluttered and suitable for a German or Swiss job
+  application.
+
+The result must remain a natural photograph. Treat the person as protected
+content and make the smallest possible visual change outside the subject.
+`.trim();
+
+const IMAGE_QUALITY_SCHEMA = {
+  type: "object",
+  properties: {
+    samePerson: { type: "boolean" },
+    facePreserved: { type: "boolean" },
+    posePreserved: { type: "boolean" },
+    clothingPreserved: { type: "boolean" },
+    framingPreserved: { type: "boolean" },
+    artifactFree: { type: "boolean" },
+    professionalBackground: { type: "boolean" },
+    identityConfidence: {
+      type: "number",
+      minimum: 0,
+      maximum: 1,
+    },
+    reasons: {
+      type: "array",
+      maxItems: 3,
+      items: { type: "string" },
+    },
+  },
+  required: [
+    "samePerson",
+    "facePreserved",
+    "posePreserved",
+    "clothingPreserved",
+    "framingPreserved",
+    "artifactFree",
+    "professionalBackground",
+    "identityConfidence",
+    "reasons",
+  ],
+};
+
+const IMAGE_QUALITY_PROMPT = `
+Compare the first image (the user's original reference photo) with the second
+image (the edited candidate).
+
+This is a strict identity-preservation quality check for a job application
+photo. Ignore the intended background and subtle lighting change when comparing
+identity. Reject the candidate if the face, identity, expression, hairstyle,
+pose, clothing, proportions, framing, or camera angle changed noticeably.
+Also reject obvious generation artifacts or an unprofessional background.
+
+Be conservative. A candidate should pass only when an ordinary person who knows
+the subject would immediately recognize the exact same photograph subject.
+Return only the requested JSON assessment.
 `.trim();
 
 function buildTextPrompt({ stichpunkte, funktion }) {
@@ -69,7 +133,39 @@ function extractImage(response) {
   };
 }
 
-function createGeminiService({ client, config }) {
+function parseQualityAssessment(response) {
+  const text = extractText(response);
+
+  try {
+    return JSON.parse(text);
+  } catch {
+    const error = new Error("Gemini returned an invalid quality assessment");
+    error.code = "IMAGE_QUALITY_CHECK_FAILED";
+    throw error;
+  }
+}
+
+function isQualityAccepted(quality, minimumConfidence) {
+  return (
+    quality.samePerson === true &&
+    quality.facePreserved === true &&
+    quality.posePreserved === true &&
+    quality.clothingPreserved === true &&
+    quality.framingPreserved === true &&
+    quality.artifactFree === true &&
+    quality.professionalBackground === true &&
+    Number(quality.identityConfidence) >= minimumConfidence
+  );
+}
+
+function createGeminiService({
+  client,
+  config,
+  imageProcessor = {
+    prepareSourceImage,
+    validateGeneratedImage,
+  },
+}) {
   if (!client?.models?.generateContent) {
     throw new TypeError("A valid Google Gen AI client is required");
   }
@@ -99,21 +195,25 @@ function createGeminiService({ client, config }) {
     },
 
     async editApplicationPhoto({ buffer, mimeType }) {
+      const source = await imageProcessor.prepareSourceImage(buffer, mimeType);
       const response = await client.models.generateContent({
         model: config.imageModel,
         contents: [
           {
-            inlineData: {
-              data: buffer.toString("base64"),
-              mimeType,
-            },
+            text: IMAGE_EDIT_PROMPT,
           },
           {
-            text: IMAGE_EDIT_PROMPT,
+            inlineData: {
+              data: source.buffer.toString("base64"),
+              mimeType: source.mimeType,
+            },
           },
         ],
         config: {
-          responseModalities: ["TEXT", "IMAGE"],
+          responseModalities: ["IMAGE"],
+          imageConfig: {
+            aspectRatio: source.aspectRatio,
+          },
         },
       });
 
@@ -124,15 +224,74 @@ function createGeminiService({ client, config }) {
         throw error;
       }
 
-      return `data:${image.mimeType};base64,${image.data}`;
+      const generated = await imageProcessor.validateGeneratedImage(image.data);
+      const qualityResponse = await client.models.generateContent({
+        model: config.textModel,
+        contents: [
+          { text: IMAGE_QUALITY_PROMPT },
+          {
+            inlineData: {
+              data: source.buffer.toString("base64"),
+              mimeType: source.mimeType,
+            },
+          },
+          {
+            inlineData: {
+              data: generated.buffer.toString("base64"),
+              mimeType: image.mimeType,
+            },
+          },
+        ],
+        config: {
+          temperature: 0,
+          maxOutputTokens: 300,
+          thinkingConfig: {
+            thinkingBudget: 0,
+          },
+          responseMimeType: "application/json",
+          responseJsonSchema: IMAGE_QUALITY_SCHEMA,
+        },
+      });
+
+      const quality = parseQualityAssessment(qualityResponse);
+      const minimumConfidence =
+        config.imageIdentityMinConfidence === undefined
+          ? 0.85
+          : config.imageIdentityMinConfidence;
+
+      if (!isQualityAccepted(quality, minimumConfidence)) {
+        const error = new Error(
+          "Generated image did not pass identity-preservation checks"
+        );
+        error.code = "IMAGE_IDENTITY_MISMATCH";
+        error.quality = quality;
+        throw error;
+      }
+
+      return {
+        dataUrl: `data:${image.mimeType};base64,${image.data}`,
+        quality: {
+          identityConfidence: quality.identityConfidence,
+          verified: true,
+        },
+        image: {
+          aspectRatio: source.aspectRatio,
+          width: generated.width,
+          height: generated.height,
+        },
+      };
     },
   };
 }
 
 module.exports = {
   IMAGE_EDIT_PROMPT,
+  IMAGE_QUALITY_PROMPT,
+  IMAGE_QUALITY_SCHEMA,
   buildTextPrompt,
   extractText,
   extractImage,
+  parseQualityAssessment,
+  isQualityAccepted,
   createGeminiService,
 };

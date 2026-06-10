@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ quiet: true });
 
 const {
   DEFAULT_GEMINI_TEXT_MODEL,
@@ -20,5 +20,8 @@ if (errors.length > 0) {
   console.log(`Text model: ${config.textModel}`);
   console.log(`Image model: ${config.imageModel}`);
   console.log(`Request timeout: ${config.timeoutMs}ms`);
+  console.log(
+    `Image identity threshold: ${config.imageIdentityMinConfidence}`
+  );
   console.log("No Gemini API request was made.");
 }

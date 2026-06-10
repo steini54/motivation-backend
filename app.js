@@ -88,10 +88,53 @@ function normalizeTextField(value, maxLength) {
 function classifyAiError(error) {
   const status = Number(error?.status);
 
+  if (error?.code === "INVALID_SOURCE_IMAGE") {
+    return {
+      status: 400,
+      body: {
+        error:
+          error.message || "The uploaded image could not be processed safely.",
+      },
+    };
+  }
+
+  if (error?.code === "IMAGE_IDENTITY_MISMATCH") {
+    return {
+      status: 422,
+      body: {
+        error:
+          "The generated result changed the person too much and was rejected. Please try a clear, front-facing source photo.",
+      },
+    };
+  }
+
+  if (
+    error?.code === "IMAGE_QUALITY_CHECK_FAILED" ||
+    error?.code === "INVALID_GENERATED_IMAGE"
+  ) {
+    return {
+      status: 502,
+      body: {
+        error:
+          "The generated image could not be verified safely. Please try again.",
+      },
+    };
+  }
+
   if (status === 429) {
     return {
       status: 429,
       body: { error: "AI request limit reached. Please try again shortly." },
+    };
+  }
+
+  if (status === 401 || status === 403) {
+    return {
+      status: 503,
+      body: {
+        error:
+          "The AI service authentication is not configured correctly. Please contact the administrator.",
+      },
     };
   }
 
@@ -189,13 +232,15 @@ function createApp({
       }
 
       try {
-        const aiFoto = await geminiService.editApplicationPhoto({
+        const result = await geminiService.editApplicationPhoto({
           buffer: req.file.buffer,
           mimeType: req.file.mimetype,
         });
 
         res.json({
-          aiFoto,
+          aiFoto: result.dataUrl,
+          quality: result.quality,
+          image: result.image,
           message: "Application photo generated successfully.",
         });
       } catch (error) {

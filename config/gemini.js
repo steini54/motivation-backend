@@ -3,10 +3,18 @@ const { GoogleGenAI } = require("@google/genai");
 const DEFAULT_GEMINI_TEXT_MODEL = "gemini-2.5-flash";
 const DEFAULT_GEMINI_IMAGE_MODEL = "gemini-2.5-flash-image";
 const DEFAULT_GEMINI_TIMEOUT_MS = 120000;
+const DEFAULT_IMAGE_IDENTITY_MIN_CONFIDENCE = 0.85;
 
 function parsePositiveInteger(value, fallback) {
   const parsed = Number.parseInt(value, 10);
   return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
+}
+
+function parseConfidence(value, fallback) {
+  const parsed = Number.parseFloat(value);
+  return Number.isFinite(parsed) && parsed >= 0 && parsed <= 1
+    ? parsed
+    : fallback;
 }
 
 function getGeminiConfig(env = process.env) {
@@ -24,6 +32,10 @@ function getGeminiConfig(env = process.env) {
     timeoutMs: parsePositiveInteger(
       env.GEMINI_TIMEOUT_MS,
       DEFAULT_GEMINI_TIMEOUT_MS
+    ),
+    imageIdentityMinConfidence: parseConfidence(
+      env.IMAGE_IDENTITY_MIN_CONFIDENCE,
+      DEFAULT_IMAGE_IDENTITY_MIN_CONFIDENCE
     ),
   };
 }
@@ -65,6 +77,7 @@ module.exports = {
   DEFAULT_GEMINI_TEXT_MODEL,
   DEFAULT_GEMINI_IMAGE_MODEL,
   DEFAULT_GEMINI_TIMEOUT_MS,
+  DEFAULT_IMAGE_IDENTITY_MIN_CONFIDENCE,
   getGeminiConfig,
   validateGeminiConfig,
   createGeminiClient,
