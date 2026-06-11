@@ -19,9 +19,9 @@ const config = {
 const passingQuality = {
   samePerson: true,
   facePreserved: true,
-  posePreserved: true,
-  clothingPreserved: true,
-  framingPreserved: true,
+  professionalPortrait: true,
+  naturalPose: true,
+  professionalAttire: true,
   artifactFree: true,
   professionalBackground: true,
   identityConfidence: 0.96,
@@ -117,12 +117,13 @@ test("editApplicationPhoto uses image-to-image and verifies identity", async () 
   assert.equal(result.quality.identityConfidence, 0.96);
   assert.equal(requests.length, 2);
   assert.equal(requests[0].model, "gemini-3.1-flash-image");
-  assert.equal(requests[0].contents[0].inlineData.mimeType, "image/jpeg");
+  assert.match(requests[0].contents[0].text, /Adaptive transformation/);
+  assert.match(requests[0].contents[0].text, /not a background-only edit/);
+  assert.equal(requests[0].contents[1].inlineData.mimeType, "image/jpeg");
   assert.equal(
-    requests[0].contents[0].inlineData.data,
+    requests[0].contents[1].inlineData.data,
     Buffer.from("source-image").toString("base64")
   );
-  assert.match(requests[0].contents[1].text, /Identity lock/);
   assert.deepEqual(requests[0].config.responseModalities, ["IMAGE"]);
   assert.equal(
     requests[0].config.responseFormat.image.aspectRatio,
@@ -196,7 +197,11 @@ test("editApplicationPhoto rejects candidates that fail identity checks", async 
 test("isQualityAccepted enforces every preservation signal", () => {
   assert.equal(isQualityAccepted(passingQuality, 0.85), true);
   assert.equal(
-    isQualityAccepted({ ...passingQuality, framingPreserved: false }, 0.85),
+    isQualityAccepted({ ...passingQuality, professionalPortrait: false }, 0.85),
+    false
+  );
+  assert.equal(
+    isQualityAccepted({ ...passingQuality, professionalAttire: false }, 0.85),
     false
   );
   assert.equal(

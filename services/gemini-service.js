@@ -116,13 +116,13 @@ function createGeminiService({
             model: config.imageModel,
             contents: [
               {
+                text: IMAGE_EDIT_PROMPT,
+              },
+              {
                 inlineData: {
                   data: source.buffer.toString("base64"),
                   mimeType: source.mimeType,
                 },
-              },
-              {
-                text: IMAGE_EDIT_PROMPT,
               },
             ],
             config: {
