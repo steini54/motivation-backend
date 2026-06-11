@@ -95,6 +95,9 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   );
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-ai-photo`/);
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-text`/);
+  assert.match(script, /aiBtn\.disabled = true/);
+  assert.match(script, /textBtn\.disabled = true/);
+  assert.match(script, /finally \{/);
 });
 
 test("preview resolves IndexedDB photo markers before assigning the image source", () => {

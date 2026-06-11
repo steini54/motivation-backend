@@ -155,6 +155,9 @@ if (aiBtn) {
 
     const loader = document.getElementById("loader");
     if (loader) loader.style.display = "block";
+    const originalButtonText = aiBtn.innerText;
+    aiBtn.disabled = true;
+    aiBtn.innerText = "Generiere Foto...";
 
     const formData = new FormData();
     formData.append("photo", file);
@@ -171,8 +174,6 @@ if (aiBtn) {
 
       const data = await response.json();
       console.log("📥 Response Daten:", data);
-
-      if (loader) loader.style.display = "none";
 
       if (data.aiFoto) {
         aiImageCount++;
@@ -191,8 +192,11 @@ if (aiBtn) {
 
     } catch (err) {
       console.error("❌ KI Foto Fehler:", err);
-      if (loader) loader.style.display = "none";
       alert("Fehler beim Generieren");
+    } finally {
+      if (loader) loader.style.display = "none";
+      aiBtn.disabled = false;
+      aiBtn.innerText = originalButtonText;
     }
   });
 } else {
@@ -260,6 +264,7 @@ if (textBtn) {
       return;
     }
 
+    const originalButtonText = textBtn.innerText;
     textBtn.disabled = true;
     textBtn.innerText = "Generiere Text...";
 
@@ -287,10 +292,10 @@ if (textBtn) {
     } catch (err) {
       console.error("❌ KI Text Fehler:", err);
       alert("Fehler beim Generieren");
+    } finally {
+      textBtn.disabled = false;
+      textBtn.innerText = originalButtonText;
     }
-
-    textBtn.disabled = false;
-    textBtn.innerText = "🛠 KI Hilfe zum Fließtext erstellen";
   });
 } else {
   console.warn("⚠️ generateTextBtn NICHT gefunden");
