@@ -86,7 +86,7 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.match(previewHtml, /href="print\.css" media="print"/);
   assert.match(
     previewHtml,
-    /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2pdf\.js\/0\.10\.1\/html2pdf\.bundle\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
+    /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2canvas\/1\.4\.1\/html2canvas\.min\.js"[^>]*><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jspdf\/2\.5\.1\/jspdf\.umd\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
   );
   assert.doesNotMatch(script, /window\.location\.hostname/);
   assert.doesNotMatch(script, /window\.location\.origin/);
@@ -117,10 +117,14 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
 
   assert.match(paymentScript, /checkout\/create-session/);
   assert.match(paymentScript, /checkout\/session/);
-  assert.match(paymentScript, /html2pdf/);
+  assert.match(paymentScript, /html2canvas/);
+  assert.match(paymentScript, /jsPDF/);
   assert.match(paymentScript, /querySelector\(".watermark"\)/);
+  assert.match(paymentScript, /querySelectorAll\(".page-break"\)/);
+  assert.match(paymentScript, /pageSelector/);
   assert.match(paymentScript, /returnUrl: getReturnUrl\(\)/);
   assert.doesNotMatch(paymentScript, /payment_method_types/);
+  assert.doesNotMatch(paymentScript, /html2pdf/);
   assert.doesNotMatch(paymentScript, /\/generate-pdf/);
   assert.doesNotMatch(motivationPreview, /id="paymentMethod"|<select|Zahlungsart:/);
   assert.doesNotMatch(lebenslaufPreview, /id="paymentMethod"|<select|Zahlungsart:/);
@@ -128,11 +132,11 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.doesNotMatch(lebenslaufPreview, /id="printBtn"|Druckvorschau/);
   assert.match(
     motivationPreview,
-    /<script src="preview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2pdf\.js\/0\.10\.1\/html2pdf\.bundle\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
+    /<script src="preview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2canvas\/1\.4\.1\/html2canvas\.min\.js"[^>]*><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jspdf\/2\.5\.1\/jspdf\.umd\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
   );
   assert.match(
     lebenslaufPreview,
-    /<script src="lpreview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2pdf\.js\/0\.10\.1\/html2pdf\.bundle\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="lebenslauf"/
+    /<script src="lpreview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2canvas\/1\.4\.1\/html2canvas\.min\.js"[^>]*><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jspdf\/2\.5\.1\/jspdf\.umd\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="lebenslauf"/
   );
 });
 

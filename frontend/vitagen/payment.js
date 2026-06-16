@@ -139,7 +139,8 @@
   }
 
   async function downloadCleanPreviewPdf() {
-    if (typeof window.html2pdf !== "function") {
+    const JsPdf = window.jspdf?.jsPDF;
+    if (typeof window.html2canvas !== "function" || typeof JsPdf !== "function") {
       throw new Error("PDF export library could not be loaded.");
     }
 
@@ -149,8 +150,18 @@
     }
 
     const watermark = preview.querySelector(".watermark");
+    const pageBreaks = Array.from(preview.querySelectorAll(".page-break"));
     const originalWatermarkDisplay = watermark?.style.display || "";
     const originalBoxShadow = preview.style.boxShadow || "";
+    const pageSelector =
+      documentType === "lebenslauf" ? ".cover, .cv" : ".cover, .anschreiben";
+    const pageElements = Array.from(preview.querySelectorAll(pageSelector));
+    const originalPageBreakDisplays = pageBreaks.map((element) => ({
+      element,
+      display: element.style.display || "",
+      breakBefore: element.style.breakBefore || "",
+      pageBreakBefore: element.style.pageBreakBefore || "",
+    }));
 
     await waitForPreviewImages(preview);
 
@@ -158,38 +169,94 @@
       if (watermark) {
         watermark.style.display = "none";
       }
+      pageBreaks.forEach((element) => {
+        element.style.display = "none";
+        element.style.breakBefore = "auto";
+        element.style.pageBreakBefore = "auto";
+      });
       preview.style.boxShadow = "none";
 
-      await window
-        .html2pdf()
-        .set({
-          margin: 0,
-          filename,
-          image: { type: "jpeg", quality: 0.98 },
-          html2canvas: {
-            scale: 2,
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: "#ffffff",
-            scrollX: 0,
-            scrollY: 0,
-          },
-          jsPDF: {
-            unit: "mm",
-            format: "a4",
-            orientation: "portrait",
-          },
-          pagebreak: {
-            mode: ["css", "legacy"],
-            avoid: [".pv-entry", ".pv-row"],
-          },
-        })
-        .from(preview)
-        .save();
+      const pdf = new JsPdf({
+        unit: "mm",
+        format: "a4",
+        orientation: "portrait",
+        compress: true,
+      });
+      let isFirstPage = true;
+
+      for (const pageElement of pageElements) {
+        const canvas = await window.html2canvas(pageElement, {
+          scale: 2,
+          useCORS: true,
+          allowTaint: true,
+          backgroundColor: "#ffffff",
+          scrollX: 0,
+          scrollY: 0,
+          windowWidth: document.documentElement.scrollWidth,
+        });
+        const sliceHeight = Math.floor(canvas.width * (297 / 210));
+        let offsetY = 0;
+
+        while (offsetY < canvas.height) {
+          const remainingHeight = canvas.height - offsetY;
+          if (remainingHeight < 8) {
+            break;
+          }
+
+          const currentSliceHeight =
+            canvas.height <= sliceHeight + 8
+              ? canvas.height
+              : Math.min(sliceHeight, remainingHeight);
+          const pageCanvas = document.createElement("canvas");
+          pageCanvas.width = canvas.width;
+          pageCanvas.height = currentSliceHeight;
+          const context = pageCanvas.getContext("2d");
+
+          context.fillStyle = "#ffffff";
+          context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
+          context.drawImage(
+            canvas,
+            0,
+            offsetY,
+            canvas.width,
+            currentSliceHeight,
+            0,
+            0,
+            canvas.width,
+            currentSliceHeight
+          );
+
+          if (!isFirstPage) {
+            pdf.addPage();
+          }
+
+          const imageData = pageCanvas.toDataURL("image/jpeg", 0.98);
+          const imageHeightMm =
+            canvas.height <= sliceHeight + 8
+              ? 297
+              : (currentSliceHeight * 210) / canvas.width;
+          pdf.addImage(imageData, "JPEG", 0, 0, 210, imageHeightMm);
+          isFirstPage = false;
+
+          if (canvas.height <= sliceHeight + 8) {
+            break;
+          }
+          offsetY += currentSliceHeight;
+        }
+      }
+
+      pdf.save(filename);
     } finally {
       if (watermark) {
         watermark.style.display = originalWatermarkDisplay;
       }
+      originalPageBreakDisplays.forEach(
+        ({ element, display, breakBefore, pageBreakBefore }) => {
+          element.style.display = display;
+          element.style.breakBefore = breakBefore;
+          element.style.pageBreakBefore = pageBreakBefore;
+        }
+      );
       preview.style.boxShadow = originalBoxShadow;
     }
   }
