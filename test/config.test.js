@@ -7,6 +7,7 @@ const {
   getGeminiConfig,
   validateGeminiConfig,
 } = require("../config/gemini");
+const { getPaymentConfig, validatePaymentConfig } = require("../config/payment");
 
 test("getGeminiConfig uses the required stable Gemini models", () => {
   const config = getGeminiConfig({ GEMINI_API_KEY: "test-key" });
@@ -34,5 +35,35 @@ test("validateGeminiConfig rejects missing keys and unexpected models", () => {
     `GEMINI_TEXT_MODEL must be ${DEFAULT_GEMINI_TEXT_MODEL}`,
     `GEMINI_IMAGE_MODEL must be ${DEFAULT_GEMINI_IMAGE_MODEL}`,
     "GEMINI_IMAGE_SIZE must be one of: 512, 1K, 2K, 4K",
+  ]);
+});
+
+test("payment config defaults to VitaGen one-time CHF checkout", () => {
+  const config = getPaymentConfig({
+    STRIPE_SECRET_KEY: "sk_test_123",
+    STRIPE_WEBHOOK_SECRET: "whsec_123",
+  });
+
+  assert.equal(config.currency, "chf");
+  assert.equal(config.priceCents, 990);
+  assert.equal(config.productName, "VitaGen PDF Download");
+  assert.equal(config.invoiceCreation, true);
+  assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), []);
+});
+
+test("payment config rejects missing or unsafe Stripe settings", () => {
+  const config = getPaymentConfig({
+    STRIPE_SECRET_KEY: "plain-text-key",
+    STRIPE_WEBHOOK_SECRET: "wrong",
+    VITAGEN_CURRENCY: "swiss-franc",
+    VITAGEN_PRICE_CENTS: "-1",
+    VITAGEN_BASE_URL: "not-a-url",
+  });
+
+  assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), [
+    "STRIPE_SECRET_KEY must be a Stripe secret or restricted key",
+    "STRIPE_WEBHOOK_SECRET must start with whsec_",
+    "VITAGEN_CURRENCY must be a three-letter currency code",
+    "VITAGEN_BASE_URL must be a valid URL",
   ]);
 });

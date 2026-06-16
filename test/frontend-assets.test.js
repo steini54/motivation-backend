@@ -3,7 +3,8 @@ const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
 
-const frontendPath = path.join(__dirname, "../frontend");
+const frontendPath = path.join(__dirname, "../frontend/vitagen/motivation");
+const vitagenPath = path.join(__dirname, "../frontend/vitagen");
 const styleNames = [
   "basic.css",
   "basic2.css",
@@ -85,7 +86,7 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.match(previewHtml, /href="print\.css" media="print"/);
   assert.match(
     previewHtml,
-    /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>/
+    /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>\s*<script src="\.\.\/payment\.js" data-document-type="motivation"/
   );
   assert.doesNotMatch(script, /window\.location\.hostname/);
   assert.doesNotMatch(script, /window\.location\.origin/);
@@ -98,6 +99,34 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.match(script, /aiBtn\.disabled = true/);
   assert.match(script, /textBtn\.disabled = true/);
   assert.match(script, /finally \{/);
+});
+
+test("Stripe payment layer is shared and loaded after preview scripts", () => {
+  const paymentScript = fs.readFileSync(
+    path.join(vitagenPath, "payment.js"),
+    "utf8"
+  );
+  const motivationPreview = fs.readFileSync(
+    path.join(vitagenPath, "motivation", "preview.html"),
+    "utf8"
+  );
+  const lebenslaufPreview = fs.readFileSync(
+    path.join(vitagenPath, "lebenslauf", "lpreview.html"),
+    "utf8"
+  );
+
+  assert.match(paymentScript, /checkout\/create-session/);
+  assert.match(paymentScript, /checkout\/session/);
+  assert.match(paymentScript, /generate-pdf/);
+  assert.doesNotMatch(paymentScript, /payment_method_types/);
+  assert.match(
+    motivationPreview,
+    /<script src="preview\.js"><\/script>\s*<script src="\.\.\/payment\.js" data-document-type="motivation"/
+  );
+  assert.match(
+    lebenslaufPreview,
+    /<script src="lpreview\.js"><\/script>\s*<script src="\.\.\/payment\.js" data-document-type="lebenslauf"/
+  );
 });
 
 test("preview resolves IndexedDB photo markers before assigning the image source", () => {

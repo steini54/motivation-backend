@@ -5,6 +5,8 @@ const helmet = require("helmet");
 const multer = require("multer");
 const { rateLimit } = require("express-rate-limit");
 const { getAiErrorCode } = require("./services/ai-retry");
+const { createDocumentHash } = require("./services/document-purchase");
+const { createCleanPdfBuffer } = require("./services/pdf-service");
 
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://syntext.ch",
@@ -195,14 +197,37 @@ function logAiError(logger, route, provider, error) {
   });
 }
 
+function classifyPaymentError(error) {
+  const status = Number(error?.status);
+  const safeStatus = [400, 402, 403, 404, 409, 422, 429, 503].includes(status)
+    ? status
+    : 500;
+
+  if (safeStatus === 500) {
+    return {
+      status: 500,
+      body: { error: "Payment service could not complete the request." },
+    };
+  }
+
+  return {
+    status: safeStatus,
+    body: {
+      error: error?.message || "Payment request could not be completed.",
+    },
+  };
+}
+
 function createApp({
   aiService = null,
   aiProvider = "gemini",
   geminiService = null,
+  paymentService = null,
   env = process.env,
   logger = console,
 } = {}) {
   const service = aiService || geminiService;
+  const payment = paymentService;
   const app = express();
   const upload = createUpload(env);
 
@@ -215,7 +240,31 @@ function createApp({
     })
   );
   app.use(cors(createCorsOptions(env)));
-  app.use(express.json({ limit: "32kb" }));
+
+  app.post(
+    "/stripe/webhook",
+    express.raw({ type: "application/json", limit: "1mb" }),
+    async (req, res) => {
+      if (!payment) {
+        res.status(503).json({ error: "Payment service is not configured." });
+        return;
+      }
+
+      try {
+        const event = payment.constructWebhookEvent(
+          req.body,
+          req.headers["stripe-signature"]
+        );
+        const result = await payment.handleWebhookEvent(event);
+        res.json(result);
+      } catch (error) {
+        const mapped = classifyPaymentError(error);
+        res.status(mapped.status).json(mapped.body);
+      }
+    }
+  );
+
+  app.use(express.json({ limit: env.JSON_BODY_LIMIT || "8mb" }));
 
   const configuredRateLimit = Number.parseInt(env.AI_RATE_LIMIT || "20", 10);
   const aiLimiter = rateLimit({
@@ -227,6 +276,21 @@ function createApp({
     standardHeaders: "draft-8",
     legacyHeaders: false,
     message: { error: "Too many AI requests. Please try again later." },
+  });
+  const configuredPaymentRateLimit = Number.parseInt(
+    env.PAYMENT_RATE_LIMIT || "60",
+    10
+  );
+  const paymentLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    limit:
+      Number.isFinite(configuredPaymentRateLimit) &&
+      configuredPaymentRateLimit > 0
+        ? configuredPaymentRateLimit
+        : 60,
+    standardHeaders: "draft-8",
+    legacyHeaders: false,
+    message: { error: "Too many payment requests. Please try again later." },
   });
 
   app.get("/health", (req, res) => {
@@ -240,7 +304,87 @@ function createApp({
       aiConfigured: ready,
       provider: aiProvider,
       geminiConfigured: ready && aiProvider === "gemini",
+      paymentsConfigured: Boolean(payment),
     });
+  });
+
+  app.post("/checkout/create-session", paymentLimiter, async (req, res) => {
+    if (!payment) {
+      res.status(503).json({ error: "Payment service is not configured." });
+      return;
+    }
+
+    try {
+      const session = await payment.createCheckoutSession(req.body);
+      res.json(session);
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
+      res.status(mapped.status).json(mapped.body);
+    }
+  });
+
+  app.get("/checkout/session/:sessionId", paymentLimiter, async (req, res) => {
+    if (!payment) {
+      res.status(503).json({ error: "Payment service is not configured." });
+      return;
+    }
+
+    try {
+      const session = await payment.retrieveCheckoutSession(
+        req.params.sessionId
+      );
+      res.json({
+        id: session.id,
+        paymentStatus: session.payment_status,
+        status: session.status,
+      });
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
+      res.status(mapped.status).json(mapped.body);
+    }
+  });
+
+  app.post("/generate-pdf", paymentLimiter, async (req, res) => {
+    if (!payment) {
+      res.status(503).json({ error: "Payment service is not configured." });
+      return;
+    }
+
+    try {
+      const { sessionId, documentType, styleName, documentData } = req.body || {};
+      const documentHash = createDocumentHash({
+        documentType,
+        styleName,
+        documentData,
+      });
+
+      if (req.body?.documentHash && req.body.documentHash !== documentHash) {
+        res.status(400).json({ error: "Document hash does not match." });
+        return;
+      }
+
+      const verification = await payment.verifyPaidSession({
+        sessionId,
+        documentType,
+        styleName,
+        documentHash,
+      });
+      const pdfBuffer = await createCleanPdfBuffer({
+        documentType: verification.documentType,
+        documentData,
+      });
+
+      res.setHeader("Content-Type", "application/pdf");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="${verification.filename}"`
+      );
+      res.setHeader("Cache-Control", "no-store");
+      res.send(pdfBuffer);
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
+      res.status(mapped.status).json(mapped.body);
+    }
   });
 
   app.post(
@@ -306,14 +450,30 @@ function createApp({
   });
 
   const frontendPath = path.join(__dirname, "frontend");
+  const vitagenPath = path.join(frontendPath, "vitagen");
+  const vitagenMotivationPath = path.join(vitagenPath, "motivation");
+
+  app.get(["/bewerbungs-generator", "/bewerbungs-generator/"], (req, res) => {
+    res.redirect("/bewerbungs-generator/start.html");
+  });
+  app.get(
+    ["/bewerbungs-generator/motivation", "/bewerbungs-generator/motivation/"],
+    (req, res) => {
+      res.redirect("/bewerbungs-generator/motivation/formular.html");
+    }
+  );
+  app.get(
+    ["/bewerbungs-generator/lebenslauf", "/bewerbungs-generator/lebenslauf/"],
+    (req, res) => {
+      res.redirect("/bewerbungs-generator/lebenslauf/lebensformular.html");
+    }
+  );
   app.use(
     "/bewerbungs-generator/motivation",
-    express.static(frontendPath)
+    express.static(vitagenMotivationPath)
   );
-  app.get("/bewerbungs-generator/motivation", (req, res) => {
-    res.redirect("/bewerbungs-generator/motivation/formular.html");
-  });
-  app.use(express.static(frontendPath));
+  app.use("/bewerbungs-generator", express.static(vitagenPath));
+  app.use(express.static(vitagenMotivationPath));
   app.get("/", (req, res) => {
     res.redirect("/formular.html");
   });

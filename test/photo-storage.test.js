@@ -6,7 +6,14 @@ const vm = require("node:vm");
 const { IDBFactory } = require("fake-indexeddb");
 
 const photoStorageSource = fs.readFileSync(
-  path.join(__dirname, "..", "frontend", "photo-storage.js"),
+  path.join(
+    __dirname,
+    "..",
+    "frontend",
+    "vitagen",
+    "motivation",
+    "photo-storage.js"
+  ),
   "utf8"
 );
 

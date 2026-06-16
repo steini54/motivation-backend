@@ -1,0 +1,182 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  color: #000;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  line-height: 2.1;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #555;
+}
+
+.pv-kontakt {
+  margin-top: 3px;
+  font-size: 11pt;
+  line-height: 1.4;
+}
+
+.pv-kontakt div {
+  display: block;
+}
+
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+button:hover, .add-btn:hover {
+  background-color: #0056b3;
+}
+
+.container {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+
+.section {
+  margin-bottom: 25px;
+}
+
+input[type="text"], input[type="date"], input[type="file"], textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.checkbox-label {
+  font-weight: normal;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.category {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  background-color: #fafafa;
+}
+
+.add-btn {
+  background-color: grey;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.add-btn:hover {
+  background-color: grey;
+}
+
+.watermark {
+  position: fixed;        /* bleibt beim Scrollen sichtbar */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 70px;
+  color: rgba(200,200,200,0.35);
+  pointer-events: none;
+  z-index: 9999;
+  white-space: nowrap;
+  width: 100vw;           /* volle Breite */
+  text-align: center;     /* zentriert horizontal */
+}
+
+/* Buttons horizontal */
+.style-switch {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.style-switch button {
+  padding: 8px 16px;
+  border: 2px solid #7a7a7a;
+  border-radius: 4px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+.style-switch button:hover {
+  background-color: #5ce687; /* grün beim Hover */
+  color: white;
+  border-color: #7a7a7a;
+}
+
+.style-switch button.active {
+  background-color: #00ff1a; /* hellgrün aktiv */
+  color: white;
+  border-color: #007BFF;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header .adresse {
+  text-align: left;
+}
+
+.header .datum {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.hidden {
+  display: none;
+}
+

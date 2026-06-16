@@ -1,0 +1,180 @@
+<!DOCTYPE html> 
+<html lang="de">
+	
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-18Q6CWP558');
+</script>	
+	
+<head>
+  <meta charset="UTF-8">
+  <title>VitaGen – Vorschau</title>
+
+  <link rel="stylesheet" href="lstyle.css">
+  <link id="theme-style" rel="stylesheet" href="styles/classic.css">
+  <!-- <link rel="stylesheet" href="lprint.css" media="print"> -->
+ 	
+</head>
+<body>
+
+<div class="style-switch">
+  <button data-style="classic.css">Classic</button>
+  <button data-style="classic2.css">Classic2</button>
+  <button data-style="basic.css">Basic</button>
+  <button data-style="basic2.css">Basic2</button>
+  <button data-style="report.css">Report</button>
+  <button data-style="report2.css">Report2</button>
+  <button data-style="modern.css">Modern</button>
+  <button data-style="modern2.css">Modern2</button>
+  <button data-style="headerbar.css">H-bar</button>
+  <button data-style="headerbarlight.css">H-light</button>
+  <button data-style="simmons.css">Simmons</button>
+  <button data-style="simmons2.css">Simmons2</button>
+  <button data-style="crosser.css">Crosser</button>
+  <button data-style="crosser2.css">Crosser2</button>
+</div>
+
+<hr>
+<div style="margin-top:10px; text-align:center;">
+  <button id="backBtn" style="
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color:#777;
+    color:white;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+  ">
+    + Neuer Anfang
+  </button>
+</div>
+	
+<div style="margin-top:10px; text-align:center;">
+  <button id="printBtn" style="
+    padding: 8px 16px;
+    font-size: 14px;
+    background-color:#445b87;
+    color:white;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+  ">
+    🖨 Druckvorschau
+  </button>
+</div>	
+
+<div style="margin-top:10px; text-align:center;">
+  <button id="buyBtn" style="
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color:#28a745;
+    color:white;
+    border:none;
+    border-radius:4px;
+    cursor:pointer;
+  ">
+    Kaufen
+  </button>
+</div>
+
+<!-- Modal für Kauf -->
+<div id="buyModal" style="
+  display:none;
+  position:fixed;
+  top:0; left:0; right:0; bottom:0;
+  background-color: rgba(0,0,0,0.5);
+  z-index:1000;
+  justify-content:center;
+  align-items:center;
+">
+  <div style="
+    background:white;
+    padding:20px;
+    border-radius:8px;
+    max-width:400px;
+    width:90%;
+  ">
+    <h3>CV kaufen & herunterladen</h3>
+    <label>Name:<br><input type="text" id="buyerName" style="width:100%;"></label><br><br>
+    <label>Email:<br><input type="email" id="buyerEmail" style="width:100%;"></label><br><br>
+    
+    <label>Zahlungsart:</label><br>
+    <select id="paymentMethod" style="width:100%; padding:5px;">
+      <option value="card">Kreditkarte (gute Variante)</option>
+      <option value="twint">Twint (schnell und unkompliziert)</option>
+      <option value="invoice">Rechnung (eigentlich zu aufwendig für so einen kleinen Betrag)</option>
+    </select><br><br>
+    
+    <button id="payBtn" style="
+      padding:10px 20px;
+      background-color:#007bff;
+      color:white;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+    ">Jetzt bezahlen</button>
+    <button onclick="document.getElementById('buyModal').style.display='none';" style="
+      padding:10px 20px;
+      background-color:#ccc;
+      border:none;
+      border-radius:4px;
+      cursor:pointer;
+      margin-left:10px;
+    ">Abbrechen</button>
+  </div>
+</div>	
+	
+<div id="preview-wrapper">
+<div id="preview">
+	 <div class="watermark">VORSCHAU – PREVIEW</div>
+
+  <!-- Seite 1: Deckblatt -->
+  <div class="cover">
+    <h1>Lebenslauf</h1>
+    <img id="pv-foto" style="max-width:200px; display:none;">
+    <h4 id="pv-name"></h4>
+    <h5 id="pv-adresse"></h5>
+    <h5 id="pv-kontakt"></h5>
+  </div>
+
+  <div class="page-break"></div>
+
+  <!-- Seite 2: Lebenslauf -->
+  <div class="cv">
+
+    <h2 class="new-page">Schulbildung</h2>
+    <div id="pv-schulbildung"></div> <!-- Container für alle Schulbildungseinträge -->
+ 	
+    <h2 class="new-page">Beruflicher Werdegang</h2>
+    <div id="pv-beruf"></div> <!-- Container für alle Berufseinträge -->
+	
+    <h2 class="new-page">Aus- und Weiterbildung</h2>
+    <div id="pv-weiterbildung"></div><!-- Container für alle Weiterbildungs-Einträge -->
+ 	
+    <h2 class="new-page">Kenntnisse & Fähigkeiten</h2>
+    <div id="pv-kenntnisse"></div><!-- Container für alle Kenntnisse -->
+
+    <h2>Hobbies</h2>
+    <div id="pv-hobbys"></div> <!-- Container für alle Hobbys -->
+
+    <br><br><br>
+    <p id="pv-datum"></p>
+	  <br>
+	  <br>
+	  <p>________________________________</p>
+    <p id="pv-unterschrift"></p>
+
+  </div>
+
+</div>
+</div>
+
+<script src="lpreview.js"></script>
+<script src="../payment.js" data-document-type="lebenslauf" data-storage-key="vitagen_lebenslauf" data-filename="Lebenslauf.pdf"></script>
+</body>
+</html>

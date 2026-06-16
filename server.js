@@ -9,6 +9,7 @@ const {
 } = require("./config/gemini");
 const { verifyGeminiAccess } = require("./services/gemini-readiness");
 const { createGeminiService } = require("./services/gemini-service");
+const { createPaymentServiceFromEnv } = require("./services/stripe-service");
 
 async function createVerifiedGeminiService(config) {
   const readinessClient = createGeminiClient({
@@ -72,6 +73,7 @@ async function startServer({
   const app = createApp({
     aiService,
     aiProvider,
+    paymentService: createPaymentServiceFromEnv(env, logger),
     env,
     logger,
   });

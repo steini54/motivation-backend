@@ -1,0 +1,125 @@
+/* ==================================================
+   LPRINT.CSS
+   Globale Drucklogik für alle Templates
+   ================================================== */
+
+
+/* =============================
+   Browserabstände entfernen
+   ============================= */
+
+html,
+body {
+
+  margin: 0;
+  padding: 0;
+
+  background: white;
+
+}
+
+
+/* =============================
+   Alles ausblenden
+   ============================= */
+
+body * {
+  visibility: hidden;
+}
+
+
+/* =============================
+   Nur Dokument anzeigen
+   ============================= */
+
+#preview,
+#preview * {
+  visibility: visible;
+}
+
+
+/* =============================
+   Dokument
+   ============================= */
+
+#preview {
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 210mm;
+  min-height: 297mm;
+
+  margin: 0;
+  padding: 0;
+
+  box-shadow: none !important;
+
+}
+
+
+/* =============================
+   Wrapper neutralisieren
+   ============================= */
+
+#preview-wrapper {
+
+  padding: 0;
+  margin: 0;
+
+}
+
+
+/* =============================
+   COVER – neutrale A4 Fläche
+   ============================= */
+
+.cover {
+  width: 100% !important;
+  height: 100% !important;
+  box-sizing: border-box;
+
+  page-break-after: always;
+  break-after: page;
+
+}
+
+
+/* =============================
+   Seitenumbrüche
+   ============================= */
+.pv-entry {
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.page-break {
+
+  page-break-before: always;
+  break-before: page;
+
+}
+
+.new-page {
+
+  page-break-before: always;
+  break-before: page;
+
+}
+
+
+/* =============================
+   A4 Druckformat
+   ============================= */
+
+@page {
+
+  size: A4;
+  margin-top: 20mm;
+  margin-right: 20mm;
+  margin-bottom: 20mm;
+  margin-left: 20mm;
+
+}

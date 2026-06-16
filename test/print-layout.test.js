@@ -5,7 +5,7 @@ const path = require("node:path");
 
 test("print layout produces exactly two fixed A4 document pages", () => {
   const css = fs.readFileSync(
-    path.join(__dirname, "../frontend/print.css"),
+    path.join(__dirname, "../frontend/vitagen/motivation/print.css"),
     "utf8"
   );
 

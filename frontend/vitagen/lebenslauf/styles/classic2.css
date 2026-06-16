@@ -1,0 +1,277 @@
+/* ============================= 
+   Grundlayout
+   ============================= */
+body {
+  font-family: Times New Roman, serif;
+  color: #000;
+  background: #fff;
+  max-width: 900px;
+  margin: auto;
+  padding: 20px;
+  line-height: 1.5;
+}
+
+/* =============================
+   Wrapper
+   ============================= */
+#preview-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 60px 0;
+  box-sizing: border-box;
+}
+
+/* =============================
+   Preview-Container (A4)
+   ============================= */
+#preview {
+  width: 210mm;
+  min-height: 297mm;
+  background: #fff;
+  box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  text-align: left;
+  position: relative;
+}
+
+/* =============================
+   Deckblatt
+   ============================= */
+.cover {
+  background: #e8f7fa;
+  width: 100%;
+  min-height: 297mm;
+  padding: 20mm;
+  box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+/* =============================
+   Überschriften
+   ============================= */
+.cover h1 {
+  font-size: 30pt;
+  font-weight: 200;
+  color: #031045;
+  margin-top: 0 0 0 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 18pt;
+  margin-bottom: 12px;
+  background: #e8f7fa;
+}
+
+h3 {
+ font-size: 18pt;
+  font-weight: 200;
+  color: #031045;
+  margin: 20mm 0 0 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.cover #pv-name {
+ font-size: 18pt;
+  font-weight: 200;
+  color: #031045;
+  margin: 20mm 0 0 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+h5 {
+ font-size: 12pt;
+  font-weight: 200;
+  color: #031045;
+  margin: 0;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+} 
+
+/* =============================
+   Text
+   ============================= */
+p {
+  font-size: 12pt;
+  margin: 4px 0;
+}
+
+/* =============================
+   Lebenslauf Bereich
+   ============================= */
+.cv {
+  padding: 30mm 25mm 25mm 25mm;
+  box-sizing: border-box;
+  width: 210mm;
+  min-height: 297mm;
+}
+
+/* =============================
+   Einträge (NEU strukturiert)
+   ============================= */
+.pv-entry {
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.pv-entry:last-child {
+  border-bottom: none;
+}
+
+/* Erste Zeile (Titel + Datum) */
+.pv-row {
+  display: flex;
+  width: 100%;
+  align-items: baseline;
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.pv-row span:first-child {
+  flex: 1;
+}
+
+/* Klassischer Strich als Bullet */
+.pv-entry .pv-row::before {
+  content: "–";
+  margin-right: 8px;
+}
+
+/* Datum rechts */
+.pv-date {
+  text-align: right;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* =============================
+   Wasserzeichen
+   ============================= */
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 70px;
+  color: rgba(200,200,200,0.35);
+  pointer-events: none;
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+/* =============================
+   Header
+   ============================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header .adresse {
+  text-align: left;
+}
+
+.header .datum {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ==================================================
+   PRINT
+   ================================================== */
+
+@media print { 
+
+  @page {
+    size: A4;
+    margin: 0;
+  }
+
+  button,
+  .style-switch,
+  .navigation,
+  .top-buttons {
+    display: none !important;
+  }
+
+  html, body {
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #preview, #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 210mm;
+  }
+
+  /* =============================
+     Deckblatt
+     ============================= */
+
+  .cover {
+    width: 210mm;
+    height: 297mm;
+    background: #e8f7fa;
+    page-break-after: always;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* =============================
+     Anschreiben Seite
+     ============================= */
+
+  .cv {
+    width: 210mm;
+    min-height: 297mm;
+    padding: 20mm;
+    box-sizing: border-box;
+  }
+
+  /* =============================
+     Seitenumbruch Utility
+     ============================= */
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* =============================
+     Content nicht splitten
+     ============================= */
+
+  .pv-entry {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+}

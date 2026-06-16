@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="de">
+	
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-18Q6CWP558');
+</script>	
+	
+<head>
+  <meta charset="UTF-8">
+  <title>VitaGen – Lebenslauf</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="lstyle.css">
+</head>
+<body>
+
+<h1>CV Generator</h1>
+
+<form id="vitagenForm">
+
+  <h2>📝 Deckblatt</h2>
+
+  <h3>Name</h3>
+  <input type="text" id="name">
+
+  <h4>Adresse</h4>
+  <textarea id="adresse"></textarea>
+
+  <h4>Kontakt (Telefon / E-Mail)</h4>
+  <input type="text" id="kontakt">
+
+  <h4>Foto (optional)</h4>
+  <input type="file" id="foto-upload" accept="image/*">
+<!-- ================= Schulbildung ================= -->
+  <h2>📚 Schulbildung</h2>
+  <div class="schulbildung-entries">
+    <div class="entry">
+      <label>Schule</label>
+      <input type="text" class="schule">
+      <label>Ort/Land</label>
+      <input type="text" class="schule-ort">
+      <label>Von</label>
+      <input type="text" class="schule-von">
+      <label>Bis</label>
+      <input type="text" class="schule-bis">
+      <label>Abschluss</label>
+      <input type="text" class="schule-abschluss">
+    </div>
+  </div>
+  <button type="button" class="add-btn" data-section="schulbildung">➕ Weitere hinzufügen</button>
+<hr>  
+
+  <!-- ================= Beruf ================= -->
+  <h2>💼 Beruflicher Werdegang</h2>
+  <div class="beruf-entries">
+    <div class="entry">
+		<label>Position</label>
+      <input type="text" class="beruf-position">
+      <label>Unternehmen / Ort (Land)</label>
+      <input type="text" class="beruf-ort">
+      <label>Von</label>
+      <input type="text" class="beruf-von">
+      <label>Bis</label>
+	  <input type="text" class="beruf-bis">
+	  <label>Ort/Land (optional, wenn Name des Unternehmens zu lang)</label>
+      <input type="text" class="beruf-firma">
+      <label>Tätigkeit/Aufgaben (optional)</label>
+      <textarea class="beruf-aufgaben"></textarea>
+    </div>
+  </div>
+  <button type="button" class="add-btn" data-section="beruf">➕ Weitere hinzufügen</button>
+<hr>
+
+  <!-- ================= Weiterbildung ================= -->
+  <h2>🎓 Aus- und Weiterbildung</h2>
+  <div class="weiterbildung-entries">
+    <div class="entry">
+      <label>Titel</label>
+      <input type="text" class="weiterbildung-titel">
+      <label>Ausbildungsstätte / Ort</label>
+      <input type="text" class="weiterbildung-ort">
+      <label>Von</label>
+      <input type="text" class="weiterbildung-von">
+      <label>Bis</label>
+      <input type="text" class="weiterbildung-bis">
+      <label>Inhalte</label>
+      <textarea class="weiterbildung-inhalt"></textarea>
+    </div>
+  </div>
+  <button type="button" class="add-btn" data-section="weiterbildung">➕ Weitere hinzufügen</button>
+<hr>
+
+  <!-- ================= Kenntnisse ================= -->
+  <h2>💪 Kenntnisse & Fähigkeiten</h2>
+  <div class="kenntnisse-entries">
+    <div class="entry">
+      <input type="text" class="kenntnisse">
+    </div>
+  </div>
+  <button type="button" class="add-btn" data-section="kenntnisse">➕ Weitere hinzufügen</button>
+  
+  <!-- ================= Hobbys ================= -->
+  <h2>🚴 Hobbies</h2>
+  <div class="hobbys-entries">
+    <div class="entry">
+      <input type="text" class="hobbys">
+    </div>
+  </div>
+  <button type="button" class="add-btn" data-section="hobbys">➕ Weitere hinzufügen</button>
+<hr>
+
+  <br><br>
+
+  <label>Datum</label>
+  <input type="text" id="datum">
+
+  <label>Unterschrift</label>
+  <input type="text" id="unterschrift">
+
+  <div class="buttons">
+    <button type="button" id="saveBtn">💾 Speichern</button>
+    <button type="button" id="previewBtn">👁 Vorschau</button>
+  </div>
+
+</form>
+<script src="lscript.js"></script>
+</body>
+</html>
