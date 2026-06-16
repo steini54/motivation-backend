@@ -119,35 +119,79 @@
     window.location.href = data.url;
   }
 
-  async function downloadPaidPdf(sessionId) {
-    const documentData = loadDocumentData();
-    const styleName = getSelectedStyleName();
-    const documentHash = await createDocumentHash(styleName, documentData);
+  async function waitForPreviewImages(preview) {
+    const images = Array.from(preview.querySelectorAll("img")).filter(
+      (img) => img.offsetParent !== null && img.getAttribute("src")
+    );
 
-    const response = await fetch(`${API_BASE_URL}/generate-pdf`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        sessionId,
-        documentType,
-        styleName,
-        documentData,
-        documentHash,
-      }),
-    });
+    await Promise.all(
+      images.map((img) => {
+        if (img.complete && img.naturalWidth > 0) {
+          return Promise.resolve();
+        }
 
-    if (!response.ok) {
-      const data = await response.json().catch(() => ({}));
-      throw new Error(data.error || "PDF could not be generated.");
+        return new Promise((resolve) => {
+          img.addEventListener("load", resolve, { once: true });
+          img.addEventListener("error", resolve, { once: true });
+        });
+      })
+    );
+  }
+
+  async function downloadCleanPreviewPdf() {
+    if (typeof window.html2pdf !== "function") {
+      throw new Error("PDF export library could not be loaded.");
     }
 
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    const preview = document.getElementById("preview");
+    if (!preview) {
+      throw new Error("Preview document could not be found.");
+    }
+
+    const watermark = preview.querySelector(".watermark");
+    const originalWatermarkDisplay = watermark?.style.display || "";
+    const originalBoxShadow = preview.style.boxShadow || "";
+
+    await waitForPreviewImages(preview);
+
+    try {
+      if (watermark) {
+        watermark.style.display = "none";
+      }
+      preview.style.boxShadow = "none";
+
+      await window
+        .html2pdf()
+        .set({
+          margin: 0,
+          filename,
+          image: { type: "jpeg", quality: 0.98 },
+          html2canvas: {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: "#ffffff",
+            scrollX: 0,
+            scrollY: 0,
+          },
+          jsPDF: {
+            unit: "mm",
+            format: "a4",
+            orientation: "portrait",
+          },
+          pagebreak: {
+            mode: ["css", "legacy"],
+            avoid: [".pv-entry", ".pv-row"],
+          },
+        })
+        .from(preview)
+        .save();
+    } finally {
+      if (watermark) {
+        watermark.style.display = originalWatermarkDisplay;
+      }
+      preview.style.boxShadow = originalBoxShadow;
+    }
   }
 
   async function handleCheckoutReturn() {
@@ -183,7 +227,7 @@
         return;
       }
 
-      await downloadPaidPdf(sessionId);
+      await downloadCleanPreviewPdf();
       setStatus("PDF download started.");
       const url = new URL(window.location.href);
       url.searchParams.delete("checkout");
