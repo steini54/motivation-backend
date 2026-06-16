@@ -51,11 +51,42 @@
     return href.split("/").pop() || localStorage.getItem("vitagen_style") || "classic.css";
   }
 
+  function getReturnUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("checkout");
+    url.searchParams.delete("session_id");
+    url.hash = "";
+    return url.toString();
+  }
+
+  function setStatus(message, isError = false) {
+    const status = document.getElementById("paymentStatus");
+    if (!status) {
+      return;
+    }
+    status.textContent = message || "";
+    status.style.color = isError ? "#b91c1c" : "#475569";
+  }
+
   function getBuyerDetails(documentData) {
     return {
       buyerName: document.getElementById("buyerName")?.value || documentData.name || "",
       customerEmail: document.getElementById("buyerEmail")?.value || "",
     };
+  }
+
+  function openModal() {
+    const modal = document.getElementById("buyModal");
+    if (modal) {
+      modal.style.display = "flex";
+    }
+  }
+
+  function closeModal() {
+    const modal = document.getElementById("buyModal");
+    if (modal) {
+      modal.style.display = "none";
+    }
   }
 
   async function startCheckout() {
@@ -75,6 +106,7 @@
         documentType,
         styleName,
         documentHash,
+        returnUrl: getReturnUrl(),
         ...getBuyerDetails(documentData),
       }),
     });
@@ -122,11 +154,18 @@
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
 
+    if (params.get("checkout") === "cancel") {
+      setStatus("Payment was cancelled. You can try again when ready.");
+      openModal();
+      return;
+    }
+
     if (params.get("checkout") !== "success" || !sessionId) {
       return;
     }
 
     try {
+      setStatus("Payment confirmed. Preparing your PDF...");
       const response = await fetch(
         `${API_BASE_URL}/checkout/session/${encodeURIComponent(sessionId)}`
       );
@@ -137,41 +176,73 @@
       }
 
       if (data.paymentStatus !== "paid") {
-        alert("Payment is still pending. The PDF download will be available after Stripe confirms the payment.");
+        setStatus(
+          "Payment is still pending. The PDF download will be available after Stripe confirms the payment."
+        );
+        openModal();
         return;
       }
 
       await downloadPaidPdf(sessionId);
+      setStatus("PDF download started.");
+      const url = new URL(window.location.href);
+      url.searchParams.delete("checkout");
+      url.searchParams.delete("session_id");
+      window.history.replaceState({}, "", url.toString());
     } catch (error) {
       console.error("Paid PDF download failed:", error);
-      alert(error.message || "Payment was successful, but the PDF could not be downloaded.");
+      setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
+      openModal();
     }
   }
 
-  function installStripePayButton() {
-    const originalPayBtn = document.getElementById("payBtn");
-    if (!originalPayBtn) {
+  function replaceButton(id) {
+    const original = document.getElementById(id);
+    if (!original) {
+      return null;
+    }
+    const replacement = original.cloneNode(true);
+    original.replaceWith(replacement);
+    return replacement;
+  }
+
+  function installStripePaymentUi() {
+    const buyBtn = replaceButton("buyBtn");
+    const payBtn = replaceButton("payBtn");
+    const cancelBtn = replaceButton("cancelPaymentBtn");
+
+    if (buyBtn) {
+      buyBtn.addEventListener("click", () => {
+        setStatus("");
+        openModal();
+      });
+    }
+
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", closeModal);
+    }
+
+    if (!payBtn) {
       return;
     }
 
-    const stripePayBtn = originalPayBtn.cloneNode(true);
-    originalPayBtn.replaceWith(stripePayBtn);
-    stripePayBtn.addEventListener("click", async () => {
-      stripePayBtn.disabled = true;
-      const originalText = stripePayBtn.textContent;
-      stripePayBtn.textContent = "Weiter zu Stripe...";
+    payBtn.addEventListener("click", async () => {
+      payBtn.disabled = true;
+      const originalText = payBtn.textContent;
+      payBtn.textContent = "Weiter zu Stripe...";
+      setStatus("Redirecting to secure Stripe Checkout...");
 
       try {
         await startCheckout();
       } catch (error) {
         console.error("Stripe checkout failed:", error);
-        alert(error.message || "Payment could not be started.");
-        stripePayBtn.disabled = false;
-        stripePayBtn.textContent = originalText;
+        setStatus(error.message || "Payment could not be started.", true);
+        payBtn.disabled = false;
+        payBtn.textContent = originalText;
       }
     });
   }
 
-  installStripePayButton();
+  installStripePaymentUi();
   handleCheckoutReturn();
 })();

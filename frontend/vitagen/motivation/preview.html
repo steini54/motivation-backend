@@ -47,20 +47,23 @@
   </button>
 </div>
 
-<!-- Modal -->
-<div id="buyModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(0,0,0,0.5); z-index:1000; justify-content:center; align-items:center;">
-  <div style="background:white; padding:20px; border-radius:8px; max-width:400px; width:90%;">
-    <h3>Bewerbung kaufen & herunterladen</h3>
-    <label>Name:<br><input type="text" id="buyerName" style="width:100%;"></label><br><br>
-    <label>Email:<br><input type="email" id="buyerEmail" style="width:100%;"></label><br><br>
-    <label>Zahlungsart:</label><br>
-    <select id="paymentMethod" style="width:100%; padding:5px;">
-      <option value="card">Kreditkarte</option>
-      <option value="twint">Twint</option>
-      <option value="invoice">Rechnung</option>
-    </select><br><br>
-    <button id="payBtn" style="padding:10px 20px; background-color:#007bff; color:white; border:none; border-radius:4px; cursor:pointer;">Jetzt bezahlen</button>
-    <button onclick="document.getElementById('buyModal').style.display='none';" style="padding:10px 20px; background-color:#ccc; border:none; border-radius:4px; cursor:pointer; margin-left:10px;">Abbrechen</button>
+<!-- Stripe Checkout Modal -->
+<div id="buyModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(15,23,42,0.62); z-index:1000; justify-content:center; align-items:center; padding:18px;">
+  <div style="background:white; padding:24px; border-radius:14px; max-width:460px; width:100%; box-shadow:0 24px 80px rgba(15,23,42,0.28);">
+    <h3 style="margin:0 0 8px;">Bewerbung ohne Wasserzeichen herunterladen</h3>
+    <p style="margin:0 0 18px; color:#475569; line-height:1.45;">
+      Die Vorschau bleibt kostenlos. Nach der Zahlung von CHF 9.90 wirst du automatisch zur PDF-Datei ohne Wasserzeichen weitergeleitet.
+      Die Zahlungsarten wie Kreditkarte, Google Pay, TWINT oder Banküberweisung werden sicher in Stripe ausgewählt.
+    </p>
+    <label style="display:block; font-weight:600; margin-bottom:10px;">Name
+      <input type="text" id="buyerName" autocomplete="name" style="width:100%; box-sizing:border-box; margin-top:6px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+    </label>
+    <label style="display:block; font-weight:600; margin-bottom:14px;">Email
+      <input type="email" id="buyerEmail" autocomplete="email" style="width:100%; box-sizing:border-box; margin-top:6px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+    </label>
+    <p id="paymentStatus" style="min-height:20px; margin:0 0 14px; color:#475569;"></p>
+    <button id="payBtn" style="padding:11px 18px; background-color:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">Weiter zu Stripe</button>
+    <button id="cancelPaymentBtn" type="button" style="padding:11px 18px; background-color:#e2e8f0; color:#0f172a; border:none; border-radius:8px; cursor:pointer; margin-left:8px;">Abbrechen</button>
   </div>
 </div>
 
@@ -105,6 +108,6 @@
 
 <script src="photo-storage.js"></script>
 <script src="preview.js"></script>
-<script src="../payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
+<script src="/bewerbungs-generator/payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
 </body>
 </html>

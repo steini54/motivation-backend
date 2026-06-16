@@ -86,7 +86,7 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.match(previewHtml, /href="print\.css" media="print"/);
   assert.match(
     previewHtml,
-    /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>\s*<script src="\.\.\/payment\.js" data-document-type="motivation"/
+    /<script src="photo-storage\.js"><\/script>\s*<script src="preview\.js"><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
   );
   assert.doesNotMatch(script, /window\.location\.hostname/);
   assert.doesNotMatch(script, /window\.location\.origin/);
@@ -118,15 +118,32 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /checkout\/create-session/);
   assert.match(paymentScript, /checkout\/session/);
   assert.match(paymentScript, /generate-pdf/);
+  assert.match(paymentScript, /returnUrl: getReturnUrl\(\)/);
   assert.doesNotMatch(paymentScript, /payment_method_types/);
+  assert.doesNotMatch(motivationPreview, /id="paymentMethod"|<select|Zahlungsart:/);
+  assert.doesNotMatch(lebenslaufPreview, /id="paymentMethod"|<select|Zahlungsart:/);
   assert.match(
     motivationPreview,
-    /<script src="preview\.js"><\/script>\s*<script src="\.\.\/payment\.js" data-document-type="motivation"/
+    /<script src="preview\.js"><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
   );
   assert.match(
     lebenslaufPreview,
-    /<script src="lpreview\.js"><\/script>\s*<script src="\.\.\/payment\.js" data-document-type="lebenslauf"/
+    /<script src="lpreview\.js"><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="lebenslauf"/
   );
+});
+
+test("legacy preview scripts no longer call PDF generation directly", () => {
+  const motivationPreviewScript = fs.readFileSync(
+    path.join(vitagenPath, "motivation", "preview.js"),
+    "utf8"
+  );
+  const lebenslaufPreviewScript = fs.readFileSync(
+    path.join(vitagenPath, "lebenslauf", "lpreview.js"),
+    "utf8"
+  );
+
+  assert.doesNotMatch(motivationPreviewScript, /generate-pdf|payBtn|buyModal/);
+  assert.doesNotMatch(lebenslaufPreviewScript, /generate-pdf|payBtn|buyModal/);
 });
 
 test("preview resolves IndexedDB photo markers before assigning the image source", () => {

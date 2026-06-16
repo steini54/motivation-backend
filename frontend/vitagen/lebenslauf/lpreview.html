@@ -1,24 +1,20 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="de">
-	
+
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-18Q6CWP558');
-</script>	
-	
+</script>
+
 <head>
   <meta charset="UTF-8">
-  <title>VitaGen – Vorschau</title>
-
+  <title>VitaGen - Vorschau</title>
   <link rel="stylesheet" href="lstyle.css">
   <link id="theme-style" rel="stylesheet" href="styles/classic.css">
-  <!-- <link rel="stylesheet" href="lprint.css" media="print"> -->
- 	
 </head>
 <body>
 
@@ -40,100 +36,49 @@
 </div>
 
 <hr>
+
 <div style="margin-top:10px; text-align:center;">
-  <button id="backBtn" style="
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color:#777;
-    color:white;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-  ">
+  <button id="backBtn" style="padding:8px 16px; font-size:14px; background-color:#777; color:white; border:none; border-radius:4px; cursor:pointer;">
     + Neuer Anfang
   </button>
 </div>
-	
-<div style="margin-top:10px; text-align:center;">
-  <button id="printBtn" style="
-    padding: 8px 16px;
-    font-size: 14px;
-    background-color:#445b87;
-    color:white;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-  ">
-    🖨 Druckvorschau
-  </button>
-</div>	
 
 <div style="margin-top:10px; text-align:center;">
-  <button id="buyBtn" style="
-    padding: 10px 20px;
-    font-size: 16px;
-    background-color:#28a745;
-    color:white;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-  ">
+  <button id="printBtn" style="padding:8px 16px; font-size:14px; background-color:#445b87; color:white; border:none; border-radius:4px; cursor:pointer;">
+    Druckvorschau
+  </button>
+</div>
+
+<div style="margin-top:10px; text-align:center;">
+  <button id="buyBtn" style="padding:10px 20px; font-size:16px; background-color:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
     Kaufen
   </button>
 </div>
 
-<!-- Modal für Kauf -->
-<div id="buyModal" style="
-  display:none;
-  position:fixed;
-  top:0; left:0; right:0; bottom:0;
-  background-color: rgba(0,0,0,0.5);
-  z-index:1000;
-  justify-content:center;
-  align-items:center;
-">
-  <div style="
-    background:white;
-    padding:20px;
-    border-radius:8px;
-    max-width:400px;
-    width:90%;
-  ">
-    <h3>CV kaufen & herunterladen</h3>
-    <label>Name:<br><input type="text" id="buyerName" style="width:100%;"></label><br><br>
-    <label>Email:<br><input type="email" id="buyerEmail" style="width:100%;"></label><br><br>
-    
-    <label>Zahlungsart:</label><br>
-    <select id="paymentMethod" style="width:100%; padding:5px;">
-      <option value="card">Kreditkarte (gute Variante)</option>
-      <option value="twint">Twint (schnell und unkompliziert)</option>
-      <option value="invoice">Rechnung (eigentlich zu aufwendig für so einen kleinen Betrag)</option>
-    </select><br><br>
-    
-    <button id="payBtn" style="
-      padding:10px 20px;
-      background-color:#007bff;
-      color:white;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-    ">Jetzt bezahlen</button>
-    <button onclick="document.getElementById('buyModal').style.display='none';" style="
-      padding:10px 20px;
-      background-color:#ccc;
-      border:none;
-      border-radius:4px;
-      cursor:pointer;
-      margin-left:10px;
-    ">Abbrechen</button>
+<!-- Stripe Checkout Modal -->
+<div id="buyModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(15,23,42,0.62); z-index:1000; justify-content:center; align-items:center; padding:18px;">
+  <div style="background:white; padding:24px; border-radius:14px; max-width:460px; width:100%; box-shadow:0 24px 80px rgba(15,23,42,0.28);">
+    <h3 style="margin:0 0 8px;">Lebenslauf ohne Wasserzeichen herunterladen</h3>
+    <p style="margin:0 0 18px; color:#475569; line-height:1.45;">
+      Die Vorschau bleibt kostenlos. Nach der Zahlung von CHF 9.90 wirst du automatisch zur PDF-Datei ohne Wasserzeichen weitergeleitet.
+      Die Zahlungsarten wie Kreditkarte, Google Pay, TWINT oder Banküberweisung werden sicher in Stripe ausgewählt.
+    </p>
+    <label style="display:block; font-weight:600; margin-bottom:10px;">Name
+      <input type="text" id="buyerName" autocomplete="name" style="width:100%; box-sizing:border-box; margin-top:6px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+    </label>
+    <label style="display:block; font-weight:600; margin-bottom:14px;">Email
+      <input type="email" id="buyerEmail" autocomplete="email" style="width:100%; box-sizing:border-box; margin-top:6px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+    </label>
+    <p id="paymentStatus" style="min-height:20px; margin:0 0 14px; color:#475569;"></p>
+    <button id="payBtn" style="padding:11px 18px; background-color:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">Weiter zu Stripe</button>
+    <button id="cancelPaymentBtn" type="button" style="padding:11px 18px; background-color:#e2e8f0; color:#0f172a; border:none; border-radius:8px; cursor:pointer; margin-left:8px;">Abbrechen</button>
   </div>
-</div>	
-	
+</div>
+
 <div id="preview-wrapper">
 <div id="preview">
-	 <div class="watermark">VORSCHAU – PREVIEW</div>
+  <div class="watermark">VORSCHAU - PREVIEW</div>
 
-  <!-- Seite 1: Deckblatt -->
   <div class="cover">
     <h1>Lebenslauf</h1>
     <img id="pv-foto" style="max-width:200px; display:none;">
@@ -144,37 +89,32 @@
 
   <div class="page-break"></div>
 
-  <!-- Seite 2: Lebenslauf -->
   <div class="cv">
-
     <h2 class="new-page">Schulbildung</h2>
-    <div id="pv-schulbildung"></div> <!-- Container für alle Schulbildungseinträge -->
- 	
+    <div id="pv-schulbildung"></div>
+
     <h2 class="new-page">Beruflicher Werdegang</h2>
-    <div id="pv-beruf"></div> <!-- Container für alle Berufseinträge -->
-	
+    <div id="pv-beruf"></div>
+
     <h2 class="new-page">Aus- und Weiterbildung</h2>
-    <div id="pv-weiterbildung"></div><!-- Container für alle Weiterbildungs-Einträge -->
- 	
+    <div id="pv-weiterbildung"></div>
+
     <h2 class="new-page">Kenntnisse & Fähigkeiten</h2>
-    <div id="pv-kenntnisse"></div><!-- Container für alle Kenntnisse -->
+    <div id="pv-kenntnisse"></div>
 
     <h2>Hobbies</h2>
-    <div id="pv-hobbys"></div> <!-- Container für alle Hobbys -->
+    <div id="pv-hobbys"></div>
 
     <br><br><br>
     <p id="pv-datum"></p>
-	  <br>
-	  <br>
-	  <p>________________________________</p>
+    <br><br>
+    <p>________________________________</p>
     <p id="pv-unterschrift"></p>
-
   </div>
-
 </div>
 </div>
 
 <script src="lpreview.js"></script>
-<script src="../payment.js" data-document-type="lebenslauf" data-storage-key="vitagen_lebenslauf" data-filename="Lebenslauf.pdf"></script>
+<script src="/bewerbungs-generator/payment.js" data-document-type="lebenslauf" data-storage-key="vitagen_lebenslauf" data-filename="Lebenslauf.pdf"></script>
 </body>
 </html>

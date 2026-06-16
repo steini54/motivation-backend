@@ -3,6 +3,7 @@ const assert = require("node:assert/strict");
 
 const { createApp } = require("../app");
 const { createDocumentHash } = require("../services/document-purchase");
+const { buildReturnUrl, normalizeReturnUrl } = require("../services/stripe-service");
 
 async function withServer(app, callback) {
   const server = app.listen(0, "127.0.0.1");
@@ -195,5 +196,36 @@ test("Stripe webhook endpoint requires raw-body signature verification", async (
       assert.equal(response.status, 200);
       assert.deepEqual(await response.json(), { received: true });
     }
+  );
+});
+
+test("Stripe return URLs support localhost and production only", () => {
+  const localReturnUrl = normalizeReturnUrl(
+    "http://localhost:3000/preview.html?checkout=cancel&session_id=old#top",
+    "https://syntext.ch/bewerbungs-generator/motivation/preview.html"
+  );
+
+  assert.equal(localReturnUrl, "http://localhost:3000/preview.html");
+  assert.equal(
+    buildReturnUrl(localReturnUrl, "success"),
+    "http://localhost:3000/preview.html?checkout=success&session_id={CHECKOUT_SESSION_ID}"
+  );
+  assert.equal(
+    buildReturnUrl(
+      normalizeReturnUrl(
+        "https://syntext.ch/bewerbungs-generator/motivation/preview.html",
+        "https://syntext.ch/bewerbungs-generator/motivation/preview.html"
+      ),
+      "cancel"
+    ),
+    "https://syntext.ch/bewerbungs-generator/motivation/preview.html?checkout=cancel"
+  );
+  assert.throws(
+    () =>
+      normalizeReturnUrl(
+        "https://attacker.example/preview.html",
+        "https://syntext.ch/bewerbungs-generator/motivation/preview.html"
+      ),
+    /Invalid payment return URL/
   );
 });

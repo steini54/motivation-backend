@@ -41,9 +41,39 @@ function buildLineItem(config) {
   };
 }
 
-function buildReturnUrl(config, documentType, kind) {
+function getFallbackPreviewUrl(config, documentType) {
   const documentConfig = DOCUMENT_TYPES[documentType];
-  const url = new URL(`${config.baseUrl}/${documentConfig.previewPath}`);
+  return `${config.baseUrl}/${documentConfig.previewPath}`;
+}
+
+function normalizeReturnUrl(value, fallbackUrl) {
+  const rawUrl = String(value || "").trim();
+  const url = new URL(rawUrl || fallbackUrl);
+  const hostname = url.hostname.toLowerCase();
+  const isLocalhost = hostname === "localhost" || hostname === "127.0.0.1";
+  const isProductionHost = hostname === "syntext.ch" || hostname === "www.syntext.ch";
+
+  if (!isLocalhost && !isProductionHost) {
+    throw createPaymentError(400, "INVALID_RETURN_URL", "Invalid payment return URL.");
+  }
+
+  if (isProductionHost && url.protocol !== "https:") {
+    throw createPaymentError(400, "INVALID_RETURN_URL", "Production payment return URL must use HTTPS.");
+  }
+
+  if (isLocalhost && !["http:", "https:"].includes(url.protocol)) {
+    throw createPaymentError(400, "INVALID_RETURN_URL", "Invalid local payment return URL.");
+  }
+
+  url.searchParams.delete("checkout");
+  url.searchParams.delete("session_id");
+  url.hash = "";
+
+  return url.toString();
+}
+
+function buildReturnUrl(returnUrl, kind) {
+  const url = new URL(returnUrl);
 
   if (kind === "success") {
     url.searchParams.set("checkout", "success");
@@ -70,6 +100,10 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const documentHash = normalizeDocumentHash(input.documentHash);
     const customerEmail = normalizeEmail(input.customerEmail);
     const buyerName = normalizeBuyerName(input.buyerName);
+    const returnUrl = normalizeReturnUrl(
+      input.returnUrl,
+      getFallbackPreviewUrl(config, documentType)
+    );
 
     const metadata = {
       product: "vitagen_pdf",
@@ -85,8 +119,8 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const params = {
       mode: "payment",
       line_items: [buildLineItem(config)],
-      success_url: buildReturnUrl(config, documentType, "success"),
-      cancel_url: buildReturnUrl(config, documentType, "cancel"),
+      success_url: buildReturnUrl(returnUrl, "success"),
+      cancel_url: buildReturnUrl(returnUrl, "cancel"),
       client_reference_id: `vitagen_${documentType}_${documentHash.slice(0, 24)}`,
       metadata,
       payment_intent_data: {
@@ -107,6 +141,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       documentType,
       styleName,
       documentHash,
+      returnUrl,
       customerEmail || "no-email",
     ].join(":");
 
@@ -237,5 +272,6 @@ module.exports = {
   createPaymentService,
   createPaymentServiceFromEnv,
   createStripeClient,
+  normalizeReturnUrl,
   sanitizeSessionId,
 };
