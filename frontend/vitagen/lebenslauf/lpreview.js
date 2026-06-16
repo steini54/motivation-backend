@@ -84,11 +84,6 @@ if (backBtn) {
   });
 }
 
-const printBtn = document.getElementById("printBtn");
-if (printBtn) {
-  printBtn.addEventListener("click", () => window.print());
-}
-
 document.querySelectorAll(".style-switch button").forEach((btn) => {
   btn.addEventListener("click", () => {
     const themeLink = document.getElementById("theme-style");

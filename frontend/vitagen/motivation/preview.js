@@ -102,10 +102,3 @@ if (backBtn) {
     window.location.href = "formular.html";
   });
 }
-
-const printBtn = document.getElementById("printBtn");
-if (printBtn) {
-  printBtn.addEventListener("click", () => {
-    window.print();
-  });
-}

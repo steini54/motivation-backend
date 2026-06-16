@@ -15,6 +15,7 @@
   <title>VitaGen - Vorschau</title>
   <link rel="stylesheet" href="lstyle.css">
   <link id="theme-style" rel="stylesheet" href="styles/classic.css">
+  <link rel="stylesheet" href="lprint.css" media="print">
 </head>
 <body>
 
@@ -44,16 +45,14 @@
 </div>
 
 <div style="margin-top:10px; text-align:center;">
-  <button id="printBtn" style="padding:8px 16px; font-size:14px; background-color:#445b87; color:white; border:none; border-radius:4px; cursor:pointer;">
-    Druckvorschau
-  </button>
-</div>
-
-<div style="margin-top:10px; text-align:center;">
   <button id="buyBtn" style="padding:10px 20px; font-size:16px; background-color:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
     Kaufen
   </button>
 </div>
+
+<p style="text-align:center; color:#475569; font-size:14px; margin:10px 0 18px;">
+  Kostenlose Vorschau mit Wasserzeichen. Der PDF-Download ohne Wasserzeichen ist erst nach der Stripe-Zahlung möglich.
+</p>
 
 <!-- Stripe Checkout Modal -->
 <div id="buyModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(15,23,42,0.62); z-index:1000; justify-content:center; align-items:center; padding:18px;">

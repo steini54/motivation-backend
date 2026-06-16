@@ -30,17 +30,21 @@
 
   #preview-wrapper {
     width: 210mm !important;
+    max-width: 210mm !important;
     margin: 0 !important;
     padding: 0 !important;
+    overflow: visible !important;
   }
 
   #preview {
     position: static !important;
     width: 210mm !important;
+    max-width: 210mm !important;
     min-height: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
     box-shadow: none !important;
+    overflow: visible !important;
   }
 
   #preview .cover,
@@ -67,8 +71,26 @@
     page-break-after: auto !important;
   }
 
-  #preview .page-break,
-  #preview .watermark {
+  #preview .page-break {
     display: none !important;
+  }
+
+  #preview .watermark {
+    display: block !important;
+    visibility: visible !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translate(-50%, -50%) rotate(-35deg) !important;
+    font-size: 70px !important;
+    line-height: 1 !important;
+    color: rgba(0, 0, 0, 0.1) !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
+    z-index: 9999 !important;
   }
 }

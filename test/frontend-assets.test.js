@@ -122,6 +122,8 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.doesNotMatch(paymentScript, /payment_method_types/);
   assert.doesNotMatch(motivationPreview, /id="paymentMethod"|<select|Zahlungsart:/);
   assert.doesNotMatch(lebenslaufPreview, /id="paymentMethod"|<select|Zahlungsart:/);
+  assert.doesNotMatch(motivationPreview, /id="printBtn"|Druckvorschau/);
+  assert.doesNotMatch(lebenslaufPreview, /id="printBtn"|Druckvorschau/);
   assert.match(
     motivationPreview,
     /<script src="preview\.js"><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/
@@ -144,6 +146,8 @@ test("legacy preview scripts no longer call PDF generation directly", () => {
 
   assert.doesNotMatch(motivationPreviewScript, /generate-pdf|payBtn|buyModal/);
   assert.doesNotMatch(lebenslaufPreviewScript, /generate-pdf|payBtn|buyModal/);
+  assert.doesNotMatch(motivationPreviewScript, /window\.print/);
+  assert.doesNotMatch(lebenslaufPreviewScript, /window\.print/);
 });
 
 test("preview resolves IndexedDB photo markers before assigning the image source", () => {
