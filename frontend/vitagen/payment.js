@@ -6,6 +6,9 @@
   const documentType = script?.dataset.documentType || "";
   const storageKey = script?.dataset.storageKey || "";
   const filename = script?.dataset.filename || "VitaGen.pdf";
+  const A4_WIDTH_MM = 210;
+  const A4_HEIGHT_MM = 297;
+  const CANVAS_SCALE = 2;
 
   function loadDocumentData() {
     try {
@@ -165,6 +168,33 @@
     );
   }
 
+  function getVisibleChildren(element) {
+    return Array.from(element.children).filter((child) => {
+      const styles = window.getComputedStyle(child);
+      return styles.display !== "none" && styles.visibility !== "hidden";
+    });
+  }
+
+  function getExportHeightPx(pageElement, pageHeightPx) {
+    if (pageElement.classList.contains("cover")) {
+      return pageHeightPx;
+    }
+
+    const pageRect = pageElement.getBoundingClientRect();
+    const styles = window.getComputedStyle(pageElement);
+    const paddingBottom = Number.parseFloat(styles.paddingBottom) || 0;
+    const contentBottom = getVisibleChildren(pageElement).reduce((bottom, child) => {
+      const childRect = child.getBoundingClientRect();
+      return Math.max(bottom, childRect.bottom - pageRect.top);
+    }, 0);
+
+    return Math.ceil(Math.max(pageHeightPx, contentBottom + paddingBottom));
+  }
+
+  function getTrailingSliceTolerancePx(canvasWidth) {
+    return Math.ceil(canvasWidth * (3 / A4_WIDTH_MM));
+  }
+
   async function downloadCleanPreviewPdf() {
     const JsPdf = window.jspdf?.jsPDF;
     if (typeof window.html2canvas !== "function" || typeof JsPdf !== "function") {
@@ -209,29 +239,38 @@
         orientation: "portrait",
         compress: true,
       });
+      const pdfPageWidth = pdf.internal.pageSize.getWidth();
+      const pdfPageHeight = pdf.internal.pageSize.getHeight();
       let isFirstPage = true;
 
       for (const pageElement of pageElements) {
+        const pageRect = pageElement.getBoundingClientRect();
+        const pageHeightPx = Math.round(pageRect.width * (A4_HEIGHT_MM / A4_WIDTH_MM));
+        const exportHeightPx = getExportHeightPx(pageElement, pageHeightPx);
         const canvas = await window.html2canvas(pageElement, {
-          scale: 2,
+          scale: CANVAS_SCALE,
+          width: Math.ceil(pageRect.width),
+          height: exportHeightPx,
           useCORS: true,
-          allowTaint: true,
+          allowTaint: false,
           backgroundColor: "#ffffff",
           scrollX: 0,
           scrollY: 0,
-          windowWidth: document.documentElement.scrollWidth,
+          windowWidth: Math.ceil(pageRect.width),
+          windowHeight: exportHeightPx,
         });
-        const sliceHeight = Math.floor(canvas.width * (297 / 210));
+        const sliceHeight = Math.floor(canvas.width * (pdfPageHeight / pdfPageWidth));
+        const trailingTolerancePx = getTrailingSliceTolerancePx(canvas.width);
         let offsetY = 0;
 
         while (offsetY < canvas.height) {
           const remainingHeight = canvas.height - offsetY;
-          if (remainingHeight < 8) {
+          if (remainingHeight < trailingTolerancePx) {
             break;
           }
 
           const currentSliceHeight =
-            canvas.height <= sliceHeight + 8
+            canvas.height <= sliceHeight + trailingTolerancePx
               ? canvas.height
               : Math.min(sliceHeight, remainingHeight);
           const pageCanvas = document.createElement("canvas");
@@ -259,13 +298,13 @@
 
           const imageData = pageCanvas.toDataURL("image/jpeg", 0.98);
           const imageHeightMm =
-            canvas.height <= sliceHeight + 8
-              ? 297
-              : (currentSliceHeight * 210) / canvas.width;
-          pdf.addImage(imageData, "JPEG", 0, 0, 210, imageHeightMm);
+            canvas.height <= sliceHeight + trailingTolerancePx
+              ? pdfPageHeight
+              : (currentSliceHeight * pdfPageWidth) / canvas.width;
+          pdf.addImage(imageData, "JPEG", 0, 0, pdfPageWidth, imageHeightMm);
           isFirstPage = false;
 
-          if (canvas.height <= sliceHeight + 8) {
+          if (canvas.height <= sliceHeight + trailingTolerancePx) {
             break;
           }
           offsetY += currentSliceHeight;

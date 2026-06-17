@@ -186,12 +186,29 @@ p {
   margin: 0 0 2.2mm;
 }
 
+.cv-signature {
+  margin-top: 9mm;
+  text-align: right;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.cv-signature p {
+  margin: 0;
+}
+
+.signature-line {
+  margin-top: 7mm !important;
+  color: var(--cv-muted);
+  letter-spacing: 0.02em;
+}
+
 #pv-datum {
-  margin-top: 12mm;
   text-align: right;
 }
 
 #pv-unterschrift {
+  margin-top: 1.5mm;
   font-weight: 700;
   text-align: right;
 }
