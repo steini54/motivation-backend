@@ -6,64 +6,40 @@ const path = require("node:path");
 const frontendPath = path.join(__dirname, "../frontend/vitagen/motivation");
 const vitagenPath = path.join(__dirname, "../frontend/vitagen");
 const styleNames = [
-  "basic.css",
-  "basic2.css",
-  "classic.css",
-  "classic2.css",
-  "crosser.css",
-  "crosser2.css",
-  "headerbar.css",
-  "headerbarlight.css",
-  "modern.css",
-  "modern2.css",
-  "report.css",
-  "report2.css",
-  "simmons.css",
-  "simmons2.css",
+  "standard.css",
+  "swiss.css",
+  "executive.css",
+  "academic.css",
+  "technical.css",
+  "creative.css",
+  "compact.css",
+  "service.css",
 ];
 
-test("all original motivation themes are included without generated imports", () => {
+test("all current motivation themes are included and import the shared base", () => {
   for (const styleName of styleNames) {
     const css = fs.readFileSync(
       path.join(frontendPath, "styles", styleName),
       "utf8"
     );
 
-    assert.doesNotMatch(css, /theme-base\.css/);
-    assert.ok(css.length > 4000, `${styleName} appears incomplete`);
+    assert.match(css, /@import url\("\.?\/?_base\.css"\);/);
+    assert.ok(css.length > 300, `${styleName} appears incomplete`);
   }
 });
 
-test("image-backed themes preserve the production Hosttech paths", () => {
-  const modern = fs.readFileSync(
-    path.join(frontendPath, "styles", "modern2.css"),
-    "utf8"
-  );
-  const simmons = fs.readFileSync(
-    path.join(frontendPath, "styles", "simmons2.css"),
-    "utf8"
-  );
+test("current motivation and lebenslauf theme sets stay in sync", () => {
+  const motivationStyles = fs
+    .readdirSync(path.join(vitagenPath, "motivation", "styles"))
+    .filter((name) => name.endsWith(".css") && !name.startsWith("_"))
+    .sort();
+  const lebenslaufStyles = fs
+    .readdirSync(path.join(vitagenPath, "lebenslauf", "styles"))
+    .filter((name) => name.endsWith(".css") && !name.startsWith("_"))
+    .sort();
 
-  assert.match(
-    modern,
-    /url\("\/bewerbungs-generator\/motivation\/images\/80s\.PNG"\)/
-  );
-  assert.match(
-    modern,
-    /url\("\/bewerbungs-generator\/motivation\/images\/NEON2\.PNG"\)/
-  );
-  assert.match(
-    simmons,
-    /url\("\/bewerbungs-generator\/motivation\/images\/90s\.PNG"\)/
-  );
-  assert.match(
-    simmons,
-    /url\("\/bewerbungs-generator\/motivation\/images\/902\.PNG"\)/
-  );
-
-  for (const imageName of ["80s.PNG", "902.PNG", "90s.PNG", "NEON2.PNG"]) {
-    assert.ok(fs.existsSync(path.join(frontendPath, "images", imageName)));
-  }
+  assert.deepEqual(motivationStyles, styleNames.slice().sort());
+  assert.deepEqual(lebenslaufStyles, styleNames.slice().sort());
 });
 
 test("frontend preserves production markup and routes AI to Railway", () => {
@@ -116,7 +92,8 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   );
 
   assert.match(paymentScript, /checkout\/create-session/);
-  assert.match(paymentScript, /checkout\/session/);
+  assert.match(paymentScript, /checkout\/verify-session/);
+  assert.doesNotMatch(paymentScript, /checkout\/session\/\$\{encodeURIComponent/);
   assert.match(paymentScript, /html2canvas/);
   assert.match(paymentScript, /jsPDF/);
   assert.match(paymentScript, /querySelector\(".watermark"\)/);
@@ -126,6 +103,8 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.doesNotMatch(paymentScript, /payment_method_types/);
   assert.doesNotMatch(paymentScript, /html2pdf/);
   assert.doesNotMatch(paymentScript, /\/generate-pdf/);
+  assert.match(motivationPreview, /integrity="sha384-/);
+  assert.match(lebenslaufPreview, /integrity="sha384-/);
   assert.doesNotMatch(motivationPreview, /id="paymentMethod"|<select|Zahlungsart:/);
   assert.doesNotMatch(lebenslaufPreview, /id="paymentMethod"|<select|Zahlungsart:/);
   assert.doesNotMatch(motivationPreview, /id="printBtn"|Druckvorschau/);

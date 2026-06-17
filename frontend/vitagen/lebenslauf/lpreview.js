@@ -84,17 +84,32 @@ if (backBtn) {
   });
 }
 
-document.querySelectorAll(".style-switch button").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const themeLink = document.getElementById("theme-style");
-    if (themeLink) {
-      themeLink.href = "styles/" + btn.dataset.style;
-    }
+const STYLE_STORAGE_KEY = "vitagen_lebenslauf_style";
+const DEFAULT_STYLE = "standard.css";
+const themeLink = document.getElementById("theme-style");
+const styleButtons = Array.from(document.querySelectorAll(".style-switch button"));
 
-    document.querySelectorAll(".style-switch button").forEach((button) => {
-      button.classList.remove("active");
-    });
+function applyPreviewStyle(file) {
+  const selectedFile = styleButtons.some((button) => button.dataset.style === file)
+    ? file
+    : DEFAULT_STYLE;
 
-    btn.classList.add("active");
+  if (themeLink) {
+    themeLink.href = "styles/" + selectedFile;
+  }
+
+  localStorage.setItem(STYLE_STORAGE_KEY, selectedFile);
+  styleButtons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.style === selectedFile);
   });
-});
+}
+
+if (themeLink && styleButtons.length > 0) {
+  applyPreviewStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
+
+  styleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      applyPreviewStyle(button.dataset.style);
+    });
+  });
+}

@@ -323,6 +323,27 @@ function createApp({
     }
   });
 
+  app.post("/checkout/verify-session", paymentLimiter, async (req, res) => {
+    if (!payment) {
+      res.status(503).json({ error: "Payment service is not configured." });
+      return;
+    }
+
+    try {
+      const verification = await payment.verifyPaidSession(req.body);
+      res.json({
+        id: verification.id,
+        paymentStatus: verification.paymentStatus,
+        documentType: verification.documentType,
+        styleName: verification.styleName,
+        documentHash: verification.documentHash,
+      });
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
+      res.status(mapped.status).json(mapped.body);
+    }
+  });
+
   app.get("/checkout/session/:sessionId", paymentLimiter, async (req, res) => {
     if (!payment) {
       res.status(503).json({ error: "Payment service is not configured." });

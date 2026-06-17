@@ -1,0 +1,34 @@
+@import url("./_base.css");
+
+:root {
+  --letter-font: "Segoe UI", Arial, sans-serif;
+  --letter-bg: #edf2f7;
+  --letter-ink: #0b1220;
+  --letter-muted: #526174;
+  --letter-accent: #0b6bcb;
+  --letter-rule: #cbd9e8;
+  --letter-cover-bg: linear-gradient(135deg, #0b1220 0%, #123b66 100%);
+  --letter-cover-ink: #f8fafc;
+  --letter-cover-muted: #d9e6f2;
+  --letter-cover-accent: #67e8f9;
+  --letter-title-size: 30pt;
+}
+
+.cover::after {
+  content: "";
+  position: absolute;
+  right: 24mm;
+  top: 28mm;
+  width: 42mm;
+  height: 42mm;
+  border-top: 1px solid rgba(103, 232, 249, 0.9);
+  border-right: 1px solid rgba(103, 232, 249, 0.9);
+}
+
+h2 {
+  border-bottom-style: dashed;
+}
+
+.header .datum {
+  font-family: Consolas, "Courier New", monospace;
+}

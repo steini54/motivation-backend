@@ -75,23 +75,32 @@ async function loadStoredPhoto(data) {
 
 loadStoredPhoto(savedData);
 
+const STYLE_STORAGE_KEY = "vitagen_motivation_style";
+const DEFAULT_STYLE = "standard.css";
 const themeLink = document.getElementById("theme-style");
-const buttons = document.querySelectorAll(".style-switch button");
+const buttons = Array.from(document.querySelectorAll(".style-switch button"));
 
-if (themeLink) {
-  const savedStyle = localStorage.getItem("vitagen_style");
+function applyPreviewStyle(file) {
+  const selectedFile = buttons.some((button) => button.dataset.style === file)
+    ? file
+    : DEFAULT_STYLE;
 
-  if (savedStyle) {
-    themeLink.href = "styles/" + savedStyle;
+  if (themeLink) {
+    themeLink.href = "styles/" + selectedFile;
   }
+
+  localStorage.setItem(STYLE_STORAGE_KEY, selectedFile);
+  buttons.forEach((button) => {
+    button.classList.toggle("active", button.dataset.style === selectedFile);
+  });
+}
+
+if (themeLink && buttons.length > 0) {
+  applyPreviewStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
 
   buttons.forEach((button) => {
     button.addEventListener("click", () => {
-      const file = button.dataset.style;
-      themeLink.href = "styles/" + file;
-      localStorage.setItem("vitagen_style", file);
-      buttons.forEach((btn) => btn.classList.remove("active"));
-      button.classList.add("active");
+      applyPreviewStyle(button.dataset.style);
     });
   });
 }

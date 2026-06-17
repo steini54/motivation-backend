@@ -1,0 +1,30 @@
+@import url("./_base.css");
+
+:root {
+  --cv-font: "Segoe UI", Arial, sans-serif;
+  --cv-bg: #f5f1ec;
+  --cv-ink: #2b2521;
+  --cv-muted: #75685d;
+  --cv-accent: #9a5b3f;
+  --cv-rule: #ded1c7;
+  --cv-cover-bg: #fff8f1;
+  --cv-cover-ink: #2b2521;
+  --cv-cover-muted: #75685d;
+  --cv-cover-accent: #9a5b3f;
+  --cv-title-size: 28pt;
+}
+
+.cover {
+  border: 12mm solid #fff;
+  outline: 1px solid #eaded3;
+}
+
+.cv {
+  background:
+    linear-gradient(180deg, #fff8f1 0 16mm, transparent 16mm),
+    var(--cv-paper);
+}
+
+h2 {
+  color: #7f4d38;
+}

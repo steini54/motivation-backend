@@ -1,0 +1,42 @@
+@import url("./_base.css");
+
+:root {
+  --letter-font: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --letter-bg: #f0f0ee;
+  --letter-ink: #101214;
+  --letter-muted: #60666f;
+  --letter-accent: #c1121f;
+  --letter-rule: #d9d9d4;
+  --letter-cover-bg: #ffffff;
+  --letter-cover-ink: #101214;
+  --letter-cover-muted: #60666f;
+  --letter-cover-accent: #c1121f;
+  --letter-body-size: 10.8pt;
+  --letter-title-size: 32pt;
+}
+
+.cover {
+  justify-content: space-between;
+}
+
+.cover::before {
+  align-self: stretch;
+  width: auto;
+}
+
+.anschreiben {
+  padding-top: 24mm;
+}
+
+h2 {
+  display: grid;
+  grid-template-columns: 24mm 1fr;
+  gap: 6mm;
+  border-bottom: 0;
+}
+
+h2::before {
+  content: "";
+  border-top: 2px solid var(--letter-accent);
+  transform: translateY(0.62em);
+}

@@ -1,0 +1,33 @@
+@import url("./_base.css");
+
+:root {
+  --cv-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-bg: #f2f4f7;
+  --cv-ink: #161a1d;
+  --cv-muted: #5f6b76;
+  --cv-accent: #334155;
+  --cv-rule: #cfd6dd;
+  --cv-cover-bg: #f8fafc;
+  --cv-cover-ink: #161a1d;
+  --cv-cover-muted: #5f6b76;
+  --cv-cover-accent: #334155;
+  --cv-body-size: 9.8pt;
+  --cv-small-size: 8.8pt;
+  --cv-heading-size: 10.2pt;
+  --cv-title-size: 25pt;
+  --cv-page-x: 18mm;
+  --cv-page-y: 17mm;
+  --cv-line-height: 1.33;
+}
+
+.cover {
+  padding: 24mm 22mm;
+}
+
+.pv-entry {
+  margin-bottom: 3.6mm;
+}
+
+h2:not(:first-child) {
+  margin-top: 6mm;
+}

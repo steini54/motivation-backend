@@ -14,20 +14,14 @@ const DOCUMENT_TYPES = {
 };
 
 const STYLE_NAMES = new Set([
-  "basic.css",
-  "basic2.css",
-  "classic.css",
-  "classic2.css",
-  "crosser.css",
-  "crosser2.css",
-  "headerbar.css",
-  "headerbarlight.css",
-  "modern.css",
-  "modern2.css",
-  "report.css",
-  "report2.css",
-  "simmons.css",
-  "simmons2.css",
+  "standard.css",
+  "swiss.css",
+  "executive.css",
+  "academic.css",
+  "technical.css",
+  "creative.css",
+  "compact.css",
+  "service.css",
 ]);
 
 function createPaymentError(status, code, message) {

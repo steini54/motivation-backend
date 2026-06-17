@@ -48,7 +48,10 @@
 
   function getSelectedStyleName() {
     const href = document.getElementById("theme-style")?.getAttribute("href") || "";
-    return href.split("/").pop() || localStorage.getItem("vitagen_style") || "classic.css";
+    const styleStorageKey =
+      documentType === "lebenslauf" ? "vitagen_lebenslauf_style" : "vitagen_motivation_style";
+
+    return href.split("/").pop() || localStorage.getItem(styleStorageKey) || "standard.css";
   }
 
   function getReturnUrl() {
@@ -117,6 +120,30 @@
     }
 
     window.location.href = data.url;
+  }
+
+  async function verifyPaidCheckoutSession(sessionId) {
+    const documentData = loadDocumentData();
+    const styleName = getSelectedStyleName();
+    const documentHash = await createDocumentHash(styleName, documentData);
+
+    const response = await fetch(`${API_BASE_URL}/checkout/verify-session`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        sessionId,
+        documentType,
+        styleName,
+        documentHash,
+      }),
+    });
+    const data = await response.json().catch(() => ({}));
+
+    if (!response.ok) {
+      throw new Error(data.error || "Payment could not be verified.");
+    }
+
+    return data;
   }
 
   async function waitForPreviewImages(preview) {
@@ -277,14 +304,7 @@
 
     try {
       setStatus("Payment confirmed. Preparing your PDF...");
-      const response = await fetch(
-        `${API_BASE_URL}/checkout/session/${encodeURIComponent(sessionId)}`
-      );
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok) {
-        throw new Error(data.error || "Payment could not be verified.");
-      }
+      const data = await verifyPaidCheckoutSession(sessionId);
 
       if (data.paymentStatus !== "paid") {
         setStatus(

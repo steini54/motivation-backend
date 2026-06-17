@@ -1,0 +1,245 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+:root {
+  --cv-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-title-font: var(--cv-font);
+  --cv-bg: #eef1f4;
+  --cv-paper: #ffffff;
+  --cv-ink: #17202a;
+  --cv-muted: #667085;
+  --cv-accent: #1f4e79;
+  --cv-soft: #f3f6f8;
+  --cv-rule: #d8dee6;
+  --cv-cover-bg: #f7f9fb;
+  --cv-cover-ink: var(--cv-ink);
+  --cv-cover-muted: #5f6b76;
+  --cv-cover-accent: var(--cv-accent);
+  --cv-body-size: 10.6pt;
+  --cv-small-size: 9.5pt;
+  --cv-heading-size: 11.4pt;
+  --cv-title-size: 28pt;
+  --cv-line-height: 1.45;
+  --cv-page-x: 24mm;
+  --cv-page-y: 22mm;
+  --cv-photo-radius: 4px;
+  --cv-section-transform: uppercase;
+  --cv-section-letter: 0.08em;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--cv-bg);
+  color: var(--cv-ink);
+  font-family: var(--cv-font);
+  font-size: var(--cv-body-size);
+  line-height: var(--cv-line-height);
+  padding: 24px;
+}
+
+#preview-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 48px;
+}
+
+#preview {
+  width: 210mm;
+  background: var(--cv-paper);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+}
+
+.cover,
+.cv {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--cv-paper);
+  color: var(--cv-ink);
+}
+
+.cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 7mm;
+  overflow: hidden;
+  padding: 34mm 30mm;
+  background: var(--cv-cover-bg);
+  color: var(--cv-cover-ink);
+  break-after: page;
+  page-break-after: always;
+}
+
+.cover::before {
+  content: "";
+  width: 28mm;
+  height: 1.2mm;
+  background: var(--cv-cover-accent);
+  display: block;
+  margin-bottom: 9mm;
+}
+
+.cover h1 {
+  margin: 0;
+  color: var(--cv-cover-ink);
+  font-family: var(--cv-title-font);
+  font-size: var(--cv-title-size);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.08;
+}
+
+.cover h4,
+.cover h5 {
+  margin: 0;
+  color: var(--cv-cover-ink);
+  font-weight: 500;
+}
+
+.cover h4 {
+  font-size: 18pt;
+  line-height: 1.15;
+}
+
+.cover h5 {
+  max-width: 130mm;
+  color: var(--cv-cover-muted);
+  font-size: 10pt;
+  letter-spacing: 0.01em;
+  line-height: 1.45;
+}
+
+#pv-foto {
+  width: 36mm;
+  height: 36mm;
+  object-fit: cover;
+  border-radius: var(--cv-photo-radius);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.16);
+}
+
+.page-break {
+  break-before: page;
+  page-break-before: always;
+}
+
+.cv {
+  padding: var(--cv-page-y) var(--cv-page-x) 20mm;
+}
+
+h2 {
+  margin: 0 0 5mm;
+  padding-bottom: 2.2mm;
+  border-bottom: 1px solid var(--cv-rule);
+  color: var(--cv-accent);
+  font-size: var(--cv-heading-size);
+  font-weight: 700;
+  letter-spacing: var(--cv-section-letter);
+  line-height: 1.22;
+  text-transform: var(--cv-section-transform);
+}
+
+h2:not(:first-child) {
+  margin-top: 9mm;
+}
+
+.pv-entry {
+  margin: 0 0 5.2mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.pv-entry p {
+  margin: 1.4mm 0 0;
+}
+
+.pv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 9mm;
+  align-items: baseline;
+  font-weight: 700;
+}
+
+.pv-date {
+  flex: 0 0 auto;
+  color: var(--cv-muted);
+  font-size: var(--cv-small-size);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+p {
+  margin: 0 0 2.2mm;
+}
+
+#pv-datum {
+  margin-top: 12mm;
+  text-align: right;
+}
+
+#pv-unterschrift {
+  font-weight: 700;
+  text-align: right;
+}
+
+.watermark {
+  color: rgba(15, 23, 42, 0.08);
+  font-family: Arial, sans-serif;
+  font-size: 54pt;
+  font-weight: 700;
+}
+
+@media print {
+  button,
+  .style-switch,
+  .navigation,
+  .top-buttons,
+  hr {
+    display: none !important;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #preview,
+  #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 210mm;
+    box-shadow: none !important;
+  }
+
+  #preview-wrapper {
+    display: block;
+    padding: 0;
+  }
+}

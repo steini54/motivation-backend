@@ -1,0 +1,237 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: var(--letter-font);
+  --letter-bg: #eef1f4;
+  --letter-paper: #ffffff;
+  --letter-ink: #17202a;
+  --letter-muted: #667085;
+  --letter-accent: #1f4e79;
+  --letter-rule: #d8dee6;
+  --letter-cover-bg: #f7f9fb;
+  --letter-cover-ink: var(--letter-ink);
+  --letter-cover-muted: #5f6b76;
+  --letter-cover-accent: var(--letter-accent);
+  --letter-body-size: 11pt;
+  --letter-small-size: 9.6pt;
+  --letter-title-size: 28pt;
+  --letter-line-height: 1.5;
+  --letter-page-x: 24mm;
+  --letter-page-y: 20mm;
+  --letter-photo-radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: var(--letter-bg);
+  color: var(--letter-ink);
+  font-family: var(--letter-font);
+  font-size: var(--letter-body-size);
+  line-height: var(--letter-line-height);
+  padding: 24px;
+}
+
+#preview-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 48px;
+}
+
+#preview {
+  width: 210mm;
+  background: var(--letter-paper);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+}
+
+.cover,
+.anschreiben {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--letter-paper);
+  color: var(--letter-ink);
+}
+
+.cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 7mm;
+  overflow: hidden;
+  padding: 34mm 30mm;
+  background: var(--letter-cover-bg);
+  color: var(--letter-cover-ink);
+  break-after: page;
+  page-break-after: always;
+}
+
+.cover::before {
+  content: "";
+  width: 28mm;
+  height: 1.2mm;
+  background: var(--letter-cover-accent);
+  display: block;
+  margin-bottom: 9mm;
+}
+
+.cover h1,
+.cover h3,
+.cover h4,
+.cover h5 {
+  margin: 0;
+  color: var(--letter-cover-ink);
+}
+
+.cover h1 {
+  font-family: var(--letter-title-font);
+  font-size: var(--letter-title-size);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.08;
+}
+
+.cover h3 {
+  max-width: 132mm;
+  font-size: 15pt;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.cover h4 {
+  font-size: 18pt;
+  font-weight: 600;
+}
+
+.cover h5 {
+  max-width: 130mm;
+  color: var(--letter-cover-muted);
+  font-size: 10pt;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+#pv-foto {
+  width: 36mm;
+  height: 36mm;
+  object-fit: cover;
+  border-radius: var(--letter-photo-radius);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.16);
+}
+
+.page-break {
+  break-before: page;
+  page-break-before: always;
+}
+
+.anschreiben {
+  padding: var(--letter-page-y) var(--letter-page-x) 22mm;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14mm;
+  align-items: start;
+  margin-bottom: 18mm;
+  color: var(--letter-muted);
+  font-size: var(--letter-small-size);
+  line-height: 1.45;
+}
+
+.header .adresse {
+  max-width: 92mm;
+  text-align: left;
+}
+
+.header .datum {
+  color: var(--letter-ink);
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: right;
+}
+
+h2 {
+  margin: 0 0 8mm;
+  padding-bottom: 3mm;
+  border-bottom: 1px solid var(--letter-rule);
+  color: var(--letter-accent);
+  font-size: 13pt;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  line-height: 1.28;
+}
+
+p {
+  margin: 0 0 4.2mm;
+}
+
+footer {
+  margin-top: 18mm;
+}
+
+footer p {
+  margin-bottom: 0;
+}
+
+.watermark {
+  color: rgba(15, 23, 42, 0.08);
+  font-family: Arial, sans-serif;
+  font-size: 54pt;
+  font-weight: 700;
+}
+
+@media print {
+  button,
+  .style-switch,
+  .navigation,
+  .top-buttons,
+  hr {
+    display: none !important;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #preview,
+  #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 210mm;
+    box-shadow: none !important;
+  }
+
+  #preview-wrapper {
+    display: block;
+    padding: 0;
+  }
+}

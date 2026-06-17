@@ -61,7 +61,7 @@ test("checkout session endpoint returns a Stripe redirect URL", async () => {
   const documentData = { name: "Max Muster", funktion: "Kaufmann" };
   const documentHash = createDocumentHash({
     documentType: "motivation",
-    styleName: "classic.css",
+    styleName: "standard.css",
     documentData,
   });
 
@@ -77,7 +77,7 @@ test("checkout session endpoint returns a Stripe redirect URL", async () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           documentType: "motivation",
-          styleName: "classic.css",
+          styleName: "standard.css",
           documentHash,
           customerEmail: "max@example.com",
         }),
@@ -95,7 +95,7 @@ test("clean PDF generation requires a paid matching checkout session", async () 
   const documentData = { name: "Max Muster", funktion: "Kaufmann" };
   const documentHash = createDocumentHash({
     documentType: "motivation",
-    styleName: "classic.css",
+    styleName: "standard.css",
     documentData,
   });
   let verified = false;
@@ -109,7 +109,7 @@ test("clean PDF generation requires a paid matching checkout session", async () 
           assert.equal(input.documentHash, documentHash);
           return {
             documentType: "motivation",
-            styleName: "classic.css",
+            styleName: "standard.css",
             documentHash,
             filename: "Bewerbung.pdf",
           };
@@ -125,7 +125,7 @@ test("clean PDF generation requires a paid matching checkout session", async () 
         body: JSON.stringify({
           sessionId: "cs_test_paid",
           documentType: "motivation",
-          styleName: "classic.css",
+          styleName: "standard.css",
           documentData,
           documentHash,
         }),
@@ -136,6 +136,93 @@ test("clean PDF generation requires a paid matching checkout session", async () 
       assert.match(response.headers.get("content-type"), /^application\/pdf/);
       assert.equal(bytes.subarray(0, 4).toString("utf8"), "%PDF");
       assert.equal(verified, true);
+    }
+  );
+});
+
+test("checkout session verification requires paid matching metadata", async () => {
+  const documentData = { name: "Max Muster", funktion: "Kaufmann" };
+  const documentHash = createDocumentHash({
+    documentType: "motivation",
+    styleName: "standard.css",
+    documentData,
+  });
+  let verified = false;
+
+  await withServer(
+    createApp({
+      paymentService: createFakePaymentService({
+        async verifyPaidSession(input) {
+          verified = true;
+          assert.deepEqual(input, {
+            sessionId: "cs_test_paid",
+            documentType: "motivation",
+            styleName: "standard.css",
+            documentHash,
+          });
+          return {
+            id: input.sessionId,
+            paymentStatus: "paid",
+            documentType: input.documentType,
+            styleName: input.styleName,
+            documentHash: input.documentHash,
+          };
+        },
+      }),
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/checkout/verify-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: "cs_test_paid",
+          documentType: "motivation",
+          styleName: "standard.css",
+          documentHash,
+        }),
+      });
+      const body = await response.json();
+
+      assert.equal(response.status, 200);
+      assert.equal(body.paymentStatus, "paid");
+      assert.equal(body.documentHash, documentHash);
+      assert.equal(verified, true);
+    }
+  );
+});
+
+test("checkout session verification rejects document mismatch", async () => {
+  await withServer(
+    createApp({
+      paymentService: createFakePaymentService({
+        async verifyPaidSession() {
+          const error = new Error("Payment does not match this document.");
+          error.status = 403;
+          error.code = "PAYMENT_DOCUMENT_MISMATCH";
+          throw error;
+        },
+      }),
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/checkout/verify-session`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          sessionId: "cs_test_paid",
+          documentType: "motivation",
+          styleName: "standard.css",
+          documentHash: "a".repeat(64),
+        }),
+      });
+
+      assert.equal(response.status, 403);
+      assert.deepEqual(await response.json(), {
+        error: "Payment does not match this document.",
+      });
     }
   );
 });

@@ -1,0 +1,31 @@
+@import url("./_base.css");
+
+:root {
+  --letter-font: Georgia, "Times New Roman", serif;
+  --letter-title-font: Georgia, "Times New Roman", serif;
+  --letter-bg: #f3f0ea;
+  --letter-ink: #241f1a;
+  --letter-muted: #6d6258;
+  --letter-accent: #5b4636;
+  --letter-rule: #d9cfc4;
+  --letter-cover-bg: #fbfaf7;
+  --letter-cover-ink: #241f1a;
+  --letter-cover-muted: #6d6258;
+  --letter-cover-accent: #8a6f4d;
+  --letter-body-size: 11.1pt;
+  --letter-title-size: 29pt;
+}
+
+.cover h1,
+.cover h4 {
+  font-weight: 600;
+}
+
+h2 {
+  color: var(--letter-ink);
+  font-style: italic;
+}
+
+.header {
+  font-size: 10pt;
+}
