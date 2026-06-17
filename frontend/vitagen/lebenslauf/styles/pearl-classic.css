@@ -1,0 +1,23 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: Georgia, Cambria, serif;
+  --cv-title-font: Georgia, Cambria, serif;
+  --cv-bg: #f0ede6;
+  --cv-paper: #fffdf7;
+  --cv-ink: #2c2924;
+  --cv-muted: #736d62;
+  --cv-accent: #6d5d44;
+  --cv-accent-2: #c5b99f;
+  --cv-rule: #ded4c2;
+  --cv-cover-bg: #fffdf7;
+  --cv-cover-mark-bg: #c5b99f;
+  --cv-cover-mark-width: 42mm;
+  --cv-photo-size: 28mm;
+  --cv-photo-border: 1px solid #c5b99f;
+  --cv-photo-shadow: none;
+  --cv-body-size: 10.4pt;
+  --cv-name-size: 26pt;
+  --cv-section-transform: none;
+  --cv-section-letter: 0;
+}

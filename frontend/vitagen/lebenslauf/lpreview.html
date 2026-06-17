@@ -14,20 +14,26 @@
   <meta charset="UTF-8">
   <title>VitaGen - Vorschau</title>
   <link rel="stylesheet" href="lstyle.css">
-  <link id="theme-style" rel="stylesheet" href="styles/standard.css">
+  <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css">
   <link rel="stylesheet" href="lprint.css" media="print">
 </head>
 <body>
 
 <div class="style-switch">
-  <button data-style="standard.css">Standard</button>
-  <button data-style="executive.css">Executive</button>
-  <button data-style="swiss.css">Swiss</button>
-  <button data-style="compact.css">Compact</button>
-  <button data-style="academic.css">Academic</button>
-  <button data-style="technical.css">Technical</button>
-  <button data-style="creative.css">Creative</button>
-  <button data-style="service.css">Service</button>
+  <button data-style="swiss-line.css">Swiss Line</button>
+  <button data-style="executive-ink.css">Executive Ink</button>
+  <button data-style="editorial-azure.css">Editorial Azure</button>
+  <button data-style="soft-sand.css">Soft Sand</button>
+  <button data-style="nordic-panel.css">Nordic Panel</button>
+  <button data-style="midnight-column.css">Midnight Column</button>
+  <button data-style="terracotta-arch.css">Terracotta Arch</button>
+  <button data-style="graphite-pro.css">Graphite Pro</button>
+  <button data-style="teal-balance.css">Teal Balance</button>
+  <button data-style="monograph.css">Monograph</button>
+  <button data-style="cobalt-ribbon.css">Cobalt Ribbon</button>
+  <button data-style="pearl-classic.css">Pearl Classic</button>
+  <button data-style="charcoal-frame.css">Charcoal Frame</button>
+  <button data-style="navy-wave.css">Navy Wave</button>
 </div>
 
 <hr>
@@ -72,17 +78,17 @@
 <div id="preview">
   <div class="watermark">VORSCHAU - PREVIEW</div>
 
-  <div class="cover">
-    <h1>Lebenslauf</h1>
-    <img id="pv-foto" style="max-width:200px; display:none;">
-    <h4 id="pv-name"></h4>
-    <h5 id="pv-adresse"></h5>
-    <h5 id="pv-kontakt"></h5>
-  </div>
-
-  <div class="page-break"></div>
-
   <div class="cv">
+    <div class="cv-header">
+      <img id="pv-foto" alt="Bewerbungsfoto" style="max-width:200px; display:none;">
+      <div class="cv-identity">
+        <p class="document-label">Lebenslauf</p>
+        <h1 id="pv-name"></h1>
+        <p id="pv-adresse"></p>
+        <p id="pv-kontakt"></p>
+      </div>
+    </div>
+
     <h2 class="new-page">Schulbildung</h2>
     <div id="pv-schulbildung"></div>
 

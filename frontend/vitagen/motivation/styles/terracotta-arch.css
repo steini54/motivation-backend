@@ -1,0 +1,29 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: Georgia, Cambria, serif;
+  --letter-bg: #f3eee9;
+  --letter-paper: #fffdf9;
+  --letter-ink: #30251f;
+  --letter-muted: #776b61;
+  --letter-accent: #b55f3d;
+  --letter-accent-2: #ebb995;
+  --letter-rule: #ead2c3;
+  --letter-cover-bg: #fffdf9;
+  --letter-cover-mark-inset: 0 auto auto 0;
+  --letter-cover-mark-width: 50mm;
+  --letter-cover-mark-height: 50mm;
+  --letter-cover-mark-bg: #ebb995;
+  --letter-cover-mark-radius: 0 0 999px 0;
+  --letter-cover-shape-bg: #f2c7ab;
+  --letter-cover-shape-width: 64mm;
+  --letter-cover-shape-height: 64mm;
+  --letter-cover-shape-inset: auto -20mm -20mm auto;
+  --letter-cover-shape-radius: 999px 0 0 0;
+  --letter-photo-size: 26mm;
+  --letter-photo-border: 3px solid #f6e6dc;
+  --letter-subject-bg: #fff6f0;
+  --letter-subject-padding: 2.4mm 3mm;
+  --letter-subject-radius: 2mm;
+}

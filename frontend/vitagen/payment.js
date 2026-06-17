@@ -54,7 +54,7 @@
     const styleStorageKey =
       documentType === "lebenslauf" ? "vitagen_lebenslauf_style" : "vitagen_motivation_style";
 
-    return href.split("/").pop() || localStorage.getItem(styleStorageKey) || "standard.css";
+    return href.split("/").pop() || localStorage.getItem(styleStorageKey) || "swiss-line.css";
   }
 
   function getReturnUrl() {
@@ -210,8 +210,7 @@
     const pageBreaks = Array.from(preview.querySelectorAll(".page-break"));
     const originalWatermarkDisplay = watermark?.style.display || "";
     const originalBoxShadow = preview.style.boxShadow || "";
-    const pageSelector =
-      documentType === "lebenslauf" ? ".cover, .cv" : ".cover, .anschreiben";
+    const pageSelector = documentType === "lebenslauf" ? ".cv" : ".anschreiben";
     const pageElements = Array.from(preview.querySelectorAll(pageSelector));
     const originalPageBreakDisplays = pageBreaks.map((element) => ({
       element,

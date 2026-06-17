@@ -76,7 +76,7 @@ async function loadStoredPhoto(data) {
 loadStoredPhoto(savedData);
 
 const STYLE_STORAGE_KEY = "vitagen_motivation_style";
-const DEFAULT_STYLE = "standard.css";
+const DEFAULT_STYLE = "swiss-line.css";
 const themeLink = document.getElementById("theme-style");
 const buttons = Array.from(document.querySelectorAll(".style-switch button"));
 
@@ -91,7 +91,9 @@ function applyPreviewStyle(file) {
 
   localStorage.setItem(STYLE_STORAGE_KEY, selectedFile);
   buttons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.style === selectedFile);
+    const isActive = button.dataset.style === selectedFile;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", String(isActive));
   });
 }
 

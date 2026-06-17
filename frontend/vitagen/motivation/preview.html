@@ -4,21 +4,27 @@
   <meta charset="UTF-8">
   <title>VitaGen – Vorschau</title>
   <link rel="stylesheet" href="style.css">
-  <link id="theme-style" rel="stylesheet" href="styles/standard.css">
+  <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css">
   <link rel="stylesheet" href="print.css" media="print">
 </head>
 <body>
 
 <!-- Style-Switch -->
 <div class="style-switch">
-  <button data-style="standard.css">Standard</button>
-  <button data-style="executive.css">Executive</button>
-  <button data-style="swiss.css">Swiss</button>
-  <button data-style="compact.css">Compact</button>
-  <button data-style="academic.css">Academic</button>
-  <button data-style="technical.css">Technical</button>
-  <button data-style="creative.css">Creative</button>
-  <button data-style="service.css">Service</button>
+  <button data-style="swiss-line.css">Swiss Line</button>
+  <button data-style="executive-ink.css">Executive Ink</button>
+  <button data-style="editorial-azure.css">Editorial Azure</button>
+  <button data-style="soft-sand.css">Soft Sand</button>
+  <button data-style="nordic-panel.css">Nordic Panel</button>
+  <button data-style="midnight-column.css">Midnight Column</button>
+  <button data-style="terracotta-arch.css">Terracotta Arch</button>
+  <button data-style="graphite-pro.css">Graphite Pro</button>
+  <button data-style="teal-balance.css">Teal Balance</button>
+  <button data-style="monograph.css">Monograph</button>
+  <button data-style="cobalt-ribbon.css">Cobalt Ribbon</button>
+  <button data-style="pearl-classic.css">Pearl Classic</button>
+  <button data-style="charcoal-frame.css">Charcoal Frame</button>
+  <button data-style="navy-wave.css">Navy Wave</button>
 </div>
 
 <hr>
@@ -64,20 +70,19 @@
   <div id="preview">
     <div class="watermark">VORSCHAU – PREVIEW</div>
 
-    <!-- Deckblatt -->
-    <div class="cover">
-      <h1>Bewerbung</h1>
-      <h3 id="pv-posten"></h3>
-      <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none; margin:10px auto; max-width:250px; height:auto; border-radius:4px;">
-      <h4 id="pv-name"></h4>
-      <h5 id="pv-adresse"></h5>
-      <h5 id="pv-kontakt"></h5>
-    </div>
-
-    <div class="page-break"></div>
-
     <!-- Motivationsschreiben -->
     <div class="anschreiben">
+      <div class="letterhead">
+        <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none; margin:10px auto; max-width:250px; height:auto; border-radius:4px;">
+        <div class="letter-identity">
+          <p class="document-label">Bewerbung</p>
+          <h1 id="pv-name"></h1>
+          <p id="pv-posten"></p>
+          <p id="pv-adresse"></p>
+          <p id="pv-kontakt"></p>
+        </div>
+      </div>
+
       <div class="header">
         <div class="adresse" id="pv-arbeitgeber">Firma<br>Straße<br>Ort</div>
         <div class="datum" id="pv-datum">01.01.2026</div>

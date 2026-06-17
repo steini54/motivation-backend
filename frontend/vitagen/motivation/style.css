@@ -125,33 +125,49 @@ button:hover, .add-btn:hover {
 /* Container zentrieren mit Flexbox */
 .style-switch {
   display: flex;
-  justify-content: center; /* Buttons horizontal zentrieren */
-  gap: 12px;               /* horizontaler Abstand zwischen Buttons */
-  margin-bottom: 20px;
+  justify-content: flex-start;
+  gap: 8px;
+  width: min(1120px, calc(100vw - 32px));
+  max-width: none;
+  margin: 0 auto 18px;
+  padding: 10px 12px;
+  overflow-x: auto;
+  background: #ffffff;
+  border: 1px solid #d9e2ec;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  scrollbar-width: thin;
 }
 
 /* Buttons Grundstil */
 .style-switch button {
-  padding: 8px 16px;
-  border: 2px solid #7a7a7a; /* blaue Umrandung */
-  border-radius: 4px;
-  background-color: #f0f0f0;
+  flex: 0 0 auto;
+  min-width: 118px;
+  padding: 9px 12px;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background-color: #f8fafc;
+  color: #172033;
   cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+  transition: background-color 0.18s ease, color 0.18s ease, border-color 0.18s ease;
 }
 
 /* Hover-Effekt */
 .style-switch button:hover {
-  background-color: #5ce687; /* grün beim Hover */
-  color: white;
-  border-color: #7a7a7a;     /* Umrandung bleibt blau */
+  background-color: #e8eef6;
+  color: #0f172a;
+  border-color: #93a4b7;
 }
 
 /* Aktiver Button */
 .style-switch button.active {
-  background-color: #00ff1a; /* hellgrün für aktiv */
-  color: white;
-  border-color: #007BFF;     /* Umrandung bleibt blau */
+  background-color: #172033;
+  color: #ffffff;
+  border-color: #172033;
 }
 
 .header {

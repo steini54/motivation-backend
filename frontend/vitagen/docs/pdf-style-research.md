@@ -21,15 +21,21 @@
 - Treat the motivation letter as a business letter: recipient/date header, clear subject, one-page text rhythm, conservative margins.
 - Use A4-first CSS: fixed 210mm page width, 297mm page sections, print color adjustment, page-break protection for entries.
 - Avoid dated or risky visuals: no neon text, no heavy image backgrounds, no novelty fonts, no cartoon styling.
-- Offer fewer, stronger choices instead of 14 near-duplicates.
+- Offer 14 deliberate style families instead of random decorative variants, with matching CV and motivation letter language.
 
 ## New Style Set
 
-- `standard.css`: conservative European baseline for broad applications.
-- `executive.css`: corporate leadership/admin/legal tone with navy and restrained gold.
-- `swiss.css`: minimal grid, high whitespace, strong typographic discipline.
-- `compact.css`: denser layout for candidates with more content.
-- `academic.css`: serif-led research, university, and formal institution tone.
-- `technical.css`: clean product/engineering layout with precise blue accents.
-- `creative.css`: restrained portfolio-friendly style without novelty effects.
-- `service.css`: warmer hospitality, healthcare, customer-facing, and service roles.
+- `swiss-line.css`: safest Swiss/German default with thin rules, calm blue-grey accents, and employer-safe spacing.
+- `executive-ink.css`: premium corporate style with ink/navy structure, warm accent, and mature spacing.
+- `editorial-azure.css`: modern editorial style with blue bars, soft panels, and stronger typographic presence.
+- `soft-sand.css`: warm human-facing style for education, service, hospitality, and social roles.
+- `nordic-panel.css`: structured neutral panel style for operations, administration, sales, and support roles.
+- `midnight-column.css`: bold dark-column style for product, IT, design-adjacent, and modern business roles.
+- `terracotta-arch.css`: elegant creative style with warm arch/corner shapes kept away from body text.
+- `graphite-pro.css`: serious graphite style for engineering, finance, process, and project management.
+- `teal-balance.css`: approachable teal style for healthcare, social work, education support, and customer success.
+- `monograph.css`: minimal black/white editorial style with thin framing and high whitespace.
+- `cobalt-ribbon.css`: confident corporate ribbon style for sales, business, and key account roles.
+- `pearl-classic.css`: conservative serif-led formal style for legal, education, public sector, and traditional employers.
+- `charcoal-frame.css`: sharp framed style for technical leadership, operations, and engineering profiles.
+- `navy-wave.css`: premium navy/gold style with subtle curved/corner detailing for client-facing senior roles.
