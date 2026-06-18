@@ -137,6 +137,7 @@ test("motivation and lebenslauf builders share the navbar and language switch", 
   assert.match(sharedNavbarScript, /data-i18n="nav.save"/);
   assert.match(sharedNavbarScript, /data-i18n="nav.preview"/);
   assert.match(sharedNavbarScript, /vitagen:languagechange/);
+  assert.match(sharedNavbarScript, /render\(\);\s*if \(document\.readyState === "loading"\)/s);
   assert.match(sharedNavbarCss, /\.topbar/);
   assert.match(sharedNavbarCss, /--navbar-primary: #202c39/);
   assert.match(sharedNavbarCss, /\.topbar \.primary-button/);
@@ -174,6 +175,27 @@ test("builder language switch translates page text and attributes", () => {
   assert.match(motivationScript, /"Motivationstext formulieren": "Write motivation text"/);
   assert.match(lebenslaufScript, /"Persoenliche Daten": "Personal details"/);
   assert.match(lebenslaufScript, /"Berufserfahrung": "Work experience"/);
+});
+
+test("builder full preview watermark is large enough to block free documents", () => {
+  const motivationCss = fs.readFileSync(
+    path.join(frontendPath, "style.css"),
+    "utf8"
+  );
+  const lebenslaufCss = fs.readFileSync(
+    path.join(lebenslaufPath, "lstyle.css"),
+    "utf8"
+  );
+
+  for (const css of [motivationCss, lebenslaufCss]) {
+    assert.match(css, /\.preview-paper \.watermark \{/);
+    assert.match(css, /font-size: clamp\(48px, 10vw, 96px\);/);
+    assert.match(css, /color: rgba\(15, 23, 42, 0\.16\);/);
+    assert.match(css, /\.modal-preview-host \.preview-paper \.watermark \{/);
+    assert.match(css, /width: 146%;/);
+    assert.match(css, /font-size: clamp\(76px, 11vw, 152px\);/);
+    assert.match(css, /color: rgba\(15, 23, 42, 0\.18\);/);
+  }
 });
 
 test("frontend preserves production markup and routes AI to Railway", () => {
@@ -273,6 +295,7 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
 
 test("frontend payment scripts are valid JavaScript", () => {
   const scripts = [
+    path.join(vitagenPath, "shared-navbar.js"),
     path.join(vitagenPath, "payment.js"),
     path.join(vitagenPath, "motivation", "script.js"),
     path.join(vitagenPath, "motivation", "preview.js"),

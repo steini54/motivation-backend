@@ -904,15 +904,19 @@ textarea:focus {
 .preview-paper .watermark {
   position: absolute;
   left: 50%;
-  top: 52%;
-  z-index: 5;
+  top: 48%;
+  z-index: 6;
+  width: 136%;
   transform: translate(-50%, -50%) rotate(-31deg);
-  color: rgba(15, 23, 42, 0.13);
-  font-size: clamp(34px, 7vw, 70px);
+  color: rgba(15, 23, 42, 0.16);
+  font-size: clamp(48px, 10vw, 96px);
   font-weight: 900;
+  line-height: 0.9;
   letter-spacing: 0.08em;
+  text-align: center;
   pointer-events: none;
   white-space: nowrap;
+  user-select: none;
 }
 
 .preview-paper .anschreiben {
@@ -1097,8 +1101,10 @@ textarea:focus {
 }
 
 .modal-preview-host .preview-paper .watermark {
-  color: rgba(15, 23, 42, 0.12);
-  font-size: 72px;
+  top: 48%;
+  width: 146%;
+  color: rgba(15, 23, 42, 0.18);
+  font-size: clamp(76px, 11vw, 152px);
 }
 
 .style-picker {
@@ -1852,4 +1858,3 @@ textarea:focus {
     animation-iteration-count: 1 !important;
   }
 }
-
