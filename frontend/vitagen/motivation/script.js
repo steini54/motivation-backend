@@ -4,6 +4,22 @@ let aiImageCount = 0;
 const MAX_IMAGES = 3;
 const STYLE_STORAGE_KEY = "vitagen_motivation_style";
 const DEFAULT_STYLE = "swiss-line.css";
+const DOCUMENT_STYLES = [
+  "charcoal-frame.css",
+  "cobalt-ribbon.css",
+  "editorial-azure.css",
+  "executive-ink.css",
+  "graphite-pro.css",
+  "midnight-column.css",
+  "monograph.css",
+  "navy-wave.css",
+  "nordic-panel.css",
+  "pearl-classic.css",
+  "soft-sand.css",
+  "swiss-line.css",
+  "teal-balance.css",
+  "terracotta-arch.css",
+];
 
 function getStoredData() {
   return JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
@@ -93,10 +109,15 @@ function syncLivePreview({ pulse = true } = {}) {
   }
 }
 
+function normalizeDocumentStyle(styleName = DEFAULT_STYLE) {
+  const cleanName = String(styleName || DEFAULT_STYLE).trim().split(/[\\/]/).pop();
+  return DOCUMENT_STYLES.includes(cleanName) ? cleanName : DEFAULT_STYLE;
+}
+
 function applyDocumentStyle(styleName = DEFAULT_STYLE) {
   const themeLink = document.getElementById("theme-style");
   const preview = document.getElementById("preview");
-  const normalized = styleName || DEFAULT_STYLE;
+  const normalized = normalizeDocumentStyle(styleName);
 
   if (themeLink) {
     themeLink.href = `styles/${normalized}`;
@@ -109,6 +130,9 @@ function applyDocumentStyle(styleName = DEFAULT_STYLE) {
   document.querySelectorAll(".style-chip").forEach(button => {
     button.classList.toggle("active", button.dataset.style === normalized);
   });
+  if (document.getElementById("previewModal")?.classList.contains("open")) {
+    refreshModalPreview();
+  }
   pulseLivePreview();
 }
 
@@ -139,6 +163,36 @@ function closePreviewModal() {
   if (modal) {
     modal.classList.remove("open");
     modal.setAttribute("aria-hidden", "true");
+  }
+}
+
+function openPaymentFromMotivation(source) {
+  console.info("[VitaGen Payment]", "motivation UI payment trigger", {
+    source,
+    hasPaymentApi: Boolean(window.VitaGenPayment?.open),
+    hasBuyModal: Boolean(document.getElementById("buyModal"))
+  });
+
+  if (window.VitaGenPayment?.open) {
+    window.VitaGenPayment.open();
+    return;
+  }
+
+  const modal = document.getElementById("buyModal");
+  if (!modal) {
+    console.error("[VitaGen Payment]", "buyModal not found from motivation UI trigger");
+    showToast("Das Zahlungsfenster konnte nicht geoeffnet werden. Bitte laden Sie die Seite neu.", "error", "Zahlung nicht bereit");
+    return;
+  }
+
+  console.warn("[VitaGen Payment]", "payment.js API missing; opening modal fallback. Check /bewerbungs-generator/payment.js loading.");
+  modal.style.display = "flex";
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  const paymentStatus = document.getElementById("paymentStatus");
+  if (paymentStatus) {
+    paymentStatus.textContent =
+      "Zahlungsmodul wird geladen. Falls die Weiterleitung nicht startet, bitte Seite neu laden.";
   }
 }
 
@@ -173,8 +227,21 @@ function installLivePreview() {
     button.addEventListener("click", closePreviewModal);
   });
   document.querySelectorAll("[data-trigger-buy]").forEach(button => {
-    button.addEventListener("click", () => document.getElementById("buyBtn")?.click());
+    button.addEventListener("click", event => {
+      if (event.defaultPrevented && window.VitaGenPayment?.open) {
+        return;
+      }
+
+      event.preventDefault();
+      openPaymentFromMotivation("preview-modal");
+    });
   });
+  if (!window.VitaGenPayment?.open) {
+    document.getElementById("buyBtn")?.addEventListener("click", event => {
+      event.preventDefault();
+      openPaymentFromMotivation("download-card-fallback");
+    });
+  }
   document.getElementById("previewModal")?.addEventListener("click", event => {
     if (event.target?.id === "previewModal") {
       closePreviewModal();

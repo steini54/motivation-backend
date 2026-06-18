@@ -93,6 +93,21 @@ test("every preview theme is served as CSS", async () => {
   );
 });
 
+test("shared payment script is served from the canonical VitaGen path", async () => {
+  await withServer(
+    createApp({ env: {}, logger: { error() {} } }),
+    async (url) => {
+      const response = await fetch(`${url}/bewerbungs-generator/payment.js`);
+      const body = await response.text();
+
+      assert.equal(response.status, 200);
+      assert.match(response.headers.get("content-type"), /javascript/);
+      assert.match(body, /VitaGenPayment/);
+      assert.match(body, /\[VitaGen Payment\]/);
+    }
+  );
+});
+
 test("generate-text preserves the frontend response contract", async () => {
   await withServer(
     createApp({

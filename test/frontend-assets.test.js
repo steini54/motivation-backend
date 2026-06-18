@@ -2,6 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const fs = require("node:fs");
 const path = require("node:path");
+const vm = require("node:vm");
 
 const frontendPath = path.join(__dirname, "../frontend/vitagen/motivation");
 const vitagenPath = path.join(__dirname, "../frontend/vitagen");
@@ -48,6 +49,20 @@ test("current motivation and lebenslauf theme sets stay in sync", () => {
   assert.deepEqual(lebenslaufStyles, styleNames.slice().sort());
 });
 
+test("motivation builder exposes every current style in the live carousel", () => {
+  const formHtml = fs.readFileSync(
+    path.join(frontendPath, "formular.html"),
+    "utf8"
+  );
+  const carouselStyles = Array.from(
+    formHtml.matchAll(/class="style-chip[^"]*"[^>]*data-style="([^"]+)"/g),
+    (match) => match[1]
+  ).sort();
+
+  assert.deepEqual(carouselStyles, styleNames.slice().sort());
+  assert.match(formHtml, /<div class="watermark">VORSCHAU<\/div>/);
+});
+
 test("frontend preserves production markup and routes AI to Railway", () => {
   const formHtml = fs.readFileSync(
     path.join(frontendPath, "formular.html"),
@@ -65,6 +80,14 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.doesNotMatch(formHtml, /api-config\.js|photo-storage\.js/);
   assert.match(previewHtml, /id="buyBtn"/);
   assert.match(previewHtml, /id="buyModal"/);
+  assert.match(formHtml, /id="buyModal"/);
+  assert.match(formHtml, /PDF ohne Wasserzeichen/);
+  assert.match(formHtml, /Finale PDF freischalten/);
+  assert.match(formHtml, /id="payBtn"[^>]*>Weiter zur sicheren Zahlung<\/button>/);
+  assert.match(formHtml, /data-trigger-buy/);
+  assert.match(formHtml, /src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/);
+  assert.match(formHtml, /html2canvas\/1\.4\.1\/html2canvas\.min\.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H"/);
+  assert.match(formHtml, /jspdf\/2\.5\.1\/jspdf\.umd\.min\.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO\/SWXgMjoVqcKyIIWOLk"/);
   assert.match(previewHtml, /href="print\.css" media="print"/);
   assert.match(
     previewHtml,
@@ -99,6 +122,10 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
 
   assert.match(paymentScript, /checkout\/create-session/);
   assert.match(paymentScript, /checkout\/verify-session/);
+  assert.match(paymentScript, /VitaGenPayment/);
+  assert.match(paymentScript, /\[VitaGen Payment\]/);
+  assert.match(paymentScript, /delegated payment trigger clicked/);
+  assert.match(paymentScript, /\[data-trigger-buy\], \[data-payment-trigger\]/);
   assert.doesNotMatch(paymentScript, /checkout\/session\/\$\{encodeURIComponent/);
   assert.match(paymentScript, /html2canvas/);
   assert.match(paymentScript, /jsPDF/);
@@ -123,6 +150,22 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
     lebenslaufPreview,
     /<script src="lpreview\.js"><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/html2canvas\/1\.4\.1\/html2canvas\.min\.js"[^>]*><\/script>\s*<script src="https:\/\/cdnjs\.cloudflare\.com\/ajax\/libs\/jspdf\/2\.5\.1\/jspdf\.umd\.min\.js"[^>]*><\/script>\s*<script src="\/bewerbungs-generator\/payment\.js" data-document-type="lebenslauf"/
   );
+});
+
+test("frontend payment scripts are valid JavaScript", () => {
+  const scripts = [
+    path.join(vitagenPath, "payment.js"),
+    path.join(vitagenPath, "motivation", "script.js"),
+    path.join(vitagenPath, "motivation", "preview.js"),
+  ];
+
+  for (const scriptPath of scripts) {
+    assert.doesNotThrow(() => {
+      new vm.Script(fs.readFileSync(scriptPath, "utf8"), {
+        filename: scriptPath,
+      });
+    }, `${path.basename(scriptPath)} should parse`);
+  }
 });
 
 test("legacy preview scripts no longer call PDF generation directly", () => {

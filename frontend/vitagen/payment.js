@@ -9,6 +9,34 @@
   const A4_WIDTH_MM = 210;
   const A4_HEIGHT_MM = 297;
   const CANVAS_SCALE = 2;
+  const LOG_PREFIX = "[VitaGen Payment]";
+
+  function log(message, details) {
+    if (details) {
+      console.info(LOG_PREFIX, message, details);
+      return;
+    }
+
+    console.info(LOG_PREFIX, message);
+  }
+
+  function warn(message, details) {
+    if (details) {
+      console.warn(LOG_PREFIX, message, details);
+      return;
+    }
+
+    console.warn(LOG_PREFIX, message);
+  }
+
+  function errorLog(message, details) {
+    if (details) {
+      console.error(LOG_PREFIX, message, details);
+      return;
+    }
+
+    console.error(LOG_PREFIX, message);
+  }
 
   function loadDocumentData() {
     try {
@@ -68,6 +96,7 @@
   function setStatus(message, isError = false) {
     const status = document.getElementById("paymentStatus");
     if (!status) {
+      warn("paymentStatus element not found", { message });
       return;
     }
     status.textContent = message || "";
@@ -83,22 +112,56 @@
 
   function openModal() {
     const modal = document.getElementById("buyModal");
-    if (modal) {
-      modal.style.display = "flex";
+    if (!modal) {
+      errorLog("buyModal element not found");
+      return;
     }
+
+    modal.style.display = "flex";
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    log("payment modal opened", {
+      path: window.location.pathname,
+      documentType,
+      storageKey,
+    });
+    window.setTimeout(() => document.getElementById("payBtn")?.focus(), 0);
   }
 
   function closeModal() {
     const modal = document.getElementById("buyModal");
     if (modal) {
       modal.style.display = "none";
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
     }
   }
 
+  function openPaymentFlow() {
+    log("payment trigger received", {
+      hasModal: Boolean(document.getElementById("buyModal")),
+      hasPayButton: Boolean(document.getElementById("payBtn")),
+      hasStoredData: Boolean(localStorage.getItem(storageKey)),
+    });
+    setStatus("");
+    openModal();
+  }
+
   async function startCheckout() {
+    if (typeof window.saveAllFields === "function") {
+      window.saveAllFields();
+    }
+
     const documentData = loadDocumentData();
     const styleName = getSelectedStyleName();
     const documentHash = await createDocumentHash(styleName, documentData);
+
+    log("starting Stripe Checkout session", {
+      documentType,
+      styleName,
+      documentHashPrefix: documentHash.slice(0, 10),
+      returnUrl: getReturnUrl(),
+    });
 
     sessionStorage.setItem(
       "vitagen_pending_checkout",
@@ -343,6 +406,11 @@
     try {
       setStatus("Payment confirmed. Preparing your PDF...");
       const data = await verifyPaidCheckoutSession(sessionId);
+      log("Stripe Checkout return verified", {
+        paymentStatus: data.paymentStatus,
+        documentType: data.documentType,
+        styleName: data.styleName,
+      });
 
       if (data.paymentStatus !== "paid") {
         setStatus(
@@ -359,7 +427,7 @@
       url.searchParams.delete("session_id");
       window.history.replaceState({}, "", url.toString());
     } catch (error) {
-      console.error("Paid PDF download failed:", error);
+      errorLog("Paid PDF download failed", error?.message || error);
       setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
       openModal();
     }
@@ -380,37 +448,76 @@
     const payBtn = replaceButton("payBtn");
     const cancelBtn = replaceButton("cancelPaymentBtn");
 
+    log("installing payment UI", {
+      hasBuyButton: Boolean(buyBtn),
+      hasPayButton: Boolean(payBtn),
+      hasCancelButton: Boolean(cancelBtn),
+      triggerCount: document.querySelectorAll("[data-trigger-buy], [data-payment-trigger]").length,
+      scriptSrc: script?.getAttribute("src") || "",
+    });
+
     if (buyBtn) {
-      buyBtn.addEventListener("click", () => {
-        setStatus("");
-        openModal();
-      });
+      buyBtn.addEventListener("click", openPaymentFlow);
     }
+
+    document.addEventListener("click", (event) => {
+      const trigger = event.target?.closest?.("[data-trigger-buy], [data-payment-trigger]");
+      if (!trigger) {
+        return;
+      }
+
+      event.preventDefault();
+      log("delegated payment trigger clicked", {
+        text: trigger.textContent.trim(),
+        id: trigger.id || null,
+        classes: trigger.className || null,
+      });
+      openPaymentFlow();
+    });
 
     if (cancelBtn) {
       cancelBtn.addEventListener("click", closeModal);
     }
 
+    document.getElementById("buyModal")?.addEventListener("click", (event) => {
+      if (event.target?.id === "buyModal") {
+        closeModal();
+      }
+    });
+
     if (!payBtn) {
+      errorLog("payBtn element not found; Stripe Checkout cannot start");
       return;
     }
 
     payBtn.addEventListener("click", async () => {
       payBtn.disabled = true;
       const originalText = payBtn.textContent;
-      payBtn.textContent = "Weiter zu Stripe...";
-      setStatus("Redirecting to secure Stripe Checkout...");
+      payBtn.textContent = "Weiterleitung zu Stripe...";
+      setStatus("Weiterleitung zu sicherem Stripe Checkout...");
 
       try {
         await startCheckout();
       } catch (error) {
-        console.error("Stripe checkout failed:", error);
+        errorLog("Stripe checkout failed", error?.message || error);
         setStatus(error.message || "Payment could not be started.", true);
         payBtn.disabled = false;
         payBtn.textContent = originalText;
       }
     });
   }
+
+  window.VitaGenPayment = {
+    open: openPaymentFlow,
+    close: closeModal,
+  };
+
+  log("script loaded", {
+    path: window.location.pathname,
+    documentType,
+    storageKey,
+    scriptSrc: script?.getAttribute("src") || "",
+  });
 
   installStripePaymentUi();
   handleCheckoutReturn();

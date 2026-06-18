@@ -271,15 +271,60 @@
                 <strong>Swiss Line</strong>
                 <small>Empfohlen</small>
               </button>
+              <button type="button" class="style-chip" data-style="charcoal-frame.css" data-tone="charcoal">
+                <span class="style-thumb charcoal"></span>
+                <strong>Charcoal Frame</strong>
+                <small>Kontrast</small>
+              </button>
+              <button type="button" class="style-chip" data-style="cobalt-ribbon.css" data-tone="cobalt">
+                <span class="style-thumb cobalt"></span>
+                <strong>Cobalt Ribbon</strong>
+                <small>Dynamisch</small>
+              </button>
+              <button type="button" class="style-chip" data-style="editorial-azure.css" data-tone="azure">
+                <span class="style-thumb azure"></span>
+                <strong>Editorial Azure</strong>
+                <small>Editorial</small>
+              </button>
               <button type="button" class="style-chip" data-style="executive-ink.css" data-tone="executive">
                 <span class="style-thumb executive"></span>
-                <strong>Executive</strong>
+                <strong>Executive Ink</strong>
                 <small>Premium</small>
+              </button>
+              <button type="button" class="style-chip" data-style="graphite-pro.css" data-tone="graphite">
+                <span class="style-thumb graphite"></span>
+                <strong>Graphite Pro</strong>
+                <small>Business</small>
               </button>
               <button type="button" class="style-chip" data-style="midnight-column.css" data-tone="midnight">
                 <span class="style-thumb midnight"></span>
-                <strong>Midnight</strong>
+                <strong>Midnight Column</strong>
                 <small>Modern</small>
+              </button>
+              <button type="button" class="style-chip" data-style="monograph.css" data-tone="monograph">
+                <span class="style-thumb monograph"></span>
+                <strong>Monograph</strong>
+                <small>Minimal</small>
+              </button>
+              <button type="button" class="style-chip" data-style="navy-wave.css" data-tone="navy">
+                <span class="style-thumb navy"></span>
+                <strong>Navy Wave</strong>
+                <small>Elegant</small>
+              </button>
+              <button type="button" class="style-chip" data-style="nordic-panel.css" data-tone="nordic">
+                <span class="style-thumb nordic"></span>
+                <strong>Nordic Panel</strong>
+                <small>Ruhig</small>
+              </button>
+              <button type="button" class="style-chip" data-style="pearl-classic.css" data-tone="pearl">
+                <span class="style-thumb pearl"></span>
+                <strong>Pearl Classic</strong>
+                <small>Klassisch</small>
+              </button>
+              <button type="button" class="style-chip" data-style="soft-sand.css" data-tone="sand">
+                <span class="style-thumb sand"></span>
+                <strong>Soft Sand</strong>
+                <small>Warm Soft</small>
               </button>
               <button type="button" class="style-chip" data-style="teal-balance.css" data-tone="teal">
                 <span class="style-thumb teal"></span>
@@ -327,28 +372,36 @@
     </div>
   </div>
 
-  <div id="buyModal" class="payment-modal" style="display:none;">
-    <div class="payment-dialog">
-      <h3>Bewerbung ohne Wasserzeichen herunterladen</h3>
-      <p>Die Vorschau bleibt kostenlos. Nach der Zahlung wirst du automatisch zur PDF-Datei ohne Wasserzeichen weitergeleitet.</p>
-      <label>Name
-        <input type="text" id="buyerName" autocomplete="name">
-      </label>
-      <label>Email
-        <input type="email" id="buyerEmail" autocomplete="email">
-      </label>
-      <p id="paymentStatus"></p>
-      <div class="payment-actions">
-        <button id="payBtn" type="button" class="primary-button">Weiter zu Stripe</button>
-        <button id="cancelPaymentBtn" type="button" class="secondary-button">Abbrechen</button>
+  <div id="buyModal" class="payment-modal" style="display:none;" aria-hidden="true">
+    <div class="payment-dialog" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <div class="payment-header">
+        <h2 id="paymentModalTitle">PDF ohne Wasserzeichen</h2>
+        <button id="cancelPaymentBtn" type="button" class="payment-close" aria-label="Zahlungsfenster schliessen">x</button>
       </div>
+      <section class="payment-unlock-card" aria-labelledby="paymentUnlockTitle">
+        <h3 id="paymentUnlockTitle">Finale PDF freischalten</h3>
+        <p>Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.</p>
+        <div class="payment-price">
+          <strong>9.90</strong>
+          <span>CHF · einmalig</span>
+        </div>
+        <ul class="payment-benefits">
+          <li>PDF ohne Wasserzeichen</li>
+          <li>Sofortiger Download nach Zahlung</li>
+          <li>Sichere Zahlung ueber Stripe</li>
+          <li>Keine Kartendaten auf dieser Website gespeichert</li>
+        </ul>
+        <p id="paymentStatus" class="payment-status"></p>
+        <button id="payBtn" type="button" class="payment-submit">Weiter zur sicheren Zahlung</button>
+        <p class="payment-note">In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.</p>
+      </section>
     </div>
   </div>
 
   <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-NaWTHo/8YCBYJxqMfQnTVMlf1BCkBOcDlvqzZ/2a7dVqf1E4FMX8QHVGsJ8uLlZn" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="../payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/bewerbungs-generator/payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
 </body>
 </html>

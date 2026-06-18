@@ -14,14 +14,20 @@ const DOCUMENT_TYPES = {
 };
 
 const STYLE_NAMES = new Set([
-  "standard.css",
-  "swiss.css",
-  "executive.css",
-  "academic.css",
-  "technical.css",
-  "creative.css",
-  "compact.css",
-  "service.css",
+  "charcoal-frame.css",
+  "cobalt-ribbon.css",
+  "editorial-azure.css",
+  "executive-ink.css",
+  "graphite-pro.css",
+  "midnight-column.css",
+  "monograph.css",
+  "navy-wave.css",
+  "nordic-panel.css",
+  "pearl-classic.css",
+  "soft-sand.css",
+  "swiss-line.css",
+  "teal-balance.css",
+  "terracotta-arch.css",
 ]);
 
 function createPaymentError(status, code, message) {
@@ -40,7 +46,7 @@ function normalizeDocumentType(value) {
 }
 
 function normalizeStyleName(value) {
-  const styleName = String(value || "classic.css").trim().split(/[\\/]/).pop();
+  const styleName = String(value || "swiss-line.css").trim().split(/[\\/]/).pop();
   if (!STYLE_NAMES.has(styleName)) {
     throw createPaymentError(400, "INVALID_STYLE", "Invalid document style.");
   }

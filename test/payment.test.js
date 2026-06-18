@@ -2,7 +2,7 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 
 const { createApp } = require("../app");
-const { createDocumentHash } = require("../services/document-purchase");
+const { STYLE_NAMES, createDocumentHash } = require("../services/document-purchase");
 const { buildReturnUrl, normalizeReturnUrl } = require("../services/stripe-service");
 
 async function withServer(app, callback) {
@@ -57,11 +57,32 @@ function createFakePaymentService(overrides = {}) {
   };
 }
 
+test("payment style allowlist matches the current VitaGen style set", () => {
+  const styleNames = [
+    "charcoal-frame.css",
+    "cobalt-ribbon.css",
+    "editorial-azure.css",
+    "executive-ink.css",
+    "graphite-pro.css",
+    "midnight-column.css",
+    "monograph.css",
+    "navy-wave.css",
+    "nordic-panel.css",
+    "pearl-classic.css",
+    "soft-sand.css",
+    "swiss-line.css",
+    "teal-balance.css",
+    "terracotta-arch.css",
+  ];
+
+  assert.deepEqual([...STYLE_NAMES].sort(), styleNames.sort());
+});
+
 test("checkout session endpoint returns a Stripe redirect URL", async () => {
   const documentData = { name: "Max Muster", funktion: "Kaufmann" };
   const documentHash = createDocumentHash({
     documentType: "motivation",
-    styleName: "standard.css",
+    styleName: "swiss-line.css",
     documentData,
   });
 
@@ -77,7 +98,7 @@ test("checkout session endpoint returns a Stripe redirect URL", async () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           documentType: "motivation",
-          styleName: "standard.css",
+          styleName: "swiss-line.css",
           documentHash,
           customerEmail: "max@example.com",
         }),
@@ -95,7 +116,7 @@ test("clean PDF generation requires a paid matching checkout session", async () 
   const documentData = { name: "Max Muster", funktion: "Kaufmann" };
   const documentHash = createDocumentHash({
     documentType: "motivation",
-    styleName: "standard.css",
+    styleName: "swiss-line.css",
     documentData,
   });
   let verified = false;
@@ -109,7 +130,7 @@ test("clean PDF generation requires a paid matching checkout session", async () 
           assert.equal(input.documentHash, documentHash);
           return {
             documentType: "motivation",
-            styleName: "standard.css",
+            styleName: "swiss-line.css",
             documentHash,
             filename: "Bewerbung.pdf",
           };
@@ -125,7 +146,7 @@ test("clean PDF generation requires a paid matching checkout session", async () 
         body: JSON.stringify({
           sessionId: "cs_test_paid",
           documentType: "motivation",
-          styleName: "standard.css",
+          styleName: "swiss-line.css",
           documentData,
           documentHash,
         }),
@@ -144,7 +165,7 @@ test("checkout session verification requires paid matching metadata", async () =
   const documentData = { name: "Max Muster", funktion: "Kaufmann" };
   const documentHash = createDocumentHash({
     documentType: "motivation",
-    styleName: "standard.css",
+    styleName: "swiss-line.css",
     documentData,
   });
   let verified = false;
@@ -157,7 +178,7 @@ test("checkout session verification requires paid matching metadata", async () =
           assert.deepEqual(input, {
             sessionId: "cs_test_paid",
             documentType: "motivation",
-            styleName: "standard.css",
+            styleName: "swiss-line.css",
             documentHash,
           });
           return {
@@ -179,7 +200,7 @@ test("checkout session verification requires paid matching metadata", async () =
         body: JSON.stringify({
           sessionId: "cs_test_paid",
           documentType: "motivation",
-          styleName: "standard.css",
+          styleName: "swiss-line.css",
           documentHash,
         }),
       });
@@ -214,7 +235,7 @@ test("checkout session verification rejects document mismatch", async () => {
         body: JSON.stringify({
           sessionId: "cs_test_paid",
           documentType: "motivation",
-          styleName: "standard.css",
+          styleName: "swiss-line.css",
           documentHash: "a".repeat(64),
         }),
       });
