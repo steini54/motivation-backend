@@ -24,19 +24,11 @@ const DOCUMENT_STYLES = [
 ];
 const UI_TRANSLATIONS = {
   de: {
-    "nav.cv": "Lebenslauf",
-    "nav.motivation": "Motivation",
-    "nav.save": "Speichern",
-    "nav.preview": "Vollbild-Vorschau",
     "cv.eyebrow": "CV Generator",
     "cv.title": "Lebenslauf erstellen",
     "cv.copy": "Strukturierter Editor fuer professionelle europaeische CVs mit Live-Vorschau, Stilwahl und KI-Bewerbungsfoto.",
   },
   en: {
-    "nav.cv": "CV",
-    "nav.motivation": "Motivation",
-    "nav.save": "Save",
-    "nav.preview": "Full preview",
     "cv.eyebrow": "CV Generator",
     "cv.title": "Create CV",
     "cv.copy": "A structured editor for professional European CVs with live preview, style selection, and AI application photo.",
@@ -108,10 +100,17 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
 }
 
 function installLanguageSwitch() {
-  document.querySelectorAll("[data-lang]").forEach((button) => {
-    button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+  document.addEventListener("vitagen:languagechange", (event) => {
+    applyLanguage(event.detail?.language);
   });
-  applyLanguage();
+
+  if (!window.VitaGenNavbar) {
+    document.querySelectorAll("[data-lang]").forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+  }
+
+  applyLanguage(window.VitaGenNavbar?.getLanguage?.() || localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de");
 }
 
 function normalizeDocumentStyle(styleName = DEFAULT_STYLE) {

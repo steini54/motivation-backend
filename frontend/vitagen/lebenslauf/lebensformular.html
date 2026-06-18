@@ -12,25 +12,11 @@
     gtag("config", "G-18Q6CWP558");
   </script>
   <link rel="stylesheet" href="lstyle.css">
+  <link rel="stylesheet" href="/bewerbungs-generator/shared-navbar.css">
   <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css" media="not all">
 </head>
 <body class="cv-builder-page">
-  <nav class="topbar">
-    <a class="brand" href="/bewerbungs-generator/lebenslauf/lebensformular.html" aria-label="VitaGen">
-      <span class="brand-mark">VG</span>
-      <span>VitaGen</span>
-    </a>
-    <div class="product-switch" aria-label="Generator wechseln">
-      <a class="active" href="/bewerbungs-generator/lebenslauf/lebensformular.html" data-i18n="nav.cv">Lebenslauf</a>
-      <a href="/bewerbungs-generator/motivation/formular.html" data-i18n="nav.motivation">Motivation</a>
-    </div>
-    <div class="topbar-actions">
-      <button type="button" class="ghost-button" data-lang="de" aria-pressed="true">DE</button>
-      <button type="button" class="ghost-button muted" data-lang="en" aria-pressed="false">EN</button>
-      <button type="button" id="saveBtn" class="secondary-button" data-i18n="nav.save">Speichern</button>
-      <button type="button" id="previewBtn" class="primary-button" data-i18n="nav.preview">Vollbild-Vorschau</button>
-    </div>
-  </nav>
+  <div data-vitagen-navbar data-active="cv"></div>
 
   <main class="page-shell">
     <header class="hero">
@@ -348,6 +334,7 @@
   </div>
 
   <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="/bewerbungs-generator/shared-navbar.js"></script>
   <script src="lscript.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

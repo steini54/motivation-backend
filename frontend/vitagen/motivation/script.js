@@ -23,19 +23,11 @@ const DOCUMENT_STYLES = [
 ];
 const UI_TRANSLATIONS = {
   de: {
-    "nav.cv": "Lebenslauf",
-    "nav.motivation": "Motivation",
-    "nav.save": "Speichern",
-    "nav.preview": "Vollbild-Vorschau",
     "motivation.eyebrow": "Bewerbungsunterlagen",
     "motivation.title": "Motivationsschreiben erstellen",
     "motivation.copy": "Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.",
   },
   en: {
-    "nav.cv": "CV",
-    "nav.motivation": "Motivation",
-    "nav.save": "Save",
-    "nav.preview": "Full preview",
     "motivation.eyebrow": "Application documents",
     "motivation.title": "Create motivation letter",
     "motivation.copy": "Enter your details, refine your photo, and create a professional letter with AI assistance.",
@@ -75,10 +67,17 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
 }
 
 function installLanguageSwitch() {
-  document.querySelectorAll("[data-lang]").forEach((button) => {
-    button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+  document.addEventListener("vitagen:languagechange", (event) => {
+    applyLanguage(event.detail?.language);
   });
-  applyLanguage();
+
+  if (!window.VitaGenNavbar) {
+    document.querySelectorAll("[data-lang]").forEach((button) => {
+      button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+    });
+  }
+
+  applyLanguage(window.VitaGenNavbar?.getLanguage?.() || localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de");
 }
 
 function setTextWithBreaks(element, value, fallback = "") {

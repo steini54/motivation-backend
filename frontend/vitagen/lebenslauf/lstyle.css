@@ -50,80 +50,6 @@ a {
   text-decoration: none;
 }
 
-.topbar {
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  gap: 18px;
-  align-items: center;
-  padding: 14px max(18px, calc((100vw - 1440px) / 2 + 24px));
-  border-bottom: 1px solid rgba(223, 230, 238, 0.9);
-  background: rgba(255, 255, 255, 0.88);
-  backdrop-filter: blur(18px);
-}
-
-.brand,
-.product-switch,
-.topbar-actions {
-  display: flex;
-  align-items: center;
-}
-
-.brand {
-  gap: 10px;
-  font-weight: 900;
-}
-
-.brand-mark {
-  display: grid;
-  width: 34px;
-  height: 34px;
-  place-items: center;
-  border-radius: 10px;
-  background: var(--ui-primary);
-  color: #ffffff;
-  font-size: 12px;
-}
-
-.product-switch {
-  justify-self: center;
-  gap: 4px;
-  padding: 4px;
-  border: 1px solid var(--ui-line);
-  border-radius: 999px;
-  background: #ffffff;
-}
-
-.product-switch a,
-.ghost-button {
-  padding: 8px 12px;
-  border-radius: 999px;
-  color: var(--ui-muted);
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.product-switch a.active {
-  background: var(--ui-primary);
-  color: #ffffff;
-}
-
-.topbar-actions {
-  justify-content: flex-end;
-  gap: 8px;
-}
-
-.ghost-button {
-  background: #ffffff;
-  cursor: pointer;
-}
-
-.ghost-button.muted {
-  opacity: 0.62;
-}
-
 .primary-button,
 .secondary-button,
 .download-button,
@@ -1378,20 +1304,6 @@ textarea:focus {
 }
 
 @media (max-width: 920px) {
-  .topbar {
-    grid-template-columns: 1fr;
-  }
-
-  .product-switch {
-    justify-self: stretch;
-    overflow-x: auto;
-  }
-
-  .topbar-actions {
-    justify-content: stretch;
-    overflow-x: auto;
-  }
-
   .builder-grid {
     grid-template-columns: 1fr;
   }

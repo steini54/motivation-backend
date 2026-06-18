@@ -73,6 +73,10 @@ test("lebenslauf builder keeps preview, styles, payment, and AI photo on one pag
     path.join(lebenslaufPath, "lscript.js"),
     "utf8"
   );
+  const sharedNavbarScript = fs.readFileSync(
+    path.join(vitagenPath, "shared-navbar.js"),
+    "utf8"
+  );
   const carouselStyles = Array.from(
     formHtml.matchAll(/class="style-chip[^"]*"[^>]*data-style="([^"]+)"/g),
     (match) => match[1]
@@ -85,7 +89,7 @@ test("lebenslauf builder keeps preview, styles, payment, and AI photo on one pag
   assert.match(formHtml, /id="foto-section"/);
   assert.match(formHtml, /id="aiFotoBtn"/);
   assert.match(formHtml, /src="\/bewerbungs-generator\/payment\.js" data-document-type="lebenslauf"/);
-  assert.match(formHtml, /href="\/bewerbungs-generator\/motivation\/formular\.html"/);
+  assert.match(sharedNavbarScript, /motivation: "\/bewerbungs-generator\/motivation\/formular\.html"/);
   assert.match(script, /const AI_API_BASE_URL = "https:\/\/motivation-backend-production-2800\.up\.railway\.app";/);
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-ai-photo`/);
   assert.doesNotMatch(script, /window\.open\("lpreview\.html"\)/);
@@ -108,21 +112,38 @@ test("motivation and lebenslauf builders share the navbar and language switch", 
     path.join(lebenslaufPath, "lscript.js"),
     "utf8"
   );
+  const sharedNavbarScript = fs.readFileSync(
+    path.join(vitagenPath, "shared-navbar.js"),
+    "utf8"
+  );
+  const sharedNavbarCss = fs.readFileSync(
+    path.join(vitagenPath, "shared-navbar.css"),
+    "utf8"
+  );
 
   for (const html of [motivationHtml, lebenslaufHtml]) {
-    assert.match(html, /class="brand" href="\/bewerbungs-generator\/lebenslauf\/lebensformular\.html"/);
-    assert.match(html, /<span class="brand-mark">VG<\/span>/);
-    assert.match(html, /class="product-switch"/);
-    assert.match(html, /data-lang="de"/);
-    assert.match(html, /data-lang="en"/);
-    assert.match(html, /data-i18n="nav.save"/);
-    assert.match(html, /data-i18n="nav.preview"/);
+    assert.doesNotMatch(html, /<nav class="topbar">/);
+    assert.match(html, /href="\/bewerbungs-generator\/shared-navbar\.css"/);
+    assert.match(html, /<script src="\/bewerbungs-generator\/shared-navbar\.js"><\/script>/);
   }
 
-  assert.match(motivationHtml, /class="active" href="\/bewerbungs-generator\/motivation\/formular\.html" data-i18n="nav\.motivation"/);
-  assert.match(lebenslaufHtml, /class="active" href="\/bewerbungs-generator\/lebenslauf\/lebensformular\.html" data-i18n="nav\.cv"/);
+  assert.match(motivationHtml, /data-vitagen-navbar data-active="motivation"/);
+  assert.match(lebenslaufHtml, /data-vitagen-navbar data-active="cv"/);
+  assert.match(sharedNavbarScript, /class="brand" href="\$\{ROUTES\.cv\}"/);
+  assert.match(sharedNavbarScript, /<span class="brand-mark">VG<\/span>/);
+  assert.match(sharedNavbarScript, /class="product-switch"/);
+  assert.match(sharedNavbarScript, /data-lang="de"/);
+  assert.match(sharedNavbarScript, /data-lang="en"/);
+  assert.match(sharedNavbarScript, /data-i18n="nav.save"/);
+  assert.match(sharedNavbarScript, /data-i18n="nav.preview"/);
+  assert.match(sharedNavbarScript, /vitagen:languagechange/);
+  assert.match(sharedNavbarCss, /\.topbar/);
+  assert.doesNotMatch(motivationScript, /"nav\.save"/);
+  assert.doesNotMatch(lebenslaufScript, /"nav\.save"/);
   assert.match(motivationScript, /const LANGUAGE_STORAGE_KEY = "vitagen_language";/);
   assert.match(lebenslaufScript, /const LANGUAGE_STORAGE_KEY = "vitagen_language";/);
+  assert.match(motivationScript, /vitagen:languagechange/);
+  assert.match(lebenslaufScript, /vitagen:languagechange/);
   assert.match(motivationScript, /function applyLanguage/);
   assert.match(lebenslaufScript, /function applyLanguage/);
 });
