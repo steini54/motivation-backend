@@ -25,15 +25,21 @@
         <h1 data-i18n="cv.title">Lebenslauf erstellen</h1>
         <p data-i18n="cv.copy">Strukturierter Editor fuer professionelle europaeische CVs mit Live-Vorschau, Stilwahl und KI-Bewerbungsfoto.</p>
       </div>
-      <div class="hero-meter" aria-hidden="true">
-        <span>Live</span>
-        <strong>CV</strong>
+      <div class="hero-badges" aria-label="Produktvorteile">
+        <span>Schweiz &amp; Europa</span>
+        <span>KI-Foto</span>
+        <span>Live-Vorschau</span>
       </div>
     </header>
 
     <form id="vitagenForm" class="builder-grid">
       <aside class="section-rail" aria-label="Abschnitte">
-        <p>Abschnitte</p>
+        <div class="rail-header">
+          <p>Abschnitte</p>
+          <button type="button" class="rail-toggle" aria-label="Toggle Navigation">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </button>
+        </div>
         <a href="#personal" class="active">Persoenliche Daten</a>
         <a href="#foto-section">Bewerbungsfoto</a>
         <a href="#experience">Berufserfahrung</a>
@@ -71,42 +77,64 @@
           </label>
         </section>
 
-        <section id="foto-section" class="form-card ai-card photo-card">
+        <section class="form-card ai-card photo-card" id="foto-section">
           <div class="photo-card-top">
             <div class="photo-title-row">
-              <span class="ai-iconbox" aria-hidden="true"><span class="ai-icon"></span></span>
+              <span class="ai-iconbox" aria-hidden="true">
+                <span class="ai-icon"></span>
+              </span>
               <div>
                 <h2>Bewerbungsfoto vorbereiten</h2>
                 <p>KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.</p>
-                <span class="ai-badge">KI-Fotoassistent</span>
+                <span class="ai-mini">KI-Fotoassistent</span>
               </div>
             </div>
-            <span id="counter" class="counter-pill">KI-Funktion - 0 / 3 generiert</span>
+            <div id="counter" class="counter photo-count-pill">KI-Funktion - 0 / 3 generiert</div>
           </div>
+
           <div class="photo-card-grid">
             <div class="photo-upload-shell">
               <input type="file" id="foto-upload" accept="image/*">
               <label for="foto-upload" class="photo-upload-drop">
-                <span class="upload-visual" aria-hidden="true"><span class="upload-plus">+</span></span>
+                <span class="upload-visual" aria-hidden="true">
+                  <span class="upload-plus">+</span>
+                </span>
                 <strong>Foto hochladen</strong>
-                <span>Die KI erstellt daraus professionelle Varianten fuer den CV.</span>
-                <span class="upload-action">Datei auswaehlen</span>
+                <span>Laden Sie ein klares Portrait hoch. Danach kann die KI professionelle Varianten erstellen.</span>
+                <span class="upload-action">Datei auswahlen</span>
               </label>
-              <button type="button" id="changePhotoBtn" class="change-photo-button" hidden>Foto aendern</button>
-              <div id="foto-container" class="upload-preview" aria-live="polite"></div>
+              <div id="foto-container" class="photo-current" aria-live="polite"></div>
+              <button type="button" id="changePhotoBtn" class="change-photo-button" hidden>Foto andern</button>
             </div>
-            <div class="photo-options-panel">
-              <div class="options-head">
+
+            <div class="generated-panel">
+              <div class="generated-panel-head">
                 <strong>Generierte Optionen</strong>
                 <span id="photo-status">Noch nicht generiert</span>
               </div>
-              <div class="photo-options-wrap">
-                <div id="loader" class="aurora-loader" style="display:none;"><span></span></div>
-                <div id="foto-auswahl" class="photo-options" aria-live="polite"></div>
+              <div class="generated-stage">
+                <div id="foto-auswahl" class="photo-options" aria-live="polite">
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                </div>
               </div>
+
               <div class="photo-actions">
                 <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
-                <p>Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.</p>
+                <p>Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.</p>
               </div>
             </div>
           </div>
@@ -197,13 +225,13 @@
           <div class="preview-head">
             <div>
               <h2>Live-Vorschau</h2>
-              <p>Aktualisiert sich automatisch beim Tippen.</p>
+              <span>Aktualisiert sich automatisch beim Tippen</span>
             </div>
-            <span class="active-dot">Aktiv</span>
+            <span class="live-dot">Aktiv</span>
           </div>
           <div id="preview-wrapper" class="live-preview-frame">
             <div id="preview" class="preview-paper" data-style="swiss-line.css">
-              <div class="watermark">VORSCHAU</div>
+              <div class="watermark">PREVIEW</div>
               <article class="cv">
                 <aside class="cv-side">
                   <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none;">

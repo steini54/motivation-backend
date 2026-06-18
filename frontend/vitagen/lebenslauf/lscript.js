@@ -539,13 +539,13 @@ function createEntry(section, data = {}) {
   toggle.type = "button";
   toggle.className = "toggle";
   toggle.setAttribute("aria-label", translateValue("Eintrag ein- oder ausklappen"));
-  toggle.textContent = "v";
+  toggle.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>`;
 
   const remove = document.createElement("button");
   remove.type = "button";
   remove.className = "delete";
   remove.setAttribute("aria-label", translateValue("Eintrag entfernen"));
-  remove.textContent = "x";
+  remove.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
 
   controls.append(toggle, remove);
   header.append(title, controls);
@@ -655,10 +655,12 @@ function applyDocumentStyle(styleName = DEFAULT_STYLE) {
 }
 
 function pulseLivePreview() {
-  const preview = document.getElementById("preview");
-  if (!preview) return;
-  preview.classList.remove("updating");
-  window.requestAnimationFrame(() => preview.classList.add("updating"));
+  const card = document.querySelector(".preview-card");
+  if (!card) return;
+  card.classList.remove("is-updating");
+  void card.offsetWidth;
+  card.classList.add("is-updating");
+  window.setTimeout(() => card.classList.remove("is-updating"), 720);
 }
 
 function renderTimeline(containerId, entries, formatter, emptyText) {
@@ -909,13 +911,6 @@ function renderOptionPlaceholders() {
   }
 }
 
-function clearGeneratedPlaceholders() {
-  const container = document.getElementById("foto-auswahl");
-  if (container?.querySelector(".photo-option-placeholder")) {
-    container.innerHTML = "";
-  }
-}
-
 function renderUploadPreview(src, selected = false) {
   const container = document.getElementById("foto-container");
   if (!container) return null;
@@ -938,7 +933,6 @@ function renderUploadPreview(src, selected = false) {
 function createGeneratedOption(src) {
   const container = document.getElementById("foto-auswahl");
   if (!container) return;
-  clearGeneratedPlaceholders();
 
   const option = document.createElement("button");
   option.type = "button";
@@ -954,7 +948,13 @@ function createGeneratedOption(src) {
 
   option.append(img, label);
   option.addEventListener("click", () => selectImage(img));
-  container.appendChild(option);
+  
+  const firstPlaceholder = container.querySelector(".photo-option-placeholder");
+  if (firstPlaceholder) {
+    container.replaceChild(option, firstPlaceholder);
+  } else {
+    container.appendChild(option);
+  }
 }
 
 function selectImage(element) {
@@ -1139,4 +1139,28 @@ window.addEventListener("DOMContentLoaded", () => {
   installFormListeners();
   installPhotoListeners();
   syncLivePreview({ pulse: false });
+
+  const sections = document.querySelectorAll(".builder-column > section");
+  const navLinks = document.querySelectorAll(".section-rail a");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        navLinks.forEach((link) => {
+          link.classList.remove("active");
+          if (link.getAttribute("href") === `#${entry.target.id}`) {
+            link.classList.add("active");
+          }
+        });
+      }
+    });
+  }, { root: null, rootMargin: "-20% 0px -60% 0px", threshold: 0 });
+  sections.forEach((section) => observer.observe(section));
+
+  const railToggle = document.querySelector(".rail-toggle");
+  if (railToggle) {
+    railToggle.addEventListener("click", () => {
+      document.querySelector(".section-rail").classList.toggle("collapsed");
+      document.querySelector(".builder-grid").classList.toggle("rail-collapsed");
+    });
+  }
 });

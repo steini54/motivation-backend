@@ -59,8 +59,17 @@
           <a${motivationActive} href="${ROUTES.motivation}" data-i18n="nav.motivation">Motivation</a>
         </div>
         <div class="topbar-actions">
-          <button type="button" class="ghost-button" data-lang="de" aria-pressed="true">DE</button>
-          <button type="button" class="ghost-button muted" data-lang="en" aria-pressed="false">EN</button>
+          <div class="lang-switch" aria-label="Sprache waehlen">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lang-icon">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="2" y1="12" x2="22" y2="12"></line>
+              <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+            </svg>
+            <div class="lang-options">
+              <button type="button" class="lang-btn" data-lang="de" aria-pressed="true">DE</button>
+              <button type="button" class="lang-btn muted" data-lang="en" aria-pressed="false">EN</button>
+            </div>
+          </div>
           <button type="button" id="saveBtn" class="secondary-button" data-i18n="nav.save">Speichern</button>
           <button type="button" id="previewBtn" class="primary-button" data-i18n="nav.preview">Vollbild-Vorschau</button>
         </div>

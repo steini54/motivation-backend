@@ -818,13 +818,6 @@ function renderOptionPlaceholders() {
   }
 }
 
-function clearGeneratedPlaceholders() {
-  const container = document.getElementById("foto-auswahl");
-  if (container?.querySelector(".photo-option-placeholder")) {
-    container.innerHTML = "";
-  }
-}
-
 function renderUploadPreview(src, selected = false) {
   const container = document.getElementById("foto-container");
   if (!container) return null;
@@ -851,8 +844,6 @@ function createGeneratedOption(src) {
   const container = document.getElementById("foto-auswahl");
   if (!container) return;
 
-  clearGeneratedPlaceholders();
-
   const option = document.createElement("button");
   option.type = "button";
   option.className = "generated-option";
@@ -867,7 +858,13 @@ function createGeneratedOption(src) {
 
   option.append(img, label);
   option.addEventListener("click", () => selectImage(img));
-  container.appendChild(option);
+  
+  const firstPlaceholder = container.querySelector(".photo-option-placeholder");
+  if (firstPlaceholder) {
+    container.replaceChild(option, firstPlaceholder);
+  } else {
+    container.appendChild(option);
+  }
 }
 
 function selectImage(element) {
