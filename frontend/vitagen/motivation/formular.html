@@ -8,30 +8,29 @@
   <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css" media="not all">
 </head>
 <body class="builder-page">
-  <header class="topbar">
-    <a class="brand" href="../start.html" aria-label="VitaGen Startseite">
-      <span class="brand-mark">V</span>
-      <span>
-        <strong>VitaGen</strong>
-        <small>Motivationsschreiben</small>
-      </span>
+  <nav class="topbar">
+    <a class="brand" href="/bewerbungs-generator/lebenslauf/lebensformular.html" aria-label="VitaGen">
+      <span class="brand-mark">VG</span>
+      <span>VitaGen</span>
     </a>
-    <div class="topbar-actions">
-      <div class="language-switch" aria-label="Sprache">
-        <span class="active">DE</span>
-        <span>EN</span>
-      </div>
-      <button type="button" id="saveBtn" class="secondary-button nav-button">Speichern</button>
-      <button type="button" id="previewBtn" class="primary-button nav-button">Vollbild-Vorschau</button>
+    <div class="product-switch" aria-label="Generator wechseln">
+      <a href="/bewerbungs-generator/lebenslauf/lebensformular.html" data-i18n="nav.cv">Lebenslauf</a>
+      <a class="active" href="/bewerbungs-generator/motivation/formular.html" data-i18n="nav.motivation">Motivation</a>
     </div>
-  </header>
+    <div class="topbar-actions">
+      <button type="button" class="ghost-button" data-lang="de" aria-pressed="true">DE</button>
+      <button type="button" class="ghost-button muted" data-lang="en" aria-pressed="false">EN</button>
+      <button type="button" id="saveBtn" class="secondary-button" data-i18n="nav.save">Speichern</button>
+      <button type="button" id="previewBtn" class="primary-button" data-i18n="nav.preview">Vollbild-Vorschau</button>
+    </div>
+  </nav>
 
   <main class="page-shell">
     <section class="hero-panel" aria-labelledby="page-title">
       <div>
-        <p class="eyebrow">Bewerbungsunterlagen</p>
-        <h1 id="page-title">Motivationsschreiben erstellen</h1>
-        <p class="hero-copy">Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.</p>
+        <p class="eyebrow" data-i18n="motivation.eyebrow">Bewerbungsunterlagen</p>
+        <h1 id="page-title" data-i18n="motivation.title">Motivationsschreiben erstellen</h1>
+        <p class="hero-copy" data-i18n="motivation.copy">Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.</p>
       </div>
       <div class="hero-badges" aria-label="Produktvorteile">
         <span>Schweiz &amp; Europa</span>

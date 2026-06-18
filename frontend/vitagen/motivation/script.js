@@ -3,6 +3,7 @@ const AI_API_BASE_URL = "https://motivation-backend-production-2800.up.railway.a
 let aiImageCount = 0;
 const MAX_IMAGES = 3;
 const STYLE_STORAGE_KEY = "vitagen_motivation_style";
+const LANGUAGE_STORAGE_KEY = "vitagen_language";
 const DEFAULT_STYLE = "swiss-line.css";
 const DOCUMENT_STYLES = [
   "charcoal-frame.css",
@@ -20,6 +21,26 @@ const DOCUMENT_STYLES = [
   "teal-balance.css",
   "terracotta-arch.css",
 ];
+const UI_TRANSLATIONS = {
+  de: {
+    "nav.cv": "Lebenslauf",
+    "nav.motivation": "Motivation",
+    "nav.save": "Speichern",
+    "nav.preview": "Vollbild-Vorschau",
+    "motivation.eyebrow": "Bewerbungsunterlagen",
+    "motivation.title": "Motivationsschreiben erstellen",
+    "motivation.copy": "Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.",
+  },
+  en: {
+    "nav.cv": "CV",
+    "nav.motivation": "Motivation",
+    "nav.save": "Save",
+    "nav.preview": "Full preview",
+    "motivation.eyebrow": "Application documents",
+    "motivation.title": "Create motivation letter",
+    "motivation.copy": "Enter your details, refine your photo, and create a professional letter with AI assistance.",
+  },
+};
 
 function getStoredData() {
   return JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
@@ -27,6 +48,37 @@ function getStoredData() {
 
 function setStoredData(data) {
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
+}
+
+function normalizeLanguage(language) {
+  return language === "en" ? "en" : "de";
+}
+
+function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de") {
+  const normalized = normalizeLanguage(language);
+  const dictionary = UI_TRANSLATIONS[normalized] || UI_TRANSLATIONS.de;
+  document.documentElement.lang = normalized;
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, normalized);
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = dictionary[element.dataset.i18n];
+    if (value) {
+      element.textContent = value;
+    }
+  });
+
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    const active = button.dataset.lang === normalized;
+    button.classList.toggle("muted", !active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function installLanguageSwitch() {
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+  });
+  applyLanguage();
 }
 
 function setTextWithBreaks(element, value, fallback = "") {
@@ -461,6 +513,7 @@ function selectImage(element) {
 window.selectImage = selectImage;
 
 window.addEventListener("DOMContentLoaded", () => {
+  installLanguageSwitch();
   const saved = getStoredData();
   const fields = [
     "name",

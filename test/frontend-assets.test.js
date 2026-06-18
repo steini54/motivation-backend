@@ -91,6 +91,42 @@ test("lebenslauf builder keeps preview, styles, payment, and AI photo on one pag
   assert.doesNotMatch(script, /window\.open\("lpreview\.html"\)/);
 });
 
+test("motivation and lebenslauf builders share the navbar and language switch", () => {
+  const motivationHtml = fs.readFileSync(
+    path.join(frontendPath, "formular.html"),
+    "utf8"
+  );
+  const lebenslaufHtml = fs.readFileSync(
+    path.join(lebenslaufPath, "lebensformular.html"),
+    "utf8"
+  );
+  const motivationScript = fs.readFileSync(
+    path.join(frontendPath, "script.js"),
+    "utf8"
+  );
+  const lebenslaufScript = fs.readFileSync(
+    path.join(lebenslaufPath, "lscript.js"),
+    "utf8"
+  );
+
+  for (const html of [motivationHtml, lebenslaufHtml]) {
+    assert.match(html, /class="brand" href="\/bewerbungs-generator\/lebenslauf\/lebensformular\.html"/);
+    assert.match(html, /<span class="brand-mark">VG<\/span>/);
+    assert.match(html, /class="product-switch"/);
+    assert.match(html, /data-lang="de"/);
+    assert.match(html, /data-lang="en"/);
+    assert.match(html, /data-i18n="nav.save"/);
+    assert.match(html, /data-i18n="nav.preview"/);
+  }
+
+  assert.match(motivationHtml, /class="active" href="\/bewerbungs-generator\/motivation\/formular\.html" data-i18n="nav\.motivation"/);
+  assert.match(lebenslaufHtml, /class="active" href="\/bewerbungs-generator\/lebenslauf\/lebensformular\.html" data-i18n="nav\.cv"/);
+  assert.match(motivationScript, /const LANGUAGE_STORAGE_KEY = "vitagen_language";/);
+  assert.match(lebenslaufScript, /const LANGUAGE_STORAGE_KEY = "vitagen_language";/);
+  assert.match(motivationScript, /function applyLanguage/);
+  assert.match(lebenslaufScript, /function applyLanguage/);
+});
+
 test("frontend preserves production markup and routes AI to Railway", () => {
   const formHtml = fs.readFileSync(
     path.join(frontendPath, "formular.html"),

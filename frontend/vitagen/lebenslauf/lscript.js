@@ -4,6 +4,7 @@ let aiImageCount = 0;
 const MAX_IMAGES = 3;
 const STORAGE_KEY = "vitagen_lebenslauf";
 const STYLE_STORAGE_KEY = "vitagen_lebenslauf_style";
+const LANGUAGE_STORAGE_KEY = "vitagen_language";
 const DEFAULT_STYLE = "swiss-line.css";
 const DOCUMENT_STYLES = [
   "charcoal-frame.css",
@@ -21,6 +22,26 @@ const DOCUMENT_STYLES = [
   "teal-balance.css",
   "terracotta-arch.css",
 ];
+const UI_TRANSLATIONS = {
+  de: {
+    "nav.cv": "Lebenslauf",
+    "nav.motivation": "Motivation",
+    "nav.save": "Speichern",
+    "nav.preview": "Vollbild-Vorschau",
+    "cv.eyebrow": "CV Generator",
+    "cv.title": "Lebenslauf erstellen",
+    "cv.copy": "Strukturierter Editor fuer professionelle europaeische CVs mit Live-Vorschau, Stilwahl und KI-Bewerbungsfoto.",
+  },
+  en: {
+    "nav.cv": "CV",
+    "nav.motivation": "Motivation",
+    "nav.save": "Save",
+    "nav.preview": "Full preview",
+    "cv.eyebrow": "CV Generator",
+    "cv.title": "Create CV",
+    "cv.copy": "A structured editor for professional European CVs with live preview, style selection, and AI application photo.",
+  },
+};
 
 const SIMPLE_FIELDS = ["name", "headline", "adresse", "kontakt", "profil", "datum", "unterschrift"];
 const SECTION_CONFIG = {
@@ -60,6 +81,37 @@ function getStoredData() {
 
 function setStoredData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function normalizeLanguage(language) {
+  return language === "en" ? "en" : "de";
+}
+
+function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de") {
+  const normalized = normalizeLanguage(language);
+  const dictionary = UI_TRANSLATIONS[normalized] || UI_TRANSLATIONS.de;
+  document.documentElement.lang = normalized;
+  localStorage.setItem(LANGUAGE_STORAGE_KEY, normalized);
+
+  document.querySelectorAll("[data-i18n]").forEach((element) => {
+    const value = dictionary[element.dataset.i18n];
+    if (value) {
+      element.textContent = value;
+    }
+  });
+
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    const active = button.dataset.lang === normalized;
+    button.classList.toggle("muted", !active);
+    button.setAttribute("aria-pressed", String(active));
+  });
+}
+
+function installLanguageSwitch() {
+  document.querySelectorAll("[data-lang]").forEach((button) => {
+    button.addEventListener("click", () => applyLanguage(button.dataset.lang));
+  });
+  applyLanguage();
 }
 
 function normalizeDocumentStyle(styleName = DEFAULT_STYLE) {
@@ -706,6 +758,7 @@ function installPhotoListeners() {
 }
 
 window.addEventListener("DOMContentLoaded", () => {
+  installLanguageSwitch();
   loadFormData();
   Object.keys(SECTION_CONFIG).forEach(ensureEntry);
   installFormListeners();
