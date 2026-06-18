@@ -2,6 +2,8 @@ const AI_API_BASE_URL = "https://motivation-backend-production-2800.up.railway.a
 
 let aiImageCount = 0;
 const MAX_IMAGES = 3;
+const STYLE_STORAGE_KEY = "vitagen_motivation_style";
+const DEFAULT_STYLE = "swiss-line.css";
 
 function getStoredData() {
   return JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
@@ -9,6 +11,180 @@ function getStoredData() {
 
 function setStoredData(data) {
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
+}
+
+function setTextWithBreaks(element, value, fallback = "") {
+  if (!element) return;
+
+  const text = (value || fallback || "").trim();
+  element.textContent = "";
+
+  text.split(/\r?\n/).forEach((line, index) => {
+    if (index > 0) {
+      element.appendChild(document.createElement("br"));
+    }
+    element.appendChild(document.createTextNode(line));
+  });
+}
+
+function getCurrentFormData() {
+  const stored = getStoredData();
+  return {
+    ...stored,
+    name: document.getElementById("name")?.value || stored.name || "",
+    adresse: document.getElementById("adresse")?.value || stored.adresse || "",
+    kontakt: document.getElementById("kontakt")?.value || stored.kontakt || "",
+    posten: document.getElementById("posten")?.value || stored.posten || "",
+    arbeitgeber: document.getElementById("arbeitgeber")?.value || stored.arbeitgeber || "",
+    funktion: document.getElementById("funktion")?.value || stored.funktion || "",
+    stichwoerter: document.getElementById("stichwoerter")?.value || stored.stichwoerter || "",
+    stichwoerter2: document.getElementById("stichwoerter2")?.value || stored.stichwoerter2 || "",
+    stichwoerter3: document.getElementById("stichwoerter3")?.value || stored.stichwoerter3 || "",
+    datum: document.getElementById("datum")?.value || stored.datum || "",
+    unterschrift: document.getElementById("unterschrift")?.value || stored.unterschrift || ""
+  };
+}
+
+function pulseLivePreview() {
+  const card = document.getElementById("livePreviewCard");
+  if (!card) return;
+
+  card.classList.remove("is-updating");
+  void card.offsetWidth;
+  card.classList.add("is-updating");
+  window.setTimeout(() => card.classList.remove("is-updating"), 720);
+}
+
+function syncLivePreview({ pulse = true } = {}) {
+  const data = getCurrentFormData();
+  const role = data.posten || data.funktion || "Kaufmaennischer Mitarbeiter";
+  const today = new Date().toLocaleDateString("de-CH");
+
+  document.getElementById("pv-name").textContent = data.name || "Max Muster";
+  document.getElementById("pv-kontakt").textContent = role.toUpperCase();
+  setTextWithBreaks(
+    document.getElementById("pv-arbeitgeber"),
+    data.arbeitgeber,
+    "Musterfirma AG\nPersonalabteilung\nLimmatquai 10\n8001 Zuerich"
+  );
+  document.getElementById("pv-datum").textContent = data.datum || `Zuerich, ${today}`;
+  document.getElementById("pv-funktion").textContent = `Bewerbung als ${role}`;
+  document.getElementById("pv-stichwoerter").textContent = data.stichwoerter || "Sehr geehrte Damen und Herren";
+  document.getElementById("pv-stichwoerter2").textContent =
+    data.stichwoerter2 ||
+    "Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.";
+  document.getElementById("pv-stichwoerter3").textContent =
+    data.stichwoerter3 || "Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.";
+  document.getElementById("pv-unterschrift").textContent = data.unterschrift || data.name || "Max Muster";
+
+  const previewPhoto = document.getElementById("pv-foto");
+  if (previewPhoto) {
+    if (data.foto) {
+      previewPhoto.src = data.foto;
+      previewPhoto.style.display = "block";
+    } else {
+      previewPhoto.removeAttribute("src");
+      previewPhoto.style.display = "none";
+    }
+  }
+
+  if (pulse) {
+    pulseLivePreview();
+  }
+}
+
+function applyDocumentStyle(styleName = DEFAULT_STYLE) {
+  const themeLink = document.getElementById("theme-style");
+  const preview = document.getElementById("preview");
+  const normalized = styleName || DEFAULT_STYLE;
+
+  if (themeLink) {
+    themeLink.href = `styles/${normalized}`;
+  }
+  if (preview) {
+    preview.dataset.style = normalized;
+  }
+  localStorage.setItem(STYLE_STORAGE_KEY, normalized);
+
+  document.querySelectorAll(".style-chip").forEach(button => {
+    button.classList.toggle("active", button.dataset.style === normalized);
+  });
+  pulseLivePreview();
+}
+
+function refreshModalPreview() {
+  const host = document.getElementById("modalPreviewHost");
+  const preview = document.getElementById("preview");
+  if (!host || !preview) return;
+
+  const clone = preview.cloneNode(true);
+  clone.id = "preview-modal-doc";
+  host.innerHTML = "";
+  host.appendChild(clone);
+}
+
+function openPreviewModal() {
+  saveAllFields();
+  syncLivePreview({ pulse: false });
+  refreshModalPreview();
+  const modal = document.getElementById("previewModal");
+  if (modal) {
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+  }
+}
+
+function closePreviewModal() {
+  const modal = document.getElementById("previewModal");
+  if (modal) {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+  }
+}
+
+function installLivePreview() {
+  const fields = [
+    "name",
+    "adresse",
+    "kontakt",
+    "posten",
+    "arbeitgeber",
+    "funktion",
+    "stichwoerter",
+    "stichwoerter2",
+    "stichwoerter3",
+    "datum",
+    "unterschrift"
+  ];
+
+  fields.forEach(id => {
+    document.getElementById(id)?.addEventListener("input", () => {
+      saveAllFields();
+      syncLivePreview();
+    });
+  });
+
+  document.querySelectorAll(".style-chip").forEach(button => {
+    button.addEventListener("click", () => applyDocumentStyle(button.dataset.style));
+  });
+
+  document.getElementById("closePreviewModal")?.addEventListener("click", closePreviewModal);
+  document.querySelectorAll("[data-close-preview]").forEach(button => {
+    button.addEventListener("click", closePreviewModal);
+  });
+  document.querySelectorAll("[data-trigger-buy]").forEach(button => {
+    button.addEventListener("click", () => document.getElementById("buyBtn")?.click());
+  });
+  document.getElementById("previewModal")?.addEventListener("click", event => {
+    if (event.target?.id === "previewModal") {
+      closePreviewModal();
+    }
+  });
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      closePreviewModal();
+    }
+  });
 }
 
 function getToastRegion() {
@@ -212,6 +388,7 @@ function selectImage(element) {
   data.foto = element.src;
   setStoredData(data);
   setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
+  syncLivePreview();
 }
 
 window.selectImage = selectImage;
@@ -246,6 +423,10 @@ window.addEventListener("DOMContentLoaded", () => {
     renderUploadPreview(saved.foto, true);
     setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
   }
+
+  applyDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
+  installLivePreview();
+  syncLivePreview({ pulse: false });
 });
 
 const fileInput = document.getElementById("foto-upload");
@@ -347,6 +528,7 @@ const saveBtn = document.getElementById("saveBtn");
 if (saveBtn) {
   saveBtn.addEventListener("click", () => {
     saveAllFields();
+    syncLivePreview();
     showToast("Ihre Eingaben wurden lokal gespeichert.", "success", "Zwischengespeichert");
   });
 }
@@ -355,8 +537,7 @@ const previewBtn = document.getElementById("previewBtn");
 
 if (previewBtn) {
   previewBtn.addEventListener("click", () => {
-    saveAllFields();
-    window.location.href = "preview.html";
+    openPreviewModal();
   });
 }
 
@@ -396,6 +577,8 @@ if (textBtn) {
 
       if (result.text) {
         document.getElementById("stichwoerter2").value = result.text;
+        saveAllFields();
+        syncLivePreview();
         showToast("Motivationstext wurde erstellt und bleibt editierbar.", "success", "KI-Text bereit");
       } else {
         showToast("Der Server hat keinen Text zurueckgegeben.", "error", "Kein Text erhalten");

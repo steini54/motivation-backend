@@ -5,6 +5,7 @@
   <title>VitaGen - Motivationsschreiben</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css" media="not all">
 </head>
 <body class="builder-page">
   <header class="topbar">
@@ -15,9 +16,13 @@
         <small>Motivationsschreiben</small>
       </span>
     </a>
-    <div class="language-switch" aria-label="Sprache">
-      <span class="active">DE</span>
-      <span>EN</span>
+    <div class="topbar-actions">
+      <div class="language-switch" aria-label="Sprache">
+        <span class="active">DE</span>
+        <span>EN</span>
+      </div>
+      <button type="button" id="saveBtn" class="secondary-button nav-button">Speichern</button>
+      <button type="button" id="previewBtn" class="primary-button nav-button">Vollbild-Vorschau</button>
     </div>
   </header>
 
@@ -216,36 +221,134 @@
         </section>
       </div>
 
-      <aside class="builder-side" aria-label="Naechste Schritte">
+      <aside class="builder-side" aria-label="Live Vorschau">
         <div class="side-panel">
-          <p class="eyebrow">Live Workflow</p>
-          <h2>Bereit fuer die Vorschau</h2>
-          <p>Speichere deine Eingaben und oeffne danach die gestaltete PDF-Vorschau mit Style-Auswahl.</p>
+          <section class="preview-card" id="livePreviewCard">
+            <div class="preview-top">
+              <div>
+                <h2>Live-Vorschau</h2>
+                <span>Aktualisiert sich automatisch beim Tippen</span>
+              </div>
+              <span class="live-dot">Aktiv</span>
+            </div>
 
-          <div class="mini-preview" aria-hidden="true">
-            <div class="mini-line strong"></div>
-            <div class="mini-line"></div>
-            <div class="mini-block"></div>
-            <div class="mini-line short"></div>
-            <div class="mini-line"></div>
-          </div>
+            <div id="preview-wrapper" class="live-preview-frame">
+              <div id="preview" class="preview-paper" data-style="swiss-line.css">
+                <div class="watermark">VORSCHAU</div>
+                <div class="anschreiben">
+                  <div class="letterhead">
+                    <div>
+                      <h1 id="pv-name">Max Muster</h1>
+                      <p id="pv-kontakt">KAUFMANNISCHER MITARBEITER</p>
+                    </div>
+                    <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none;">
+                  </div>
+                  <div class="doc-rule"></div>
+                  <div class="doc-meta">
+                    <p id="pv-arbeitgeber">Musterfirma AG<br>Personalabteilung<br>Limmatquai 10<br>8001 Zuerich</p>
+                    <p id="pv-datum">Zuerich, 18.06.2026</p>
+                  </div>
+                  <div class="doc-body">
+                    <h4 id="pv-funktion">Bewerbung als Kaufmaennischer Mitarbeiter im Kundenservice</h4>
+                    <p id="pv-stichwoerter">Sehr geehrte Damen und Herren</p>
+                    <p id="pv-stichwoerter2">Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.</p>
+                    <p id="pv-stichwoerter3">Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.</p>
+                    <p class="doc-signature">Mit freundlichen Gruessen<br><strong id="pv-unterschrift">Max Muster</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
 
-          <ul class="check-list">
-            <li>Angaben bleiben lokal zwischengespeichert</li>
-            <li>KI-Foto und KI-Text bleiben editierbar</li>
-            <li>PDF ohne Wasserzeichen erst nach Zahlung</li>
-          </ul>
+          <section class="style-picker" aria-label="Dokumentstil">
+            <div>
+              <h3>Stil direkt testen</h3>
+              <p>Der Stil veraendert sich direkt in der Vorschau.</p>
+            </div>
+            <div class="style-scroll" role="list">
+              <button type="button" class="style-chip active" data-style="swiss-line.css" data-tone="swiss">
+                <span class="style-thumb swiss"></span>
+                <strong>Swiss Line</strong>
+                <small>Empfohlen</small>
+              </button>
+              <button type="button" class="style-chip" data-style="executive-ink.css" data-tone="executive">
+                <span class="style-thumb executive"></span>
+                <strong>Executive</strong>
+                <small>Premium</small>
+              </button>
+              <button type="button" class="style-chip" data-style="midnight-column.css" data-tone="midnight">
+                <span class="style-thumb midnight"></span>
+                <strong>Midnight</strong>
+                <small>Modern</small>
+              </button>
+              <button type="button" class="style-chip" data-style="teal-balance.css" data-tone="teal">
+                <span class="style-thumb teal"></span>
+                <strong>Teal Balance</strong>
+                <small>Klar</small>
+              </button>
+              <button type="button" class="style-chip" data-style="terracotta-arch.css" data-tone="terracotta">
+                <span class="style-thumb terracotta"></span>
+                <strong>Terracotta</strong>
+                <small>Warm</small>
+              </button>
+            </div>
+          </section>
 
-          <div class="buttons">
-            <button type="button" id="saveBtn" class="secondary-button">Zwischenspeichern</button>
-            <button type="button" id="previewBtn" class="primary-button">Vorschau oeffnen</button>
-          </div>
+          <section class="download-card">
+            <h3>PDF ohne Wasserzeichen vorbereiten</h3>
+            <p>Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.</p>
+            <button type="button" id="buyBtn" class="download-button">PDF ohne Wasserzeichen vorbereiten</button>
+          </section>
         </div>
       </aside>
     </form>
   </main>
 
+  <div id="previewModal" class="modal-backdrop" aria-hidden="true">
+    <div class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewModalTitle">
+      <div class="modal-header">
+        <h2 id="previewModalTitle">Vollbild-Vorschau</h2>
+        <button type="button" class="modal-close" id="closePreviewModal" aria-label="Vorschau schliessen">x</button>
+      </div>
+      <div class="modal-grid">
+        <div id="modalPreviewHost" class="modal-preview-host"></div>
+        <aside class="modal-payment-card">
+          <h3>Kostenlose Vorschau</h3>
+          <p>Die Vorschau zeigt das Dokument mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.</p>
+          <ul>
+            <li>Stil, Foto und Text vorher pruefen</li>
+            <li>Kein Account erforderlich</li>
+            <li>Download ohne Wasserzeichen nach Zahlung</li>
+          </ul>
+          <button type="button" class="download-button" data-trigger-buy>PDF ohne Wasserzeichen herunterladen</button>
+          <button type="button" class="secondary-button" data-close-preview>Zurueck bearbeiten</button>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div id="buyModal" class="payment-modal" style="display:none;">
+    <div class="payment-dialog">
+      <h3>Bewerbung ohne Wasserzeichen herunterladen</h3>
+      <p>Die Vorschau bleibt kostenlos. Nach der Zahlung wirst du automatisch zur PDF-Datei ohne Wasserzeichen weitergeleitet.</p>
+      <label>Name
+        <input type="text" id="buyerName" autocomplete="name">
+      </label>
+      <label>Email
+        <input type="email" id="buyerEmail" autocomplete="email">
+      </label>
+      <p id="paymentStatus"></p>
+      <div class="payment-actions">
+        <button id="payBtn" type="button" class="primary-button">Weiter zu Stripe</button>
+        <button id="cancelPaymentBtn" type="button" class="secondary-button">Abbrechen</button>
+      </div>
+    </div>
+  </div>
+
   <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-NaWTHo/8YCBYJxqMfQnTVMlf1BCkBOcDlvqzZ/2a7dVqf1E4FMX8QHVGsJ8uLlZn" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="../payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
 </body>
 </html>
