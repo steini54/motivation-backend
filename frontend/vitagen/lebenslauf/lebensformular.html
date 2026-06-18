@@ -1,133 +1,356 @@
 <!DOCTYPE html>
 <html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>	
-	
 <head>
   <meta charset="UTF-8">
-  <title>VitaGen – Lebenslauf</title>
+  <title>VitaGen - Lebenslauf</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag("js", new Date());
+    gtag("config", "G-18Q6CWP558");
+  </script>
   <link rel="stylesheet" href="lstyle.css">
+  <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css" media="not all">
 </head>
-<body>
+<body class="cv-builder-page">
+  <nav class="topbar">
+    <a class="brand" href="/bewerbungs-generator/lebenslauf/lebensformular.html" aria-label="VitaGen Lebenslauf">
+      <span class="brand-mark">VG</span>
+      <span>VitaGen</span>
+    </a>
+    <div class="product-switch" aria-label="Generator wechseln">
+      <a class="active" href="/bewerbungs-generator/lebenslauf/lebensformular.html">Lebenslauf</a>
+      <a href="/bewerbungs-generator/motivation/formular.html">Motivation</a>
+    </div>
+    <div class="topbar-actions">
+      <button type="button" class="ghost-button">DE</button>
+      <button type="button" class="ghost-button muted">EN</button>
+      <button type="button" id="saveBtn" class="secondary-button">Speichern</button>
+      <button type="button" id="previewBtn" class="primary-button">Vollbild-Vorschau</button>
+    </div>
+  </nav>
 
-<h1>CV Generator</h1>
+  <main class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">CV Generator</p>
+        <h1>Lebenslauf erstellen</h1>
+        <p>Strukturierter Editor fuer professionelle europaeische CVs mit Live-Vorschau, Stilwahl und KI-Bewerbungsfoto.</p>
+      </div>
+      <div class="hero-meter" aria-hidden="true">
+        <span>Live</span>
+        <strong>CV</strong>
+      </div>
+    </header>
 
-<form id="vitagenForm">
+    <form id="vitagenForm" class="builder-grid">
+      <aside class="section-rail" aria-label="Abschnitte">
+        <p>Abschnitte</p>
+        <a href="#personal" class="active">Persoenliche Daten</a>
+        <a href="#foto-section">Bewerbungsfoto</a>
+        <a href="#experience">Berufserfahrung</a>
+        <a href="#education">Schulbildung</a>
+        <a href="#training">Weiterbildung</a>
+        <a href="#skills">Kenntnisse</a>
+        <a href="#finish">Abschluss</a>
+      </aside>
 
-  <h2>📝 Deckblatt</h2>
+      <section class="builder-column" aria-label="Lebenslauf Formular">
+        <section id="personal" class="form-card">
+          <div class="card-heading">
+            <span class="step">01</span>
+            <div>
+              <h2>Persoenliche Daten</h2>
+              <p>Diese Angaben erscheinen direkt in der Live-Vorschau.</p>
+            </div>
+          </div>
+          <div class="field-grid two">
+            <label>Name
+              <input type="text" id="name" placeholder="Max Muster">
+            </label>
+            <label>Berufsprofil
+              <input type="text" id="headline" placeholder="Kaufmaennischer Mitarbeiter">
+            </label>
+            <label>Kontakt
+              <input type="text" id="kontakt" placeholder="max@example.com / +41 79 123 45 67">
+            </label>
+            <label>Adresse
+              <textarea id="adresse" rows="3" placeholder="Bahnhofstrasse 12, 8001 Zuerich"></textarea>
+            </label>
+          </div>
+          <label>Profil
+            <textarea id="profil" rows="4" placeholder="Kurzprofil mit Staerken, Berufserfahrung und Zielrichtung."></textarea>
+          </label>
+        </section>
 
-  <h3>Name</h3>
-  <input type="text" id="name">
+        <section id="foto-section" class="form-card ai-card photo-card">
+          <div class="photo-card-top">
+            <div class="photo-title-row">
+              <span class="ai-iconbox" aria-hidden="true"><span class="ai-icon"></span></span>
+              <div>
+                <h2>Bewerbungsfoto vorbereiten</h2>
+                <p>KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.</p>
+                <span class="ai-badge">KI-Fotoassistent</span>
+              </div>
+            </div>
+            <span id="counter" class="counter-pill">KI-Funktion - 0 / 3 generiert</span>
+          </div>
+          <div class="photo-card-grid">
+            <div class="photo-upload-shell">
+              <input type="file" id="foto-upload" accept="image/*">
+              <label for="foto-upload" class="photo-upload-drop">
+                <span class="upload-visual" aria-hidden="true"><span class="upload-plus">+</span></span>
+                <strong>Foto hochladen</strong>
+                <span>Die KI erstellt daraus professionelle Varianten fuer den CV.</span>
+                <span class="upload-action">Datei auswaehlen</span>
+              </label>
+              <button type="button" id="changePhotoBtn" class="change-photo-button" hidden>Foto aendern</button>
+              <div id="foto-container" class="upload-preview" aria-live="polite"></div>
+            </div>
+            <div class="photo-options-panel">
+              <div class="options-head">
+                <strong>Generierte Optionen</strong>
+                <span id="photo-status">Noch nicht generiert</span>
+              </div>
+              <div class="photo-options-wrap">
+                <div id="loader" class="aurora-loader" style="display:none;"><span></span></div>
+                <div id="foto-auswahl" class="photo-options" aria-live="polite"></div>
+              </div>
+              <div class="photo-actions">
+                <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
+                <p>Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.</p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-  <h4>Adresse</h4>
-  <textarea id="adresse"></textarea>
+        <section id="experience" class="form-card">
+          <div class="card-heading">
+            <span class="step">02</span>
+            <div>
+              <h2>Beruflicher Werdegang</h2>
+              <p>Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.</p>
+            </div>
+          </div>
+          <div class="beruf-entries entry-stack"></div>
+          <button type="button" class="add-btn" data-section="beruf">Weitere Station hinzufuegen</button>
+        </section>
 
-  <h4>Kontakt (Telefon / E-Mail)</h4>
-  <input type="text" id="kontakt">
+        <section id="education" class="form-card">
+          <div class="card-heading">
+            <span class="step">03</span>
+            <div>
+              <h2>Schulbildung</h2>
+              <p>Abschluss, Zeitraum und Ort kompakt erfassen.</p>
+            </div>
+          </div>
+          <div class="schulbildung-entries entry-stack"></div>
+          <button type="button" class="add-btn" data-section="schulbildung">Schule hinzufuegen</button>
+        </section>
 
-  <h4>Foto (optional)</h4>
-  <input type="file" id="foto-upload" accept="image/*">
-<!-- ================= Schulbildung ================= -->
-  <h2>📚 Schulbildung</h2>
-  <div class="schulbildung-entries">
-    <div class="entry">
-      <label>Schule</label>
-      <input type="text" class="schule">
-      <label>Ort/Land</label>
-      <input type="text" class="schule-ort">
-      <label>Von</label>
-      <input type="text" class="schule-von">
-      <label>Bis</label>
-      <input type="text" class="schule-bis">
-      <label>Abschluss</label>
-      <input type="text" class="schule-abschluss">
+        <section id="training" class="form-card">
+          <div class="card-heading">
+            <span class="step">04</span>
+            <div>
+              <h2>Aus- und Weiterbildung</h2>
+              <p>Kurse, Zertifikate und Weiterbildungen strukturiert darstellen.</p>
+            </div>
+          </div>
+          <div class="weiterbildung-entries entry-stack"></div>
+          <button type="button" class="add-btn" data-section="weiterbildung">Weiterbildung hinzufuegen</button>
+        </section>
+
+        <section id="skills" class="form-card split-card">
+          <div>
+            <div class="card-heading">
+              <span class="step">05</span>
+              <div>
+                <h2>Kenntnisse</h2>
+                <p>Fachliche und digitale Kompetenzen.</p>
+              </div>
+            </div>
+            <div class="kenntnisse-entries entry-stack compact"></div>
+            <button type="button" class="add-btn" data-section="kenntnisse">Kenntnis hinzufuegen</button>
+          </div>
+          <div>
+            <div class="card-heading">
+              <span class="step">06</span>
+              <div>
+                <h2>Hobbys</h2>
+                <p>Optional, kurz und professionell.</p>
+              </div>
+            </div>
+            <div class="hobbys-entries entry-stack compact"></div>
+            <button type="button" class="add-btn" data-section="hobbys">Hobby hinzufuegen</button>
+          </div>
+        </section>
+
+        <section id="finish" class="form-card">
+          <div class="card-heading">
+            <span class="step">07</span>
+            <div>
+              <h2>Abschluss</h2>
+              <p>Datum und Signatur fuer den CV.</p>
+            </div>
+          </div>
+          <div class="field-grid two">
+            <label>Datum
+              <input type="text" id="datum" placeholder="Zuerich, 18.06.2026">
+            </label>
+            <label>Unterschrift
+              <input type="text" id="unterschrift" placeholder="Max Muster">
+            </label>
+          </div>
+        </section>
+      </section>
+
+      <aside class="preview-column" aria-label="Live Vorschau">
+        <section class="preview-card">
+          <div class="preview-head">
+            <div>
+              <h2>Live-Vorschau</h2>
+              <p>Aktualisiert sich automatisch beim Tippen.</p>
+            </div>
+            <span class="active-dot">Aktiv</span>
+          </div>
+          <div id="preview-wrapper" class="live-preview-frame">
+            <div id="preview" class="preview-paper" data-style="swiss-line.css">
+              <div class="watermark">VORSCHAU</div>
+              <article class="cv">
+                <aside class="cv-side">
+                  <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none;">
+                  <h1 id="pv-name">Max Muster</h1>
+                  <p id="pv-headline">Kaufmaennischer Mitarbeiter</p>
+                  <div class="cv-block">
+                    <h3>Kontakt</h3>
+                    <p id="pv-kontakt">max@example.com<br>+41 79 123 45 67</p>
+                    <p id="pv-adresse">Bahnhofstrasse 12<br>8001 Zuerich</p>
+                  </div>
+                  <div class="cv-block">
+                    <h3>Kenntnisse</h3>
+                    <div id="pv-kenntnisse" class="pill-list"></div>
+                  </div>
+                  <div class="cv-block">
+                    <h3>Interessen</h3>
+                    <div id="pv-hobbys" class="pill-list muted"></div>
+                  </div>
+                </aside>
+                <section class="cv-main">
+                  <p class="document-label">Lebenslauf</p>
+                  <section class="cv-section">
+                    <h2>Profil</h2>
+                    <p id="pv-profil">Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.</p>
+                  </section>
+                  <section class="cv-section">
+                    <h2>Berufserfahrung</h2>
+                    <div id="pv-beruf" class="timeline"></div>
+                  </section>
+                  <section class="cv-section">
+                    <h2>Schulbildung</h2>
+                    <div id="pv-schulbildung" class="timeline"></div>
+                  </section>
+                  <section class="cv-section">
+                    <h2>Weiterbildung</h2>
+                    <div id="pv-weiterbildung" class="timeline"></div>
+                  </section>
+                  <footer class="cv-footer">
+                    <span id="pv-datum">Zuerich, 18.06.2026</span>
+                    <strong id="pv-unterschrift">Max Muster</strong>
+                  </footer>
+                </section>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        <section class="style-picker" aria-label="Dokumentstil">
+          <div>
+            <h3>Stil direkt testen</h3>
+            <p>Der Stil veraendert sich direkt in der Vorschau.</p>
+          </div>
+          <div class="style-scroll" role="list">
+            <button type="button" class="style-chip active" data-style="swiss-line.css" data-tone="swiss"><span class="style-thumb swiss"></span><strong>Swiss Line</strong><small>Empfohlen</small></button>
+            <button type="button" class="style-chip" data-style="charcoal-frame.css" data-tone="charcoal"><span class="style-thumb charcoal"></span><strong>Charcoal Frame</strong><small>Kontrast</small></button>
+            <button type="button" class="style-chip" data-style="cobalt-ribbon.css" data-tone="cobalt"><span class="style-thumb cobalt"></span><strong>Cobalt Ribbon</strong><small>Dynamisch</small></button>
+            <button type="button" class="style-chip" data-style="editorial-azure.css" data-tone="azure"><span class="style-thumb azure"></span><strong>Editorial Azure</strong><small>Editorial</small></button>
+            <button type="button" class="style-chip" data-style="executive-ink.css" data-tone="executive"><span class="style-thumb executive"></span><strong>Executive Ink</strong><small>Premium</small></button>
+            <button type="button" class="style-chip" data-style="graphite-pro.css" data-tone="graphite"><span class="style-thumb graphite"></span><strong>Graphite Pro</strong><small>Business</small></button>
+            <button type="button" class="style-chip" data-style="midnight-column.css" data-tone="midnight"><span class="style-thumb midnight"></span><strong>Midnight Column</strong><small>Modern</small></button>
+            <button type="button" class="style-chip" data-style="monograph.css" data-tone="monograph"><span class="style-thumb monograph"></span><strong>Monograph</strong><small>Minimal</small></button>
+            <button type="button" class="style-chip" data-style="navy-wave.css" data-tone="navy"><span class="style-thumb navy"></span><strong>Navy Wave</strong><small>Elegant</small></button>
+            <button type="button" class="style-chip" data-style="nordic-panel.css" data-tone="nordic"><span class="style-thumb nordic"></span><strong>Nordic Panel</strong><small>Ruhig</small></button>
+            <button type="button" class="style-chip" data-style="pearl-classic.css" data-tone="pearl"><span class="style-thumb pearl"></span><strong>Pearl Classic</strong><small>Klassisch</small></button>
+            <button type="button" class="style-chip" data-style="soft-sand.css" data-tone="sand"><span class="style-thumb sand"></span><strong>Soft Sand</strong><small>Warm Soft</small></button>
+            <button type="button" class="style-chip" data-style="teal-balance.css" data-tone="teal"><span class="style-thumb teal"></span><strong>Teal Balance</strong><small>Klar</small></button>
+            <button type="button" class="style-chip" data-style="terracotta-arch.css" data-tone="terracotta"><span class="style-thumb terracotta"></span><strong>Terracotta Arch</strong><small>Warm</small></button>
+          </div>
+        </section>
+
+        <section class="download-card">
+          <h3>PDF ohne Wasserzeichen vorbereiten</h3>
+          <p>Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.</p>
+          <button type="button" id="buyBtn" class="download-button">PDF ohne Wasserzeichen vorbereiten</button>
+        </section>
+      </aside>
+    </form>
+  </main>
+
+  <div id="previewModal" class="preview-modal" aria-hidden="true">
+    <button type="button" class="modal-backdrop" data-close-preview aria-label="Vorschau schliessen"></button>
+    <div class="preview-dialog" role="dialog" aria-modal="true" aria-labelledby="previewModalTitle">
+      <div class="modal-head">
+        <h2 id="previewModalTitle">Vollbild-Vorschau</h2>
+        <button type="button" id="closePreviewModal" class="icon-button" aria-label="Vorschau schliessen">x</button>
+      </div>
+      <div class="modal-grid">
+        <div id="modalPreviewHost" class="modal-preview-host"></div>
+        <aside class="modal-payment-card">
+          <h3>Kostenlose Vorschau</h3>
+          <p>Die Vorschau zeigt den Lebenslauf mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.</p>
+          <ul>
+            <li>Stil, Foto und Text vorher pruefen</li>
+            <li>Kein Account erforderlich</li>
+            <li>Download ohne Wasserzeichen nach Zahlung</li>
+          </ul>
+          <button type="button" class="download-button" data-trigger-buy>PDF ohne Wasserzeichen herunterladen</button>
+          <button type="button" class="secondary-button" data-close-preview>Zurueck bearbeiten</button>
+        </aside>
+      </div>
     </div>
   </div>
-  <button type="button" class="add-btn" data-section="schulbildung">➕ Weitere hinzufügen</button>
-<hr>  
 
-  <!-- ================= Beruf ================= -->
-  <h2>💼 Beruflicher Werdegang</h2>
-  <div class="beruf-entries">
-    <div class="entry">
-		<label>Position</label>
-      <input type="text" class="beruf-position">
-      <label>Unternehmen / Ort (Land)</label>
-      <input type="text" class="beruf-ort">
-      <label>Von</label>
-      <input type="text" class="beruf-von">
-      <label>Bis</label>
-	  <input type="text" class="beruf-bis">
-	  <label>Ort/Land (optional, wenn Name des Unternehmens zu lang)</label>
-      <input type="text" class="beruf-firma">
-      <label>Tätigkeit/Aufgaben (optional)</label>
-      <textarea class="beruf-aufgaben"></textarea>
+  <div id="buyModal" class="payment-modal" style="display:none;" aria-hidden="true">
+    <div class="payment-dialog" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <div class="payment-header">
+        <h2 id="paymentModalTitle">PDF ohne Wasserzeichen</h2>
+        <button id="cancelPaymentBtn" type="button" class="payment-close" aria-label="Zahlungsfenster schliessen">x</button>
+      </div>
+      <section class="payment-unlock-card" aria-labelledby="paymentUnlockTitle">
+        <h3 id="paymentUnlockTitle">Finale PDF freischalten</h3>
+        <p>Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.</p>
+        <div class="payment-price">
+          <strong>9.90</strong>
+          <span>CHF · einmalig</span>
+        </div>
+        <ul class="payment-benefits">
+          <li>PDF ohne Wasserzeichen</li>
+          <li>Sofortiger Download nach Zahlung</li>
+          <li>Sichere Zahlung ueber Stripe</li>
+          <li>Keine Kartendaten auf dieser Website gespeichert</li>
+        </ul>
+        <p id="paymentStatus" class="payment-status"></p>
+        <button id="payBtn" type="button" class="payment-submit">Weiter zur sicheren Zahlung</button>
+        <p class="payment-note">In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.</p>
+      </section>
     </div>
   </div>
-  <button type="button" class="add-btn" data-section="beruf">➕ Weitere hinzufügen</button>
-<hr>
 
-  <!-- ================= Weiterbildung ================= -->
-  <h2>🎓 Aus- und Weiterbildung</h2>
-  <div class="weiterbildung-entries">
-    <div class="entry">
-      <label>Titel</label>
-      <input type="text" class="weiterbildung-titel">
-      <label>Ausbildungsstätte / Ort</label>
-      <input type="text" class="weiterbildung-ort">
-      <label>Von</label>
-      <input type="text" class="weiterbildung-von">
-      <label>Bis</label>
-      <input type="text" class="weiterbildung-bis">
-      <label>Inhalte</label>
-      <textarea class="weiterbildung-inhalt"></textarea>
-    </div>
-  </div>
-  <button type="button" class="add-btn" data-section="weiterbildung">➕ Weitere hinzufügen</button>
-<hr>
-
-  <!-- ================= Kenntnisse ================= -->
-  <h2>💪 Kenntnisse & Fähigkeiten</h2>
-  <div class="kenntnisse-entries">
-    <div class="entry">
-      <input type="text" class="kenntnisse">
-    </div>
-  </div>
-  <button type="button" class="add-btn" data-section="kenntnisse">➕ Weitere hinzufügen</button>
-  
-  <!-- ================= Hobbys ================= -->
-  <h2>🚴 Hobbies</h2>
-  <div class="hobbys-entries">
-    <div class="entry">
-      <input type="text" class="hobbys">
-    </div>
-  </div>
-  <button type="button" class="add-btn" data-section="hobbys">➕ Weitere hinzufügen</button>
-<hr>
-
-  <br><br>
-
-  <label>Datum</label>
-  <input type="text" id="datum">
-
-  <label>Unterschrift</label>
-  <input type="text" id="unterschrift">
-
-  <div class="buttons">
-    <button type="button" id="saveBtn">💾 Speichern</button>
-    <button type="button" id="previewBtn">👁 Vorschau</button>
-  </div>
-
-</form>
-<script src="lscript.js"></script>
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="lscript.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/bewerbungs-generator/payment.js" data-document-type="lebenslauf" data-storage-key="vitagen_lebenslauf" data-filename="Lebenslauf.pdf"></script>
 </body>
 </html>

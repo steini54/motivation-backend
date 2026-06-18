@@ -5,6 +5,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const frontendPath = path.join(__dirname, "../frontend/vitagen/motivation");
+const lebenslaufPath = path.join(__dirname, "../frontend/vitagen/lebenslauf");
 const vitagenPath = path.join(__dirname, "../frontend/vitagen");
 const styleNames = [
   "charcoal-frame.css",
@@ -61,6 +62,33 @@ test("motivation builder exposes every current style in the live carousel", () =
 
   assert.deepEqual(carouselStyles, styleNames.slice().sort());
   assert.match(formHtml, /<div class="watermark">VORSCHAU<\/div>/);
+});
+
+test("lebenslauf builder keeps preview, styles, payment, and AI photo on one page", () => {
+  const formHtml = fs.readFileSync(
+    path.join(lebenslaufPath, "lebensformular.html"),
+    "utf8"
+  );
+  const script = fs.readFileSync(
+    path.join(lebenslaufPath, "lscript.js"),
+    "utf8"
+  );
+  const carouselStyles = Array.from(
+    formHtml.matchAll(/class="style-chip[^"]*"[^>]*data-style="([^"]+)"/g),
+    (match) => match[1]
+  ).sort();
+
+  assert.deepEqual(carouselStyles, styleNames.slice().sort());
+  assert.match(formHtml, /id="preview"/);
+  assert.match(formHtml, /class="cv"/);
+  assert.match(formHtml, /id="previewModal"/);
+  assert.match(formHtml, /id="foto-section"/);
+  assert.match(formHtml, /id="aiFotoBtn"/);
+  assert.match(formHtml, /src="\/bewerbungs-generator\/payment\.js" data-document-type="lebenslauf"/);
+  assert.match(formHtml, /href="\/bewerbungs-generator\/motivation\/formular\.html"/);
+  assert.match(script, /const AI_API_BASE_URL = "https:\/\/motivation-backend-production-2800\.up\.railway\.app";/);
+  assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-ai-photo`/);
+  assert.doesNotMatch(script, /window\.open\("lpreview\.html"\)/);
 });
 
 test("frontend preserves production markup and routes AI to Railway", () => {
@@ -157,6 +185,8 @@ test("frontend payment scripts are valid JavaScript", () => {
     path.join(vitagenPath, "payment.js"),
     path.join(vitagenPath, "motivation", "script.js"),
     path.join(vitagenPath, "motivation", "preview.js"),
+    path.join(vitagenPath, "lebenslauf", "lscript.js"),
+    path.join(vitagenPath, "lebenslauf", "lpreview.js"),
   ];
 
   for (const scriptPath of scripts) {
