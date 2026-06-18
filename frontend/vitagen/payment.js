@@ -77,12 +77,96 @@
       .join("");
   }
 
-  function getSelectedStyleName() {
-    const href = document.getElementById("theme-style")?.getAttribute("href") || "";
-    const styleStorageKey =
-      documentType === "lebenslauf" ? "vitagen_lebenslauf_style" : "vitagen_motivation_style";
+  function getStyleStorageKey() {
+    return documentType === "lebenslauf"
+      ? "vitagen_lebenslauf_style"
+      : "vitagen_motivation_style";
+  }
 
-    return href.split("/").pop() || localStorage.getItem(styleStorageKey) || "swiss-line.css";
+  function normalizeStyleFile(value) {
+    return String(value || "").trim().split(/[\\/]/).pop();
+  }
+
+  function getAvailableStyleNames() {
+    return Array.from(document.querySelectorAll("[data-style]"))
+      .map((element) => normalizeStyleFile(element.dataset.style))
+      .filter((styleName) => styleName.endsWith(".css"));
+  }
+
+  function isKnownStyleName(styleName, availableStyles) {
+    if (!styleName || !styleName.endsWith(".css")) {
+      return false;
+    }
+
+    return availableStyles.length === 0 || availableStyles.includes(styleName);
+  }
+
+  function getThemeHrefStyleName() {
+    const href = document.getElementById("theme-style")?.getAttribute("href") || "";
+    return normalizeStyleFile(href);
+  }
+
+  function getPreviewStyleName() {
+    return normalizeStyleFile(document.getElementById("preview")?.dataset.style);
+  }
+
+  function getStoredStyleName() {
+    return normalizeStyleFile(localStorage.getItem(getStyleStorageKey()));
+  }
+
+  function getPendingCheckoutStyleName() {
+    try {
+      const pending = JSON.parse(sessionStorage.getItem("vitagen_pending_checkout") || "{}");
+      if (pending.documentType !== documentType) {
+        return "";
+      }
+
+      return normalizeStyleFile(pending.styleName);
+    } catch {
+      return "";
+    }
+  }
+
+  function syncSelectedStyleToDom(styleName) {
+    const themeLink = document.getElementById("theme-style");
+    const preview = document.getElementById("preview");
+
+    if (themeLink) {
+      themeLink.href = `styles/${styleName}`;
+    }
+
+    if (preview) {
+      preview.dataset.style = styleName;
+    }
+
+    document.querySelectorAll("[data-style]").forEach((element) => {
+      element.classList.toggle("active", element.dataset.style === styleName);
+    });
+  }
+
+  function getSelectedStyleName() {
+    const availableStyles = getAvailableStyleNames();
+    const candidates = [
+      getPendingCheckoutStyleName(),
+      getStoredStyleName(),
+      getPreviewStyleName(),
+      getThemeHrefStyleName(),
+      "swiss-line.css",
+    ];
+    const selectedStyle = candidates.find((styleName) =>
+      isKnownStyleName(styleName, availableStyles)
+    );
+
+    syncSelectedStyleToDom(selectedStyle);
+    log("selected style resolved", {
+      selectedStyle,
+      pendingStyle: getPendingCheckoutStyleName(),
+      storedStyle: getStoredStyleName(),
+      previewStyle: getPreviewStyleName(),
+      hrefStyle: getThemeHrefStyleName(),
+    });
+
+    return selectedStyle;
   }
 
   function getReturnUrl() {

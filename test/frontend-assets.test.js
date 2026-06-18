@@ -239,6 +239,12 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /\[VitaGen Payment\]/);
   assert.match(paymentScript, /delegated payment trigger clicked/);
   assert.match(paymentScript, /\[data-trigger-buy\], \[data-payment-trigger\]/);
+  assert.match(paymentScript, /getPendingCheckoutStyleName/);
+  assert.match(
+    paymentScript,
+    /const candidates = \[\s*getPendingCheckoutStyleName\(\),\s*getStoredStyleName\(\),\s*getPreviewStyleName\(\),\s*getThemeHrefStyleName\(\),\s*"swiss-line\.css",\s*\]/s
+  );
+  assert.match(paymentScript, /syncSelectedStyleToDom\(selectedStyle\)/);
   assert.doesNotMatch(paymentScript, /checkout\/session\/\$\{encodeURIComponent/);
   assert.match(paymentScript, /html2canvas/);
   assert.match(paymentScript, /jsPDF/);
