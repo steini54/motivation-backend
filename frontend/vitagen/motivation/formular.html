@@ -2,107 +2,209 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>VitaGen – Motivationsschreiben</title>
+  <title>VitaGen - Motivationsschreiben</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="builder-page">
+  <header class="topbar">
+    <a class="brand" href="../start.html" aria-label="VitaGen Startseite">
+      <span class="brand-mark">V</span>
+      <span>
+        <strong>VitaGen</strong>
+        <small>Motivationsschreiben</small>
+      </span>
+    </a>
+    <div class="language-switch" aria-label="Sprache">
+      <span class="active">DE</span>
+      <span>EN</span>
+    </div>
+  </header>
 
-<h1>Motivationsschreiben</h1>
+  <main class="page-shell">
+    <section class="hero-panel" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Bewerbungsunterlagen</p>
+        <h1 id="page-title">Motivationsschreiben erstellen</h1>
+        <p class="hero-copy">Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.</p>
+      </div>
+      <div class="hero-badges" aria-label="Produktvorteile">
+        <span>Schweiz &amp; Europa</span>
+        <span>KI-Foto</span>
+        <span>KI-Text</span>
+      </div>
+    </section>
 
-<form id="vitagenForm">
+    <form id="vitagenForm" class="builder-grid">
+      <div class="builder-main">
+        <section class="form-card">
+          <div class="card-heading">
+            <span class="step">01</span>
+            <div>
+              <h2>Meine Angaben</h2>
+              <p>Diese Daten erscheinen spaeter im Briefkopf deiner Bewerbung.</p>
+            </div>
+          </div>
 
-  <h2>📝 Meine Angaben</h2>
-		<!-- FOTO-UPLOAD BUTTON UND PLATZHALTER -->
- <!-- FOTO-UPLOAD UND KI GENERATOR -->
-<div id="foto-section">
-  <label for="foto-upload">📷 Foto hochladen:</label>
-  <input type="file" id="foto-upload" accept="image/*">
-  <div id="foto-container"></div>
+          <div class="field-grid two">
+            <div class="field">
+              <label for="name">Mein Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" placeholder="Max Mustermann">
+            </div>
+            <div class="field">
+              <label for="kontakt">E-Mail / Telefon</label>
+              <input type="text" id="kontakt" name="kontakt" autocomplete="email" placeholder="+41 76 456 79 00 · max@email.com">
+            </div>
+          </div>
 
-<div id="counter" style="margin:10px; font-weight:bold;">
-  0 / 3 Bilder generiert
-</div>
+          <div class="field">
+            <label for="adresse">Meine Adresse</label>
+            <textarea id="adresse" name="adresse" rows="3" autocomplete="street-address" placeholder="Strasse, PLZ Ort"></textarea>
+          </div>
+        </section>
 
-  <button type="button" id="aiFotoBtn" style="
-    margin-top:10px;
-    padding:8px 16px;
-    font-size:14px;
-    background-color:#28a745;
-    color:white;
-    border:none;
-    border-radius:4px;
-    cursor:pointer;
-  ">✨ KI Foto generieren</button>
-  <!-- Container für 3 KI-Varianten -->
-  <div id="foto-auswahl" style="display:flex; flex-wrap:wrap; justify-content:center; margin-top:10px;"></div>
-</div>
+        <section class="form-card ai-card photo-card" id="foto-section">
+          <div class="card-heading">
+            <span class="step ai-step">AI</span>
+            <div>
+              <p class="card-kicker">KI-Fotoassistent</p>
+              <h2>Bewerbungsfoto vorbereiten</h2>
+              <p>Aus einem normalen Foto kann eine professionelle Bewerbungsfoto-Variante entstehen.</p>
+            </div>
+          </div>
 
-<div id="loader" style="display:none; text-align:center; margin:10px;">
-  ⏳ Trommelwirbel, es wird generiert...
-</div>
+          <div class="photo-workspace">
+            <div class="field upload-field">
+              <label for="foto-upload">Foto hochladen</label>
+              <input type="file" id="foto-upload" accept="image/*">
+              <div id="foto-container" class="photo-current"></div>
+            </div>
 
-<br>
-<hr>
-  <label>Mein Name</label>
- <input type="text" id="name" name="name">
+            <div class="ai-action-panel">
+              <div id="counter" class="counter">0 / 3 Bilder generiert</div>
+              <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
+              <div id="loader" class="loader" style="display:none;">Foto wird vorbereitet...</div>
+            </div>
+          </div>
 
-  <label>Meine Adresse</label>
-  <textarea id="adresse" name="adresse"></textarea>
+          <div id="foto-auswahl" class="photo-options" aria-live="polite"></div>
+        </section>
 
-  <label>E-Mail / Telefon</label>
-   <input type="text" id="kontakt" name="kontakt">
+        <section class="form-card">
+          <div class="card-heading">
+            <span class="step">02</span>
+            <div>
+              <h2>Angaben zur Bewerbung</h2>
+              <p>Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.</p>
+            </div>
+          </div>
 
-  <h2>📝 Bewerbung</h2>
-  <label>Bewerbung als...</label>
-  <input type="text" id="posten" name="posten">
+          <div class="field-grid two">
+            <div class="field">
+              <label for="posten">Bewerbung als...</label>
+              <input type="text" id="posten" name="posten" placeholder="Marketing Manager">
+            </div>
+            <div class="field">
+              <label for="funktion">Bewerbung als... (fuer Motivationstext)</label>
+              <input type="text" id="funktion" name="funktion" placeholder="z.B. Softwareentwickler">
+            </div>
+          </div>
 
-  <label>Adresse Arbeitgeber</label>
-<textarea id="arbeitgeber" name="arbeitgeber"></textarea>
+          <div class="field">
+            <label for="arbeitgeber">Adresse Arbeitgeber</label>
+            <textarea id="arbeitgeber" name="arbeitgeber" rows="4" placeholder="Firma, Ansprechperson, Strasse, Ort"></textarea>
+          </div>
+        </section>
 
-	<label for="funktion">Bewerbung als... (für Motivationstext)</label>
-<input type="text" id="funktion" name="funktion" placeholder="z.B. Softwareentwickler">
-	
-  <h2>📝 Motivationsschreiben</h2>
-   <label id="pv-hallo">Begrüssung</label>
-	<p class="hint">z.B. Sehr geehrte...</p>
-	<textarea id="stichwoerter" name="stichwoerter"></textarea>
-	
-	<label id="pv-fliesstext">Motivationstext</label>
-     <p class="hint">
-     Stichwörter eingeben (z. B. Erfahrung, Motivation, Stärken).  
-     Mit Hilfe von KI einen Fliesstext erstellen.
-     </p>
-    <textarea id="stichwoerter2" name="stichwoerter2"></textarea>
-  
-<!-- Button direkt nach dem Stichworte-Feld -->
-<button type="button" id="generateTextBtn" style="
-  margin-top:10px;
-  padding:8px 16px;
-  font-size:14px;
-  background-color:#445b87;
-  color:white;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-">
-  🛠 KI Hilfe zum Fließtext erstellen
-</button>
-	
-	<label id="pv-adieu">Verabschiedung</label>
-	 <p class="hint">z.B. Mit freundlichen Grüssen...</p>
-   <textarea id="stichwoerter3" name="stichwoerter3"></textarea>
-	
-<input type="text" id="datum" name="datum" placeholder="Datum">
-  <input type="text" id="unterschrift" name="unterschrift" placeholder="Dein Name – Unterschrift">
+        <section class="form-card ai-card text-card">
+          <div class="card-heading">
+            <span class="step ai-step">AI</span>
+            <div>
+              <p class="card-kicker">KI-Textassistent</p>
+              <h2>Motivationstext formulieren</h2>
+              <p>Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.</p>
+            </div>
+          </div>
 
-  <div class="buttons">
-    <button type="button" id="saveBtn">💾 Zwischenspeichern</button>
-	<button type="button" id="previewBtn">👁 Vorschau</button>
-  </div>
+          <div class="tone-chips" aria-label="Tonvorschlaege">
+            <span>Professionell</span>
+            <span>Warm</span>
+            <span>Selbstbewusst</span>
+            <span>Kurz &amp; klar</span>
+          </div>
 
-</form>
+          <div class="field">
+            <label id="pv-fliesstext" for="stichwoerter2">Motivationstext</label>
+            <p class="hint">Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.</p>
+            <textarea id="stichwoerter2" name="stichwoerter2" rows="7" placeholder="Erfahrung, Motivation, passende Staerken, konkrete Beispiele..."></textarea>
+          </div>
 
-<script src="script.js"></script>
+          <button type="button" id="generateTextBtn" class="ai-button text-button">KI Hilfe zum Fliesstext erstellen</button>
+        </section>
+
+        <section class="form-card">
+          <div class="card-heading">
+            <span class="step">03</span>
+            <div>
+              <h2>Briefdetails</h2>
+              <p>Begruessung, Abschluss und Signatur fuer den finalen Brief.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label id="pv-hallo" for="stichwoerter">Begruessung</label>
+            <p class="hint">z.B. Sehr geehrte Frau Muster</p>
+            <textarea id="stichwoerter" name="stichwoerter" rows="3"></textarea>
+          </div>
+
+          <div class="field">
+            <label id="pv-adieu" for="stichwoerter3">Verabschiedung</label>
+            <p class="hint">z.B. Mit freundlichen Gruessen</p>
+            <textarea id="stichwoerter3" name="stichwoerter3" rows="3"></textarea>
+          </div>
+
+          <div class="field-grid two">
+            <div class="field">
+              <label for="datum">Datum</label>
+              <input type="text" id="datum" name="datum" placeholder="Datum">
+            </div>
+            <div class="field">
+              <label for="unterschrift">Unterschrift</label>
+              <input type="text" id="unterschrift" name="unterschrift" placeholder="Dein Name - Unterschrift">
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="builder-side" aria-label="Naechste Schritte">
+        <div class="side-panel">
+          <p class="eyebrow">Live Workflow</p>
+          <h2>Bereit fuer die Vorschau</h2>
+          <p>Speichere deine Eingaben und oeffne danach die gestaltete PDF-Vorschau mit Style-Auswahl.</p>
+
+          <div class="mini-preview" aria-hidden="true">
+            <div class="mini-line strong"></div>
+            <div class="mini-line"></div>
+            <div class="mini-block"></div>
+            <div class="mini-line short"></div>
+            <div class="mini-line"></div>
+          </div>
+
+          <ul class="check-list">
+            <li>Angaben bleiben lokal zwischengespeichert</li>
+            <li>KI-Foto und KI-Text bleiben editierbar</li>
+            <li>PDF ohne Wasserzeichen erst nach Zahlung</li>
+          </ul>
+
+          <div class="buttons">
+            <button type="button" id="saveBtn" class="secondary-button">Zwischenspeichern</button>
+            <button type="button" id="previewBtn" class="primary-button">Vorschau oeffnen</button>
+          </div>
+        </div>
+      </aside>
+    </form>
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
