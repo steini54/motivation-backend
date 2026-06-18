@@ -198,6 +198,26 @@ test("builder full preview watermark is large enough to block free documents", (
   }
 });
 
+test("builder photo state is session-only and clears stale stored images", () => {
+  const motivationScript = fs.readFileSync(
+    path.join(frontendPath, "script.js"),
+    "utf8"
+  );
+  const lebenslaufScript = fs.readFileSync(
+    path.join(lebenslaufPath, "lscript.js"),
+    "utf8"
+  );
+
+  for (const script of [motivationScript, lebenslaufScript]) {
+    assert.match(script, /function getSelectedPhotoSrc\(\)/);
+    assert.match(script, /function clearStoredPhotoState/);
+    assert.match(script, /delete data\.foto/);
+    assert.match(script, /clearStoredPhotoState\(\{ resetUi: false \}\)/);
+    assert.doesNotMatch(script, /data\.foto = element\.src/);
+    assert.doesNotMatch(script, /if \(saved\.foto\) \{\s*renderUploadPreview/s);
+  }
+});
+
 test("frontend preserves production markup and routes AI to Railway", () => {
   const formHtml = fs.readFileSync(
     path.join(frontendPath, "formular.html"),

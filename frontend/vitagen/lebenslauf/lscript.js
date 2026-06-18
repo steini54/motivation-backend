@@ -379,6 +379,43 @@ function setStoredData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+function getSelectedPhotoSrc() {
+  return document.querySelector(".generated-option.selected img, #foto-container.selected img")?.src || "";
+}
+
+function clearStoredPhotoState({ resetUi = true } = {}) {
+  const data = getStoredData();
+  if (data.foto) {
+    delete data.foto;
+    setStoredData(data);
+  }
+
+  if (!resetUi) return;
+
+  aiImageCount = 0;
+  updateCounter();
+  const fileInput = document.getElementById("foto-upload");
+  if (fileInput) {
+    fileInput.value = "";
+  }
+
+  const container = document.getElementById("foto-container");
+  const shell = container?.closest(".photo-upload-shell");
+  if (container) {
+    container.innerHTML = "";
+    container.classList.remove("selected");
+  }
+  shell?.classList.remove("has-photo");
+
+  const changeButton = document.getElementById("changePhotoBtn");
+  if (changeButton) {
+    changeButton.hidden = true;
+  }
+
+  renderOptionPlaceholders();
+  setPhotoStatus("Noch nicht generiert");
+}
+
 function normalizeLanguage(language) {
   return language === "en" ? "en" : "de";
 }
@@ -608,23 +645,20 @@ function ensureEntry(section) {
 }
 
 function saveFormData() {
-  const existing = getStoredData();
   const data = {};
 
   SIMPLE_FIELDS.forEach((id) => {
     data[id] = document.getElementById(id)?.value || "";
   });
 
-  if (existing.foto) {
-    data.foto = existing.foto;
-  }
-
   Object.keys(SECTION_CONFIG).forEach((section) => {
     data[section] = getEntriesData(section);
   });
 
   setStoredData(data);
-  return data;
+
+  const selectedPhoto = getSelectedPhotoSrc();
+  return selectedPhoto ? { ...data, foto: selectedPhoto } : data;
 }
 
 window.saveAllFields = saveFormData;
@@ -968,9 +1002,7 @@ function selectImage(element) {
     document.getElementById("foto-container")?.classList.add("selected");
   }
 
-  const data = getStoredData();
-  data.foto = element.src;
-  setStoredData(data);
+  saveFormData();
   setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
   syncLivePreview();
 }
@@ -978,6 +1010,7 @@ function selectImage(element) {
 window.selectImage = selectImage;
 
 function loadFormData() {
+  clearStoredPhotoState({ resetUi: false });
   const saved = getStoredData();
   SIMPLE_FIELDS.forEach((id) => {
     const element = document.getElementById(id);
@@ -996,11 +1029,6 @@ function loadFormData() {
 
   renderOptionPlaceholders();
   updateCounter();
-
-  if (saved.foto) {
-    renderUploadPreview(saved.foto, true);
-    setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
-  }
 
   applyDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
   syncLivePreview({ pulse: false });

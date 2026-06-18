@@ -356,6 +356,43 @@ function setStoredData(data) {
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
 }
 
+function getSelectedPhotoSrc() {
+  return document.querySelector(".generated-option.selected img, #foto-container.selected img")?.src || "";
+}
+
+function clearStoredPhotoState({ resetUi = true } = {}) {
+  const data = getStoredData();
+  if (data.foto) {
+    delete data.foto;
+    setStoredData(data);
+  }
+
+  if (!resetUi) return;
+
+  aiImageCount = 0;
+  updateCounter();
+  const fileInput = document.getElementById("foto-upload");
+  if (fileInput) {
+    fileInput.value = "";
+  }
+
+  const container = document.getElementById("foto-container");
+  const shell = container?.closest(".photo-upload-shell");
+  if (container) {
+    container.innerHTML = "";
+    container.classList.remove("selected");
+  }
+  shell?.classList.remove("has-photo");
+
+  const changeButton = document.getElementById("changePhotoBtn");
+  if (changeButton) {
+    changeButton.hidden = true;
+  }
+
+  renderOptionPlaceholders();
+  setPhotoStatus("Noch nicht generiert");
+}
+
 function normalizeLanguage(language) {
   return language === "en" ? "en" : "de";
 }
@@ -475,7 +512,7 @@ function setTextWithBreaks(element, value, fallback = "") {
 
 function getCurrentFormData() {
   const stored = getStoredData();
-  return {
+  const data = {
     ...stored,
     name: document.getElementById("name")?.value || stored.name || "",
     adresse: document.getElementById("adresse")?.value || stored.adresse || "",
@@ -489,6 +526,14 @@ function getCurrentFormData() {
     datum: document.getElementById("datum")?.value || stored.datum || "",
     unterschrift: document.getElementById("unterschrift")?.value || stored.unterschrift || ""
   };
+  delete data.foto;
+
+  const selectedPhoto = getSelectedPhotoSrc();
+  if (selectedPhoto) {
+    data.foto = selectedPhoto;
+  }
+
+  return data;
 }
 
 function pulseLivePreview() {
@@ -756,6 +801,7 @@ function saveAllFields() {
   data.stichwoerter3 = document.getElementById("stichwoerter3")?.value || "";
   data.datum = document.getElementById("datum")?.value || "";
   data.unterschrift = document.getElementById("unterschrift")?.value || "";
+  delete data.foto;
 
   setStoredData(data);
   return data;
@@ -881,9 +927,7 @@ function selectImage(element) {
     document.getElementById("foto-container")?.classList.add("selected");
   }
 
-  const data = getStoredData();
-  data.foto = element.src;
-  setStoredData(data);
+  saveAllFields();
   setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
   syncLivePreview();
 }
@@ -892,6 +936,7 @@ window.selectImage = selectImage;
 
 window.addEventListener("DOMContentLoaded", () => {
   installLanguageSwitch();
+  clearStoredPhotoState({ resetUi: false });
   const saved = getStoredData();
   const fields = [
     "name",
@@ -916,11 +961,6 @@ window.addEventListener("DOMContentLoaded", () => {
 
   renderOptionPlaceholders();
   updateCounter();
-
-  if (saved.foto) {
-    renderUploadPreview(saved.foto, true);
-    setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
-  }
 
   applyDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
   installLivePreview();
