@@ -23,16 +23,330 @@ const DOCUMENT_STYLES = [
 ];
 const UI_TRANSLATIONS = {
   de: {
+    "document.title": "VitaGen - Motivationsschreiben",
     "motivation.eyebrow": "Bewerbungsunterlagen",
     "motivation.title": "Motivationsschreiben erstellen",
     "motivation.copy": "Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.",
+    "Produktvorteile": "Produktvorteile",
+    "Schweiz & Europa": "Schweiz & Europa",
+    "KI-Foto": "KI-Foto",
+    "KI-Text": "KI-Text",
+    "Meine Angaben": "Meine Angaben",
+    "Diese Daten erscheinen spaeter im Briefkopf deiner Bewerbung.": "Diese Daten erscheinen spaeter im Briefkopf deiner Bewerbung.",
+    "Mein Name": "Mein Name",
+    "Max Mustermann": "Max Mustermann",
+    "Max Muster": "Max Muster",
+    "E-Mail / Telefon": "E-Mail / Telefon",
+    "+41 76 456 79 00 Â· max@email.com": "+41 76 456 79 00 - max@email.com",
+    "Meine Adresse": "Meine Adresse",
+    "Strasse, PLZ Ort": "Strasse, PLZ Ort",
+    "Bewerbungsfoto vorbereiten": "Bewerbungsfoto vorbereiten",
+    "KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.": "KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.",
+    "KI-Fotoassistent": "KI-Fotoassistent",
+    "KI-Funktion - {count} / {max} generiert": "KI-Funktion - {count} / {max} generiert",
+    "KI-Funktion - 0 / 3 generiert": "KI-Funktion - 0 / 3 generiert",
+    "Foto hochladen": "Foto hochladen",
+    "Laden Sie ein klares Portrait hoch. Danach kann die KI professionelle Varianten erstellen.": "Laden Sie ein klares Portrait hoch. Danach kann die KI professionelle Varianten erstellen.",
+    "Datei auswahlen": "Datei auswaehlen",
+    "Foto andern": "Foto aendern",
+    "Generierte Optionen": "Generierte Optionen",
+    "Noch nicht generiert": "Noch nicht generiert",
+    "Foto wird vorbereitet...": "Foto wird vorbereitet...",
+    "Bereit fur KI-Foto": "Bereit fuer KI-Foto",
+    "Professionelles Foto generieren": "Professionelles Foto generieren",
+    "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.",
+    "Angaben zur Bewerbung": "Angaben zur Bewerbung",
+    "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.": "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.",
+    "Bewerbung als...": "Bewerbung als...",
+    "Marketing Manager": "Marketing Manager",
+    "Bewerbung als... (fuer Motivationstext)": "Bewerbung als... (fuer Motivationstext)",
+    "z.B. Softwareentwickler": "z.B. Softwareentwickler",
+    "Adresse Arbeitgeber": "Adresse Arbeitgeber",
+    "Firma, Ansprechperson, Strasse, Ort": "Firma, Ansprechperson, Strasse, Ort",
+    "KI-Textassistent": "KI-Textassistent",
+    "Motivationstext formulieren": "Motivationstext formulieren",
+    "Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.": "Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.",
+    "Tonvorschlaege": "Tonvorschlaege",
+    "Professionell": "Professionell",
+    "Warm": "Warm",
+    "Selbstbewusst": "Selbstbewusst",
+    "Kurz & klar": "Kurz & klar",
+    "Motivationstext": "Motivationstext",
+    "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.": "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.",
+    "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...": "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...",
+    "KI Hilfe zum Fliesstext erstellen": "KI Hilfe zum Fliesstext erstellen",
+    "Briefdetails": "Briefdetails",
+    "Begruessung, Abschluss und Signatur fuer den finalen Brief.": "Begruessung, Abschluss und Signatur fuer den finalen Brief.",
+    "Begruessung": "Begruessung",
+    "z.B. Sehr geehrte Frau Muster": "z.B. Sehr geehrte Frau Muster",
+    "Verabschiedung": "Verabschiedung",
+    "z.B. Mit freundlichen Gruessen": "z.B. Mit freundlichen Gruessen",
+    "Datum": "Datum",
+    "Unterschrift": "Unterschrift",
+    "Dein Name - Unterschrift": "Dein Name - Unterschrift",
+    "Live Vorschau": "Live Vorschau",
+    "Live-Vorschau": "Live-Vorschau",
+    "Aktualisiert sich automatisch beim Tippen": "Aktualisiert sich automatisch beim Tippen",
+    "Aktiv": "Aktiv",
+    "VORSCHAU": "VORSCHAU",
+    "Bewerbungsfoto": "Bewerbungsfoto",
+    "Musterfirma AG": "Musterfirma AG",
+    "Personalabteilung": "Personalabteilung",
+    "Limmatquai 10": "Limmatquai 10",
+    "8001 Zuerich": "8001 Zuerich",
+    "Kaufmaennischer Mitarbeiter": "Kaufmaennischer Mitarbeiter",
+    "KAUFMANNISCHER MITARBEITER": "KAUFMANNISCHER MITARBEITER",
+    "Bewerbung als {role}": "Bewerbung als {role}",
+    "Bewerbung als Kaufmaennischer Mitarbeiter im Kundenservice": "Bewerbung als Kaufmaennischer Mitarbeiter im Kundenservice",
+    "Sehr geehrte Damen und Herren": "Sehr geehrte Damen und Herren",
+    "Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.": "Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.",
+    "Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.": "Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.",
+    "Mit freundlichen Gruessen": "Mit freundlichen Gruessen",
+    "Dokumentstil": "Dokumentstil",
+    "Stil direkt testen": "Stil direkt testen",
+    "Der Stil veraendert sich direkt in der Vorschau.": "Der Stil veraendert sich direkt in der Vorschau.",
+    "Empfohlen": "Empfohlen",
+    "Kontrast": "Kontrast",
+    "Dynamisch": "Dynamisch",
+    "Editorial": "Editorial",
+    "Premium": "Premium",
+    "Business": "Business",
+    "Modern": "Modern",
+    "Minimal": "Minimal",
+    "Elegant": "Elegant",
+    "Ruhig": "Ruhig",
+    "Klassisch": "Klassisch",
+    "Warm Soft": "Warm Soft",
+    "Klar": "Klar",
+    "PDF ohne Wasserzeichen vorbereiten": "PDF ohne Wasserzeichen vorbereiten",
+    "Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.": "Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.",
+    "Vollbild-Vorschau": "Vollbild-Vorschau",
+    "Vorschau schliessen": "Vorschau schliessen",
+    "Kostenlose Vorschau": "Kostenlose Vorschau",
+    "Die Vorschau zeigt das Dokument mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.": "Die Vorschau zeigt das Dokument mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.",
+    "Stil, Foto und Text vorher pruefen": "Stil, Foto und Text vorher pruefen",
+    "Kein Account erforderlich": "Kein Account erforderlich",
+    "Download ohne Wasserzeichen nach Zahlung": "Download ohne Wasserzeichen nach Zahlung",
+    "PDF ohne Wasserzeichen herunterladen": "PDF ohne Wasserzeichen herunterladen",
+    "Zurueck bearbeiten": "Zurueck bearbeiten",
+    "PDF ohne Wasserzeichen": "PDF ohne Wasserzeichen",
+    "Zahlungsfenster schliessen": "Zahlungsfenster schliessen",
+    "Finale PDF freischalten": "Finale PDF freischalten",
+    "Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.": "Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.",
+    "CHF Â· einmalig": "CHF - einmalig",
+    "CHF Ã‚Â· einmalig": "CHF - einmalig",
+    "Sofortiger Download nach Zahlung": "Sofortiger Download nach Zahlung",
+    "Sichere Zahlung ueber Stripe": "Sichere Zahlung ueber Stripe",
+    "Keine Kartendaten auf dieser Website gespeichert": "Keine Kartendaten auf dieser Website gespeichert",
+    "Weiter zur sicheren Zahlung": "Weiter zur sicheren Zahlung",
+    "In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.": "In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.",
+    "Variante": "Variante",
+    "Ausgewaehltes Bewerbungsfoto": "Ausgewaehltes Bewerbungsfoto",
+    "KI Foto Variante {count} auswaehlen": "KI Foto Variante {count} auswaehlen",
+    "KI Foto Variante {count}": "KI Foto Variante {count}",
+    "Foto fuer die Vorschau ausgewaehlt": "Foto fuer die Vorschau ausgewaehlt",
+    "Bereit fuer KI-Foto": "Bereit fuer KI-Foto",
+    "3 professionelle Varianten verfuegbar": "3 professionelle Varianten verfuegbar",
+    "Option bereit zur Auswahl": "Option bereit zur Auswahl",
+    "Weitere Option generieren": "Weitere Option generieren",
+    "Generiere Foto...": "Generiere Foto...",
+    "Kein Bild erhalten": "Kein Bild erhalten",
+    "Generierung fehlgeschlagen": "Generierung fehlgeschlagen",
+    "Upload fehlgeschlagen": "Upload fehlgeschlagen",
+    "Limit erreicht": "Limit erreicht",
+    "Foto fehlt": "Foto fehlt",
+    "KI-Foto bereit": "KI-Foto bereit",
+    "Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.": "Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.",
+    "Sie haben bereits 3 KI-Bilder generiert.": "Sie haben bereits 3 KI-Bilder generiert.",
+    "Bitte zuerst ein Foto hochladen.": "Bitte zuerst ein Foto hochladen.",
+    "Professionelle Foto-Option wurde erstellt.": "Professionelle Foto-Option wurde erstellt.",
+    "Der Server hat kein Bild zurueckgegeben.": "Der Server hat kein Bild zurueckgegeben.",
+    "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.": "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.",
+    "Zahlung nicht bereit": "Zahlung nicht bereit",
+    "Das Zahlungsfenster konnte nicht geoeffnet werden. Bitte laden Sie die Seite neu.": "Das Zahlungsfenster konnte nicht geoeffnet werden. Bitte laden Sie die Seite neu.",
+    "Zahlungsmodul wird geladen. Falls die Weiterleitung nicht startet, bitte Seite neu laden.": "Zahlungsmodul wird geladen. Falls die Weiterleitung nicht startet, bitte Seite neu laden.",
+    "Zwischengespeichert": "Zwischengespeichert",
+    "Ihre Eingaben wurden lokal gespeichert.": "Ihre Eingaben wurden lokal gespeichert.",
+    "Text fehlt": "Text fehlt",
+    "Rolle fehlt": "Rolle fehlt",
+    "Generiere Text...": "Generiere Text...",
+    "KI-Text bereit": "KI-Text bereit",
+    "Kein Text erhalten": "Kein Text erhalten",
+    "Bitte Stichwoerter oder einen bestehenden Motivationstext eingeben.": "Bitte Stichwoerter oder einen bestehenden Motivationstext eingeben.",
+    "Bitte die Zielrolle fuer den Motivationstext eintragen.": "Bitte die Zielrolle fuer den Motivationstext eintragen.",
+    "Motivationstext wurde erstellt und bleibt editierbar.": "Motivationstext wurde erstellt und bleibt editierbar.",
+    "Der Server hat keinen Text zurueckgegeben.": "Der Server hat keinen Text zurueckgegeben.",
+    "Der Motivationstext konnte nicht generiert werden. Bitte versuchen Sie es erneut.": "Der Motivationstext konnte nicht generiert werden. Bitte versuchen Sie es erneut.",
+    "Erfolg": "Erfolg",
+    "Hinweis": "Hinweis",
+    "Achtung": "Achtung",
+    "Fehler": "Fehler",
+    "Meldung schliessen": "Meldung schliessen",
   },
   en: {
+    "document.title": "VitaGen - Motivation letter",
     "motivation.eyebrow": "Application documents",
     "motivation.title": "Create motivation letter",
     "motivation.copy": "Enter your details, refine your photo, and create a professional letter with AI assistance.",
+    "Produktvorteile": "Product benefits",
+    "Schweiz & Europa": "Switzerland & Europe",
+    "KI-Foto": "AI photo",
+    "KI-Text": "AI text",
+    "Meine Angaben": "My details",
+    "Diese Daten erscheinen spaeter im Briefkopf deiner Bewerbung.": "These details will appear in the letterhead of your application.",
+    "Mein Name": "My name",
+    "Max Mustermann": "Max Sample",
+    "Max Muster": "Max Sample",
+    "E-Mail / Telefon": "Email / phone",
+    "+41 76 456 79 00 Â· max@email.com": "+41 76 456 79 00 - max@email.com",
+    "Meine Adresse": "My address",
+    "Strasse, PLZ Ort": "Street, postal code, city",
+    "Bewerbungsfoto vorbereiten": "Prepare application photo",
+    "KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.": "AI feature: turn a regular photo into a professional application photo variant.",
+    "KI-Fotoassistent": "AI photo assistant",
+    "KI-Funktion - {count} / {max} generiert": "AI feature - {count} / {max} generated",
+    "KI-Funktion - 0 / 3 generiert": "AI feature - 0 / 3 generated",
+    "Foto hochladen": "Upload photo",
+    "Laden Sie ein klares Portrait hoch. Danach kann die KI professionelle Varianten erstellen.": "Upload a clear portrait. The AI can then create professional variants.",
+    "Datei auswahlen": "Choose file",
+    "Foto andern": "Change photo",
+    "Generierte Optionen": "Generated options",
+    "Noch nicht generiert": "Not generated yet",
+    "Foto wird vorbereitet...": "Preparing photo...",
+    "Bereit fur KI-Foto": "Ready for AI photo",
+    "Professionelles Foto generieren": "Generate professional photo",
+    "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "After selection, the photo appears directly in the live preview.",
+    "Angaben zur Bewerbung": "Application details",
+    "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.": "Role and employer are used for the subject, letterhead, and AI text.",
+    "Bewerbung als...": "Applying as...",
+    "Marketing Manager": "Marketing Manager",
+    "Bewerbung als... (fuer Motivationstext)": "Applying as... (for motivation text)",
+    "z.B. Softwareentwickler": "e.g. software developer",
+    "Adresse Arbeitgeber": "Employer address",
+    "Firma, Ansprechperson, Strasse, Ort": "Company, contact person, street, city",
+    "KI-Textassistent": "AI text assistant",
+    "Motivationstext formulieren": "Write motivation text",
+    "Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.": "Add notes about experience, motivation, and strengths. The text remains editable afterward.",
+    "Tonvorschlaege": "Tone suggestions",
+    "Professionell": "Professional",
+    "Warm": "Warm",
+    "Selbstbewusst": "Confident",
+    "Kurz & klar": "Short & clear",
+    "Motivationstext": "Motivation text",
+    "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.": "Enter notes or revise an existing text.",
+    "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...": "Experience, motivation, relevant strengths, concrete examples...",
+    "KI Hilfe zum Fliesstext erstellen": "Create text with AI help",
+    "Briefdetails": "Letter details",
+    "Begruessung, Abschluss und Signatur fuer den finalen Brief.": "Greeting, closing, and signature for the final letter.",
+    "Begruessung": "Greeting",
+    "z.B. Sehr geehrte Frau Muster": "e.g. Dear Ms Sample",
+    "Verabschiedung": "Closing",
+    "z.B. Mit freundlichen Gruessen": "e.g. Kind regards",
+    "Datum": "Date",
+    "Unterschrift": "Signature",
+    "Dein Name - Unterschrift": "Your name - signature",
+    "Live Vorschau": "Live preview",
+    "Live-Vorschau": "Live preview",
+    "Aktualisiert sich automatisch beim Tippen": "Updates automatically while typing",
+    "Aktiv": "Active",
+    "VORSCHAU": "PREVIEW",
+    "Bewerbungsfoto": "Application photo",
+    "Musterfirma AG": "Sample Company Ltd",
+    "Personalabteilung": "HR department",
+    "Limmatquai 10": "Limmatquai 10",
+    "8001 Zuerich": "8001 Zurich",
+    "Kaufmaennischer Mitarbeiter": "Commercial employee",
+    "KAUFMANNISCHER MITARBEITER": "COMMERCIAL EMPLOYEE",
+    "Bewerbung als {role}": "Application as {role}",
+    "Bewerbung als Kaufmaennischer Mitarbeiter im Kundenservice": "Application as commercial employee in customer service",
+    "Sehr geehrte Damen und Herren": "Dear Sir or Madam",
+    "Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.": "I am applying with great interest. With my experience and structured working style, I am confident I can support your team effectively.",
+    "Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.": "I would be happy to discuss my motivation with you in a personal interview.",
+    "Mit freundlichen Gruessen": "Kind regards",
+    "Dokumentstil": "Document style",
+    "Stil direkt testen": "Test style directly",
+    "Der Stil veraendert sich direkt in der Vorschau.": "The style changes directly in the preview.",
+    "Empfohlen": "Recommended",
+    "Kontrast": "Contrast",
+    "Dynamisch": "Dynamic",
+    "Editorial": "Editorial",
+    "Premium": "Premium",
+    "Business": "Business",
+    "Modern": "Modern",
+    "Minimal": "Minimal",
+    "Elegant": "Elegant",
+    "Ruhig": "Calm",
+    "Klassisch": "Classic",
+    "Warm Soft": "Warm soft",
+    "Klar": "Clear",
+    "PDF ohne Wasserzeichen vorbereiten": "Prepare PDF without watermark",
+    "Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.": "Review the preview first. The price appears only when the PDF without watermark is requested.",
+    "Vollbild-Vorschau": "Full-screen preview",
+    "Vorschau schliessen": "Close preview",
+    "Kostenlose Vorschau": "Free preview",
+    "Die Vorschau zeigt das Dokument mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.": "The preview shows the document with a watermark. After unlocking, the PDF is downloaded without a watermark.",
+    "Stil, Foto und Text vorher pruefen": "Check style, photo, and text first",
+    "Kein Account erforderlich": "No account required",
+    "Download ohne Wasserzeichen nach Zahlung": "Download without watermark after payment",
+    "PDF ohne Wasserzeichen herunterladen": "Download PDF without watermark",
+    "Zurueck bearbeiten": "Back to editing",
+    "PDF ohne Wasserzeichen": "PDF without watermark",
+    "Zahlungsfenster schliessen": "Close payment window",
+    "Finale PDF freischalten": "Unlock final PDF",
+    "Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.": "Your preview is free. For the print-ready PDF without watermark, you can unlock the document once.",
+    "CHF Â· einmalig": "CHF - one time",
+    "CHF Ã‚Â· einmalig": "CHF - one time",
+    "Sofortiger Download nach Zahlung": "Instant download after payment",
+    "Sichere Zahlung ueber Stripe": "Secure payment via Stripe",
+    "Keine Kartendaten auf dieser Website gespeichert": "No card details stored on this website",
+    "Weiter zur sicheren Zahlung": "Continue to secure payment",
+    "In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.": "In the final step you will be redirected to Stripe Checkout and then automatically returned to the download.",
+    "Variante": "Variant",
+    "Ausgewaehltes Bewerbungsfoto": "Selected application photo",
+    "KI Foto Variante {count} auswaehlen": "Select AI photo variant {count}",
+    "KI Foto Variante {count}": "AI photo variant {count}",
+    "Foto fuer die Vorschau ausgewaehlt": "Photo selected for preview",
+    "Bereit fuer KI-Foto": "Ready for AI photo",
+    "3 professionelle Varianten verfuegbar": "3 professional variants available",
+    "Option bereit zur Auswahl": "Option ready to select",
+    "Weitere Option generieren": "Generate another option",
+    "Generiere Foto...": "Generating photo...",
+    "Kein Bild erhalten": "No image received",
+    "Generierung fehlgeschlagen": "Generation failed",
+    "Upload fehlgeschlagen": "Upload failed",
+    "Limit erreicht": "Limit reached",
+    "Foto fehlt": "Photo missing",
+    "KI-Foto bereit": "AI photo ready",
+    "Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.": "The photo could not be read. Please try another file.",
+    "Sie haben bereits 3 KI-Bilder generiert.": "You have already generated 3 AI images.",
+    "Bitte zuerst ein Foto hochladen.": "Please upload a photo first.",
+    "Professionelle Foto-Option wurde erstellt.": "Professional photo option was created.",
+    "Der Server hat kein Bild zurueckgegeben.": "The server did not return an image.",
+    "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.": "The photo could not be generated. Please try again.",
+    "Zahlung nicht bereit": "Payment not ready",
+    "Das Zahlungsfenster konnte nicht geoeffnet werden. Bitte laden Sie die Seite neu.": "The payment window could not be opened. Please reload the page.",
+    "Zahlungsmodul wird geladen. Falls die Weiterleitung nicht startet, bitte Seite neu laden.": "Payment module is loading. If the redirect does not start, please reload the page.",
+    "Zwischengespeichert": "Saved locally",
+    "Ihre Eingaben wurden lokal gespeichert.": "Your entries have been saved locally.",
+    "Text fehlt": "Text missing",
+    "Rolle fehlt": "Role missing",
+    "Generiere Text...": "Generating text...",
+    "KI-Text bereit": "AI text ready",
+    "Kein Text erhalten": "No text received",
+    "Bitte Stichwoerter oder einen bestehenden Motivationstext eingeben.": "Please enter notes or an existing motivation text.",
+    "Bitte die Zielrolle fuer den Motivationstext eintragen.": "Please enter the target role for the motivation text.",
+    "Motivationstext wurde erstellt und bleibt editierbar.": "Motivation text was created and remains editable.",
+    "Der Server hat keinen Text zurueckgegeben.": "The server did not return text.",
+    "Der Motivationstext konnte nicht generiert werden. Bitte versuchen Sie es erneut.": "The motivation text could not be generated. Please try again.",
+    "Erfolg": "Success",
+    "Hinweis": "Info",
+    "Achtung": "Warning",
+    "Fehler": "Error",
+    "Meldung schliessen": "Close message",
   },
 };
+
+let currentLanguage = "de";
 
 function getStoredData() {
   return JSON.parse(localStorage.getItem("vitagen_motivation") || "{}");
@@ -46,10 +360,71 @@ function normalizeLanguage(language) {
   return language === "en" ? "en" : "de";
 }
 
+function getTranslationKey(value) {
+  const cleanValue = String(value || "").trim();
+  if (!cleanValue) return null;
+  if (Object.prototype.hasOwnProperty.call(UI_TRANSLATIONS.de, cleanValue)) {
+    return cleanValue;
+  }
+  for (const dictionary of Object.values(UI_TRANSLATIONS)) {
+    const entry = Object.entries(dictionary).find(([, translated]) => translated === cleanValue);
+    if (entry) {
+      return entry[0];
+    }
+  }
+  return null;
+}
+
+function t(key, replacements = {}) {
+  const dictionary = UI_TRANSLATIONS[currentLanguage] || UI_TRANSLATIONS.de;
+  const fallback = UI_TRANSLATIONS.de[key] || key;
+  let value = dictionary[key] || fallback;
+  Object.entries(replacements).forEach(([name, replacement]) => {
+    value = value.replaceAll(`{${name}}`, replacement);
+  });
+  return value;
+}
+
+function translateValue(value, replacements = {}) {
+  const key = getTranslationKey(value);
+  if (!key) return value;
+  return t(key, replacements);
+}
+
+function translateTextNodes(dictionary) {
+  if (!document.body) return;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+
+  while (walker.nextNode()) {
+    nodes.push(walker.currentNode);
+  }
+
+  nodes.forEach((node) => {
+    const cleanValue = node.nodeValue.trim();
+    const key = getTranslationKey(cleanValue);
+    if (!key || !dictionary[key]) return;
+    node.nodeValue = node.nodeValue.replace(cleanValue, dictionary[key]);
+  });
+}
+
+function translateAttributes(dictionary) {
+  ["placeholder", "aria-label", "alt", "title"].forEach((attribute) => {
+    document.querySelectorAll(`[${attribute}]`).forEach((element) => {
+      const key = getTranslationKey(element.getAttribute(attribute));
+      if (key && dictionary[key]) {
+        element.setAttribute(attribute, dictionary[key]);
+      }
+    });
+  });
+}
+
 function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de") {
   const normalized = normalizeLanguage(language);
   const dictionary = UI_TRANSLATIONS[normalized] || UI_TRANSLATIONS.de;
+  currentLanguage = normalized;
   document.documentElement.lang = normalized;
+  document.title = t("document.title");
   localStorage.setItem(LANGUAGE_STORAGE_KEY, normalized);
 
   document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -64,6 +439,10 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
     button.classList.toggle("muted", !active);
     button.setAttribute("aria-pressed", String(active));
   });
+
+  translateTextNodes(dictionary);
+  translateAttributes(dictionary);
+  updateCounter();
 }
 
 function installLanguageSwitch() {
@@ -124,25 +503,25 @@ function pulseLivePreview() {
 
 function syncLivePreview({ pulse = true } = {}) {
   const data = getCurrentFormData();
-  const role = data.posten || data.funktion || "Kaufmaennischer Mitarbeiter";
+  const role = data.posten || data.funktion || t("Kaufmaennischer Mitarbeiter");
   const today = new Date().toLocaleDateString("de-CH");
 
-  document.getElementById("pv-name").textContent = data.name || "Max Muster";
+  document.getElementById("pv-name").textContent = data.name || t("Max Mustermann");
   document.getElementById("pv-kontakt").textContent = role.toUpperCase();
   setTextWithBreaks(
     document.getElementById("pv-arbeitgeber"),
     data.arbeitgeber,
-    "Musterfirma AG\nPersonalabteilung\nLimmatquai 10\n8001 Zuerich"
+    `${t("Musterfirma AG")}\n${t("Personalabteilung")}\n${t("Limmatquai 10")}\n${t("8001 Zuerich")}`
   );
   document.getElementById("pv-datum").textContent = data.datum || `Zuerich, ${today}`;
-  document.getElementById("pv-funktion").textContent = `Bewerbung als ${role}`;
-  document.getElementById("pv-stichwoerter").textContent = data.stichwoerter || "Sehr geehrte Damen und Herren";
+  document.getElementById("pv-funktion").textContent = t("Bewerbung als {role}", { role });
+  document.getElementById("pv-stichwoerter").textContent = data.stichwoerter || t("Sehr geehrte Damen und Herren");
   document.getElementById("pv-stichwoerter2").textContent =
     data.stichwoerter2 ||
-    "Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.";
+    t("Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.");
   document.getElementById("pv-stichwoerter3").textContent =
-    data.stichwoerter3 || "Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.";
-  document.getElementById("pv-unterschrift").textContent = data.unterschrift || data.name || "Max Muster";
+    data.stichwoerter3 || t("Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.");
+  document.getElementById("pv-unterschrift").textContent = data.unterschrift || data.name || t("Max Mustermann");
 
   const previewPhoto = document.getElementById("pv-foto");
   if (previewPhoto) {
@@ -243,7 +622,7 @@ function openPaymentFromMotivation(source) {
   const paymentStatus = document.getElementById("paymentStatus");
   if (paymentStatus) {
     paymentStatus.textContent =
-      "Zahlungsmodul wird geladen. Falls die Weiterleitung nicht startet, bitte Seite neu laden.";
+      translateValue("Zahlungsmodul wird geladen. Falls die Weiterleitung nicht startet, bitte Seite neu laden.");
   }
 }
 
@@ -320,10 +699,10 @@ function getToastRegion() {
 
 function showToast(message, type = "info", title) {
   const titles = {
-    success: "Erledigt",
-    error: "Fehler",
-    warning: "Hinweis",
-    info: "Info"
+    success: t("Erfolg"),
+    error: t("Fehler"),
+    warning: t("Achtung"),
+    info: t("Hinweis")
   };
 
   const toast = document.createElement("div");
@@ -337,16 +716,16 @@ function showToast(message, type = "info", title) {
   const content = document.createElement("div");
   const heading = document.createElement("p");
   heading.className = "toast-title";
-  heading.textContent = title || titles[type] || titles.info;
+  heading.textContent = title ? translateValue(title) : titles[type] || titles.info;
 
   const body = document.createElement("p");
   body.className = "toast-message";
-  body.textContent = message;
+  body.textContent = translateValue(message);
 
   const close = document.createElement("button");
   close.type = "button";
   close.className = "toast-close";
-  close.setAttribute("aria-label", "Meldung schliessen");
+  close.setAttribute("aria-label", translateValue("Meldung schliessen"));
   close.textContent = "x";
 
   content.append(heading, body);
@@ -385,14 +764,17 @@ function saveAllFields() {
 function updateCounter() {
   const counter = document.getElementById("counter");
   if (counter) {
-    counter.innerText = `KI-Funktion - ${aiImageCount} / ${MAX_IMAGES} generiert`;
+    counter.innerText = t("KI-Funktion - {count} / {max} generiert", {
+      count: aiImageCount,
+      max: MAX_IMAGES,
+    });
   }
 }
 
 function setPhotoStatus(text) {
   const status = document.getElementById("photo-status");
   if (status) {
-    status.textContent = text;
+    status.textContent = translateValue(text);
   }
 }
 
@@ -429,7 +811,7 @@ function renderOptionPlaceholders() {
 
     const label = document.createElement("span");
     label.className = "empty-caption";
-    label.textContent = "Bereit fur KI-Foto";
+    label.textContent = translateValue("Bereit fuer KI-Foto");
 
     placeholder.append(avatar, shoulders, label);
     container.appendChild(placeholder);
@@ -459,7 +841,7 @@ function renderUploadPreview(src, selected = false) {
 
   const img = document.createElement("img");
   img.src = src;
-  img.alt = "Ausgewaehltes Bewerbungsfoto";
+  img.alt = translateValue("Ausgewaehltes Bewerbungsfoto");
   img.addEventListener("click", () => selectImage(img));
   container.appendChild(img);
   return img;
@@ -474,14 +856,14 @@ function createGeneratedOption(src) {
   const option = document.createElement("button");
   option.type = "button";
   option.className = "generated-option";
-  option.setAttribute("aria-label", `KI Foto Variante ${aiImageCount} auswaehlen`);
+  option.setAttribute("aria-label", t("KI Foto Variante {count} auswaehlen", { count: aiImageCount }));
 
   const img = document.createElement("img");
   img.src = src;
-  img.alt = `KI Foto Variante ${aiImageCount}`;
+  img.alt = t("KI Foto Variante {count}", { count: aiImageCount });
 
   const label = document.createElement("span");
-  label.textContent = "Variante";
+  label.textContent = translateValue("Variante");
 
   option.append(img, label);
   option.addEventListener("click", () => selectImage(img));
@@ -600,7 +982,7 @@ if (aiBtn) {
 
     const originalButtonText = aiBtn.innerText;
     aiBtn.disabled = true;
-    aiBtn.innerText = "Generiere Foto...";
+    aiBtn.innerText = translateValue("Generiere Foto...");
     setPhotoStatus("Foto wird vorbereitet...");
     setPhotoLoading(true);
 
@@ -624,7 +1006,7 @@ if (aiBtn) {
         updateCounter();
         createGeneratedOption(result.aiFoto);
         setPhotoStatus(aiImageCount === MAX_IMAGES ? "3 professionelle Varianten verfuegbar" : "Option bereit zur Auswahl");
-        aiBtn.innerText = aiImageCount > 0 ? "Weitere Option generieren" : originalButtonText;
+        aiBtn.innerText = aiImageCount > 0 ? translateValue("Weitere Option generieren") : originalButtonText;
         showToast("Professionelle Foto-Option wurde erstellt.", "success", "KI-Foto bereit");
       } else {
         setPhotoStatus("Kein Bild erhalten");
@@ -637,7 +1019,7 @@ if (aiBtn) {
     } finally {
       setPhotoLoading(false);
       aiBtn.disabled = false;
-      aiBtn.innerText = aiImageCount > 0 ? "Weitere Option generieren" : originalButtonText;
+      aiBtn.innerText = aiImageCount > 0 ? translateValue("Weitere Option generieren") : originalButtonText;
     }
   });
 }
@@ -679,7 +1061,7 @@ if (textBtn) {
 
     const originalButtonText = textBtn.innerText;
     textBtn.disabled = true;
-    textBtn.innerText = "Generiere Text...";
+    textBtn.innerText = translateValue("Generiere Text...");
 
     try {
       const response = await fetch(`${AI_API_BASE_URL}/generate-text`, {

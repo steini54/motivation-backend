@@ -151,6 +151,31 @@ test("motivation and lebenslauf builders share the navbar and language switch", 
   assert.match(lebenslaufScript, /function applyLanguage/);
 });
 
+test("builder language switch translates page text and attributes", () => {
+  const motivationScript = fs.readFileSync(
+    path.join(frontendPath, "script.js"),
+    "utf8"
+  );
+  const lebenslaufScript = fs.readFileSync(
+    path.join(lebenslaufPath, "lscript.js"),
+    "utf8"
+  );
+
+  for (const script of [motivationScript, lebenslaufScript]) {
+    assert.match(script, /function translateTextNodes/);
+    assert.match(script, /function translateAttributes/);
+    assert.match(script, /document\.title = t\("document\.title"\)/);
+    assert.match(script, /"VORSCHAU": "PREVIEW"/);
+    assert.match(script, /"PDF ohne Wasserzeichen": "PDF without watermark"/);
+    assert.match(script, /"Professionelles Foto generieren": "Generate professional photo"/);
+  }
+
+  assert.match(motivationScript, /"Angaben zur Bewerbung": "Application details"/);
+  assert.match(motivationScript, /"Motivationstext formulieren": "Write motivation text"/);
+  assert.match(lebenslaufScript, /"Persoenliche Daten": "Personal details"/);
+  assert.match(lebenslaufScript, /"Berufserfahrung": "Work experience"/);
+});
+
 test("frontend preserves production markup and routes AI to Railway", () => {
   const formHtml = fs.readFileSync(
     path.join(frontendPath, "formular.html"),

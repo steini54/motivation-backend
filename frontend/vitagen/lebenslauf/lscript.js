@@ -24,16 +24,320 @@ const DOCUMENT_STYLES = [
 ];
 const UI_TRANSLATIONS = {
   de: {
+    "document.title": "VitaGen - Lebenslauf",
     "cv.eyebrow": "CV Generator",
     "cv.title": "Lebenslauf erstellen",
     "cv.copy": "Strukturierter Editor fuer professionelle europaeische CVs mit Live-Vorschau, Stilwahl und KI-Bewerbungsfoto.",
+    "Live": "Live",
+    "Abschnitte": "Abschnitte",
+    "Persoenliche Daten": "Persoenliche Daten",
+    "Bewerbungsfoto": "Bewerbungsfoto",
+    "Berufserfahrung": "Berufserfahrung",
+    "Schulbildung": "Schulbildung",
+    "Weiterbildung": "Weiterbildung",
+    "Kenntnisse": "Kenntnisse",
+    "Abschluss": "Abschluss",
+    "Lebenslauf Formular": "Lebenslauf Formular",
+    "Diese Angaben erscheinen direkt in der Live-Vorschau.": "Diese Angaben erscheinen direkt in der Live-Vorschau.",
+    "Name": "Name",
+    "Max Muster": "Max Muster",
+    "Berufsprofil": "Berufsprofil",
+    "Kaufmaennischer Mitarbeiter": "Kaufmaennischer Mitarbeiter",
+    "Kontakt": "Kontakt",
+    "Adresse": "Adresse",
+    "Bahnhofstrasse 12, 8001 Zuerich": "Bahnhofstrasse 12, 8001 Zuerich",
+    "Bahnhofstrasse 12": "Bahnhofstrasse 12",
+    "8001 Zuerich": "8001 Zuerich",
+    "Profil": "Profil",
+    "Kurzprofil mit Staerken, Berufserfahrung und Zielrichtung.": "Kurzprofil mit Staerken, Berufserfahrung und Zielrichtung.",
+    "Bewerbungsfoto vorbereiten": "Bewerbungsfoto vorbereiten",
+    "KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.": "KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.",
+    "KI-Fotoassistent": "KI-Fotoassistent",
+    "KI-Funktion - {count} / {max} generiert": "KI-Funktion - {count} / {max} generiert",
+    "KI-Funktion - 0 / 3 generiert": "KI-Funktion - 0 / 3 generiert",
+    "Foto hochladen": "Foto hochladen",
+    "Die KI erstellt daraus professionelle Varianten fuer den CV.": "Die KI erstellt daraus professionelle Varianten fuer den CV.",
+    "Datei auswaehlen": "Datei auswaehlen",
+    "Foto aendern": "Foto aendern",
+    "Generierte Optionen": "Generierte Optionen",
+    "Noch nicht generiert": "Noch nicht generiert",
+    "Professionelles Foto generieren": "Professionelles Foto generieren",
+    "Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.": "Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.",
+    "Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.": "Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.",
+    "Weitere Station hinzufuegen": "Weitere Station hinzufuegen",
+    "Abschluss, Zeitraum und Ort kompakt erfassen.": "Abschluss, Zeitraum und Ort kompakt erfassen.",
+    "Schule hinzufuegen": "Schule hinzufuegen",
+    "Aus- und Weiterbildung": "Aus- und Weiterbildung",
+    "Kurse, Zertifikate und Weiterbildungen strukturiert darstellen.": "Kurse, Zertifikate und Weiterbildungen strukturiert darstellen.",
+    "Weiterbildung hinzufuegen": "Weiterbildung hinzufuegen",
+    "Fachliche und digitale Kompetenzen.": "Fachliche und digitale Kompetenzen.",
+    "Kenntnis hinzufuegen": "Kenntnis hinzufuegen",
+    "Hobbys": "Hobbys",
+    "Optional, kurz und professionell.": "Optional, kurz und professionell.",
+    "Hobby hinzufuegen": "Hobby hinzufuegen",
+    "Datum und Signatur fuer den CV.": "Datum und Signatur fuer den CV.",
+    "Datum": "Datum",
+    "Zuerich, 18.06.2026": "Zuerich, 18.06.2026",
+    "Unterschrift": "Unterschrift",
+    "Live Vorschau": "Live Vorschau",
+    "Live-Vorschau": "Live-Vorschau",
+    "Aktualisiert sich automatisch beim Tippen.": "Aktualisiert sich automatisch beim Tippen.",
+    "Aktiv": "Aktiv",
+    "VORSCHAU": "VORSCHAU",
+    "Interessen": "Interessen",
+    "Lebenslauf": "Lebenslauf",
+    "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.": "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.",
+    "Dokumentstil": "Dokumentstil",
+    "Stil direkt testen": "Stil direkt testen",
+    "Der Stil veraendert sich direkt in der Vorschau.": "Der Stil veraendert sich direkt in der Vorschau.",
+    "Empfohlen": "Empfohlen",
+    "Kontrast": "Kontrast",
+    "Dynamisch": "Dynamisch",
+    "Editorial": "Editorial",
+    "Premium": "Premium",
+    "Business": "Business",
+    "Modern": "Modern",
+    "Minimal": "Minimal",
+    "Elegant": "Elegant",
+    "Ruhig": "Ruhig",
+    "Klassisch": "Klassisch",
+    "Warm Soft": "Warm Soft",
+    "Klar": "Klar",
+    "Warm": "Warm",
+    "PDF ohne Wasserzeichen vorbereiten": "PDF ohne Wasserzeichen vorbereiten",
+    "Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.": "Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.",
+    "Vorschau schliessen": "Vorschau schliessen",
+    "Vollbild-Vorschau": "Vollbild-Vorschau",
+    "Kostenlose Vorschau": "Kostenlose Vorschau",
+    "Die Vorschau zeigt den Lebenslauf mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.": "Die Vorschau zeigt den Lebenslauf mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.",
+    "Stil, Foto und Text vorher pruefen": "Stil, Foto und Text vorher pruefen",
+    "Kein Account erforderlich": "Kein Account erforderlich",
+    "Download ohne Wasserzeichen nach Zahlung": "Download ohne Wasserzeichen nach Zahlung",
+    "PDF ohne Wasserzeichen herunterladen": "PDF ohne Wasserzeichen herunterladen",
+    "Zurueck bearbeiten": "Zurueck bearbeiten",
+    "PDF ohne Wasserzeichen": "PDF ohne Wasserzeichen",
+    "Zahlungsfenster schliessen": "Zahlungsfenster schliessen",
+    "Finale PDF freischalten": "Finale PDF freischalten",
+    "Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.": "Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.",
+    "CHF Â· einmalig": "CHF - einmalig",
+    "CHF Ã‚Â· einmalig": "CHF - einmalig",
+    "Sofortiger Download nach Zahlung": "Sofortiger Download nach Zahlung",
+    "Sichere Zahlung ueber Stripe": "Sichere Zahlung ueber Stripe",
+    "Keine Kartendaten auf dieser Website gespeichert": "Keine Kartendaten auf dieser Website gespeichert",
+    "Weiter zur sicheren Zahlung": "Weiter zur sicheren Zahlung",
+    "In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.": "In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.",
+    "Position": "Position",
+    "Unternehmen / Ort": "Unternehmen / Ort",
+    "Von": "Von",
+    "Bis": "Bis",
+    "Ort / Land optional": "Ort / Land optional",
+    "Taetigkeit / Aufgaben": "Taetigkeit / Aufgaben",
+    "Schule": "Schule",
+    "Ort / Land": "Ort / Land",
+    "Titel": "Titel",
+    "Ausbildungsstaette / Ort": "Ausbildungsstaette / Ort",
+    "Inhalte": "Inhalte",
+    "Kenntnis": "Kenntnis",
+    "Hobby": "Hobby",
+    "Eintrag": "Eintrag",
+    "Eintrag ein- oder ausklappen": "Eintrag ein- oder ausklappen",
+    "Eintrag entfernen": "Eintrag entfernen",
+    "Jetzt ergaenzen": "Jetzt ergaenzen",
+    "MS Office": "MS Office",
+    "Organisation": "Organisation",
+    "Kommunikation": "Kommunikation",
+    "Lesen": "Lesen",
+    "Sport": "Sport",
+    "Bereit fuer KI-Foto": "Bereit fuer KI-Foto",
+    "Ausgewaehltes Bewerbungsfoto": "Ausgewaehltes Bewerbungsfoto",
+    "KI Foto Variante {count} auswaehlen": "KI Foto Variante {count} auswaehlen",
+    "KI Foto Variante {count}": "KI Foto Variante {count}",
+    "Variante": "Variante",
+    "Foto fuer die Vorschau ausgewaehlt": "Foto fuer die Vorschau ausgewaehlt",
+    "Foto wird vorbereitet...": "Foto wird vorbereitet...",
+    "3 professionelle Varianten verfuegbar": "3 professionelle Varianten verfuegbar",
+    "Option bereit zur Auswahl": "Option bereit zur Auswahl",
+    "Weitere Option generieren": "Weitere Option generieren",
+    "Generiere Foto...": "Generiere Foto...",
+    "Kein Bild erhalten": "Kein Bild erhalten",
+    "Generierung fehlgeschlagen": "Generierung fehlgeschlagen",
+    "Upload fehlgeschlagen": "Upload fehlgeschlagen",
+    "Limit erreicht": "Limit erreicht",
+    "Foto fehlt": "Foto fehlt",
+    "KI-Foto bereit": "KI-Foto bereit",
+    "Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.": "Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.",
+    "Sie haben bereits 3 KI-Bilder generiert.": "Sie haben bereits 3 KI-Bilder generiert.",
+    "Bitte zuerst ein Foto hochladen.": "Bitte zuerst ein Foto hochladen.",
+    "Professionelle Foto-Option wurde erstellt.": "Professionelle Foto-Option wurde erstellt.",
+    "Der Server hat kein Bild zurueckgegeben.": "Der Server hat kein Bild zurueckgegeben.",
+    "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.": "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.",
+    "Zwischengespeichert": "Zwischengespeichert",
+    "Ihre Eingaben wurden lokal gespeichert.": "Ihre Eingaben wurden lokal gespeichert.",
+    "Erfolg": "Erfolg",
+    "Hinweis": "Hinweis",
+    "Achtung": "Achtung",
+    "Fehler": "Fehler",
+    "Meldung schliessen": "Meldung schliessen",
   },
   en: {
+    "document.title": "VitaGen - CV",
     "cv.eyebrow": "CV Generator",
     "cv.title": "Create CV",
     "cv.copy": "A structured editor for professional European CVs with live preview, style selection, and AI application photo.",
+    "Live": "Live",
+    "Abschnitte": "Sections",
+    "Persoenliche Daten": "Personal details",
+    "Bewerbungsfoto": "Application photo",
+    "Berufserfahrung": "Work experience",
+    "Schulbildung": "Education",
+    "Weiterbildung": "Further training",
+    "Kenntnisse": "Skills",
+    "Abschluss": "Final details",
+    "Lebenslauf Formular": "CV form",
+    "Diese Angaben erscheinen direkt in der Live-Vorschau.": "These details appear directly in the live preview.",
+    "Name": "Name",
+    "Max Muster": "Max Sample",
+    "Berufsprofil": "Professional profile",
+    "Kaufmaennischer Mitarbeiter": "Commercial employee",
+    "Kontakt": "Contact",
+    "Adresse": "Address",
+    "Bahnhofstrasse 12, 8001 Zuerich": "Bahnhofstrasse 12, 8001 Zurich",
+    "Bahnhofstrasse 12": "Bahnhofstrasse 12",
+    "8001 Zuerich": "8001 Zurich",
+    "Profil": "Profile",
+    "Kurzprofil mit Staerken, Berufserfahrung und Zielrichtung.": "Short profile with strengths, work experience, and target direction.",
+    "Bewerbungsfoto vorbereiten": "Prepare application photo",
+    "KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.": "AI feature: turn a regular photo into a professional application photo variant.",
+    "KI-Fotoassistent": "AI photo assistant",
+    "KI-Funktion - {count} / {max} generiert": "AI feature - {count} / {max} generated",
+    "KI-Funktion - 0 / 3 generiert": "AI feature - 0 / 3 generated",
+    "Foto hochladen": "Upload photo",
+    "Die KI erstellt daraus professionelle Varianten fuer den CV.": "The AI creates professional variants for your CV.",
+    "Datei auswaehlen": "Choose file",
+    "Foto aendern": "Change photo",
+    "Generierte Optionen": "Generated options",
+    "Noch nicht generiert": "Not generated yet",
+    "Professionelles Foto generieren": "Generate professional photo",
+    "Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.": "After selection, the photo appears directly in the CV preview.",
+    "Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.": "Entries can be added, deleted, and checked directly in the preview.",
+    "Weitere Station hinzufuegen": "Add another role",
+    "Abschluss, Zeitraum und Ort kompakt erfassen.": "Enter qualification, period, and location compactly.",
+    "Schule hinzufuegen": "Add school",
+    "Aus- und Weiterbildung": "Training and further education",
+    "Kurse, Zertifikate und Weiterbildungen strukturiert darstellen.": "Present courses, certificates, and training in a structured way.",
+    "Weiterbildung hinzufuegen": "Add training",
+    "Fachliche und digitale Kompetenzen.": "Professional and digital skills.",
+    "Kenntnis hinzufuegen": "Add skill",
+    "Hobbys": "Hobbies",
+    "Optional, kurz und professionell.": "Optional, short, and professional.",
+    "Hobby hinzufuegen": "Add hobby",
+    "Datum und Signatur fuer den CV.": "Date and signature for the CV.",
+    "Datum": "Date",
+    "Zuerich, 18.06.2026": "Zurich, 18.06.2026",
+    "Unterschrift": "Signature",
+    "Live Vorschau": "Live preview",
+    "Live-Vorschau": "Live preview",
+    "Aktualisiert sich automatisch beim Tippen.": "Updates automatically while typing.",
+    "Aktiv": "Active",
+    "VORSCHAU": "PREVIEW",
+    "Interessen": "Interests",
+    "Lebenslauf": "CV",
+    "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.": "Structured, reliable professional with experience in organization, communication, and service-oriented collaboration.",
+    "Dokumentstil": "Document style",
+    "Stil direkt testen": "Test style directly",
+    "Der Stil veraendert sich direkt in der Vorschau.": "The style changes directly in the preview.",
+    "Empfohlen": "Recommended",
+    "Kontrast": "Contrast",
+    "Dynamisch": "Dynamic",
+    "Editorial": "Editorial",
+    "Premium": "Premium",
+    "Business": "Business",
+    "Modern": "Modern",
+    "Minimal": "Minimal",
+    "Elegant": "Elegant",
+    "Ruhig": "Calm",
+    "Klassisch": "Classic",
+    "Warm Soft": "Warm soft",
+    "Klar": "Clear",
+    "Warm": "Warm",
+    "PDF ohne Wasserzeichen vorbereiten": "Prepare PDF without watermark",
+    "Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.": "Review the preview first. The price appears only when the PDF without watermark is requested.",
+    "Vorschau schliessen": "Close preview",
+    "Vollbild-Vorschau": "Full-screen preview",
+    "Kostenlose Vorschau": "Free preview",
+    "Die Vorschau zeigt den Lebenslauf mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.": "The preview shows the CV with a watermark. After unlocking, the PDF is downloaded without a watermark.",
+    "Stil, Foto und Text vorher pruefen": "Check style, photo, and text first",
+    "Kein Account erforderlich": "No account required",
+    "Download ohne Wasserzeichen nach Zahlung": "Download without watermark after payment",
+    "PDF ohne Wasserzeichen herunterladen": "Download PDF without watermark",
+    "Zurueck bearbeiten": "Back to editing",
+    "PDF ohne Wasserzeichen": "PDF without watermark",
+    "Zahlungsfenster schliessen": "Close payment window",
+    "Finale PDF freischalten": "Unlock final PDF",
+    "Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.": "Your preview is free. For the print-ready PDF without watermark, you can unlock the document once.",
+    "CHF Â· einmalig": "CHF - one time",
+    "CHF Ã‚Â· einmalig": "CHF - one time",
+    "Sofortiger Download nach Zahlung": "Instant download after payment",
+    "Sichere Zahlung ueber Stripe": "Secure payment via Stripe",
+    "Keine Kartendaten auf dieser Website gespeichert": "No card details stored on this website",
+    "Weiter zur sicheren Zahlung": "Continue to secure payment",
+    "In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.": "In the final step you will be redirected to Stripe Checkout and then automatically returned to the download.",
+    "Position": "Position",
+    "Unternehmen / Ort": "Company / location",
+    "Von": "From",
+    "Bis": "To",
+    "Ort / Land optional": "City / country optional",
+    "Taetigkeit / Aufgaben": "Activities / responsibilities",
+    "Schule": "School",
+    "Ort / Land": "City / country",
+    "Titel": "Title",
+    "Ausbildungsstaette / Ort": "Training provider / location",
+    "Inhalte": "Content",
+    "Kenntnis": "Skill",
+    "Hobby": "Hobby",
+    "Eintrag": "Entry",
+    "Eintrag ein- oder ausklappen": "Expand or collapse entry",
+    "Eintrag entfernen": "Remove entry",
+    "Jetzt ergaenzen": "Add now",
+    "MS Office": "MS Office",
+    "Organisation": "Organization",
+    "Kommunikation": "Communication",
+    "Lesen": "Reading",
+    "Sport": "Sports",
+    "Bereit fuer KI-Foto": "Ready for AI photo",
+    "Ausgewaehltes Bewerbungsfoto": "Selected application photo",
+    "KI Foto Variante {count} auswaehlen": "Select AI photo variant {count}",
+    "KI Foto Variante {count}": "AI photo variant {count}",
+    "Variante": "Variant",
+    "Foto fuer die Vorschau ausgewaehlt": "Photo selected for preview",
+    "Foto wird vorbereitet...": "Preparing photo...",
+    "3 professionelle Varianten verfuegbar": "3 professional variants available",
+    "Option bereit zur Auswahl": "Option ready to select",
+    "Weitere Option generieren": "Generate another option",
+    "Generiere Foto...": "Generating photo...",
+    "Kein Bild erhalten": "No image received",
+    "Generierung fehlgeschlagen": "Generation failed",
+    "Upload fehlgeschlagen": "Upload failed",
+    "Limit erreicht": "Limit reached",
+    "Foto fehlt": "Photo missing",
+    "KI-Foto bereit": "AI photo ready",
+    "Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.": "The photo could not be read. Please try another file.",
+    "Sie haben bereits 3 KI-Bilder generiert.": "You have already generated 3 AI images.",
+    "Bitte zuerst ein Foto hochladen.": "Please upload a photo first.",
+    "Professionelle Foto-Option wurde erstellt.": "Professional photo option was created.",
+    "Der Server hat kein Bild zurueckgegeben.": "The server did not return an image.",
+    "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.": "The photo could not be generated. Please try again.",
+    "Zwischengespeichert": "Saved locally",
+    "Ihre Eingaben wurden lokal gespeichert.": "Your entries have been saved locally.",
+    "Erfolg": "Success",
+    "Hinweis": "Info",
+    "Achtung": "Warning",
+    "Fehler": "Error",
+    "Meldung schliessen": "Close message",
   },
 };
+
+let currentLanguage = "de";
 
 const SIMPLE_FIELDS = ["name", "headline", "adresse", "kontakt", "profil", "datum", "unterschrift"];
 const SECTION_CONFIG = {
@@ -79,10 +383,71 @@ function normalizeLanguage(language) {
   return language === "en" ? "en" : "de";
 }
 
+function getTranslationKey(value) {
+  const cleanValue = String(value || "").trim();
+  if (!cleanValue) return null;
+  if (Object.prototype.hasOwnProperty.call(UI_TRANSLATIONS.de, cleanValue)) {
+    return cleanValue;
+  }
+  for (const dictionary of Object.values(UI_TRANSLATIONS)) {
+    const entry = Object.entries(dictionary).find(([, translated]) => translated === cleanValue);
+    if (entry) {
+      return entry[0];
+    }
+  }
+  return null;
+}
+
+function t(key, replacements = {}) {
+  const dictionary = UI_TRANSLATIONS[currentLanguage] || UI_TRANSLATIONS.de;
+  const fallback = UI_TRANSLATIONS.de[key] || key;
+  let value = dictionary[key] || fallback;
+  Object.entries(replacements).forEach(([name, replacement]) => {
+    value = value.replaceAll(`{${name}}`, replacement);
+  });
+  return value;
+}
+
+function translateValue(value, replacements = {}) {
+  const key = getTranslationKey(value);
+  if (!key) return value;
+  return t(key, replacements);
+}
+
+function translateTextNodes(dictionary) {
+  if (!document.body) return;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+
+  while (walker.nextNode()) {
+    nodes.push(walker.currentNode);
+  }
+
+  nodes.forEach((node) => {
+    const cleanValue = node.nodeValue.trim();
+    const key = getTranslationKey(cleanValue);
+    if (!key || !dictionary[key]) return;
+    node.nodeValue = node.nodeValue.replace(cleanValue, dictionary[key]);
+  });
+}
+
+function translateAttributes(dictionary) {
+  ["placeholder", "aria-label", "alt", "title"].forEach((attribute) => {
+    document.querySelectorAll(`[${attribute}]`).forEach((element) => {
+      const key = getTranslationKey(element.getAttribute(attribute));
+      if (key && dictionary[key]) {
+        element.setAttribute(attribute, dictionary[key]);
+      }
+    });
+  });
+}
+
 function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de") {
   const normalized = normalizeLanguage(language);
   const dictionary = UI_TRANSLATIONS[normalized] || UI_TRANSLATIONS.de;
+  currentLanguage = normalized;
   document.documentElement.lang = normalized;
+  document.title = t("document.title");
   localStorage.setItem(LANGUAGE_STORAGE_KEY, normalized);
 
   document.querySelectorAll("[data-i18n]").forEach((element) => {
@@ -97,6 +462,10 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
     button.classList.toggle("muted", !active);
     button.setAttribute("aria-pressed", String(active));
   });
+
+  translateTextNodes(dictionary);
+  translateAttributes(dictionary);
+  updateCounter();
 }
 
 function installLanguageSwitch() {
@@ -130,21 +499,21 @@ function setTextWithBreaks(element, value, fallback = "") {
 
 function getEntryTitle(section, data = {}) {
   if (section === "beruf") {
-    return data["beruf-position"] || data["beruf-ort"] || "Berufserfahrung";
+    return data["beruf-position"] || data["beruf-ort"] || translateValue("Berufserfahrung");
   }
   if (section === "schulbildung") {
-    return data.schule || data["schule-abschluss"] || "Schulbildung";
+    return data.schule || data["schule-abschluss"] || translateValue("Schulbildung");
   }
   if (section === "weiterbildung") {
-    return data["weiterbildung-titel"] || "Weiterbildung";
+    return data["weiterbildung-titel"] || translateValue("Weiterbildung");
   }
   if (section === "kenntnisse") {
-    return data.kenntnisse || "Kenntnis";
+    return data.kenntnisse || translateValue("Kenntnis");
   }
   if (section === "hobbys") {
-    return data.hobbys || "Hobby";
+    return data.hobbys || translateValue("Hobby");
   }
-  return "Eintrag";
+  return translateValue("Eintrag");
 }
 
 function createEntry(section, data = {}) {
@@ -169,13 +538,13 @@ function createEntry(section, data = {}) {
   const toggle = document.createElement("button");
   toggle.type = "button";
   toggle.className = "toggle";
-  toggle.setAttribute("aria-label", "Eintrag ein- oder ausklappen");
+  toggle.setAttribute("aria-label", translateValue("Eintrag ein- oder ausklappen"));
   toggle.textContent = "v";
 
   const remove = document.createElement("button");
   remove.type = "button";
   remove.className = "delete";
-  remove.setAttribute("aria-label", "Eintrag entfernen");
+  remove.setAttribute("aria-label", translateValue("Eintrag entfernen"));
   remove.textContent = "x";
 
   controls.append(toggle, remove);
@@ -186,7 +555,7 @@ function createEntry(section, data = {}) {
 
   fields.forEach((field) => {
     const label = document.createElement("label");
-    label.textContent = field.label;
+    label.textContent = translateValue(field.label);
 
     const input = document.createElement(field.type === "textarea" ? "textarea" : "input");
     input.className = field.className;
@@ -301,7 +670,11 @@ function renderTimeline(containerId, entries, formatter, emptyText) {
   if (usableEntries.length === 0) {
     const item = document.createElement("div");
     item.className = "timeline-item";
-    item.innerHTML = `<strong>${emptyText}</strong><span>Jetzt ergaenzen</span>`;
+    const strong = document.createElement("strong");
+    strong.textContent = translateValue(emptyText);
+    const span = document.createElement("span");
+    span.textContent = translateValue("Jetzt ergaenzen");
+    item.append(strong, span);
     container.appendChild(item);
     return;
   }
@@ -336,24 +709,24 @@ function renderPills(containerId, entries, key, emptyItems) {
 
   finalValues.forEach((value) => {
     const pill = document.createElement("span");
-    pill.textContent = value;
+    pill.textContent = translateValue(value);
     container.appendChild(pill);
   });
 }
 
 function syncLivePreview({ pulse = true } = {}) {
   const data = saveFormData();
-  setTextWithBreaks(document.getElementById("pv-name"), data.name, "Max Muster");
-  setTextWithBreaks(document.getElementById("pv-headline"), data.headline, "Kaufmaennischer Mitarbeiter");
+  setTextWithBreaks(document.getElementById("pv-name"), data.name, t("Max Muster"));
+  setTextWithBreaks(document.getElementById("pv-headline"), data.headline, t("Kaufmaennischer Mitarbeiter"));
   setTextWithBreaks(document.getElementById("pv-kontakt"), data.kontakt, "max@example.com\n+41 79 123 45 67");
-  setTextWithBreaks(document.getElementById("pv-adresse"), data.adresse, "Bahnhofstrasse 12\n8001 Zuerich");
+  setTextWithBreaks(document.getElementById("pv-adresse"), data.adresse, `${t("Bahnhofstrasse 12")}\n${t("8001 Zuerich")}`);
   setTextWithBreaks(
     document.getElementById("pv-profil"),
     data.profil,
-    "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit."
+    t("Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.")
   );
-  setTextWithBreaks(document.getElementById("pv-datum"), data.datum, "Zuerich, 18.06.2026");
-  setTextWithBreaks(document.getElementById("pv-unterschrift"), data.unterschrift || data.name, "Max Muster");
+  setTextWithBreaks(document.getElementById("pv-datum"), data.datum, t("Zuerich, 18.06.2026"));
+  setTextWithBreaks(document.getElementById("pv-unterschrift"), data.unterschrift || data.name, t("Max Muster"));
 
   const photo = document.getElementById("pv-foto");
   if (photo) {
@@ -370,31 +743,31 @@ function syncLivePreview({ pulse = true } = {}) {
     "pv-beruf",
     data.beruf,
     (entry) => ({
-      title: entry["beruf-position"] || "Position",
+      title: entry["beruf-position"] || translateValue("Position"),
       meta: [entry["beruf-ort"], [entry["beruf-von"], entry["beruf-bis"]].filter(Boolean).join(" - ")].filter(Boolean).join(" | "),
       body: entry["beruf-aufgaben"] || entry["beruf-firma"] || "",
     }),
-    "Berufserfahrung"
+    translateValue("Berufserfahrung")
   );
   renderTimeline(
     "pv-schulbildung",
     data.schulbildung,
     (entry) => ({
-      title: entry["schule-abschluss"] || entry.schule || "Schulbildung",
+      title: entry["schule-abschluss"] || entry.schule || translateValue("Schulbildung"),
       meta: [entry.schule, entry["schule-ort"], [entry["schule-von"], entry["schule-bis"]].filter(Boolean).join(" - ")].filter(Boolean).join(" | "),
       body: "",
     }),
-    "Schulbildung"
+    translateValue("Schulbildung")
   );
   renderTimeline(
     "pv-weiterbildung",
     data.weiterbildung,
     (entry) => ({
-      title: entry["weiterbildung-titel"] || "Weiterbildung",
+      title: entry["weiterbildung-titel"] || translateValue("Weiterbildung"),
       meta: [entry["weiterbildung-ort"], [entry["weiterbildung-von"], entry["weiterbildung-bis"]].filter(Boolean).join(" - ")].filter(Boolean).join(" | "),
       body: entry["weiterbildung-inhalt"] || "",
     }),
-    "Weiterbildung"
+    translateValue("Weiterbildung")
   );
   renderPills("pv-kenntnisse", data.kenntnisse, "kenntnisse", ["MS Office", "Organisation", "Kommunikation"]);
   renderPills("pv-hobbys", data.hobbys, "hobbys", ["Lesen", "Sport"]);
@@ -447,10 +820,10 @@ function getToastRegion() {
 
 function showToast(message, type = "info", title) {
   const titles = {
-    success: "Erledigt",
-    error: "Fehler",
-    warning: "Hinweis",
-    info: "Info",
+    success: t("Erfolg"),
+    error: t("Fehler"),
+    warning: t("Achtung"),
+    info: t("Hinweis"),
   };
   const toast = document.createElement("div");
   toast.className = `toast ${type}`;
@@ -463,16 +836,16 @@ function showToast(message, type = "info", title) {
   const content = document.createElement("div");
   const heading = document.createElement("p");
   heading.className = "toast-title";
-  heading.textContent = title || titles[type] || titles.info;
+  heading.textContent = title ? translateValue(title) : titles[type] || titles.info;
 
   const body = document.createElement("p");
   body.className = "toast-message";
-  body.textContent = message;
+  body.textContent = translateValue(message);
 
   const close = document.createElement("button");
   close.type = "button";
   close.className = "toast-close";
-  close.setAttribute("aria-label", "Meldung schliessen");
+  close.setAttribute("aria-label", translateValue("Meldung schliessen"));
   close.textContent = "x";
 
   content.append(heading, body);
@@ -492,14 +865,17 @@ function showToast(message, type = "info", title) {
 function updateCounter() {
   const counter = document.getElementById("counter");
   if (counter) {
-    counter.innerText = `KI-Funktion - ${aiImageCount} / ${MAX_IMAGES} generiert`;
+    counter.innerText = t("KI-Funktion - {count} / {max} generiert", {
+      count: aiImageCount,
+      max: MAX_IMAGES,
+    });
   }
 }
 
 function setPhotoStatus(text) {
   const status = document.getElementById("photo-status");
   if (status) {
-    status.textContent = text;
+    status.textContent = translateValue(text);
   }
 }
 
@@ -527,7 +903,7 @@ function renderOptionPlaceholders() {
     shoulders.setAttribute("aria-hidden", "true");
     const label = document.createElement("span");
     label.className = "empty-caption";
-    label.textContent = "Bereit fuer KI-Foto";
+    label.textContent = translateValue("Bereit fuer KI-Foto");
     placeholder.append(avatar, shoulders, label);
     container.appendChild(placeholder);
   }
@@ -553,7 +929,7 @@ function renderUploadPreview(src, selected = false) {
 
   const img = document.createElement("img");
   img.src = src;
-  img.alt = "Ausgewaehltes Bewerbungsfoto";
+  img.alt = translateValue("Ausgewaehltes Bewerbungsfoto");
   img.addEventListener("click", () => selectImage(img));
   container.appendChild(img);
   return img;
@@ -567,14 +943,14 @@ function createGeneratedOption(src) {
   const option = document.createElement("button");
   option.type = "button";
   option.className = "generated-option";
-  option.setAttribute("aria-label", `KI Foto Variante ${aiImageCount} auswaehlen`);
+  option.setAttribute("aria-label", t("KI Foto Variante {count} auswaehlen", { count: aiImageCount }));
 
   const img = document.createElement("img");
   img.src = src;
-  img.alt = `KI Foto Variante ${aiImageCount}`;
+  img.alt = t("KI Foto Variante {count}", { count: aiImageCount });
 
   const label = document.createElement("span");
-  label.textContent = "Variante";
+  label.textContent = translateValue("Variante");
 
   option.append(img, label);
   option.addEventListener("click", () => selectImage(img));
@@ -717,7 +1093,7 @@ function installPhotoListeners() {
 
     const originalButtonText = aiBtn.innerText;
     aiBtn.disabled = true;
-    aiBtn.innerText = "Generiere Foto...";
+    aiBtn.innerText = translateValue("Generiere Foto...");
     setPhotoStatus("Foto wird vorbereitet...");
     setPhotoLoading(true);
 
@@ -738,7 +1114,7 @@ function installPhotoListeners() {
         updateCounter();
         createGeneratedOption(result.aiFoto);
         setPhotoStatus(aiImageCount === MAX_IMAGES ? "3 professionelle Varianten verfuegbar" : "Option bereit zur Auswahl");
-        aiBtn.innerText = aiImageCount > 0 ? "Weitere Option generieren" : originalButtonText;
+        aiBtn.innerText = aiImageCount > 0 ? translateValue("Weitere Option generieren") : originalButtonText;
         showToast("Professionelle Foto-Option wurde erstellt.", "success", "KI-Foto bereit");
       } else {
         setPhotoStatus("Kein Bild erhalten");
@@ -751,7 +1127,7 @@ function installPhotoListeners() {
     } finally {
       setPhotoLoading(false);
       aiBtn.disabled = false;
-      aiBtn.innerText = aiImageCount > 0 ? "Weitere Option generieren" : originalButtonText;
+      aiBtn.innerText = aiImageCount > 0 ? translateValue("Weitere Option generieren") : originalButtonText;
     }
   });
 }
