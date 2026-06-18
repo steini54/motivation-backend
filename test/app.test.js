@@ -56,14 +56,20 @@ test("health is available while readiness reflects AI configuration", async () =
 
 test("every preview theme is served as CSS", async () => {
   const themes = [
-    "standard.css",
-    "swiss.css",
-    "executive.css",
-    "academic.css",
-    "technical.css",
-    "creative.css",
-    "compact.css",
-    "service.css",
+    "charcoal-frame.css",
+    "cobalt-ribbon.css",
+    "editorial-azure.css",
+    "executive-ink.css",
+    "graphite-pro.css",
+    "midnight-column.css",
+    "monograph.css",
+    "navy-wave.css",
+    "nordic-panel.css",
+    "pearl-classic.css",
+    "soft-sand.css",
+    "swiss-line.css",
+    "teal-balance.css",
+    "terracotta-arch.css",
   ];
 
   await withServer(

@@ -6,14 +6,20 @@ const path = require("node:path");
 const frontendPath = path.join(__dirname, "../frontend/vitagen/motivation");
 const vitagenPath = path.join(__dirname, "../frontend/vitagen");
 const styleNames = [
-  "standard.css",
-  "swiss.css",
-  "executive.css",
-  "academic.css",
-  "technical.css",
-  "creative.css",
-  "compact.css",
-  "service.css",
+  "charcoal-frame.css",
+  "cobalt-ribbon.css",
+  "editorial-azure.css",
+  "executive-ink.css",
+  "graphite-pro.css",
+  "midnight-column.css",
+  "monograph.css",
+  "navy-wave.css",
+  "nordic-panel.css",
+  "pearl-classic.css",
+  "soft-sand.css",
+  "swiss-line.css",
+  "teal-balance.css",
+  "terracotta-arch.css",
 ];
 
 test("all current motivation themes are included and import the shared base", () => {

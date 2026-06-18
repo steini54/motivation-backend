@@ -64,30 +64,54 @@
         </section>
 
         <section class="form-card ai-card photo-card" id="foto-section">
-          <div class="card-heading">
-            <span class="step ai-step">AI</span>
-            <div>
-              <p class="card-kicker">KI-Fotoassistent</p>
-              <h2>Bewerbungsfoto vorbereiten</h2>
-              <p>Aus einem normalen Foto kann eine professionelle Bewerbungsfoto-Variante entstehen.</p>
+          <div class="photo-card-top">
+            <div class="photo-title-row">
+              <span class="ai-iconbox" aria-hidden="true">
+                <img src="../assets/Ai%20icon.png" alt="" class="ai-icon">
+              </span>
+              <div>
+                <h2>Bewerbungsfoto vorbereiten</h2>
+                <p>KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.</p>
+                <span class="ai-mini">KI-Fotoassistent</span>
+              </div>
             </div>
+            <div id="counter" class="counter photo-count-pill">KI-Funktion - 0 / 3 generiert</div>
           </div>
 
-          <div class="photo-workspace">
-            <div class="field upload-field">
-              <label for="foto-upload">Foto hochladen</label>
+          <div class="photo-card-grid">
+            <div class="photo-upload-shell">
               <input type="file" id="foto-upload" accept="image/*">
-              <div id="foto-container" class="photo-current"></div>
+              <label for="foto-upload" class="photo-upload-drop">
+                <span class="upload-plus" aria-hidden="true">+</span>
+                <strong>Foto hochladen</strong>
+                <span>Laden Sie ein Foto hoch. Die KI erstellt daraus eine professionelle Bewerbungsfoto-Variante.</span>
+              </label>
+              <div id="foto-container" class="photo-current" aria-live="polite"></div>
             </div>
 
-            <div class="ai-action-panel">
-              <div id="counter" class="counter">0 / 3 Bilder generiert</div>
-              <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
-              <div id="loader" class="loader" style="display:none;">Foto wird vorbereitet...</div>
+            <div class="generated-panel">
+              <div class="generated-panel-head">
+                <strong>Generierte Optionen</strong>
+                <span id="photo-status">Noch nicht generiert</span>
+              </div>
+              <div class="generated-stage">
+                <div id="loader" class="loader aurora-loader" style="display:none;" role="status" aria-live="polite">
+                  <span class="aurora-spinner" aria-hidden="true"></span>
+                  <span class="loader-text">Foto wird vorbereitet...</span>
+                </div>
+                <div id="foto-auswahl" class="photo-options" aria-live="polite">
+                  <div class="photo-option-placeholder"><span>Variante</span></div>
+                  <div class="photo-option-placeholder"><span>Variante</span></div>
+                  <div class="photo-option-placeholder"><span>Variante</span></div>
+                </div>
+              </div>
+
+              <div class="photo-actions">
+                <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
+                <p>Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.</p>
+              </div>
             </div>
           </div>
-
-          <div id="foto-auswahl" class="photo-options" aria-live="polite"></div>
         </section>
 
         <section class="form-card">
@@ -205,6 +229,7 @@
     </form>
   </main>
 
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <script src="script.js"></script>
 </body>
 </html>
