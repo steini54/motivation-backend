@@ -173,8 +173,19 @@ test("builder language switch translates page text and attributes", () => {
 
   assert.match(motivationScript, /"Angaben zur Bewerbung": "Application details"/);
   assert.match(motivationScript, /"Motivationstext formulieren": "Write motivation text"/);
+  assert.match(motivationScript, /"Schweiz & Europa": "Switzerland & Europe"/);
+  assert.match(motivationScript, /"KI-Foto": "AI photo"/);
+  assert.match(motivationScript, /"Foto andern": "Change photo"/);
+  assert.match(motivationScript, /"Aktualisiert sich automatisch beim Tippen": "Updates automatically while typing"/);
+  assert.match(motivationScript, /"Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau\.": "After selection, the photo appears directly in the live preview\."/);
   assert.match(lebenslaufScript, /"Persoenliche Daten": "Personal details"/);
   assert.match(lebenslaufScript, /"Berufserfahrung": "Work experience"/);
+  assert.match(lebenslaufScript, /"Schweiz & Europa": "Switzerland & Europe"/);
+  assert.match(lebenslaufScript, /"KI-Foto": "AI photo"/);
+  assert.match(lebenslaufScript, /"Foto andern": "Change photo"/);
+  assert.match(lebenslaufScript, /"Beruflicher Werdegang": "Professional experience"/);
+  assert.match(lebenslaufScript, /"Aktualisiert sich automatisch beim Tippen": "Updates automatically while typing"/);
+  assert.match(lebenslaufScript, /"Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau\.": "After selection, the photo appears directly in the live preview\."/);
 });
 
 test("builder full preview watermark is large enough to block free documents", () => {
