@@ -138,6 +138,9 @@ test("motivation and lebenslauf builders share the navbar and language switch", 
   assert.match(sharedNavbarScript, /data-i18n="nav.preview"/);
   assert.match(sharedNavbarScript, /vitagen:languagechange/);
   assert.match(sharedNavbarCss, /\.topbar/);
+  assert.match(sharedNavbarCss, /--navbar-primary: #202c39/);
+  assert.match(sharedNavbarCss, /\.topbar \.primary-button/);
+  assert.match(sharedNavbarCss, /\.topbar \.secondary-button/);
   assert.doesNotMatch(motivationScript, /"nav\.save"/);
   assert.doesNotMatch(lebenslaufScript, /"nav\.save"/);
   assert.match(motivationScript, /const LANGUAGE_STORAGE_KEY = "vitagen_language";/);

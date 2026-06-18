@@ -1,4 +1,9 @@
 .topbar {
+  --navbar-ink: #182230;
+  --navbar-primary: #202c39;
+  --navbar-muted: #738096;
+  --navbar-line: #dde5ee;
+  --navbar-surface: #ffffff;
   position: sticky;
   top: 0;
   z-index: 50;
@@ -21,7 +26,7 @@
 
 .brand {
   gap: 10px;
-  color: var(--ui-ink, #182230);
+  color: var(--navbar-ink);
   font-weight: 900;
   text-decoration: none;
 }
@@ -32,7 +37,7 @@
   height: 34px;
   place-items: center;
   border-radius: 10px;
-  background: var(--ui-primary, #202c39);
+  background: var(--navbar-primary);
   color: #ffffff;
   font-size: 12px;
   font-weight: 900;
@@ -42,23 +47,23 @@
   justify-self: center;
   gap: 4px;
   padding: 4px;
-  border: 1px solid var(--ui-line, #dde5ee);
+  border: 1px solid var(--navbar-line);
   border-radius: 999px;
-  background: #ffffff;
+  background: var(--navbar-surface);
 }
 
 .product-switch a,
 .ghost-button {
   padding: 8px 12px;
   border-radius: 999px;
-  color: var(--ui-muted, #738096);
+  color: var(--navbar-muted);
   font-size: 13px;
   font-weight: 800;
   text-decoration: none;
 }
 
 .product-switch a.active {
-  background: var(--ui-primary, #202c39);
+  background: var(--navbar-primary);
   color: #ffffff;
 }
 
@@ -69,12 +74,55 @@
 
 .ghost-button {
   border: 0;
-  background: #ffffff;
+  background: var(--navbar-surface);
   cursor: pointer;
 }
 
 .ghost-button.muted {
   opacity: 0.62;
+}
+
+.topbar .primary-button,
+.topbar .secondary-button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 900;
+  line-height: 1;
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+}
+
+.topbar .primary-button {
+  background: var(--navbar-primary);
+  color: #ffffff;
+  box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+}
+
+.topbar .secondary-button {
+  border-color: var(--navbar-line);
+  background: var(--navbar-surface);
+  color: var(--navbar-primary);
+  box-shadow: none;
+}
+
+.topbar .primary-button:hover,
+.topbar .secondary-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+}
+
+.topbar .primary-button:disabled,
+.topbar .secondary-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+  transform: none;
 }
 
 @media (max-width: 920px) {
