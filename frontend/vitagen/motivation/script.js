@@ -124,9 +124,20 @@ function renderOptionPlaceholders() {
   for (let index = 0; index < MAX_IMAGES; index++) {
     const placeholder = document.createElement("div");
     placeholder.className = "photo-option-placeholder";
+
+    const avatar = document.createElement("span");
+    avatar.className = "empty-avatar";
+    avatar.setAttribute("aria-hidden", "true");
+
+    const shoulders = document.createElement("span");
+    shoulders.className = "empty-shoulders";
+    shoulders.setAttribute("aria-hidden", "true");
+
     const label = document.createElement("span");
-    label.textContent = "Variante";
-    placeholder.appendChild(label);
+    label.className = "empty-caption";
+    label.textContent = "Bereit fur KI-Foto";
+
+    placeholder.append(avatar, shoulders, label);
     container.appendChild(placeholder);
   }
 }
@@ -142,8 +153,15 @@ function renderUploadPreview(src, selected = false) {
   const container = document.getElementById("foto-container");
   if (!container) return null;
 
+  const shell = container.closest(".photo-upload-shell");
+  const changeButton = document.getElementById("changePhotoBtn");
+
   container.innerHTML = "";
   container.classList.toggle("selected", selected);
+  shell?.classList.add("has-photo");
+  if (changeButton) {
+    changeButton.hidden = false;
+  }
 
   const img = document.createElement("img");
   img.src = src;
@@ -253,6 +271,14 @@ if (fileInput) {
       showToast("Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.", "error", "Upload fehlgeschlagen");
     };
     reader.readAsDataURL(file);
+  });
+}
+
+const changePhotoBtn = document.getElementById("changePhotoBtn");
+
+if (changePhotoBtn && fileInput) {
+  changePhotoBtn.addEventListener("click", () => {
+    fileInput.click();
   });
 }
 

@@ -380,9 +380,10 @@ textarea:focus {
 }
 
 .ai-icon {
+  display: block;
   width: 24px;
   height: 24px;
-  object-fit: contain;
+  background: url("../assets/Ai icon.png") center / contain no-repeat;
 }
 
 .photo-title-row h2 {
@@ -440,6 +441,7 @@ textarea:focus {
 .photo-upload-shell {
   position: relative;
   min-height: 282px;
+  border-radius: 22px;
 }
 
 #foto-upload {
@@ -456,16 +458,25 @@ textarea:focus {
   height: 100%;
   min-height: 282px;
   place-items: center;
-  gap: 9px;
+  gap: 10px;
   padding: 28px 24px;
-  border: 1px dashed #c7d5ea;
-  border-radius: 20px;
+  border: 1px dashed #c9d5ee;
+  border-radius: 22px;
   background:
-    radial-gradient(circle at 100% 100%, rgba(122, 92, 255, 0.09), transparent 30%),
-    rgba(255, 255, 255, 0.68);
+    radial-gradient(circle at 50% 38%, rgba(122, 92, 255, 0.09), transparent 30%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(248, 250, 255, 0.72));
   color: #5f6979;
   text-align: center;
   cursor: pointer;
+  transition: opacity 0.18s ease, border-color 0.18s ease, background 0.18s ease, transform 0.18s ease;
+}
+
+.photo-upload-drop:hover {
+  border-color: #8d7bff;
+  background:
+    radial-gradient(circle at 50% 38%, rgba(122, 92, 255, 0.13), transparent 32%),
+    linear-gradient(180deg, #ffffff, #f8f9ff);
+  transform: translateY(-1px);
 }
 
 .photo-upload-drop strong {
@@ -473,22 +484,47 @@ textarea:focus {
   font-size: 16px;
 }
 
-.photo-upload-drop span:last-child {
+.photo-upload-drop > span:not(.upload-visual):not(.upload-action) {
   max-width: 220px;
   line-height: 1.45;
 }
 
+.upload-visual {
+  display: grid;
+  width: 70px;
+  height: 70px;
+  place-items: center;
+  border: 1px solid rgba(122, 92, 255, 0.12);
+  border-radius: 24px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 246, 255, 0.88));
+  box-shadow: 0 18px 42px rgba(63, 77, 133, 0.12);
+}
+
 .upload-plus {
   display: grid;
-  width: 64px;
-  height: 64px;
+  width: 38px;
+  height: 38px;
   place-items: center;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.84);
+  background: #ffffff;
   color: #6b59ff;
-  font-size: 30px;
+  font-size: 24px;
   font-weight: 800;
-  box-shadow: 0 18px 40px rgba(63, 77, 133, 0.12);
+  box-shadow: 0 10px 28px rgba(63, 77, 133, 0.12);
+}
+
+.upload-action {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  padding: 8px 13px;
+  border-radius: 999px;
+  background: #ebeaff;
+  color: #4f46c8;
+  font-size: 12px;
+  font-weight: 900;
+  line-height: 1;
 }
 
 .photo-current {
@@ -507,15 +543,43 @@ textarea:focus {
   width: min(100%, 190px);
   height: 230px;
   object-fit: cover;
-  border: 3px solid #ffffff;
+  border: 3px solid #6b59ff;
   border-radius: 18px;
   cursor: pointer;
   box-shadow: 0 18px 34px rgba(23, 32, 51, 0.16);
   transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
 }
 
-.photo-upload-shell:has(.photo-current img) .photo-upload-drop {
-  opacity: 0.18;
+.photo-upload-shell.has-photo .photo-upload-drop {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.change-photo-button {
+  position: absolute;
+  right: 20px;
+  bottom: 18px;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 34px;
+  padding: 8px 14px;
+  border: 1px solid rgba(217, 226, 236, 0.95);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #4f46c8;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 900;
+  box-shadow: 0 12px 28px rgba(63, 77, 133, 0.16);
+  backdrop-filter: blur(12px);
+}
+
+.change-photo-button:hover {
+  border-color: #8d7bff;
+  background: #ffffff;
 }
 
 .generated-panel {
@@ -563,25 +627,20 @@ textarea:focus {
   overflow: hidden;
   border: 1px solid #e4e9f0;
   border-radius: 18px;
-  background:
-    radial-gradient(circle at 50% 24%, #ddb092 0 18%, #684335 19% 31%, transparent 32%),
-    linear-gradient(180deg, #f7f8f9 0 50%, #26344c 51% 100%);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.85);
 }
 
-.photo-option-placeholder:nth-child(2) {
+.photo-option-placeholder {
+  align-items: center;
+  align-content: center;
+  justify-items: center;
+  gap: 12px;
+  padding: 22px 18px;
   background:
-    radial-gradient(circle at 50% 24%, #dfac8b 0 18%, #3d312e 19% 31%, transparent 32%),
-    linear-gradient(180deg, #faf9f6 0 50%, #344053 51% 100%);
+    radial-gradient(circle at 50% 28%, rgba(122, 92, 255, 0.08), transparent 26%),
+    linear-gradient(180deg, #ffffff 0%, #f6f8fc 100%);
 }
 
-.photo-option-placeholder:nth-child(3) {
-  background:
-    radial-gradient(circle at 50% 24%, #e4b492 0 18%, #6a4636 19% 31%, transparent 32%),
-    linear-gradient(180deg, #f3fbf8 0 50%, #128173 51% 100%);
-}
-
-.photo-option-placeholder span,
 .generated-option span {
   position: relative;
   z-index: 1;
@@ -593,6 +652,39 @@ textarea:focus {
   color: #536171;
   font-size: 11px;
   font-weight: 800;
+  text-align: center;
+}
+
+.empty-avatar {
+  width: 82px;
+  height: 82px;
+  border: 2px solid #d7e0ec;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 45%, #e8eef5 0 38%, transparent 39%),
+    #f8fafc;
+  box-shadow: inset 0 0 0 12px #ffffff;
+}
+
+.empty-shoulders {
+  width: min(82%, 140px);
+  height: 58px;
+  border-radius: 44px 44px 16px 16px;
+  background:
+    linear-gradient(180deg, #eef3f8, #dde6ef);
+}
+
+.empty-caption {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 7px 12px;
+  border: 1px solid #dce5ef;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #788497;
+  font-size: 11px;
+  font-weight: 900;
   text-align: center;
 }
 

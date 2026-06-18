@@ -67,7 +67,7 @@
           <div class="photo-card-top">
             <div class="photo-title-row">
               <span class="ai-iconbox" aria-hidden="true">
-                <img src="../assets/Ai%20icon.png" alt="" class="ai-icon">
+                <span class="ai-icon"></span>
               </span>
               <div>
                 <h2>Bewerbungsfoto vorbereiten</h2>
@@ -82,11 +82,15 @@
             <div class="photo-upload-shell">
               <input type="file" id="foto-upload" accept="image/*">
               <label for="foto-upload" class="photo-upload-drop">
-                <span class="upload-plus" aria-hidden="true">+</span>
+                <span class="upload-visual" aria-hidden="true">
+                  <span class="upload-plus">+</span>
+                </span>
                 <strong>Foto hochladen</strong>
-                <span>Laden Sie ein Foto hoch. Die KI erstellt daraus eine professionelle Bewerbungsfoto-Variante.</span>
+                <span>Laden Sie ein klares Portrait hoch. Danach kann die KI professionelle Varianten erstellen.</span>
+                <span class="upload-action">Datei auswahlen</span>
               </label>
               <div id="foto-container" class="photo-current" aria-live="polite"></div>
+              <button type="button" id="changePhotoBtn" class="change-photo-button" hidden>Foto andern</button>
             </div>
 
             <div class="generated-panel">
@@ -100,9 +104,21 @@
                   <span class="loader-text">Foto wird vorbereitet...</span>
                 </div>
                 <div id="foto-auswahl" class="photo-options" aria-live="polite">
-                  <div class="photo-option-placeholder"><span>Variante</span></div>
-                  <div class="photo-option-placeholder"><span>Variante</span></div>
-                  <div class="photo-option-placeholder"><span>Variante</span></div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
                 </div>
               </div>
 
