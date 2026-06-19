@@ -3,7 +3,11 @@ const assert = require("node:assert/strict");
 
 const { createApp } = require("../app");
 const { STYLE_NAMES, createDocumentHash } = require("../services/document-purchase");
-const { buildReturnUrl, normalizeReturnUrl } = require("../services/stripe-service");
+const {
+  buildReturnUrl,
+  createPaymentService,
+  normalizeReturnUrl,
+} = require("../services/stripe-service");
 
 async function withServer(app, callback) {
   const server = app.listen(0, "127.0.0.1");
@@ -110,6 +114,165 @@ test("checkout session endpoint returns a Stripe redirect URL", async () => {
       assert.match(body.url, /^https:\/\/checkout\.stripe\.com/);
     }
   );
+});
+
+test("Stripe checkout applies the configured server-side coupon", async () => {
+  let receivedParams = null;
+  let receivedOptions = null;
+  const payment = createPaymentService({
+    config: {
+      secretKey: "sk_test_123",
+      webhookSecret: "whsec_123",
+      priceId: "",
+      currency: "chf",
+      priceCents: 990,
+      productName: "VitaGen PDF Download",
+      baseUrl: "https://syntext.ch/bewerbungs-generator",
+      invoiceCreation: true,
+      stripeApiVersion: "2026-05-27.dahlia",
+      checkoutCouponId: "coupon_free_test",
+    },
+    stripeClient: {
+      checkout: {
+        sessions: {
+          async create(params, options) {
+            receivedParams = params;
+            receivedOptions = options;
+            return {
+              id: "cs_test_coupon",
+              url: "https://checkout.stripe.com/c/pay/cs_test_coupon",
+            };
+          },
+        },
+      },
+      webhooks: { constructEvent() {} },
+    },
+  });
+
+  const session = await payment.createCheckoutSession({
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash: "a".repeat(64),
+    returnUrl: "https://syntext.ch/bewerbungs-generator/motivation/formular.html",
+  });
+
+  assert.equal(session.id, "cs_test_coupon");
+  assert.deepEqual(receivedParams.discounts, [{ coupon: "coupon_free_test" }]);
+  assert.match(receivedOptions.idempotencyKey, /coupon_free_test:paid-checkout$/);
+});
+
+test("Stripe checkout can create a no-cost session behind an explicit env flag", async () => {
+  let receivedParams = null;
+  const payment = createPaymentService({
+    config: {
+      secretKey: "sk_test_123",
+      webhookSecret: "whsec_123",
+      priceId: "",
+      currency: "chf",
+      priceCents: 990,
+      productName: "VitaGen PDF Download",
+      baseUrl: "https://syntext.ch/bewerbungs-generator",
+      invoiceCreation: true,
+      stripeApiVersion: "2026-05-27.dahlia",
+      checkoutCouponId: "",
+      freeCheckout: true,
+    },
+    stripeClient: {
+      checkout: {
+        sessions: {
+          async create(params) {
+            receivedParams = params;
+            return {
+              id: "cs_test_free",
+              url: "https://checkout.stripe.com/c/pay/cs_test_free",
+            };
+          },
+        },
+      },
+      webhooks: { constructEvent() {} },
+    },
+  });
+
+  await payment.createCheckoutSession({
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash: "c".repeat(64),
+    returnUrl: "https://syntext.ch/bewerbungs-generator/motivation/formular.html",
+  });
+
+  assert.equal(receivedParams.line_items[0].price_data.unit_amount, 0);
+  assert.equal(receivedParams.line_items[0].price_data.currency, "chf");
+  assert.equal(receivedParams.discounts, undefined);
+});
+
+test("Stripe verification accepts no-cost sessions only when a checkout coupon is configured", async () => {
+  function makePayment({ checkoutCouponId = "", freeCheckout = false } = {}) {
+    return createPaymentService({
+      config: {
+        secretKey: "sk_test_123",
+        webhookSecret: "whsec_123",
+        priceId: "",
+        currency: "chf",
+        priceCents: 990,
+        productName: "VitaGen PDF Download",
+        baseUrl: "https://syntext.ch/bewerbungs-generator",
+        invoiceCreation: true,
+        stripeApiVersion: "2026-05-27.dahlia",
+        checkoutCouponId,
+        freeCheckout,
+      },
+      stripeClient: {
+        checkout: {
+          sessions: {
+            async retrieve() {
+              return {
+                id: "cs_test_free",
+                payment_status: "paid",
+                currency: "chf",
+                amount_total: 0,
+                metadata: {
+                  document_type: "motivation",
+                  style_name: "swiss-line.css",
+                  document_hash: "b".repeat(64),
+                },
+              };
+            },
+          },
+        },
+        webhooks: { constructEvent() {} },
+      },
+    });
+  }
+
+  await assert.rejects(
+    () =>
+      makePayment().verifyPaidSession({
+        sessionId: "cs_test_free",
+        documentType: "motivation",
+        styleName: "swiss-line.css",
+        documentHash: "b".repeat(64),
+      }),
+    /Payment amount mismatch/
+  );
+
+  const verification = await makePayment({ checkoutCouponId: "coupon_free_test" }).verifyPaidSession({
+    sessionId: "cs_test_free",
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash: "b".repeat(64),
+  });
+
+  assert.equal(verification.paymentStatus, "paid");
+  assert.equal(verification.filename, "Bewerbung.pdf");
+
+  const freeVerification = await makePayment({ freeCheckout: true }).verifyPaidSession({
+    sessionId: "cs_test_free",
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash: "b".repeat(64),
+  });
+
+  assert.equal(freeVerification.paymentStatus, "paid");
 });
 
 test("clean PDF generation requires a paid matching checkout session", async () => {

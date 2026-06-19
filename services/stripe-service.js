@@ -22,6 +22,19 @@ function createStripeClient(config) {
 }
 
 function buildLineItem(config) {
+  if (config.freeCheckout) {
+    return {
+      price_data: {
+        currency: config.currency,
+        unit_amount: 0,
+        product_data: {
+          name: config.productName,
+        },
+      },
+      quantity: 1,
+    };
+  }
+
   if (config.priceId) {
     return {
       price: config.priceId,
@@ -94,6 +107,21 @@ function sanitizeSessionId(value) {
 }
 
 function createPaymentService({ stripeClient, config, logger = console }) {
+  function isAllowedAmountTotal(amountTotal) {
+    if (!Number.isInteger(amountTotal)) {
+      return true;
+    }
+
+    if (amountTotal === config.priceCents) {
+      return true;
+    }
+
+    return (
+      (Boolean(config.checkoutCouponId) || Boolean(config.freeCheckout)) &&
+      amountTotal === 0
+    );
+  }
+
   async function createCheckoutSession(input = {}) {
     const documentType = normalizeDocumentType(input.documentType);
     const styleName = normalizeStyleName(input.styleName);
@@ -136,6 +164,10 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       params.invoice_creation = { enabled: true };
     }
 
+    if (config.checkoutCouponId) {
+      params.discounts = [{ coupon: config.checkoutCouponId }];
+    }
+
     const idempotencyKey = [
       "vitagen-checkout",
       documentType,
@@ -143,6 +175,8 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       documentHash,
       returnUrl,
       customerEmail || "no-email",
+      config.checkoutCouponId || "no-coupon",
+      config.freeCheckout ? "free-checkout" : "paid-checkout",
     ].join(":");
 
     const session = await stripeClient.checkout.sessions.create(params, {
@@ -179,7 +213,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
 
     if (
       Number.isInteger(session.amount_total) &&
-      session.amount_total !== config.priceCents
+      !isAllowedAmountTotal(session.amount_total)
     ) {
       throw createPaymentError(403, "PAYMENT_AMOUNT_MISMATCH", "Payment amount mismatch.");
     }

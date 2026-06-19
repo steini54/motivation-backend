@@ -48,7 +48,21 @@ test("payment config defaults to VitaGen one-time CHF checkout", () => {
   assert.equal(config.priceCents, 990);
   assert.equal(config.productName, "VitaGen PDF Download");
   assert.equal(config.invoiceCreation, true);
+  assert.equal(config.checkoutCouponId, "");
+  assert.equal(config.freeCheckout, false);
   assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), []);
+});
+
+test("payment config supports an optional server-side checkout coupon", () => {
+  const config = getPaymentConfig({
+    STRIPE_SECRET_KEY: "rk_live_123",
+    STRIPE_CHECKOUT_COUPON_ID: "coupon_free_test",
+    VITAGEN_FREE_CHECKOUT: "true",
+  });
+
+  assert.equal(config.checkoutCouponId, "coupon_free_test");
+  assert.equal(config.freeCheckout, true);
+  assert.deepEqual(validatePaymentConfig(config), []);
 });
 
 test("payment config rejects missing or unsafe Stripe settings", () => {
@@ -58,12 +72,14 @@ test("payment config rejects missing or unsafe Stripe settings", () => {
     VITAGEN_CURRENCY: "swiss-franc",
     VITAGEN_PRICE_CENTS: "-1",
     VITAGEN_BASE_URL: "not-a-url",
+    STRIPE_CHECKOUT_COUPON_ID: "coupon with space",
   });
 
   assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), [
     "STRIPE_SECRET_KEY must be a Stripe secret or restricted key",
     "STRIPE_WEBHOOK_SECRET must start with whsec_",
     "VITAGEN_CURRENCY must be a three-letter currency code",
+    "STRIPE_CHECKOUT_COUPON_ID must not contain whitespace",
     "VITAGEN_BASE_URL must be a valid URL",
   ]);
 });

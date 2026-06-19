@@ -33,6 +33,8 @@ function getPaymentConfig(env = process.env) {
     baseUrl: normalizeBaseUrl(env.VITAGEN_BASE_URL),
     invoiceCreation: parseBoolean(env.STRIPE_INVOICE_CREATION, true),
     stripeApiVersion: env.STRIPE_API_VERSION || STRIPE_API_VERSION,
+    checkoutCouponId: (env.STRIPE_CHECKOUT_COUPON_ID || "").trim(),
+    freeCheckout: parseBoolean(env.VITAGEN_FREE_CHECKOUT, false),
   };
 }
 
@@ -65,6 +67,10 @@ function validatePaymentConfig(config, { requireWebhook = false } = {}) {
 
   if (!Number.isInteger(config.priceCents) || config.priceCents <= 0) {
     errors.push("VITAGEN_PRICE_CENTS must be a positive integer");
+  }
+
+  if (config.checkoutCouponId && /\s/.test(config.checkoutCouponId)) {
+    errors.push("STRIPE_CHECKOUT_COUPON_ID must not contain whitespace");
   }
 
   try {
