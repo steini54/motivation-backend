@@ -109,9 +109,18 @@ test("shared payment script is served from the canonical VitaGen path", async ()
 });
 
 test("generate-text preserves the frontend response contract", async () => {
+  let textInput;
+  const textService = {
+    ...service,
+    async generateApplicationText(input) {
+      textInput = input;
+      return service.generateApplicationText(input);
+    },
+  };
+
   await withServer(
     createApp({
-      aiService: service,
+      aiService: textService,
       aiProvider: "openai",
       env: {},
       logger: { error() {} },
@@ -123,12 +132,28 @@ test("generate-text preserves the frontend response contract", async () => {
         body: JSON.stringify({
           stichpunkte: "Teamarbeit",
           funktion: "Projektleiter",
+          textLength: "long",
+          name: "Max Muster",
+          arbeitgeber: "Musterfirma AG",
+          greeting: "Sehr geehrte Damen und Herren",
+          closing: "Gerne ueberzeuge ich Sie im Gespraech.",
         }),
       });
 
       assert.equal(response.status, 200);
       assert.deepEqual(await response.json(), {
         text: "Generierter Bewerbungstext.",
+      });
+      assert.deepEqual(textInput, {
+        stichpunkte: "Teamarbeit",
+        funktion: "Projektleiter",
+        textLength: "long",
+        name: "Max Muster",
+        adresse: "",
+        posten: "",
+        arbeitgeber: "Musterfirma AG",
+        greeting: "Sehr geehrte Damen und Herren",
+        closing: "Gerne ueberzeuge ich Sie im Gespraech.",
       });
     }
   );

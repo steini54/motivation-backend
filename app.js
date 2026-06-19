@@ -88,6 +88,10 @@ function normalizeTextField(value, maxLength) {
   return value.trim().slice(0, maxLength);
 }
 
+function normalizeTextLength(value) {
+  return ["short", "standard", "long"].includes(value) ? value : "standard";
+}
+
 function classifyAiError(error) {
   const status = Number(error?.status);
 
@@ -451,6 +455,7 @@ function createApp({
 
     const stichpunkte = normalizeTextField(req.body?.stichpunkte, 4000);
     const funktion = normalizeTextField(req.body?.funktion, 300);
+    const textLength = normalizeTextLength(req.body?.textLength);
 
     if (!stichpunkte || !funktion) {
       res.status(400).json({ error: "Missing data for text generation" });
@@ -461,6 +466,13 @@ function createApp({
       const text = await service.generateApplicationText({
         stichpunkte,
         funktion,
+        textLength,
+        name: normalizeTextField(req.body?.name, 200),
+        adresse: normalizeTextField(req.body?.adresse, 600),
+        posten: normalizeTextField(req.body?.posten, 300),
+        arbeitgeber: normalizeTextField(req.body?.arbeitgeber, 1000),
+        greeting: normalizeTextField(req.body?.greeting, 600),
+        closing: normalizeTextField(req.body?.closing, 800),
       });
       res.json({ text });
     } catch (error) {
@@ -539,5 +551,6 @@ module.exports = {
   createApp,
   createCorsOptions,
   normalizeTextField,
+  normalizeTextLength,
   classifyAiError,
 };

@@ -71,6 +71,10 @@ const UI_TRANSLATIONS = {
     "Warm": "Warm",
     "Selbstbewusst": "Selbstbewusst",
     "Kurz & klar": "Kurz & klar",
+    "Textumfang": "Textumfang",
+    "Kurz": "Kurz",
+    "Standard": "Standard",
+    "Ausfuehrlich": "Ausfuehrlich",
     "Motivationstext": "Motivationstext",
     "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.": "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.",
     "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...": "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...",
@@ -232,6 +236,10 @@ const UI_TRANSLATIONS = {
     "Warm": "Warm",
     "Selbstbewusst": "Confident",
     "Kurz & klar": "Short & clear",
+    "Textumfang": "Text length",
+    "Kurz": "Short",
+    "Standard": "Standard",
+    "Ausfuehrlich": "Detailed",
     "Motivationstext": "Motivation text",
     "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.": "Enter notes or revise an existing text.",
     "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...": "Experience, motivation, relevant strengths, concrete examples...",
@@ -523,6 +531,7 @@ function getCurrentFormData() {
     stichwoerter: document.getElementById("stichwoerter")?.value || stored.stichwoerter || "",
     stichwoerter2: document.getElementById("stichwoerter2")?.value || stored.stichwoerter2 || "",
     stichwoerter3: document.getElementById("stichwoerter3")?.value || stored.stichwoerter3 || "",
+    motivationTextLength: document.getElementById("motivationTextLength")?.value || stored.motivationTextLength || "standard",
     datum: document.getElementById("datum")?.value || stored.datum || "",
     unterschrift: document.getElementById("unterschrift")?.value || stored.unterschrift || ""
   };
@@ -561,9 +570,11 @@ function syncLivePreview({ pulse = true } = {}) {
   document.getElementById("pv-datum").textContent = data.datum || `Zuerich, ${today}`;
   document.getElementById("pv-funktion").textContent = t("Bewerbung als {role}", { role });
   document.getElementById("pv-stichwoerter").textContent = data.stichwoerter || t("Sehr geehrte Damen und Herren");
-  document.getElementById("pv-stichwoerter2").textContent =
-    data.stichwoerter2 ||
-    t("Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.");
+  setTextWithBreaks(
+    document.getElementById("pv-stichwoerter2"),
+    data.stichwoerter2,
+    t("Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.")
+  );
   document.getElementById("pv-stichwoerter3").textContent =
     data.stichwoerter3 || t("Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.");
   document.getElementById("pv-unterschrift").textContent = data.unterschrift || data.name || t("Max Mustermann");
@@ -682,6 +693,7 @@ function installLivePreview() {
     "stichwoerter",
     "stichwoerter2",
     "stichwoerter3",
+    "motivationTextLength",
     "datum",
     "unterschrift"
   ];
@@ -799,6 +811,7 @@ function saveAllFields() {
   data.stichwoerter = document.getElementById("stichwoerter")?.value || "";
   data.stichwoerter2 = document.getElementById("stichwoerter2")?.value || "";
   data.stichwoerter3 = document.getElementById("stichwoerter3")?.value || "";
+  data.motivationTextLength = document.getElementById("motivationTextLength")?.value || "standard";
   data.datum = document.getElementById("datum")?.value || "";
   data.unterschrift = document.getElementById("unterschrift")?.value || "";
   delete data.foto;
@@ -948,6 +961,7 @@ window.addEventListener("DOMContentLoaded", () => {
     "stichwoerter",
     "stichwoerter2",
     "stichwoerter3",
+    "motivationTextLength",
     "datum",
     "unterschrift"
   ];
@@ -1083,8 +1097,9 @@ const textBtn = document.getElementById("generateTextBtn");
 
 if (textBtn) {
   textBtn.addEventListener("click", async function () {
-    const stichpunkte = document.getElementById("stichwoerter2")?.value.trim();
-    const funktion = document.getElementById("funktion")?.value.trim();
+    const data = getCurrentFormData();
+    const stichpunkte = data.stichwoerter2.trim();
+    const funktion = data.funktion.trim();
 
     if (!stichpunkte) {
       showToast("Bitte Stichwoerter oder einen bestehenden Motivationstext eingeben.", "warning", "Text fehlt");
@@ -1104,7 +1119,17 @@ if (textBtn) {
       const response = await fetch(`${AI_API_BASE_URL}/generate-text`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ stichpunkte, funktion })
+        body: JSON.stringify({
+          stichpunkte,
+          funktion,
+          textLength: data.motivationTextLength || "standard",
+          name: data.name,
+          adresse: data.adresse,
+          posten: data.posten,
+          arbeitgeber: data.arbeitgeber,
+          greeting: data.stichwoerter,
+          closing: data.stichwoerter3,
+        })
       });
 
       if (!response.ok) {

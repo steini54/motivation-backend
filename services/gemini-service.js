@@ -64,6 +64,18 @@ function parseQualityAssessment(response) {
   return parseQualityJson(extractText(response), "Gemini");
 }
 
+function getTextMaxOutputTokens(textLength) {
+  if (textLength === "long") {
+    return 1100;
+  }
+
+  if (textLength === "short") {
+    return 450;
+  }
+
+  return 800;
+}
+
 function createGeminiService({
   client,
   config,
@@ -86,7 +98,7 @@ function createGeminiService({
             contents: buildTextPrompt(input),
             config: {
               temperature: 0.5,
-              maxOutputTokens: 600,
+              maxOutputTokens: getTextMaxOutputTokens(input?.textLength),
               thinkingConfig: {
                 thinkingBudget: 0,
               },
@@ -232,6 +244,7 @@ module.exports = {
   extractText,
   extractImage,
   createEmptyResponseError,
+  getTextMaxOutputTokens,
   parseQualityAssessment,
   isQualityAccepted,
   createGeminiService,

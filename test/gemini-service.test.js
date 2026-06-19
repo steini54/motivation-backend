@@ -4,6 +4,7 @@ const assert = require("node:assert/strict");
 const {
   createGeminiService,
   buildTextPrompt,
+  getTextMaxOutputTokens,
   isQualityAccepted,
 } = require("../services/gemini-service");
 
@@ -65,11 +66,15 @@ test("generateApplicationText calls Gemini 2.5 Flash and returns text", async ()
   const text = await service.generateApplicationText({
     stichpunkte: "Zuverlaessig, fuenf Jahre Erfahrung",
     funktion: "Projektleiter",
+    textLength: "long",
+    arbeitgeber: "Musterfirma AG",
   });
 
   assert.equal(text, "Ein professioneller Motivationstext.");
   assert.equal(request.model, "gemini-2.5-flash");
   assert.match(request.contents, /Projektleiter/);
+  assert.match(request.contents, /Musterfirma AG/);
+  assert.equal(request.config.maxOutputTokens, 1100);
   assert.equal(request.config.thinkingConfig.thinkingBudget, 0);
 });
 
@@ -139,10 +144,33 @@ test("buildTextPrompt constrains unsupported personal facts", () => {
   const prompt = buildTextPrompt({
     stichpunkte: "Teamarbeit",
     funktion: "Sachbearbeiter",
+    textLength: "short",
   });
 
   assert.match(prompt, /Do not invent qualifications/);
-  assert.match(prompt, /5 to 7 complete sentences/);
+  assert.match(prompt, /European motivation-letter standards/);
+  assert.match(prompt, /Target language:\nGerman/);
+  assert.match(prompt, /4 to 5 concise sentences/);
+});
+
+test("buildTextPrompt follows English input language and detailed length", () => {
+  const prompt = buildTextPrompt({
+    stichpunkte: "I have five years of customer success experience and enjoy improving onboarding.",
+    funktion: "Customer Success Manager",
+    textLength: "long",
+    arbeitgeber: "Example Ltd",
+  });
+
+  assert.match(prompt, /Target language:\nEnglish/);
+  assert.match(prompt, /9 to 11 complete sentences/);
+  assert.match(prompt, /Example Ltd/);
+});
+
+test("text output token budget follows requested length", () => {
+  assert.equal(getTextMaxOutputTokens("short"), 450);
+  assert.equal(getTextMaxOutputTokens("standard"), 800);
+  assert.equal(getTextMaxOutputTokens("long"), 1100);
+  assert.equal(getTextMaxOutputTokens("unexpected"), 800);
 });
 
 test("editApplicationPhoto rejects candidates that fail identity checks", async () => {

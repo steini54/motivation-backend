@@ -101,23 +101,125 @@ pose, background, and crop may have been reconstructed.
 Return only the requested JSON assessment.
 `.trim();
 
-function buildTextPrompt({ stichpunkte, funktion }) {
+const TEXT_LENGTH_GUIDES = {
+  short: {
+    label: "Short",
+    instruction:
+      "Write 4 to 5 concise sentences, about 110 to 150 words, in one paragraph.",
+  },
+  standard: {
+    label: "Standard",
+    instruction:
+      "Write 6 to 8 complete sentences, about 170 to 240 words, in one or two short paragraphs.",
+  },
+  long: {
+    label: "Detailed",
+    instruction:
+      "Write 9 to 11 complete sentences, about 280 to 360 words, in two well-structured paragraphs.",
+  },
+};
+
+function normalizeTextLength(textLength) {
+  return Object.hasOwn(TEXT_LENGTH_GUIDES, textLength) ? textLength : "standard";
+}
+
+function countPatternMatches(text, patterns) {
+  return patterns.reduce((count, pattern) => {
+    return count + (text.match(pattern) || []).length;
+  }, 0);
+}
+
+function detectTextLanguage(input = {}) {
+  const source = [
+    input.stichpunkte,
+    input.funktion,
+    input.posten,
+    input.arbeitgeber,
+    input.greeting,
+    input.closing,
+  ]
+    .filter(Boolean)
+    .join(" ")
+    .toLowerCase();
+
+  const germanScore =
+    countPatternMatches(source, [
+      /\b(ich|mich|mein|meine|meinen|mit|fuer|fur|und|der|die|das|als|bei|sehr|geehrte|herren|damen|erfahrung|staerken|starken|bewerbung|motivation|team|unternehmen)\b/g,
+      /[\u00e4\u00f6\u00fc\u00df]/g,
+    ]) + (/\b(deutsch|german|de)\b/.test(source) ? 2 : 0);
+
+  const englishScore =
+    countPatternMatches(source, [
+      /\b(i|my|me|with|for|and|the|as|at|dear|experience|strengths|skills|application|motivation|team|company|organisation|organization|role|position)\b/g,
+    ]) + (/\b(english|englisch|en)\b/.test(source) ? 2 : 0);
+
+  return englishScore > germanScore ? "English" : "German";
+}
+
+function formatPromptField(label, value) {
+  if (!value) {
+    return null;
+  }
+
+  return `${label}: ${value}`;
+}
+
+function buildTextPrompt(input = {}) {
+  const {
+    stichpunkte,
+    funktion,
+    name,
+    posten,
+    arbeitgeber,
+    adresse,
+    greeting,
+    closing,
+  } = input;
+  const textLength = normalizeTextLength(input.textLength);
+  const lengthGuide = TEXT_LENGTH_GUIDES[textLength];
+  const targetLanguage = detectTextLanguage(input);
+  const context = [
+    formatPromptField("Applicant name", name),
+    formatPromptField("Target role for the motivation text", funktion),
+    formatPromptField("Role / subject-line wording", posten),
+    formatPromptField("Employer or recipient details", arbeitgeber),
+    formatPromptField("Applicant address or location clues", adresse),
+    formatPromptField("Existing greeting", greeting),
+    formatPromptField("Existing closing text", closing),
+    formatPromptField("User notes or draft to rewrite", stichpunkte),
+  ]
+    .filter(Boolean)
+    .join("\n");
+
   return `
-You are an expert German application writer.
+System role:
+You are a senior European application-writing coach for motivation letters and cover letters.
 
-Write one polished motivation paragraph in German for the following role:
-${funktion}
+Task:
+Write the main motivation body text for a job application. The result must feel specific to the form context, not like a random generic paragraph.
 
-Use only the information in these notes:
-${stichpunkte}
+Target language:
+${targetLanguage}. Use the language of the user's own notes or draft. If the source is mixed, prioritize the motivation notes and role text. Do not switch languages mid-text.
 
-Requirements:
-- Write exactly 5 to 7 complete sentences as one flowing paragraph.
-- Use a professional, clear, credible, and convincing tone.
-- Do not use headings, bullet points, placeholders, greetings, or a closing.
-- Do not invent qualifications, employers, dates, or personal facts.
-- Avoid generic filler and repetition.
-- Return only the finished German paragraph.
+Length:
+${lengthGuide.label}. ${lengthGuide.instruction}
+
+Application context:
+${context}
+
+European motivation-letter standards:
+- Connect the applicant's motivation, relevant experience, strengths, and concrete examples to the target role and employer.
+- Use a formal, credible tone common in Germany, Switzerland, Austria, and broader European applications.
+- Prefer precise, evidence-based wording over hype, slogans, exaggerated passion, or empty claims.
+- Make the text readable for recruiters: clear opening fit, relevant proof, value for the employer, and a confident forward-looking final sentence.
+- In German, use formal "Sie/Ihr" when addressing the employer. In English, use polished professional English suitable for European applications.
+- If the employer details are sparse, stay role-focused and do not invent company facts.
+
+Hard rules:
+- Use only the provided context. Do not invent qualifications, employers, dates, languages, degrees, metrics, or personal facts.
+- Preserve any specific facts from the user's notes, but rewrite them into fluent professional prose.
+- Do not include headings, bullet points, markdown, placeholders, greeting, closing, signature, or subject line.
+- Return only the finished motivation body text as plain text. Paragraph breaks are allowed for standard and detailed length.
 `.trim();
 }
 
