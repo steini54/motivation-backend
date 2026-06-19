@@ -635,39 +635,59 @@ function pulseLivePreview() {
   window.setTimeout(() => card.classList.remove("is-updating"), 720);
 }
 
+function getSelectedStyle() {
+  return normalizeDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || document.getElementById("preview")?.dataset.style || DEFAULT_STYLE);
+}
+
+function fitPreviewFrame() {
+  const frame = document.getElementById("preview-wrapper");
+  const preview = document.getElementById("preview");
+  const firstPage = preview?.querySelector(".document-page");
+  if (!frame || !preview || !firstPage) return;
+
+  preview.style.transform = "none";
+  const availableWidth = frame.clientWidth;
+  const scale = Math.min(1, availableWidth / firstPage.offsetWidth);
+  preview.style.transform = `scale(${scale})`;
+  frame.style.height = `${Math.ceil(firstPage.offsetHeight * scale)}px`;
+}
+
+function updateDocumentWarnings(result) {
+  const frame = document.getElementById("preview-wrapper");
+  if (!frame) return;
+
+  let warning = document.getElementById("documentRenderWarning");
+  if (!result?.warnings?.length) {
+    warning?.remove();
+    return;
+  }
+
+  if (!warning) {
+    warning = document.createElement("p");
+    warning.id = "documentRenderWarning";
+    warning.className = "document-render-warning";
+    frame.insertAdjacentElement("afterend", warning);
+  }
+  warning.textContent = result.warnings[0];
+}
+
 function syncLivePreview({ pulse = true } = {}) {
+  const preview = document.getElementById("preview");
+  if (!preview || !window.VitaGenDocumentRenderer) return;
   const data = getCurrentFormData();
-  const role = data.posten || data.funktion || t("Kaufmaennischer Mitarbeiter");
-  const today = new Date().toLocaleDateString("de-CH");
+  const result = window.VitaGenDocumentRenderer.renderInto(preview, {
+    type: "motivation",
+    data,
+    styleName: getSelectedStyle(),
+    language: currentLanguage,
+    watermark: true,
+  });
+  window.VitaGenLastRenderResult = result;
+  updateDocumentWarnings(result);
+  fitPreviewFrame();
 
-  document.getElementById("pv-name").textContent = data.name || t("Max Mustermann");
-  document.getElementById("pv-kontakt").textContent = role.toUpperCase();
-  setTextWithBreaks(
-    document.getElementById("pv-arbeitgeber"),
-    data.arbeitgeber,
-    `${t("Musterfirma AG")}\n${t("Personalabteilung")}\n${t("Limmatquai 10")}\n${t("8001 Zuerich")}`
-  );
-  document.getElementById("pv-datum").textContent = data.datum || `Zuerich, ${today}`;
-  document.getElementById("pv-funktion").textContent = t("Bewerbung als {role}", { role });
-  document.getElementById("pv-stichwoerter").textContent = data.stichwoerter || t("Sehr geehrte Damen und Herren");
-  setTextWithBreaks(
-    document.getElementById("pv-stichwoerter2"),
-    data.stichwoerter2,
-    t("Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.")
-  );
-  document.getElementById("pv-stichwoerter3").textContent =
-    data.stichwoerter3 || t("Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.");
-  document.getElementById("pv-unterschrift").textContent = data.unterschrift || data.name || t("Max Mustermann");
-
-  const previewPhoto = document.getElementById("pv-foto");
-  if (previewPhoto) {
-    if (data.foto) {
-      previewPhoto.src = data.foto;
-      previewPhoto.style.display = "block";
-    } else {
-      previewPhoto.removeAttribute("src");
-      previewPhoto.style.display = "none";
-    }
+  if (document.getElementById("previewModal")?.classList.contains("open")) {
+    refreshModalPreview();
   }
 
   if (pulse) {
@@ -696,10 +716,7 @@ function applyDocumentStyle(styleName = DEFAULT_STYLE) {
   document.querySelectorAll(".style-chip").forEach(button => {
     button.classList.toggle("active", button.dataset.style === normalized);
   });
-  if (document.getElementById("previewModal")?.classList.contains("open")) {
-    refreshModalPreview();
-  }
-  pulseLivePreview();
+  syncLivePreview();
 }
 
 function refreshModalPreview() {
@@ -709,6 +726,8 @@ function refreshModalPreview() {
 
   const clone = preview.cloneNode(true);
   clone.id = "preview-modal-doc";
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top center";
   host.innerHTML = "";
   host.appendChild(clone);
 }
@@ -1062,6 +1081,7 @@ window.addEventListener("DOMContentLoaded", () => {
   applyDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
   installLivePreview();
   syncLivePreview({ pulse: false });
+  window.addEventListener("resize", fitPreviewFrame);
   setPhotoReady(
     restoreSelectedPhoto().finally(() => {
       syncLivePreview({ pulse: false });

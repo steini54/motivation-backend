@@ -8,8 +8,6 @@
   const filename = script?.dataset.filename || "VitaGen.pdf";
   const A4_WIDTH_MM = 210;
   const A4_HEIGHT_MM = 297;
-  const EXPORT_WIDTH_PX = documentType === "lebenslauf" ? 640 : 620;
-  const EXPORT_HEIGHT_PX = Math.round(EXPORT_WIDTH_PX * (A4_HEIGHT_MM / A4_WIDTH_MM));
   const TARGET_CANVAS_WIDTH_PX = 2480;
   const MIN_CANVAS_SCALE = 3;
   const MAX_CANVAS_SCALE = 5;
@@ -365,33 +363,6 @@
     );
   }
 
-  function getVisibleChildren(element) {
-    return Array.from(element.children).filter((child) => {
-      const styles = window.getComputedStyle(child);
-      return styles.display !== "none" && styles.visibility !== "hidden";
-    });
-  }
-
-  function getExportHeightPx(pageElement, pageHeightPx) {
-    if (pageElement.classList.contains("cover")) {
-      return pageHeightPx;
-    }
-
-    const pageRect = pageElement.getBoundingClientRect();
-    const styles = window.getComputedStyle(pageElement);
-    const paddingBottom = Number.parseFloat(styles.paddingBottom) || 0;
-    const contentBottom = getVisibleChildren(pageElement).reduce((bottom, child) => {
-      const childRect = child.getBoundingClientRect();
-      return Math.max(bottom, childRect.bottom - pageRect.top);
-    }, 0);
-
-    return Math.ceil(Math.max(pageHeightPx, contentBottom + paddingBottom));
-  }
-
-  function getTrailingSliceTolerancePx(canvasWidth) {
-    return Math.ceil(canvasWidth * (3 / A4_WIDTH_MM));
-  }
-
   function getCanvasScale(pageWidthPx) {
     return Math.min(
       MAX_CANVAS_SCALE,
@@ -399,15 +370,15 @@
     );
   }
 
-  function createPdfExportPreview(sourcePreview, pageSelector) {
+  function createPdfExportPreview(sourcePreview) {
     const host = document.createElement("div");
-    host.className = "vitagen-pdf-export-host modal-preview-host";
+    host.className = "vitagen-pdf-export-host";
     Object.assign(host.style, {
       position: "fixed",
       left: "-10000px",
       top: "0",
-      width: `${EXPORT_WIDTH_PX}px`,
-      minHeight: `${EXPORT_HEIGHT_PX}px`,
+      width: `${A4_WIDTH_MM}mm`,
+      minHeight: `${A4_HEIGHT_MM}mm`,
       overflow: "visible",
       background: "#ffffff",
       pointerEvents: "none",
@@ -418,9 +389,8 @@
     preview.id = "preview-pdf-export";
     preview.classList.add("pdf-export-preview");
     Object.assign(preview.style, {
-      width: `${EXPORT_WIDTH_PX}px`,
+      width: `${A4_WIDTH_MM}mm`,
       maxWidth: "none",
-      aspectRatio: `${A4_WIDTH_MM} / ${A4_HEIGHT_MM}`,
       overflow: "visible",
       boxShadow: "none",
       border: "0",
@@ -428,7 +398,7 @@
       transform: "none",
     });
 
-    preview.querySelectorAll(".watermark").forEach((element) => {
+    preview.querySelectorAll(".document-watermark, .watermark").forEach((element) => {
       element.remove();
     });
     preview.querySelectorAll(".page-break").forEach((element) => {
@@ -440,11 +410,13 @@
     host.appendChild(preview);
     document.body.appendChild(host);
 
-    const pageElements = Array.from(preview.querySelectorAll(pageSelector));
+    const pageElements = Array.from(preview.querySelectorAll(".document-page"));
     pageElements.forEach((element) => {
       Object.assign(element.style, {
-        width: `${EXPORT_WIDTH_PX}px`,
-        minHeight: `${EXPORT_HEIGHT_PX}px`,
+        width: `${A4_WIDTH_MM}mm`,
+        height: `${A4_HEIGHT_MM}mm`,
+        minHeight: `${A4_HEIGHT_MM}mm`,
+        overflow: "hidden",
         boxShadow: "none",
         borderRadius: "0",
       });
@@ -468,8 +440,7 @@
     await waitForDocumentFonts();
     await waitForPreviewImages(preview);
 
-    const pageSelector = documentType === "lebenslauf" ? ".cv" : ".anschreiben";
-    const exportPreview = createPdfExportPreview(preview, pageSelector);
+    const exportPreview = createPdfExportPreview(preview);
 
     try {
       if (exportPreview.pageElements.length === 0) {
@@ -490,71 +461,27 @@
 
       for (const pageElement of exportPreview.pageElements) {
         const pageRect = pageElement.getBoundingClientRect();
-        const pageHeightPx = Math.round(pageRect.width * (A4_HEIGHT_MM / A4_WIDTH_MM));
-        const exportHeightPx = getExportHeightPx(pageElement, pageHeightPx);
         const canvasScale = getCanvasScale(pageRect.width);
         const canvas = await window.html2canvas(pageElement, {
           scale: canvasScale,
           width: Math.ceil(pageRect.width),
-          height: exportHeightPx,
+          height: Math.ceil(pageRect.height),
           useCORS: true,
           allowTaint: false,
           backgroundColor: "#ffffff",
           scrollX: 0,
           scrollY: 0,
           windowWidth: Math.ceil(pageRect.width),
-          windowHeight: exportHeightPx,
+          windowHeight: Math.ceil(pageRect.height),
         });
-        const sliceHeight = Math.floor(canvas.width * (pdfPageHeight / pdfPageWidth));
-        const trailingTolerancePx = getTrailingSliceTolerancePx(canvas.width);
-        let offsetY = 0;
 
-        while (offsetY < canvas.height) {
-          const remainingHeight = canvas.height - offsetY;
-          if (remainingHeight < trailingTolerancePx) {
-            break;
-          }
-
-          const currentSliceHeight =
-            canvas.height <= sliceHeight + trailingTolerancePx
-              ? canvas.height
-              : Math.min(sliceHeight, remainingHeight);
-          const pageCanvas = document.createElement("canvas");
-          pageCanvas.width = canvas.width;
-          pageCanvas.height = currentSliceHeight;
-          const context = pageCanvas.getContext("2d");
-
-          context.fillStyle = "#ffffff";
-          context.fillRect(0, 0, pageCanvas.width, pageCanvas.height);
-          context.drawImage(
-            canvas,
-            0,
-            offsetY,
-            canvas.width,
-            currentSliceHeight,
-            0,
-            0,
-            canvas.width,
-            currentSliceHeight
-          );
-
-          if (!isFirstPage) {
-            pdf.addPage();
-          }
-
-          const imageData = pageCanvas.toDataURL("image/png");
-          const imageHeightMm =
-            canvas.height <= sliceHeight + trailingTolerancePx
-              ? pdfPageHeight
-              : (currentSliceHeight * pdfPageWidth) / canvas.width;
-          pdf.addImage(imageData, "PNG", 0, 0, pdfPageWidth, imageHeightMm);
-          isFirstPage = false;
-
-          if (canvas.height <= sliceHeight + trailingTolerancePx) {
-            break;
-          }
-          offsetY += currentSliceHeight;
+        if (!isFirstPage) {
+          pdf.addPage("a4", "portrait");
         }
+
+        const imageData = canvas.toDataURL("image/png");
+        pdf.addImage(imageData, "PNG", 0, 0, pdfPageWidth, pdfPageHeight);
+        isFirstPage = false;
       }
 
       pdf.save(filename);

@@ -778,10 +778,7 @@ function applyDocumentStyle(styleName = DEFAULT_STYLE) {
     button.setAttribute("aria-pressed", String(active));
   });
 
-  if (document.getElementById("previewModal")?.classList.contains("open")) {
-    refreshModalPreview();
-  }
-  pulseLivePreview();
+  syncLivePreview();
 }
 
 function pulseLivePreview() {
@@ -791,6 +788,42 @@ function pulseLivePreview() {
   void card.offsetWidth;
   card.classList.add("is-updating");
   window.setTimeout(() => card.classList.remove("is-updating"), 720);
+}
+
+function getSelectedStyle() {
+  return normalizeDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || document.getElementById("preview")?.dataset.style || DEFAULT_STYLE);
+}
+
+function fitPreviewFrame() {
+  const frame = document.getElementById("preview-wrapper");
+  const preview = document.getElementById("preview");
+  const firstPage = preview?.querySelector(".document-page");
+  if (!frame || !preview || !firstPage) return;
+
+  preview.style.transform = "none";
+  const availableWidth = frame.clientWidth;
+  const scale = Math.min(1, availableWidth / firstPage.offsetWidth);
+  preview.style.transform = `scale(${scale})`;
+  frame.style.height = `${Math.ceil(firstPage.offsetHeight * scale)}px`;
+}
+
+function updateDocumentWarnings(result) {
+  const frame = document.getElementById("preview-wrapper");
+  if (!frame) return;
+
+  let warning = document.getElementById("documentRenderWarning");
+  if (!result?.warnings?.length) {
+    warning?.remove();
+    return;
+  }
+
+  if (!warning) {
+    warning = document.createElement("p");
+    warning.id = "documentRenderWarning";
+    warning.className = "document-render-warning";
+    frame.insertAdjacentElement("afterend", warning);
+  }
+  warning.textContent = result.warnings[0];
 }
 
 function renderTimeline(containerId, entries, formatter, emptyText) {
@@ -847,62 +880,23 @@ function renderPills(containerId, entries, key, emptyItems) {
 }
 
 function syncLivePreview({ pulse = true } = {}) {
+  const preview = document.getElementById("preview");
+  if (!preview || !window.VitaGenDocumentRenderer) return;
   const data = saveFormData();
-  setTextWithBreaks(document.getElementById("pv-name"), data.name, t("Max Muster"));
-  setTextWithBreaks(document.getElementById("pv-headline"), data.headline, t("Kaufmaennischer Mitarbeiter"));
-  setTextWithBreaks(document.getElementById("pv-kontakt"), data.kontakt, "max@example.com\n+41 79 123 45 67");
-  setTextWithBreaks(document.getElementById("pv-adresse"), data.adresse, `${t("Bahnhofstrasse 12")}\n${t("8001 Zuerich")}`);
-  setTextWithBreaks(
-    document.getElementById("pv-profil"),
-    data.profil,
-    t("Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.")
-  );
-  setTextWithBreaks(document.getElementById("pv-datum"), data.datum, t("Zuerich, 18.06.2026"));
-  setTextWithBreaks(document.getElementById("pv-unterschrift"), data.unterschrift || data.name, t("Max Muster"));
+  const result = window.VitaGenDocumentRenderer.renderInto(preview, {
+    type: "cv",
+    data,
+    styleName: getSelectedStyle(),
+    language: currentLanguage,
+    watermark: true,
+  });
+  window.VitaGenLastRenderResult = result;
+  updateDocumentWarnings(result);
+  fitPreviewFrame();
 
-  const photo = document.getElementById("pv-foto");
-  if (photo) {
-    if (data.foto) {
-      photo.src = data.foto;
-      photo.style.display = "block";
-    } else {
-      photo.removeAttribute("src");
-      photo.style.display = "none";
-    }
+  if (document.getElementById("previewModal")?.classList.contains("open")) {
+    refreshModalPreview();
   }
-
-  renderTimeline(
-    "pv-beruf",
-    data.beruf,
-    (entry) => ({
-      title: entry["beruf-position"] || translateValue("Position"),
-      meta: [entry["beruf-ort"], [entry["beruf-von"], entry["beruf-bis"]].filter(Boolean).join(" - ")].filter(Boolean).join(" | "),
-      body: entry["beruf-aufgaben"] || entry["beruf-firma"] || "",
-    }),
-    translateValue("Berufserfahrung")
-  );
-  renderTimeline(
-    "pv-schulbildung",
-    data.schulbildung,
-    (entry) => ({
-      title: entry["schule-abschluss"] || entry.schule || translateValue("Schulbildung"),
-      meta: [entry.schule, entry["schule-ort"], [entry["schule-von"], entry["schule-bis"]].filter(Boolean).join(" - ")].filter(Boolean).join(" | "),
-      body: "",
-    }),
-    translateValue("Schulbildung")
-  );
-  renderTimeline(
-    "pv-weiterbildung",
-    data.weiterbildung,
-    (entry) => ({
-      title: entry["weiterbildung-titel"] || translateValue("Weiterbildung"),
-      meta: [entry["weiterbildung-ort"], [entry["weiterbildung-von"], entry["weiterbildung-bis"]].filter(Boolean).join(" - ")].filter(Boolean).join(" | "),
-      body: entry["weiterbildung-inhalt"] || "",
-    }),
-    translateValue("Weiterbildung")
-  );
-  renderPills("pv-kenntnisse", data.kenntnisse, "kenntnisse", ["MS Office", "Organisation", "Kommunikation"]);
-  renderPills("pv-hobbys", data.hobbys, "hobbys", ["Lesen", "Sport"]);
 
   if (pulse) {
     pulseLivePreview();
@@ -916,6 +910,8 @@ function refreshModalPreview() {
   host.innerHTML = "";
   const clone = preview.cloneNode(true);
   clone.id = "preview-modal-doc";
+  clone.style.transform = "none";
+  clone.style.transformOrigin = "top center";
   host.appendChild(clone);
 }
 
@@ -1275,6 +1271,7 @@ window.addEventListener("DOMContentLoaded", () => {
   installFormListeners();
   installPhotoListeners();
   syncLivePreview({ pulse: false });
+  window.addEventListener("resize", fitPreviewFrame);
 
   const sections = document.querySelectorAll(".builder-column > section");
   const navLinks = document.querySelectorAll(".section-rail a");

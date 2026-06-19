@@ -256,7 +256,7 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.doesNotMatch(formHtml, /api-config\.js/);
   assert.match(
     formHtml,
-    /<script src="\/bewerbungs-generator\/motivation\/photo-storage\.js"><\/script>\s*<script src="script\.js"><\/script>/
+    /<script src="\/bewerbungs-generator\/motivation\/photo-storage\.js"><\/script>\s*<script src="\/bewerbungs-generator\/document-renderer\.js"><\/script>\s*<script src="script\.js"><\/script>/
   );
   assert.match(previewHtml, /id="buyBtn"/);
   assert.match(previewHtml, /id="buyModal"/);
@@ -322,9 +322,11 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /createPdfExportPreview/);
   assert.match(paymentScript, /toDataURL\("image\/png"\)/);
   assert.match(paymentScript, /addImage\(imageData, "PNG"/);
-  assert.match(paymentScript, /querySelectorAll\("\.watermark"\)/);
+  assert.match(paymentScript, /querySelectorAll\("\.document-watermark, \.watermark"\)/);
   assert.match(paymentScript, /querySelectorAll\("\.page-break"\)/);
-  assert.match(paymentScript, /pageSelector/);
+  assert.match(paymentScript, /querySelectorAll\("\.document-page"\)/);
+  assert.doesNotMatch(paymentScript, /sliceHeight/);
+  assert.doesNotMatch(paymentScript, /while \(offsetY < canvas\.height\)/);
   assert.match(paymentScript, /returnUrl: getReturnUrl\(\)/);
   assert.match(paymentScript, /createCheckoutAttemptId/);
   assert.match(paymentScript, /checkoutAttemptId/);
@@ -350,6 +352,7 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
 test("frontend payment scripts are valid JavaScript", () => {
   const scripts = [
     path.join(vitagenPath, "shared-navbar.js"),
+    path.join(vitagenPath, "document-renderer.js"),
     path.join(vitagenPath, "payment.js"),
     path.join(vitagenPath, "motivation", "script.js"),
     path.join(vitagenPath, "motivation", "preview.js"),
