@@ -1,3 +1,4 @@
+const crypto = require("node:crypto");
 const Stripe = require("stripe");
 const {
   getPaymentConfig,
@@ -118,7 +119,25 @@ function createCheckoutAttemptId(value) {
 }
 
 function createPaymentService({ stripeClient, config, logger = console }) {
-  function isAllowedAmountTotal(amountTotal) {
+  function shouldApplyDeveloperDiscount(token) {
+    const provided = String(token || "").trim();
+    const expected = String(config.devDiscountToken || "").trim();
+
+    if (!config.checkoutCouponId || !provided || !expected) {
+      return false;
+    }
+
+    const providedBuffer = Buffer.from(provided);
+    const expectedBuffer = Buffer.from(expected);
+
+    return (
+      providedBuffer.length === expectedBuffer.length &&
+      crypto.timingSafeEqual(providedBuffer, expectedBuffer)
+    );
+  }
+
+  function isAllowedAmountTotal(session) {
+    const amountTotal = session.amount_total;
     if (!Number.isInteger(amountTotal)) {
       return true;
     }
@@ -127,9 +146,15 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       return true;
     }
 
+    if (amountTotal !== 0) {
+      return false;
+    }
+
+    const metadata = session.metadata || {};
     return (
-      (Boolean(config.checkoutCouponId) || Boolean(config.freeCheckout)) &&
-      amountTotal === 0
+      (Boolean(config.checkoutCouponId) &&
+        metadata.discount_mode === "developer_100_percent") ||
+      (Boolean(config.freeCheckout) && metadata.discount_mode === "free_checkout")
     );
   }
 
@@ -140,6 +165,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const customerEmail = normalizeEmail(input.customerEmail);
     const buyerName = normalizeBuyerName(input.buyerName);
     const checkoutAttemptId = createCheckoutAttemptId(input.checkoutAttemptId);
+    const developerDiscount = shouldApplyDeveloperDiscount(input.developerDiscountToken);
     const returnUrl = normalizeReturnUrl(
       input.returnUrl,
       getFallbackPreviewUrl(config, documentType)
@@ -154,6 +180,12 @@ function createPaymentService({ stripeClient, config, logger = console }) {
 
     if (buyerName) {
       metadata.buyer_name = buyerName;
+    }
+
+    if (developerDiscount) {
+      metadata.discount_mode = "developer_100_percent";
+    } else if (config.freeCheckout) {
+      metadata.discount_mode = "free_checkout";
     }
 
     const params = {
@@ -176,7 +208,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       params.invoice_creation = { enabled: true };
     }
 
-    if (config.checkoutCouponId) {
+    if (developerDiscount) {
       params.discounts = [{ coupon: config.checkoutCouponId }];
     }
 
@@ -185,6 +217,8 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       checkoutAttemptId,
       documentType,
       documentHash.slice(0, 24),
+      developerDiscount ? "developer-discount" : "standard",
+      config.freeCheckout ? "free-checkout" : "paid-checkout",
     ].join(":");
 
     const session = await stripeClient.checkout.sessions.create(params, {
@@ -221,7 +255,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
 
     if (
       Number.isInteger(session.amount_total) &&
-      !isAllowedAmountTotal(session.amount_total)
+      !isAllowedAmountTotal(session)
     ) {
       throw createPaymentError(403, "PAYMENT_AMOUNT_MISMATCH", "Payment amount mismatch.");
     }

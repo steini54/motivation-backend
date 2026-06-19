@@ -479,6 +479,10 @@
     };
   }
 
+  function getDeveloperDiscountToken() {
+    return localStorage.getItem("vitagen_dev_discount_token")?.trim() || undefined;
+  }
+
   async function waitForBuilderPhotoReady() {
     const ready = window.VitaGenPhotoReady;
     if (!ready || typeof ready.then !== "function") {
@@ -558,6 +562,7 @@
       documentHashPrefix: documentHash.slice(0, 10),
       checkoutAttemptId,
       returnUrl: getReturnUrl(),
+      developerDiscount: Boolean(getDeveloperDiscountToken()),
     });
 
     sessionStorage.setItem(
@@ -574,6 +579,7 @@
         documentHash,
         checkoutAttemptId,
         returnUrl: getReturnUrl(),
+        developerDiscountToken: getDeveloperDiscountToken(),
         ...getBuyerDetails(documentData),
       }),
     });

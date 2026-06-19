@@ -45,10 +45,11 @@ test("payment config defaults to VitaGen one-time CHF checkout", () => {
   });
 
   assert.equal(config.currency, "chf");
-  assert.equal(config.priceCents, 990);
+  assert.equal(config.priceCents, 999);
   assert.equal(config.productName, "VitaGen PDF Download");
   assert.equal(config.invoiceCreation, true);
   assert.equal(config.checkoutCouponId, "");
+  assert.equal(config.devDiscountToken, "");
   assert.equal(config.freeCheckout, false);
   assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), []);
 });
@@ -57,10 +58,12 @@ test("payment config supports an optional server-side checkout coupon", () => {
   const config = getPaymentConfig({
     STRIPE_SECRET_KEY: "rk_live_123",
     STRIPE_CHECKOUT_COUPON_ID: "coupon_free_test",
+    VITAGEN_DEV_DISCOUNT_TOKEN: "dev_token_123456",
     VITAGEN_FREE_CHECKOUT: "true",
   });
 
   assert.equal(config.checkoutCouponId, "coupon_free_test");
+  assert.equal(config.devDiscountToken, "dev_token_123456");
   assert.equal(config.freeCheckout, true);
   assert.deepEqual(validatePaymentConfig(config), []);
 });
@@ -73,6 +76,7 @@ test("payment config rejects missing or unsafe Stripe settings", () => {
     VITAGEN_PRICE_CENTS: "-1",
     VITAGEN_BASE_URL: "not-a-url",
     STRIPE_CHECKOUT_COUPON_ID: "coupon with space",
+    VITAGEN_DEV_DISCOUNT_TOKEN: "token with space",
   });
 
   assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), [
@@ -80,6 +84,18 @@ test("payment config rejects missing or unsafe Stripe settings", () => {
     "STRIPE_WEBHOOK_SECRET must start with whsec_",
     "VITAGEN_CURRENCY must be a three-letter currency code",
     "STRIPE_CHECKOUT_COUPON_ID must not contain whitespace",
+    "VITAGEN_DEV_DISCOUNT_TOKEN must not contain whitespace",
     "VITAGEN_BASE_URL must be a valid URL",
+  ]);
+});
+
+test("payment config requires a developer token when checkout coupon is configured", () => {
+  const config = getPaymentConfig({
+    STRIPE_SECRET_KEY: "rk_live_123",
+    STRIPE_CHECKOUT_COUPON_ID: "coupon_free_test",
+  });
+
+  assert.deepEqual(validatePaymentConfig(config), [
+    "VITAGEN_DEV_DISCOUNT_TOKEN is required when STRIPE_CHECKOUT_COUPON_ID is set",
   ]);
 });

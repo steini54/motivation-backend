@@ -360,6 +360,8 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /\[VitaGen Payment\]/);
   assert.match(paymentScript, /delegated payment trigger clicked/);
   assert.match(paymentScript, /\[data-trigger-buy\], \[data-payment-trigger\]/);
+  assert.match(paymentScript, /vitagen_dev_discount_token/);
+  assert.match(paymentScript, /developerDiscountToken/);
   assert.match(paymentScript, /getPendingCheckoutStyleName/);
   assert.match(paymentScript, /complete-order-modal/);
   assert.match(paymentScript, /Your PDF will download automatically/);

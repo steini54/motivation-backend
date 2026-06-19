@@ -1,4 +1,4 @@
-const DEFAULT_PRICE_CENTS = 990;
+const DEFAULT_PRICE_CENTS = 999;
 const DEFAULT_CURRENCY = "chf";
 const DEFAULT_PRODUCT_NAME = "VitaGen PDF Download";
 const DEFAULT_BASE_URL = "https://syntext.ch/bewerbungs-generator";
@@ -34,6 +34,7 @@ function getPaymentConfig(env = process.env) {
     invoiceCreation: parseBoolean(env.STRIPE_INVOICE_CREATION, true),
     stripeApiVersion: env.STRIPE_API_VERSION || STRIPE_API_VERSION,
     checkoutCouponId: (env.STRIPE_CHECKOUT_COUPON_ID || "").trim(),
+    devDiscountToken: (env.VITAGEN_DEV_DISCOUNT_TOKEN || "").trim(),
     freeCheckout: parseBoolean(env.VITAGEN_FREE_CHECKOUT, false),
   };
 }
@@ -71,6 +72,14 @@ function validatePaymentConfig(config, { requireWebhook = false } = {}) {
 
   if (config.checkoutCouponId && /\s/.test(config.checkoutCouponId)) {
     errors.push("STRIPE_CHECKOUT_COUPON_ID must not contain whitespace");
+  }
+
+  if (config.devDiscountToken && /\s/.test(config.devDiscountToken)) {
+    errors.push("VITAGEN_DEV_DISCOUNT_TOKEN must not contain whitespace");
+  }
+
+  if (config.checkoutCouponId && !config.devDiscountToken) {
+    errors.push("VITAGEN_DEV_DISCOUNT_TOKEN is required when STRIPE_CHECKOUT_COUPON_ID is set");
   }
 
   try {

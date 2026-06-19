@@ -125,12 +125,13 @@ test("Stripe checkout applies the configured server-side coupon", async () => {
       webhookSecret: "whsec_123",
       priceId: "",
       currency: "chf",
-      priceCents: 990,
+      priceCents: 999,
       productName: "VitaGen PDF Download",
       baseUrl: "https://syntext.ch/bewerbungs-generator",
       invoiceCreation: true,
       stripeApiVersion: "2026-05-27.dahlia",
       checkoutCouponId: "coupon_free_test",
+      devDiscountToken: "dev_token_123456",
     },
     stripeClient: {
       checkout: {
@@ -154,14 +155,16 @@ test("Stripe checkout applies the configured server-side coupon", async () => {
     styleName: "swiss-line.css",
     documentHash: "a".repeat(64),
     checkoutAttemptId: "attempt_coupon_001",
+    developerDiscountToken: "dev_token_123456",
     returnUrl: "https://syntext.ch/bewerbungs-generator/motivation/formular.html",
   });
 
   assert.equal(session.id, "cs_test_coupon");
   assert.deepEqual(receivedParams.discounts, [{ coupon: "coupon_free_test" }]);
+  assert.equal(receivedParams.metadata.discount_mode, "developer_100_percent");
   assert.equal(
     receivedOptions.idempotencyKey,
-    `vitagen-checkout:attempt_coupon_001:motivation:${"a".repeat(24)}`
+    `vitagen-checkout:attempt_coupon_001:motivation:${"a".repeat(24)}:developer-discount:paid-checkout`
   );
 });
 
@@ -173,12 +176,13 @@ test("Stripe checkout uses a fresh idempotency key for every checkout attempt", 
       webhookSecret: "whsec_123",
       priceId: "",
       currency: "chf",
-      priceCents: 990,
+      priceCents: 999,
       productName: "VitaGen PDF Download",
       baseUrl: "https://syntext.ch/bewerbungs-generator",
       invoiceCreation: true,
       stripeApiVersion: "2026-05-27.dahlia",
       checkoutCouponId: "",
+      devDiscountToken: "",
     },
     stripeClient: {
       checkout: {
@@ -228,12 +232,13 @@ test("Stripe checkout can create a no-cost session behind an explicit env flag",
       webhookSecret: "whsec_123",
       priceId: "",
       currency: "chf",
-      priceCents: 990,
+      priceCents: 999,
       productName: "VitaGen PDF Download",
       baseUrl: "https://syntext.ch/bewerbungs-generator",
       invoiceCreation: true,
       stripeApiVersion: "2026-05-27.dahlia",
       checkoutCouponId: "",
+      devDiscountToken: "",
       freeCheckout: true,
     },
     stripeClient: {
@@ -262,22 +267,29 @@ test("Stripe checkout can create a no-cost session behind an explicit env flag",
   assert.equal(receivedParams.line_items[0].price_data.unit_amount, 0);
   assert.equal(receivedParams.line_items[0].price_data.currency, "chf");
   assert.equal(receivedParams.discounts, undefined);
+  assert.equal(receivedParams.metadata.discount_mode, "free_checkout");
 });
 
 test("Stripe verification accepts no-cost sessions only when a checkout coupon is configured", async () => {
-  function makePayment({ checkoutCouponId = "", freeCheckout = false } = {}) {
+  function makePayment({
+    checkoutCouponId = "",
+    devDiscountToken = "",
+    freeCheckout = false,
+    discountMode = "",
+  } = {}) {
     return createPaymentService({
       config: {
         secretKey: "sk_test_123",
         webhookSecret: "whsec_123",
         priceId: "",
         currency: "chf",
-        priceCents: 990,
+        priceCents: 999,
         productName: "VitaGen PDF Download",
         baseUrl: "https://syntext.ch/bewerbungs-generator",
         invoiceCreation: true,
         stripeApiVersion: "2026-05-27.dahlia",
         checkoutCouponId,
+        devDiscountToken,
         freeCheckout,
       },
       stripeClient: {
@@ -293,6 +305,7 @@ test("Stripe verification accepts no-cost sessions only when a checkout coupon i
                   document_type: "motivation",
                   style_name: "swiss-line.css",
                   document_hash: "b".repeat(64),
+                  ...(discountMode ? { discount_mode: discountMode } : {}),
                 },
               };
             },
@@ -314,7 +327,11 @@ test("Stripe verification accepts no-cost sessions only when a checkout coupon i
     /Payment amount mismatch/
   );
 
-  const verification = await makePayment({ checkoutCouponId: "coupon_free_test" }).verifyPaidSession({
+  const verification = await makePayment({
+    checkoutCouponId: "coupon_free_test",
+    devDiscountToken: "dev_token_123456",
+    discountMode: "developer_100_percent",
+  }).verifyPaidSession({
     sessionId: "cs_test_free",
     documentType: "motivation",
     styleName: "swiss-line.css",
@@ -324,7 +341,10 @@ test("Stripe verification accepts no-cost sessions only when a checkout coupon i
   assert.equal(verification.paymentStatus, "paid");
   assert.equal(verification.filename, "Bewerbung.pdf");
 
-  const freeVerification = await makePayment({ freeCheckout: true }).verifyPaidSession({
+  const freeVerification = await makePayment({
+    freeCheckout: true,
+    discountMode: "free_checkout",
+  }).verifyPaidSession({
     sessionId: "cs_test_free",
     documentType: "motivation",
     styleName: "swiss-line.css",
