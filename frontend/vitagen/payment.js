@@ -177,6 +177,16 @@
     return url.toString();
   }
 
+  function createCheckoutAttemptId() {
+    if (window.crypto?.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+
+    return `${Date.now().toString(36)}_${Math.random()
+      .toString(36)
+      .slice(2, 12)}`;
+  }
+
   function setStatus(message, isError = false) {
     const status = document.getElementById("paymentStatus");
     if (!status) {
@@ -239,17 +249,19 @@
     const documentData = loadDocumentData();
     const styleName = getSelectedStyleName();
     const documentHash = await createDocumentHash(styleName, documentData);
+    const checkoutAttemptId = createCheckoutAttemptId();
 
     log("starting Stripe Checkout session", {
       documentType,
       styleName,
       documentHashPrefix: documentHash.slice(0, 10),
+      checkoutAttemptId,
       returnUrl: getReturnUrl(),
     });
 
     sessionStorage.setItem(
       "vitagen_pending_checkout",
-      JSON.stringify({ documentType, styleName, documentHash })
+      JSON.stringify({ documentType, styleName, documentHash, checkoutAttemptId })
     );
 
     const response = await fetch(`${API_BASE_URL}/checkout/create-session`, {
@@ -259,6 +271,7 @@
         documentType,
         styleName,
         documentHash,
+        checkoutAttemptId,
         returnUrl: getReturnUrl(),
         ...getBuyerDetails(documentData),
       }),

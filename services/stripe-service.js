@@ -106,6 +106,17 @@ function sanitizeSessionId(value) {
   return sessionId;
 }
 
+function createCheckoutAttemptId(value) {
+  const attemptId = String(value || "").trim();
+  if (/^[A-Za-z0-9_-]{8,64}$/.test(attemptId)) {
+    return attemptId;
+  }
+
+  return `${Date.now().toString(36)}_${Math.random()
+    .toString(36)
+    .slice(2, 12)}`;
+}
+
 function createPaymentService({ stripeClient, config, logger = console }) {
   function isAllowedAmountTotal(amountTotal) {
     if (!Number.isInteger(amountTotal)) {
@@ -128,6 +139,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const documentHash = normalizeDocumentHash(input.documentHash);
     const customerEmail = normalizeEmail(input.customerEmail);
     const buyerName = normalizeBuyerName(input.buyerName);
+    const checkoutAttemptId = createCheckoutAttemptId(input.checkoutAttemptId);
     const returnUrl = normalizeReturnUrl(
       input.returnUrl,
       getFallbackPreviewUrl(config, documentType)
@@ -170,13 +182,9 @@ function createPaymentService({ stripeClient, config, logger = console }) {
 
     const idempotencyKey = [
       "vitagen-checkout",
+      checkoutAttemptId,
       documentType,
-      styleName,
-      documentHash,
-      returnUrl,
-      customerEmail || "no-email",
-      config.checkoutCouponId || "no-coupon",
-      config.freeCheckout ? "free-checkout" : "paid-checkout",
+      documentHash.slice(0, 24),
     ].join(":");
 
     const session = await stripeClient.checkout.sessions.create(params, {

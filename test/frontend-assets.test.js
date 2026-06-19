@@ -305,6 +305,8 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /querySelectorAll\(".page-break"\)/);
   assert.match(paymentScript, /pageSelector/);
   assert.match(paymentScript, /returnUrl: getReturnUrl\(\)/);
+  assert.match(paymentScript, /createCheckoutAttemptId/);
+  assert.match(paymentScript, /checkoutAttemptId/);
   assert.doesNotMatch(paymentScript, /payment_method_types/);
   assert.doesNotMatch(paymentScript, /html2pdf/);
   assert.doesNotMatch(paymentScript, /\/generate-pdf/);

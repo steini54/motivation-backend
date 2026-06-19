@@ -153,12 +153,71 @@ test("Stripe checkout applies the configured server-side coupon", async () => {
     documentType: "motivation",
     styleName: "swiss-line.css",
     documentHash: "a".repeat(64),
+    checkoutAttemptId: "attempt_coupon_001",
     returnUrl: "https://syntext.ch/bewerbungs-generator/motivation/formular.html",
   });
 
   assert.equal(session.id, "cs_test_coupon");
   assert.deepEqual(receivedParams.discounts, [{ coupon: "coupon_free_test" }]);
-  assert.match(receivedOptions.idempotencyKey, /coupon_free_test:paid-checkout$/);
+  assert.equal(
+    receivedOptions.idempotencyKey,
+    `vitagen-checkout:attempt_coupon_001:motivation:${"a".repeat(24)}`
+  );
+});
+
+test("Stripe checkout uses a fresh idempotency key for every checkout attempt", async () => {
+  const receivedOptions = [];
+  const payment = createPaymentService({
+    config: {
+      secretKey: "sk_test_123",
+      webhookSecret: "whsec_123",
+      priceId: "",
+      currency: "chf",
+      priceCents: 990,
+      productName: "VitaGen PDF Download",
+      baseUrl: "https://syntext.ch/bewerbungs-generator",
+      invoiceCreation: true,
+      stripeApiVersion: "2026-05-27.dahlia",
+      checkoutCouponId: "",
+    },
+    stripeClient: {
+      checkout: {
+        sessions: {
+          async create(params, options) {
+            receivedOptions.push(options);
+            return {
+              id: `cs_test_${receivedOptions.length}`,
+              url: `https://checkout.stripe.com/c/pay/${receivedOptions.length}`,
+            };
+          },
+        },
+      },
+      webhooks: { constructEvent() {} },
+    },
+  });
+  const input = {
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash: "b".repeat(64),
+    returnUrl: "https://syntext.ch/bewerbungs-generator/motivation/formular.html",
+  };
+
+  await payment.createCheckoutSession({
+    ...input,
+    checkoutAttemptId: "attempt_first_001",
+  });
+  await payment.createCheckoutSession({
+    ...input,
+    checkoutAttemptId: "attempt_second_002",
+  });
+
+  assert.equal(receivedOptions.length, 2);
+  assert.notEqual(
+    receivedOptions[0].idempotencyKey,
+    receivedOptions[1].idempotencyKey
+  );
+  assert.match(receivedOptions[0].idempotencyKey, /attempt_first_001/);
+  assert.match(receivedOptions[1].idempotencyKey, /attempt_second_002/);
 });
 
 test("Stripe checkout can create a no-cost session behind an explicit env flag", async () => {
