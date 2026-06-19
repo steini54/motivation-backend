@@ -26,8 +26,6 @@
       greeting: "Sehr geehrte Damen und Herren",
       motivationBody:
         "Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.",
-      closingNote:
-        "Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.",
       signoff: "Mit freundlichen Gruessen",
       profile: "Profil",
       work: "Berufserfahrung",
@@ -65,8 +63,6 @@
       greeting: "Dear Sir or Madam",
       motivationBody:
         "I am applying with great interest. With my experience and structured working style, I am confident I can support your team effectively.",
-      closingNote:
-        "I would be happy to discuss my motivation with you in a personal interview.",
       signoff: "Kind regards",
       profile: "Profile",
       work: "Work experience",
@@ -195,9 +191,9 @@
     const rawBody = splitParagraphs(data.stichwoerter2, t(language, "motivationBody"));
     const bodyLines = removeDuplicateLetterParts(rawBody, signature);
     const bodyParagraphs = bodyLines.length ? bodyLines.slice(0, 3) : [t(language, "motivationBody")];
-    const rawClosing = splitParagraphs(data.stichwoerter3, t(language, "closingNote"));
+    const rawClosing = splitParagraphs(data.stichwoerter3, "");
     const closingLines = removeDuplicateLetterParts(rawClosing, signature);
-    const closingNote = closingLines[0] || t(language, "closingNote");
+    const closingNote = closingLines[0] || "";
     const bodyWordCount = bodyParagraphs.reduce((count, paragraph) => count + words(paragraph).length, 0);
 
     if (bodyWordCount > BODY_WORD_LIMIT || rawBody.length > 3) {
@@ -254,7 +250,7 @@
       ),
       node("div", { className: "letter-spacer", "aria-hidden": "true" }),
       node("footer", { className: "closing-block doc-signature" }, [
-        node("p", { id: "pv-stichwoerter3", text: closingNote }),
+        ...(closingNote ? [node("p", { id: "pv-stichwoerter3", text: closingNote })] : []),
         node("p", { className: "letter-signoff", text: t(language, "signoff") }),
         node("strong", { id: "pv-unterschrift", text: signature }),
       ])

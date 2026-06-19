@@ -252,6 +252,17 @@ test("motivation letter body typography uses 11pt", () => {
   assert.match(motivationCss, /\.preview-paper\.document-rendered \.closing-block strong \{[\s\S]*font-size: 11pt;/);
 });
 
+test("motivation renderer does not invent an empty closing sentence", () => {
+  const renderer = fs.readFileSync(
+    path.join(vitagenPath, "document-renderer.js"),
+    "utf8"
+  );
+
+  assert.match(renderer, /splitParagraphs\(data\.stichwoerter3, ""\)/);
+  assert.doesNotMatch(renderer, /I would be happy to discuss my motivation/);
+  assert.doesNotMatch(renderer, /Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech/);
+});
+
 test("builder photo state persists blobs without storing base64 in localStorage", () => {
   const motivationScript = fs.readFileSync(
     path.join(frontendPath, "script.js"),
