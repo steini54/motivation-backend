@@ -231,10 +231,25 @@ test("CV renderer uses measured pagination and the required typography scale", (
   assert.match(lebenslaufCss, /--cv-body-size: 11pt;/);
   assert.match(lebenslaufCss, /--cv-body-line-height: 1\.38;/);
   assert.match(lebenslaufCss, /--cv-entry-meta-size: 9\.2pt;/);
+  assert.match(lebenslaufCss, /\.preview-paper\.document-rendered \.cv--continuation \{\s*grid-template-columns: 34% 1fr;/);
   assert.match(lebenslaufCss, /\.document-measurement-root/);
   assert.match(lebenslaufCss, /\.cv-entry \{/);
   assert.match(lebenslaufCss, /break-inside: avoid;/);
   assert.doesNotMatch(lebenslaufCss, /font-size: 12pt;/);
+});
+
+test("motivation letter body typography uses 11pt", () => {
+  const motivationCss = fs.readFileSync(
+    path.join(frontendPath, "style.css"),
+    "utf8"
+  );
+
+  assert.match(
+    motivationCss,
+    /\.preview-paper\.document-rendered \.letter-body p,\s*\.preview-paper\.document-rendered \.closing-block p \{\s*margin: 0;\s*color: #1f2933;\s*font-size: 11pt;/s
+  );
+  assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-greeting \{\s*margin: 0 0 5mm;\s*font-size: 11pt;/);
+  assert.match(motivationCss, /\.preview-paper\.document-rendered \.closing-block strong \{[\s\S]*font-size: 11pt;/);
 });
 
 test("builder photo state persists blobs without storing base64 in localStorage", () => {

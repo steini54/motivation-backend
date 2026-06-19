@@ -1080,11 +1080,11 @@ textarea:focus {
 }
 
 .preview-paper.document-rendered .cv--continuation {
-  grid-template-columns: 26% 1fr;
+  grid-template-columns: 34% 1fr;
 }
 
 .preview-paper.document-rendered .cv--continuation .cv-side {
-  padding: 8% 8%;
+  padding: 7.2% 7%;
 }
 
 .preview-paper.document-rendered .cv--continuation .cv-side h1 {
