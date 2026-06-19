@@ -199,6 +199,279 @@
     status.style.color = isError ? "#b91c1c" : "#475569";
   }
 
+  function getLanguage() {
+    try {
+      return localStorage.getItem("vitagen_language") === "en" ? "en" : "de";
+    } catch {
+      return document.documentElement.lang === "en" ? "en" : "de";
+    }
+  }
+
+  function getCompleteOrderLabels() {
+    const labels = {
+      de: {
+        title: "Bestellung abgeschlossen",
+        lead: "Ihre Zahlung war erfolgreich.",
+        pending: "Ihre PDF wird automatisch heruntergeladen. Bitte warten Sie einen Moment.",
+        ready: "Der automatische Download wurde gestartet. Falls nichts passiert ist, koennen Sie die PDF manuell herunterladen.",
+        error: "Die Zahlung war erfolgreich, aber der automatische Download konnte nicht abgeschlossen werden.",
+        button: "PDF manuell herunterladen",
+        close: "Schliessen",
+      },
+      en: {
+        title: "Order complete",
+        lead: "Your payment was successful.",
+        pending: "Your PDF will download automatically. Please wait a moment.",
+        ready: "The automatic download has started. If nothing happened, you can download the PDF manually.",
+        error: "Payment was successful, but the automatic download could not be completed.",
+        button: "Download PDF manually",
+        close: "Close",
+      },
+    };
+
+    return labels[getLanguage()] || labels.de;
+  }
+
+  function ensureCompleteOrderStyles() {
+    if (document.getElementById("vitagenCompleteOrderStyles")) {
+      return;
+    }
+
+    const style = document.createElement("style");
+    style.id = "vitagenCompleteOrderStyles";
+    style.textContent = `
+      .complete-order-modal {
+        align-items: center;
+        background: rgba(15, 23, 42, 0.56);
+        backdrop-filter: blur(12px);
+        display: none;
+        inset: 0;
+        justify-content: center;
+        padding: 24px;
+        position: fixed;
+        z-index: 10000;
+      }
+
+      .complete-order-modal.open {
+        display: flex;
+      }
+
+      .complete-order-dialog {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 28px;
+        box-shadow: 0 30px 90px rgba(15, 23, 42, 0.28);
+        color: #172033;
+        max-width: 520px;
+        padding: 28px;
+        width: min(100%, 520px);
+      }
+
+      .complete-order-top {
+        align-items: flex-start;
+        display: flex;
+        gap: 18px;
+      }
+
+      .complete-order-icon {
+        align-items: center;
+        background: linear-gradient(135deg, #6d5dfc, #2485ff);
+        border-radius: 18px;
+        box-shadow: 0 16px 32px rgba(67, 97, 238, 0.28);
+        color: #ffffff;
+        display: inline-flex;
+        flex: 0 0 auto;
+        font-size: 22px;
+        font-weight: 900;
+        height: 52px;
+        justify-content: center;
+        width: 52px;
+      }
+
+      .complete-order-dialog h2 {
+        font-size: 28px;
+        line-height: 1.12;
+        margin: 0 0 8px;
+      }
+
+      .complete-order-dialog p {
+        color: #64748b;
+        font-size: 16px;
+        line-height: 1.55;
+        margin: 0;
+      }
+
+      .complete-order-status {
+        align-items: center;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        display: flex;
+        gap: 14px;
+        margin-top: 22px;
+        padding: 16px;
+      }
+
+      .complete-order-spinner {
+        animation: completeOrderSpin 0.9s linear infinite;
+        border: 3px solid #dbeafe;
+        border-top-color: #2563eb;
+        border-radius: 999px;
+        flex: 0 0 auto;
+        height: 28px;
+        width: 28px;
+      }
+
+      .complete-order-modal.ready .complete-order-spinner,
+      .complete-order-modal.error .complete-order-spinner {
+        animation: none;
+        background: #dcfce7;
+        border-color: #bbf7d0;
+        position: relative;
+      }
+
+      .complete-order-modal.error .complete-order-spinner {
+        background: #fee2e2;
+        border-color: #fecaca;
+      }
+
+      .complete-order-modal.ready .complete-order-spinner::after {
+        color: #15803d;
+        content: "✓";
+        font-size: 16px;
+        font-weight: 900;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .complete-order-modal.error .complete-order-spinner::after {
+        color: #b91c1c;
+        content: "!";
+        font-size: 16px;
+        font-weight: 900;
+        left: 50%;
+        position: absolute;
+        top: 50%;
+        transform: translate(-50%, -50%);
+      }
+
+      .complete-order-actions {
+        display: grid;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .complete-order-download,
+      .complete-order-close {
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 900;
+        min-height: 52px;
+        padding: 0 20px;
+      }
+
+      .complete-order-download {
+        background: #1f2937;
+        border: 0;
+        color: #ffffff;
+      }
+
+      .complete-order-download:disabled {
+        cursor: wait;
+        opacity: 0.45;
+      }
+
+      .complete-order-close {
+        background: #ffffff;
+        border: 1px solid #dbe3ef;
+        color: #1f2937;
+      }
+
+      @keyframes completeOrderSpin {
+        to { transform: rotate(360deg); }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function ensureCompleteOrderModal() {
+    ensureCompleteOrderStyles();
+
+    let modal = document.getElementById("completeOrderModal");
+    if (modal) {
+      return modal;
+    }
+
+    modal = document.createElement("div");
+    modal.id = "completeOrderModal";
+    modal.className = "complete-order-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.innerHTML = `
+      <div class="complete-order-dialog">
+        <div class="complete-order-top">
+          <div class="complete-order-icon" aria-hidden="true">✓</div>
+          <div>
+            <h2 data-complete-order-title></h2>
+            <p data-complete-order-lead></p>
+          </div>
+        </div>
+        <div class="complete-order-status">
+          <span class="complete-order-spinner" aria-hidden="true"></span>
+          <p data-complete-order-message></p>
+        </div>
+        <div class="complete-order-actions">
+          <button type="button" class="complete-order-download" data-complete-order-download disabled></button>
+          <button type="button" class="complete-order-close" data-complete-order-close></button>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+
+    modal.querySelector("[data-complete-order-close]")?.addEventListener("click", () => {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+    });
+
+    modal.querySelector("[data-complete-order-download]")?.addEventListener("click", async () => {
+      const button = modal.querySelector("[data-complete-order-download]");
+      button.disabled = true;
+      updateCompleteOrderModal("pending");
+      try {
+        await downloadCleanPreviewPdf();
+        updateCompleteOrderModal("ready");
+      } catch (error) {
+        errorLog("Manual paid PDF download failed", error?.message || error);
+        updateCompleteOrderModal("error");
+        setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
+      }
+    });
+
+    return modal;
+  }
+
+  function updateCompleteOrderModal(state = "pending") {
+    const labels = getCompleteOrderLabels();
+    const modal = ensureCompleteOrderModal();
+    modal.classList.remove("pending", "ready", "error");
+    modal.classList.add(state);
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+
+    const message = state === "ready" ? labels.ready : state === "error" ? labels.error : labels.pending;
+    const downloadButton = modal.querySelector("[data-complete-order-download]");
+    modal.querySelector("[data-complete-order-title]").textContent = labels.title;
+    modal.querySelector("[data-complete-order-lead]").textContent = labels.lead;
+    modal.querySelector("[data-complete-order-message]").textContent = message;
+    modal.querySelector("[data-complete-order-close]").textContent = labels.close;
+    downloadButton.textContent = labels.button;
+    downloadButton.disabled = state === "pending";
+    window.setTimeout(() => downloadButton.focus(), 0);
+  }
+
   function getBuyerDetails(documentData) {
     return {
       buyerName: document.getElementById("buyerName")?.value || documentData.name || "",
@@ -505,6 +778,7 @@
     }
 
     try {
+      updateCompleteOrderModal("pending");
       setStatus("Payment confirmed. Preparing your PDF...");
       const data = await verifyPaidCheckoutSession(sessionId);
       log("Stripe Checkout return verified", {
@@ -522,15 +796,17 @@
       }
 
       await downloadCleanPreviewPdf();
+      updateCompleteOrderModal("ready");
       setStatus("PDF download started.");
+      sessionStorage.removeItem("vitagen_pending_checkout");
       const url = new URL(window.location.href);
       url.searchParams.delete("checkout");
       url.searchParams.delete("session_id");
       window.history.replaceState({}, "", url.toString());
     } catch (error) {
       errorLog("Paid PDF download failed", error?.message || error);
+      updateCompleteOrderModal("error");
       setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
-      openModal();
     }
   }
 

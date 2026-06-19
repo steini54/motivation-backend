@@ -350,6 +350,12 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /delegated payment trigger clicked/);
   assert.match(paymentScript, /\[data-trigger-buy\], \[data-payment-trigger\]/);
   assert.match(paymentScript, /getPendingCheckoutStyleName/);
+  assert.match(paymentScript, /complete-order-modal/);
+  assert.match(paymentScript, /Your PDF will download automatically/);
+  assert.match(paymentScript, /Download PDF manually/);
+  assert.match(paymentScript, /updateCompleteOrderModal\("pending"\)/);
+  assert.match(paymentScript, /updateCompleteOrderModal\("ready"\)/);
+  assert.match(paymentScript, /data-complete-order-download/);
   assert.match(
     paymentScript,
     /const candidates = \[\s*getPendingCheckoutStyleName\(\),\s*getStoredStyleName\(\),\s*getPreviewStyleName\(\),\s*getThemeHrefStyleName\(\),\s*"swiss-line\.css",\s*\]/s
