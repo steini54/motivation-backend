@@ -209,7 +209,7 @@ test("builder full preview watermark is large enough to block free documents", (
   }
 });
 
-test("builder photo state is session-only and clears stale stored images", () => {
+test("builder photo state persists blobs without storing base64 in localStorage", () => {
   const motivationScript = fs.readFileSync(
     path.join(frontendPath, "script.js"),
     "utf8"
@@ -222,8 +222,18 @@ test("builder photo state is session-only and clears stale stored images", () =>
   for (const script of [motivationScript, lebenslaufScript]) {
     assert.match(script, /function getSelectedPhotoSrc\(\)/);
     assert.match(script, /function clearStoredPhotoState/);
+    assert.match(script, /function restoreSelectedPhoto/);
+    assert.match(script, /function persistSelectedPhoto/);
+    assert.match(script, /window\.VitaGenPhotoReady/);
+    assert.match(script, /PhotoStorage\.saveSelectedPhoto/);
+    assert.match(script, /PhotoStorage\.getSelectedPhoto/);
+    assert.match(script, /PhotoStorage\.saveSourcePhoto/);
+    assert.match(script, /PhotoStorage\.getSourcePhoto/);
+    assert.match(script, /PhotoStorage\.migrateLegacyPhoto/);
+    assert.match(script, /await pendingPhotoMigration/);
     assert.match(script, /delete data\.foto/);
     assert.match(script, /clearStoredPhotoState\(\{ resetUi: false \}\)/);
+    assert.match(script, /selectImage\(img, \{ persist: false \}\)/);
     assert.doesNotMatch(script, /data\.foto = element\.src/);
     assert.doesNotMatch(script, /if \(saved\.foto\) \{\s*renderUploadPreview/s);
   }
@@ -243,7 +253,11 @@ test("frontend preserves production markup and routes AI to Railway", () => {
     "utf8"
   );
 
-  assert.doesNotMatch(formHtml, /api-config\.js|photo-storage\.js/);
+  assert.doesNotMatch(formHtml, /api-config\.js/);
+  assert.match(
+    formHtml,
+    /<script src="\/bewerbungs-generator\/motivation\/photo-storage\.js"><\/script>\s*<script src="script\.js"><\/script>/
+  );
   assert.match(previewHtml, /id="buyBtn"/);
   assert.match(previewHtml, /id="buyModal"/);
   assert.match(formHtml, /id="buyModal"/);
@@ -301,8 +315,15 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.doesNotMatch(paymentScript, /checkout\/session\/\$\{encodeURIComponent/);
   assert.match(paymentScript, /html2canvas/);
   assert.match(paymentScript, /jsPDF/);
-  assert.match(paymentScript, /querySelector\(".watermark"\)/);
-  assert.match(paymentScript, /querySelectorAll\(".page-break"\)/);
+  assert.match(paymentScript, /format: "a4"/);
+  assert.match(paymentScript, /TARGET_CANVAS_WIDTH_PX = 2480/);
+  assert.match(paymentScript, /MAX_CANVAS_SCALE = 5/);
+  assert.match(paymentScript, /waitForBuilderPhotoReady/);
+  assert.match(paymentScript, /createPdfExportPreview/);
+  assert.match(paymentScript, /toDataURL\("image\/png"\)/);
+  assert.match(paymentScript, /addImage\(imageData, "PNG"/);
+  assert.match(paymentScript, /querySelectorAll\("\.watermark"\)/);
+  assert.match(paymentScript, /querySelectorAll\("\.page-break"\)/);
   assert.match(paymentScript, /pageSelector/);
   assert.match(paymentScript, /returnUrl: getReturnUrl\(\)/);
   assert.match(paymentScript, /createCheckoutAttemptId/);

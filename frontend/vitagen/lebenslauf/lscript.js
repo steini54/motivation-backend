@@ -22,6 +22,11 @@ const DOCUMENT_STYLES = [
   "teal-balance.css",
   "terracotta-arch.css",
 ];
+let resolveInitialPhotoReady;
+let pendingPhotoMigration = Promise.resolve();
+window.VitaGenPhotoReady = new Promise((resolve) => {
+  resolveInitialPhotoReady = resolve;
+});
 const UI_TRANSLATIONS = {
   de: {
     "document.title": "VitaGen - Lebenslauf",
@@ -402,6 +407,15 @@ function getSelectedPhotoSrc() {
 function clearStoredPhotoState({ resetUi = true } = {}) {
   const data = getStoredData();
   if (data.foto) {
+    if (
+      typeof data.foto === "string" &&
+      data.foto.startsWith("data:image/") &&
+      window.PhotoStorage?.migrateLegacyPhoto
+    ) {
+      pendingPhotoMigration = window.PhotoStorage.migrateLegacyPhoto(data.foto).catch((error) => {
+        console.warn("[VitaGen Photo]", "Could not migrate legacy stored photo", error);
+      });
+    }
     delete data.foto;
     setStoredData(data);
   }
@@ -430,6 +444,72 @@ function clearStoredPhotoState({ resetUi = true } = {}) {
 
   renderOptionPlaceholders();
   setPhotoStatus("Noch nicht generiert");
+}
+
+function setPhotoReady(promise) {
+  const ready = Promise.resolve(promise).catch((error) => {
+    console.warn("[VitaGen Photo]", "Photo storage is unavailable", error);
+  });
+  window.VitaGenPhotoReady = ready;
+  ready.finally(() => {
+    if (resolveInitialPhotoReady) {
+      resolveInitialPhotoReady();
+      resolveInitialPhotoReady = null;
+    }
+  });
+  return ready;
+}
+
+function saveSourcePhotoForReuse(blob) {
+  if (!window.PhotoStorage?.saveSourcePhoto || !(blob instanceof Blob)) {
+    return;
+  }
+
+  window.PhotoStorage.saveSourcePhoto(blob).catch((error) => {
+    console.warn("[VitaGen Photo]", "Could not store source photo", error);
+  });
+}
+
+function persistSelectedPhoto(element) {
+  if (!window.PhotoStorage?.blobFromImageElement || !window.PhotoStorage?.saveSelectedPhoto) {
+    return setPhotoReady(Promise.resolve());
+  }
+
+  return setPhotoReady((async () => {
+    const blob = await window.PhotoStorage.blobFromImageElement(element);
+    await window.PhotoStorage.saveSelectedPhoto(blob);
+  })());
+}
+
+async function restoreSelectedPhoto() {
+  if (!window.PhotoStorage?.getSelectedPhoto || !window.PhotoStorage?.createPhotoUrl) {
+    return;
+  }
+
+  await pendingPhotoMigration;
+  const blob = await window.PhotoStorage.getSelectedPhoto();
+  if (!(blob instanceof Blob)) {
+    return;
+  }
+
+  const img = renderUploadPreview(window.PhotoStorage.createPhotoUrl(blob), true);
+  if (img) {
+    img.photoBlob = blob;
+    selectImage(img, { persist: false });
+  }
+}
+
+async function getPhotoForGeneration() {
+  const file = document.getElementById("foto-upload")?.files?.[0];
+  if (file) {
+    return file;
+  }
+
+  if (!window.PhotoStorage?.getSourcePhoto) {
+    return null;
+  }
+
+  return window.PhotoStorage.getSourcePhoto();
 }
 
 function normalizeLanguage(language) {
@@ -1007,7 +1087,7 @@ function createGeneratedOption(src) {
   }
 }
 
-function selectImage(element) {
+function selectImage(element, { persist = true } = {}) {
   if (!element?.src) return;
   document.querySelectorAll("#foto-container, .generated-option").forEach((item) => item.classList.remove("selected"));
 
@@ -1021,6 +1101,9 @@ function selectImage(element) {
   saveFormData();
   setPhotoStatus("Foto fuer die Vorschau ausgewaehlt");
   syncLivePreview();
+  if (persist) {
+    persistSelectedPhoto(element);
+  }
 }
 
 window.selectImage = selectImage;
@@ -1048,6 +1131,11 @@ function loadFormData() {
 
   applyDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
   syncLivePreview({ pulse: false });
+  setPhotoReady(
+    restoreSelectedPhoto().finally(() => {
+      syncLivePreview({ pulse: false });
+    })
+  );
 }
 
 function installFormListeners() {
@@ -1112,8 +1200,12 @@ function installPhotoListeners() {
       updateCounter();
       renderOptionPlaceholders();
       setPhotoStatus("Noch nicht generiert");
+      saveSourcePhotoForReuse(file);
       const img = renderUploadPreview(loadEvent.target.result, true);
-      if (img) selectImage(img);
+      if (img) {
+        img.photoBlob = file;
+        selectImage(img);
+      }
     };
     reader.onerror = () => {
       showToast("Das Foto konnte nicht gelesen werden. Bitte versuchen Sie eine andere Datei.", "error", "Upload fehlgeschlagen");
@@ -1129,7 +1221,7 @@ function installPhotoListeners() {
       return;
     }
 
-    const file = fileInput?.files[0];
+    const file = await getPhotoForGeneration();
     if (!file) {
       showToast("Bitte zuerst ein Foto hochladen.", "warning", "Foto fehlt");
       return;
@@ -1142,7 +1234,7 @@ function installPhotoListeners() {
     setPhotoLoading(true);
 
     const formData = new FormData();
-    formData.append("photo", file);
+    formData.append("photo", file, file.name || "application-photo.jpg");
 
     try {
       const response = await fetch(`${AI_API_BASE_URL}/generate-ai-photo`, {

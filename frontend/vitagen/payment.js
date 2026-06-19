@@ -8,7 +8,11 @@
   const filename = script?.dataset.filename || "VitaGen.pdf";
   const A4_WIDTH_MM = 210;
   const A4_HEIGHT_MM = 297;
-  const CANVAS_SCALE = 2;
+  const EXPORT_WIDTH_PX = documentType === "lebenslauf" ? 640 : 620;
+  const EXPORT_HEIGHT_PX = Math.round(EXPORT_WIDTH_PX * (A4_HEIGHT_MM / A4_WIDTH_MM));
+  const TARGET_CANVAS_WIDTH_PX = 2480;
+  const MIN_CANVAS_SCALE = 3;
+  const MAX_CANVAS_SCALE = 5;
   const LOG_PREFIX = "[VitaGen Payment]";
 
   function log(message, details) {
@@ -204,6 +208,31 @@
     };
   }
 
+  async function waitForBuilderPhotoReady() {
+    const ready = window.VitaGenPhotoReady;
+    if (!ready || typeof ready.then !== "function") {
+      return;
+    }
+
+    try {
+      await ready;
+    } catch (error) {
+      warn("builder photo readiness failed; continuing with current preview", error);
+    }
+  }
+
+  async function waitForDocumentFonts() {
+    if (!document.fonts?.ready) {
+      return;
+    }
+
+    try {
+      await document.fonts.ready;
+    } catch (error) {
+      warn("document fonts did not finish loading before export", error);
+    }
+  }
+
   function openModal() {
     const modal = document.getElementById("buyModal");
     if (!modal) {
@@ -245,6 +274,7 @@
     if (typeof window.saveAllFields === "function") {
       window.saveAllFields();
     }
+    await waitForBuilderPhotoReady();
 
     const documentData = loadDocumentData();
     const styleName = getSelectedStyleName();
@@ -311,7 +341,14 @@
 
   async function waitForPreviewImages(preview) {
     const images = Array.from(preview.querySelectorAll("img")).filter(
-      (img) => img.offsetParent !== null && img.getAttribute("src")
+      (img) => {
+        if (!img.getAttribute("src")) {
+          return false;
+        }
+
+        const styles = window.getComputedStyle(img);
+        return styles.display !== "none" && styles.visibility !== "hidden";
+      }
     );
 
     await Promise.all(
@@ -355,6 +392,67 @@
     return Math.ceil(canvasWidth * (3 / A4_WIDTH_MM));
   }
 
+  function getCanvasScale(pageWidthPx) {
+    return Math.min(
+      MAX_CANVAS_SCALE,
+      Math.max(MIN_CANVAS_SCALE, TARGET_CANVAS_WIDTH_PX / pageWidthPx)
+    );
+  }
+
+  function createPdfExportPreview(sourcePreview, pageSelector) {
+    const host = document.createElement("div");
+    host.className = "vitagen-pdf-export-host modal-preview-host";
+    Object.assign(host.style, {
+      position: "fixed",
+      left: "-10000px",
+      top: "0",
+      width: `${EXPORT_WIDTH_PX}px`,
+      minHeight: `${EXPORT_HEIGHT_PX}px`,
+      overflow: "visible",
+      background: "#ffffff",
+      pointerEvents: "none",
+      zIndex: "-1",
+    });
+
+    const preview = sourcePreview.cloneNode(true);
+    preview.id = "preview-pdf-export";
+    preview.classList.add("pdf-export-preview");
+    Object.assign(preview.style, {
+      width: `${EXPORT_WIDTH_PX}px`,
+      maxWidth: "none",
+      aspectRatio: `${A4_WIDTH_MM} / ${A4_HEIGHT_MM}`,
+      overflow: "visible",
+      boxShadow: "none",
+      border: "0",
+      borderRadius: "0",
+      transform: "none",
+    });
+
+    preview.querySelectorAll(".watermark").forEach((element) => {
+      element.remove();
+    });
+    preview.querySelectorAll(".page-break").forEach((element) => {
+      element.style.display = "none";
+      element.style.breakBefore = "auto";
+      element.style.pageBreakBefore = "auto";
+    });
+
+    host.appendChild(preview);
+    document.body.appendChild(host);
+
+    const pageElements = Array.from(preview.querySelectorAll(pageSelector));
+    pageElements.forEach((element) => {
+      Object.assign(element.style, {
+        width: `${EXPORT_WIDTH_PX}px`,
+        minHeight: `${EXPORT_HEIGHT_PX}px`,
+        boxShadow: "none",
+        borderRadius: "0",
+      });
+    });
+
+    return { host, preview, pageElements };
+  }
+
   async function downloadCleanPreviewPdf() {
     const JsPdf = window.jspdf?.jsPDF;
     if (typeof window.html2canvas !== "function" || typeof JsPdf !== "function") {
@@ -366,31 +464,19 @@
       throw new Error("Preview document could not be found.");
     }
 
-    const watermark = preview.querySelector(".watermark");
-    const pageBreaks = Array.from(preview.querySelectorAll(".page-break"));
-    const originalWatermarkDisplay = watermark?.style.display || "";
-    const originalBoxShadow = preview.style.boxShadow || "";
-    const pageSelector = documentType === "lebenslauf" ? ".cv" : ".anschreiben";
-    const pageElements = Array.from(preview.querySelectorAll(pageSelector));
-    const originalPageBreakDisplays = pageBreaks.map((element) => ({
-      element,
-      display: element.style.display || "",
-      breakBefore: element.style.breakBefore || "",
-      pageBreakBefore: element.style.pageBreakBefore || "",
-    }));
-
+    await waitForBuilderPhotoReady();
+    await waitForDocumentFonts();
     await waitForPreviewImages(preview);
 
+    const pageSelector = documentType === "lebenslauf" ? ".cv" : ".anschreiben";
+    const exportPreview = createPdfExportPreview(preview, pageSelector);
+
     try {
-      if (watermark) {
-        watermark.style.display = "none";
+      if (exportPreview.pageElements.length === 0) {
+        throw new Error("No printable document page was found.");
       }
-      pageBreaks.forEach((element) => {
-        element.style.display = "none";
-        element.style.breakBefore = "auto";
-        element.style.pageBreakBefore = "auto";
-      });
-      preview.style.boxShadow = "none";
+
+      await waitForPreviewImages(exportPreview.preview);
 
       const pdf = new JsPdf({
         unit: "mm",
@@ -402,12 +488,13 @@
       const pdfPageHeight = pdf.internal.pageSize.getHeight();
       let isFirstPage = true;
 
-      for (const pageElement of pageElements) {
+      for (const pageElement of exportPreview.pageElements) {
         const pageRect = pageElement.getBoundingClientRect();
         const pageHeightPx = Math.round(pageRect.width * (A4_HEIGHT_MM / A4_WIDTH_MM));
         const exportHeightPx = getExportHeightPx(pageElement, pageHeightPx);
+        const canvasScale = getCanvasScale(pageRect.width);
         const canvas = await window.html2canvas(pageElement, {
-          scale: CANVAS_SCALE,
+          scale: canvasScale,
           width: Math.ceil(pageRect.width),
           height: exportHeightPx,
           useCORS: true,
@@ -455,12 +542,12 @@
             pdf.addPage();
           }
 
-          const imageData = pageCanvas.toDataURL("image/jpeg", 0.98);
+          const imageData = pageCanvas.toDataURL("image/png");
           const imageHeightMm =
             canvas.height <= sliceHeight + trailingTolerancePx
               ? pdfPageHeight
               : (currentSliceHeight * pdfPageWidth) / canvas.width;
-          pdf.addImage(imageData, "JPEG", 0, 0, pdfPageWidth, imageHeightMm);
+          pdf.addImage(imageData, "PNG", 0, 0, pdfPageWidth, imageHeightMm);
           isFirstPage = false;
 
           if (canvas.height <= sliceHeight + trailingTolerancePx) {
@@ -472,17 +559,7 @@
 
       pdf.save(filename);
     } finally {
-      if (watermark) {
-        watermark.style.display = originalWatermarkDisplay;
-      }
-      originalPageBreakDisplays.forEach(
-        ({ element, display, breakBefore, pageBreakBefore }) => {
-          element.style.display = display;
-          element.style.breakBefore = breakBefore;
-          element.style.pageBreakBefore = pageBreakBefore;
-        }
-      );
-      preview.style.boxShadow = originalBoxShadow;
+      exportPreview.host.remove();
     }
   }
 
