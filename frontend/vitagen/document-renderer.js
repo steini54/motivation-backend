@@ -3,8 +3,8 @@
 
   const DEFAULT_STYLE = "swiss-line.css";
   const BODY_WORD_LIMIT = 270;
-  const CV_PAGE_ONE_BUDGET = 25;
-  const CV_CONTINUATION_BUDGET = 31;
+  const CV_PAGE_ONE_BUDGET = 21;
+  const CV_CONTINUATION_BUDGET = 26;
 
   const COPY = {
     de: {
@@ -272,7 +272,7 @@
 
   function entryUnits(entry) {
     const body = entry.body || "";
-    return 3 + Math.ceil(words(body).length / 18);
+    return 3 + Math.ceil(words(body).length / 14);
   }
 
   function splitLongEntry(entry, maxUnits, language) {
@@ -281,7 +281,7 @@
     }
 
     const allWords = words(entry.body);
-    const chunkSize = Math.max(45, Math.floor((maxUnits - 3) * 16));
+    const chunkSize = Math.max(36, Math.floor((maxUnits - 3) * 12));
     const chunks = [];
     for (let index = 0; index < allWords.length; index += chunkSize) {
       chunks.push(allWords.slice(index, index + chunkSize).join(" "));

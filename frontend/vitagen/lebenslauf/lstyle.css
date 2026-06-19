@@ -1114,7 +1114,7 @@ textarea:focus {
 .cv-side > p {
   margin: 7px 0 18px;
   color: rgba(255, 255, 255, 0.72);
-  font-size: 9pt;
+  font-size: 10pt;
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1127,7 +1127,7 @@ textarea:focus {
 .cv-block h3,
 .cv-section h2 {
   margin: 0 0 8px;
-  font-size: 11pt;
+  font-size: 13pt;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
@@ -1135,7 +1135,7 @@ textarea:focus {
 .cv-block p {
   margin: 0 0 8px;
   color: rgba(255, 255, 255, 0.78);
-  font-size: 9pt;
+  font-size: 10pt;
   line-height: 1.35;
 }
 
@@ -1146,7 +1146,7 @@ textarea:focus {
 .document-label {
   margin: 0 0 10px;
   color: var(--cv-accent);
-  font-size: 9pt;
+  font-size: 10pt;
   font-weight: 900;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1166,8 +1166,8 @@ textarea:focus {
 .timeline p,
 .timeline small {
   color: #445164;
-  font-size: 10pt;
-  line-height: 1.36;
+  font-size: 12pt;
+  line-height: 1.34;
 }
 
 .timeline {
@@ -1195,12 +1195,12 @@ textarea:focus {
 
 .timeline-item strong {
   color: #1f2933;
-  font-size: 10.5pt;
+  font-size: 12pt;
 }
 
 .timeline-item span {
   color: var(--cv-muted);
-  font-size: 9pt;
+  font-size: 10pt;
   font-weight: 800;
 }
 
@@ -1219,7 +1219,7 @@ textarea:focus {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.14);
   color: rgba(255, 255, 255, 0.88);
-  font-size: 8pt;
+  font-size: 9pt;
   font-weight: 800;
 }
 

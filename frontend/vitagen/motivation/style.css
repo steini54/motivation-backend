@@ -1018,7 +1018,7 @@ select:focus {
   flex-direction: column;
   padding: 20mm 24mm 18mm;
   background: var(--doc-paper-bg);
-  font-size: 11pt;
+  font-size: 12pt;
   line-height: 1.5;
 }
 
@@ -1052,7 +1052,7 @@ select:focus {
 
 .preview-paper.document-rendered .letter-greeting {
   margin: 0 0 5mm;
-  font-size: 11pt;
+  font-size: 12pt;
 }
 
 .preview-paper.document-rendered .letter-body {
@@ -1064,7 +1064,7 @@ select:focus {
 .preview-paper.document-rendered .closing-block p {
   margin: 0;
   color: #1f2933;
-  font-size: 11pt;
+  font-size: 12pt;
   line-height: 1.5;
 }
 
@@ -1086,7 +1086,7 @@ select:focus {
   display: block;
   margin-top: 2mm;
   color: #111827;
-  font-size: 11pt;
+  font-size: 12pt;
 }
 
 .preview-paper .letterhead {
