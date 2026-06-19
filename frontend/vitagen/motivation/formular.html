@@ -163,11 +163,22 @@
 
           <div class="field text-length-field">
             <label for="motivationTextLength">Textumfang</label>
-            <select id="motivationTextLength" name="motivationTextLength">
-              <option value="short">Kurz</option>
-              <option value="standard" selected>Standard</option>
-              <option value="long">Ausfuehrlich</option>
-            </select>
+            <div class="custom-select" id="customMotivationTextLength">
+              <div class="custom-select-trigger">
+                <span>Standard</span>
+                <span class="custom-select-arrow"></span>
+              </div>
+              <div class="custom-select-options">
+                <div class="custom-select-option" data-value="short">Kurz</div>
+                <div class="custom-select-option selected" data-value="standard">Standard</div>
+                <div class="custom-select-option" data-value="long">Ausfuehrlich</div>
+              </div>
+              <select id="motivationTextLength" name="motivationTextLength" style="display: none;">
+                <option value="short">Kurz</option>
+                <option value="standard" selected>Standard</option>
+                <option value="long">Ausfuehrlich</option>
+              </select>
+            </div>
           </div>
 
           <div class="field">

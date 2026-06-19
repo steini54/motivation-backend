@@ -124,6 +124,11 @@
       const navbar = wrapper.firstElementChild;
       mount.replaceWith(navbar);
       installLanguageButtons(navbar);
+
+      const brandLink = navbar.querySelector(".brand");
+      if (brandLink) {
+        brandLink.setAttribute("href", "/bewerbungs-generator/start.html");
+      }
     });
     applyNavbarLanguage(getStoredLanguage());
   }

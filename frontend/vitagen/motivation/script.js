@@ -1089,6 +1089,57 @@ window.addEventListener("DOMContentLoaded", () => {
 
   updateAiGeneratedTextState(saved.stichwoerter2_is_ai);
 
+  // Initialize Custom Select Dropdown
+  const customSelect = document.getElementById("customMotivationTextLength");
+  const selectEl = document.getElementById("motivationTextLength");
+  if (customSelect && selectEl) {
+    const trigger = customSelect.querySelector(".custom-select-trigger");
+    const triggerText = customSelect.querySelector(".custom-select-trigger span");
+    const options = customSelect.querySelectorAll(".custom-select-option");
+
+    function syncCustomSelect() {
+      const val = selectEl.value;
+      options.forEach(opt => {
+        if (opt.dataset.value === val) {
+          opt.classList.add("selected");
+          triggerText.textContent = opt.textContent;
+        } else {
+          opt.classList.remove("selected");
+        }
+      });
+    }
+
+    trigger.addEventListener("click", (e) => {
+      e.stopPropagation();
+      customSelect.classList.toggle("open");
+    });
+
+    options.forEach(opt => {
+      opt.addEventListener("click", () => {
+        const val = opt.dataset.value;
+        selectEl.value = val;
+        syncCustomSelect();
+        customSelect.classList.remove("open");
+        
+        selectEl.dispatchEvent(new Event("change"));
+        selectEl.dispatchEvent(new Event("input"));
+      });
+    });
+
+    document.addEventListener("click", () => {
+      customSelect.classList.remove("open");
+    });
+
+    syncCustomSelect();
+
+    const observer = new MutationObserver(() => {
+      syncCustomSelect();
+    });
+    observer.observe(selectEl, { attributes: true });
+    
+    window.setInterval(syncCustomSelect, 500);
+  }
+
   renderOptionPlaceholders();
   updateCounter();
 
