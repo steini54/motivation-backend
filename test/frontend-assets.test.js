@@ -209,6 +209,34 @@ test("builder full preview watermark is large enough to block free documents", (
   }
 });
 
+test("CV renderer uses measured pagination and the required typography scale", () => {
+  const rendererScript = fs.readFileSync(
+    path.join(vitagenPath, "document-renderer.js"),
+    "utf8"
+  );
+  const lebenslaufCss = fs.readFileSync(
+    path.join(lebenslaufPath, "lstyle.css"),
+    "utf8"
+  );
+
+  assert.match(rendererScript, /function createCvMeasurer/);
+  assert.match(rendererScript, /document-measurement-root/);
+  assert.match(rendererScript, /getBoundingClientRect\(\)/);
+  assert.match(rendererScript, /function splitEntryToMeasuredChunks/);
+  assert.match(rendererScript, /function ensureFinalFooterFits/);
+  assert.doesNotMatch(rendererScript, /function entryUnits/);
+  assert.doesNotMatch(rendererScript, /CV_PAGE_ONE_BUDGET/);
+  assert.doesNotMatch(rendererScript, /CV_CONTINUATION_BUDGET/);
+
+  assert.match(lebenslaufCss, /--cv-body-size: 11pt;/);
+  assert.match(lebenslaufCss, /--cv-body-line-height: 1\.38;/);
+  assert.match(lebenslaufCss, /--cv-entry-meta-size: 9\.2pt;/);
+  assert.match(lebenslaufCss, /\.document-measurement-root/);
+  assert.match(lebenslaufCss, /\.cv-entry \{/);
+  assert.match(lebenslaufCss, /break-inside: avoid;/);
+  assert.doesNotMatch(lebenslaufCss, /font-size: 12pt;/);
+});
+
 test("builder photo state persists blobs without storing base64 in localStorage", () => {
   const motivationScript = fs.readFileSync(
     path.join(frontendPath, "script.js"),

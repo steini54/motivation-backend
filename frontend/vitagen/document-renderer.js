@@ -3,8 +3,8 @@
 
   const DEFAULT_STYLE = "swiss-line.css";
   const BODY_WORD_LIMIT = 270;
-  const CV_PAGE_ONE_BUDGET = 21;
-  const CV_CONTINUATION_BUDGET = 26;
+  const CV_SAFE_BOTTOM_PX = 18;
+  const CV_MIN_BODY_CHUNK_WORDS = 36;
 
   const COPY = {
     de: {
@@ -270,28 +270,54 @@
     );
   }
 
-  function entryUnits(entry) {
-    const body = entry.body || "";
-    return 3 + Math.ceil(words(body).length / 14);
+  function clonePageModel(page) {
+    return {
+      sections: page.sections.map((section) => ({
+        key: section.key,
+        title: section.title,
+        entries: section.entries.slice(),
+      })),
+    };
   }
 
-  function splitLongEntry(entry, maxUnits, language) {
-    if (entryUnits(entry) <= maxUnits || words(entry.body).length < 80) {
-      return [entry];
-    }
+  function pageHasEntries(page) {
+    return page.sections.some((section) => section.entries.length > 0);
+  }
 
-    const allWords = words(entry.body);
-    const chunkSize = Math.max(36, Math.floor((maxUnits - 3) * 12));
-    const chunks = [];
-    for (let index = 0; index < allWords.length; index += chunkSize) {
-      chunks.push(allWords.slice(index, index + chunkSize).join(" "));
+  function addEntryToPage(page, section, entry) {
+    let targetSection = page.sections.find((item) => item.key === section.key);
+    if (!targetSection) {
+      targetSection = { key: section.key, title: section.title, entries: [] };
+      page.sections.push(targetSection);
     }
+    targetSection.entries.push(entry);
+  }
 
-    return chunks.map((chunk, index) => ({
-      ...entry,
-      title: index === 0 ? entry.title : `${entry.title} - ${t(language, "continued")}`,
-      body: chunk,
-    }));
+  function pageWithEntry(page, section, entry) {
+    const candidate = clonePageModel(page);
+    addEntryToPage(candidate, section, entry);
+    return candidate;
+  }
+
+  function popLastEntry(page) {
+    for (let index = page.sections.length - 1; index >= 0; index -= 1) {
+      const section = page.sections[index];
+      const entry = section.entries.pop();
+      if (entry) {
+        if (section.entries.length === 0) {
+          page.sections.splice(index, 1);
+        }
+        return {
+          section: { key: section.key, title: section.title },
+          entry,
+        };
+      }
+    }
+    return null;
+  }
+
+  function pageEntryCount(page) {
+    return page.sections.reduce((count, section) => count + section.entries.length, 0);
   }
 
   function cvSectionEntries(data, language) {
@@ -361,37 +387,206 @@
     return sections;
   }
 
-  function paginateCv(data, language) {
+  function renderCvFooter(data, language) {
+    return node("footer", { className: "cv-footer" }, [
+      node("span", { id: "pv-datum", text: text(data.datum, t(language, "defaultDate")) }),
+      node("strong", { id: "pv-unterschrift", text: text(data.unterschrift || data.name, t(language, "cvName")) }),
+    ]);
+  }
+
+  function renderCvEntry(entry, sectionKey) {
+    return node("div", { className: "timeline-item cv-entry" }, [
+      entry.title ? node("strong", { className: "cv-entry-title", text: entry.title }) : null,
+      entry.meta ? node("span", { className: "cv-entry-meta", text: entry.meta }) : null,
+      entry.body
+        ? node("p", {
+            className: sectionKey === "profile" ? "cv-entry-desc cv-profile-text" : "cv-entry-desc",
+            text: entry.body,
+          })
+        : null,
+    ]);
+  }
+
+  function renderCvSection(section) {
+    return node("section", { className: "cv-section", "data-section": section.key }, [
+      node("h2", { className: "cv-section-title", text: section.title }),
+      node(
+        "div",
+        { className: "timeline" },
+        section.entries.map((entry) => renderCvEntry(entry, section.key))
+      ),
+    ]);
+  }
+
+  function renderedContentHeight(container, paddingTop) {
+    let bottom = 0;
+    Array.from(container.children).forEach((child) => {
+      const rect = child.getBoundingClientRect();
+      const styles = global.getComputedStyle ? global.getComputedStyle(child) : null;
+      const marginBottom = styles ? parseFloat(styles.marginBottom) || 0 : 0;
+      bottom = Math.max(bottom, rect.bottom - container.getBoundingClientRect().top - paddingTop + marginBottom);
+    });
+    return Math.max(0, bottom);
+  }
+
+  function createCvMeasurer(data, language) {
+    if (!global.document?.body || !global.getComputedStyle) {
+      return null;
+    }
+
+    const root = node("div", { className: "preview-paper document-rendered document-measurement-root" });
+    const page = createPage({ type: "cv", pageNumber: 1, pageCount: 1, watermark: false, language });
+    const article = node("article", { className: "document-content cv" });
+    const main = node("section", { className: "cv-main" });
+    article.append(buildCvSidebar(data, language, 1, 1), main);
+    page.appendChild(article);
+    root.appendChild(page);
+    global.document.body.appendChild(root);
+
+    const mainStyles = global.getComputedStyle(main);
+    const paddingTop = parseFloat(mainStyles.paddingTop) || 0;
+    const paddingBottom = parseFloat(mainStyles.paddingBottom) || 0;
+    main.innerHTML = "";
+    main.appendChild(renderCvFooter(data, language));
+    const footerHeight = renderedContentHeight(main, paddingTop);
+    const mainHeight = main.getBoundingClientRect().height;
+    const finalLimit = mainHeight - paddingTop - paddingBottom - CV_SAFE_BOTTOM_PX;
+    const nonFinalLimit = finalLimit - footerHeight - CV_SAFE_BOTTOM_PX;
+    main.innerHTML = "";
+
+    function renderMain(pageModel, includeFooter = false) {
+      main.innerHTML = "";
+      main.appendChild(node("p", { className: "document-label", text: t(language, "cvLabel") }));
+      pageModel.sections.forEach((section) => main.appendChild(renderCvSection(section)));
+      if (includeFooter) {
+        main.appendChild(renderCvFooter(data, language));
+      }
+    }
+
+    function measure(pageModel, includeFooter = false) {
+      renderMain(pageModel, includeFooter);
+      return renderedContentHeight(main, paddingTop);
+    }
+
+    function fits(pageModel, includeFooter = false) {
+      const limit = includeFooter ? finalLimit : nonFinalLimit;
+      return measure(pageModel, includeFooter) <= limit;
+    }
+
+    return {
+      root,
+      fits,
+    };
+  }
+
+  function splitEntryToMeasuredChunks(section, entry, language, measurer) {
+    const bodyWords = words(entry.body);
+    if (bodyWords.length === 0) {
+      return [entry];
+    }
+
+    const chunks = [];
+    let index = 0;
+    while (index < bodyWords.length) {
+      let low = Math.min(CV_MIN_BODY_CHUNK_WORDS, bodyWords.length - index);
+      let high = bodyWords.length - index;
+      let best = low;
+
+      while (low <= high) {
+        const mid = Math.floor((low + high) / 2);
+        const chunk = {
+          ...entry,
+          title: chunks.length === 0 ? entry.title : `${entry.title} - ${t(language, "continued")}`,
+          body: bodyWords.slice(index, index + mid).join(" "),
+        };
+        const page = { sections: [] };
+        addEntryToPage(page, section, chunk);
+        if (measurer.fits(page, false)) {
+          best = mid;
+          low = mid + 1;
+        } else {
+          high = mid - 1;
+        }
+      }
+
+      chunks.push({
+        ...entry,
+        title: chunks.length === 0 ? entry.title : `${entry.title} - ${t(language, "continued")}`,
+        body: bodyWords.slice(index, index + best).join(" "),
+      });
+      index += best;
+    }
+
+    return chunks;
+  }
+
+  function paginateCvFallback(data, language) {
     const pages = [{ sections: [] }];
-    let current = pages[0];
-    let remaining = CV_PAGE_ONE_BUDGET;
-
     cvSectionEntries(data, language).forEach((section) => {
-      let sectionStartedOnPage = false;
-      section.entries.forEach((rawEntry) => {
-        splitLongEntry(rawEntry, CV_CONTINUATION_BUDGET - 3, language).forEach((entry) => {
-          const cost = entryUnits(entry) + (sectionStartedOnPage ? 0 : 2);
-          if (cost > remaining && current.sections.length > 0) {
-            current = { sections: [] };
-            pages.push(current);
-            remaining = CV_CONTINUATION_BUDGET;
-            sectionStartedOnPage = false;
-          }
+      section.entries.forEach((entry) => addEntryToPage(pages[0], section, entry));
+    });
+    return pages;
+  }
 
-          let targetSection = current.sections.find((item) => item.key === section.key);
-          if (!targetSection) {
-            targetSection = { key: section.key, title: section.title, entries: [] };
-            current.sections.push(targetSection);
-            remaining -= 2;
-          }
-          targetSection.entries.push(entry);
-          remaining -= entryUnits(entry);
-          sectionStartedOnPage = true;
+  function ensureFinalFooterFits(pages, measurer) {
+    let guard = 0;
+    while (pages.length && !measurer.fits(pages[pages.length - 1], true) && guard < 20) {
+      const finalPage = pages[pages.length - 1];
+      if (pageEntryCount(finalPage) <= 1) {
+        break;
+      }
+      const moved = popLastEntry(finalPage);
+      if (!moved) {
+        break;
+      }
+      const newPage = { sections: [] };
+      addEntryToPage(newPage, moved.section, moved.entry);
+      pages.push(newPage);
+      guard += 1;
+    }
+  }
+
+  function paginateCv(data, language) {
+    const measurer = createCvMeasurer(data, language);
+    if (!measurer) {
+      return paginateCvFallback(data, language);
+    }
+
+    try {
+      const pages = [{ sections: [] }];
+      let current = pages[0];
+
+      cvSectionEntries(data, language).forEach((section) => {
+        section.entries.forEach((rawEntry) => {
+          const emptyPage = { sections: [] };
+          addEntryToPage(emptyPage, section, rawEntry);
+          const entries = measurer.fits(emptyPage, false)
+            ? [rawEntry]
+            : splitEntryToMeasuredChunks(section, rawEntry, language, measurer);
+
+          entries.forEach((entry) => {
+            let candidate = pageWithEntry(current, section, entry);
+            if (!measurer.fits(candidate, false) && pageHasEntries(current)) {
+              current = { sections: [] };
+              pages.push(current);
+              candidate = pageWithEntry(current, section, entry);
+            }
+
+            if (!measurer.fits(candidate, false) && !pageHasEntries(current)) {
+              addEntryToPage(current, section, entry);
+              return;
+            }
+
+            addEntryToPage(current, section, entry);
+          });
         });
       });
-    });
 
-    return pages;
+      ensureFinalFooterFits(pages, measurer);
+      return pages.filter(pageHasEntries);
+    } finally {
+      measurer.root.remove();
+    }
   }
 
   function makePills(values, limit) {
@@ -409,22 +604,19 @@
       sidebar.appendChild(node("img", { id: "pv-foto", src: data.foto, alt: "Bewerbungsfoto" }));
     }
 
-    sidebar.append(
-      node("h1", { id: pageNumber === 1 ? "pv-name" : undefined, text: text(data.name, t(language, "cvName")) }),
-      node("p", { id: pageNumber === 1 ? "pv-headline" : undefined, text: text(data.headline, t(language, "role")).toUpperCase() }),
-      node("div", { className: "cv-block" }, [
-        node("h3", { text: t(language, "contact") }),
-        node("p", { id: pageNumber === 1 ? "pv-kontakt" : undefined }, [
-          textWithBreaks(text(data.kontakt, t(language, "defaultContact"))),
-        ]),
-        node("p", { id: pageNumber === 1 ? "pv-adresse" : undefined }, [
-          textWithBreaks(text(data.adresse, t(language, "defaultAddress"))),
-        ]),
-      ])
-    );
-
     if (pageNumber === 1) {
       sidebar.append(
+        node("h1", { id: "pv-name", text: text(data.name, t(language, "cvName")) }),
+        node("p", { id: "pv-headline", text: text(data.headline, t(language, "role")).toUpperCase() }),
+        node("div", { className: "cv-block" }, [
+          node("h3", { text: t(language, "contact") }),
+          node("p", { id: "pv-kontakt" }, [
+            textWithBreaks(text(data.kontakt, t(language, "defaultContact"))),
+          ]),
+          node("p", { id: "pv-adresse" }, [
+            textWithBreaks(text(data.adresse, t(language, "defaultAddress"))),
+          ]),
+        ]),
         node("div", { className: "cv-block" }, [
           node("h3", { text: t(language, "skills") }),
           node("div", { id: "pv-kenntnisse", className: "pill-list" }, makePills(skills.length ? skills : ["MS Office", "Organisation", "Kommunikation"], 12)),
@@ -435,29 +627,21 @@
         ])
       );
     } else {
-      sidebar.appendChild(
-        node("p", { className: "cv-page-marker", text: `${t(language, "page")} ${pageNumber} ${t(language, "of")} ${pageCount}` })
+      sidebar.append(
+        node("h1", { id: pageNumber === 2 ? "pv-name-cont" : undefined, text: text(data.name, t(language, "cvName")) }),
+        node("p", { id: pageNumber === 2 ? "pv-headline-cont" : undefined, text: text(data.headline, t(language, "role")) }),
+        node("div", { className: "cv-block cv-continuation-contact" }, [
+          node("h3", { text: t(language, "contact") }),
+          node("p", {}, [textWithBreaks(text(data.kontakt, t(language, "defaultContact")))]),
+        ]),
+        node("p", {
+          className: "cv-page-marker cv-page-number",
+          text: `${t(language, "page")} ${pageNumber} ${t(language, "of")} ${pageCount}`,
+        })
       );
     }
 
     return sidebar;
-  }
-
-  function renderCvSection(section) {
-    return node("section", { className: "cv-section", "data-section": section.key }, [
-      node("h2", { text: section.title }),
-      node(
-        "div",
-        { className: "timeline" },
-        section.entries.map((entry) =>
-          node("div", { className: "timeline-item" }, [
-            entry.title ? node("strong", { text: entry.title }) : null,
-            entry.meta ? node("span", { text: entry.meta }) : null,
-            entry.body ? node("p", { text: entry.body }) : null,
-          ])
-        )
-      ),
-    ]);
   }
 
   function buildCv(options) {
@@ -483,12 +667,7 @@
       ]);
 
       if (pageNumber === pageModels.length) {
-        main.appendChild(
-          node("footer", { className: "cv-footer" }, [
-            node("span", { id: "pv-datum", text: text(data.datum, t(language, "defaultDate")) }),
-            node("strong", { id: "pv-unterschrift", text: text(data.unterschrift || data.name, t(language, "cvName")) }),
-          ])
-        );
+        main.appendChild(renderCvFooter(data, language));
       }
 
       article.append(buildCvSidebar(data, language, pageNumber, pageModels.length), main);
