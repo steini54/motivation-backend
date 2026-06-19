@@ -226,6 +226,15 @@ select {
 
 select {
   cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-right: 36px !important;
+  background: #fbfdff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23637083' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5'/%3E%3C/svg%3E") no-repeat right 14px center / 14px !important;
+}
+
+select:focus {
+  background-color: #ffffff;
 }
 
 textarea {
@@ -2161,41 +2170,4 @@ select:focus {
   height: 14px;
   background: url("../assets/Ai icon.png") center / contain no-repeat;
 }
-
-/* AI Live Preview Highlight */
-.preview-paper.document-rendered .letter-body.ai-generated {
-  position: relative;
-  border-left: 2.5px solid;
-  border-image: linear-gradient(180deg, #6366f1, #0d6f72) 1;
-  padding-left: 12px;
-  margin-left: -14px;
-  background: linear-gradient(90deg, rgba(99, 102, 241, 0.02), rgba(13, 111, 114, 0.01) 60%, transparent);
-  border-radius: 0 6px 6px 0;
-}
-
-.preview-paper.document-rendered .ai-highlight-badge {
-  position: absolute;
-  right: 0px;
-  top: -20px;
-  background: linear-gradient(135deg, #6366f1, #0d6f72);
-  color: #ffffff;
-  font-size: 8px;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 2.5px 7px;
-  border-radius: 999px;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  z-index: 5;
-  pointer-events: none;
-  box-shadow: 0 2px 6px rgba(99, 102, 241, 0.2);
-}
-
-.preview-paper.document-rendered .ai-highlight-badge .ai-badge-sparkle {
-  width: 8px;
-  height: 8px;
-  background: url("../assets/Ai icon.png") center / contain no-repeat;
-  filter: brightness(0) invert(1);
 }

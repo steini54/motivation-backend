@@ -230,18 +230,6 @@
       `${t(language, "company")}\n${t(language, "department")}\n${t(language, "addressLine")}\n${t(language, "city")}`
     );
 
-    const hasAiText = !!data.stichwoerter2_is_ai;
-    const bodyClass = hasAiText ? "letter-body ai-generated" : "letter-body";
-    const bodyChildren = [
-      ...(hasAiText ? [
-        node("div", { className: "ai-highlight-badge" }, [
-          node("span", { className: "ai-badge-sparkle" }),
-          node("span", { text: "KI-generiert" })
-        ])
-      ] : []),
-      ...bodyParagraphs.map((paragraph) => node("p", { text: paragraph }))
-    ];
-
     content.append(
       header,
       node("div", { className: "document-rule", "aria-hidden": "true" }),
@@ -257,8 +245,8 @@
       node("p", { id: "pv-stichwoerter", className: "letter-greeting", text: greeting }),
       node(
         "div",
-        { id: "pv-stichwoerter2", className: bodyClass },
-        bodyChildren
+        { id: "pv-stichwoerter2", className: "letter-body" },
+        bodyParagraphs.map((paragraph) => node("p", { text: paragraph }))
       ),
       node("div", { className: "letter-spacer", "aria-hidden": "true" }),
       node("footer", { className: "closing-block doc-signature" }, [
