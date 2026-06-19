@@ -51,6 +51,7 @@
     return `
       <nav class="topbar" data-vitagen-shared-navbar>
         <a class="brand" href="${ROUTES.cv}" aria-label="VitaGen">
+          <img src="/bewerbungs-generator/assets/vitagen-logo.png" alt="VitaGen Logo" class="brand-img" />
           <span class="brand-mark">VG</span>
           <span>VitaGen</span>
         </a>

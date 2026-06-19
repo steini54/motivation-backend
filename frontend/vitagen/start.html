@@ -79,9 +79,73 @@
     .nav a{padding:8px 11px;color:#475569;font-size:12px;font-weight:700;border-radius:999px;transition:.18s ease;white-space:nowrap}
     .nav a:hover{background:#fff;color:var(--primary);box-shadow:0 8px 18px rgba(17,24,39,.06)}
     .top-actions{display:flex;gap:10px;align-items:center}
-    .lang-switch{display:inline-flex;border:1px solid var(--line);background:#fff;border-radius:999px;padding:4px;gap:4px}
-    .lang-switch button{border:0;background:transparent;border-radius:999px;padding:8px 11px;color:var(--muted);font-weight:750;font-size:12px;cursor:pointer}
-    .lang-switch button.active{background:var(--primary);color:#fff}
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px 4px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+    }
+    .lang-icon {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .lang-options {
+      display: flex;
+      gap: 4px;
+    }
+    .lang-btn {
+      border: 0;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lang-btn.muted {
+      background: transparent;
+      color: var(--muted);
+    }
+    .lang-btn:not(.muted):hover {
+      background: var(--primary2);
+    }
+
+    .topbar-inner .btn {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+    }
+    .topbar-inner .btn.primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+    }
+    .topbar-inner .btn.ghost {
+      border-color: var(--line);
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: none;
+    }
+    .topbar-inner .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
 
     .btn{
       border:0;
@@ -166,10 +230,10 @@
     .section h2{margin:0;font-size:clamp(30px,3.4vw,54px);line-height:1;letter-spacing:-.055em;max-width:830px}
     .section-head p{margin:0;max-width:500px;color:var(--muted);line-height:1.65;font-size:15px}
 
-    .logo-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.55);overflow:hidden}
-    .marquee{display:flex;gap:14px;padding:18px 0;white-space:nowrap;animation:marquee 28s linear infinite;will-change: transform;}
+    .logo-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.55);overflow:hidden;display:flex}
+    .marquee{display:flex;gap:14px;padding:18px 14px 18px 0;white-space:nowrap;animation:marquee 14s linear infinite;will-change: transform;flex-shrink:0}
     .marquee span{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--line);background:#fff;border-radius:999px;color:#64748b;font-size:13px;font-weight:700}
-    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
 
     .problem-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px}
     .problem-card{border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:30px;box-shadow:var(--soft-shadow);padding:28px;position:relative;overflow:hidden}
@@ -290,6 +354,22 @@
       .section{padding:54px 18px}.section-head{display:grid}.steps,.advantage-grid,.deep-grid,.template-wall,.faq-grid{grid-template-columns:1fr}
       .product-card{padding:22px}.solution-preview .split{grid-template-columns:1fr}.cta{padding:0 18px;margin-bottom:52px}.cta-box{padding:28px}.footer-inner{padding:22px 18px;display:grid}
     }
+    .ai-icon-img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+    .product-icon-img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+    .deep-icon-img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      margin-bottom: 16px;
+    }
   </style>
 </head>
 <body>
@@ -298,7 +378,7 @@
   <header class="topbar">
     <div class="topbar-inner">
       <a class="brand" href="#">
-        <img src="data:image/png;base64,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" alt="VitaGen Logo" />
+        <img src="/bewerbungs-generator/assets/vitagen-logo.png" alt="VitaGen Logo" />
         <div>
           <strong>VitaGen</strong>
           <span data-i18n="brand_subtitle"></span>
@@ -315,8 +395,15 @@
 
       <div class="top-actions">
         <div class="lang-switch" aria-label="Language switcher">
-          <button id="langDe" class="active" onclick="setLanguage('de')">DE</button>
-          <button id="langEn" onclick="setLanguage('en')">EN</button>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lang-icon">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <div class="lang-options">
+            <button id="langDe" class="lang-btn" onclick="setLanguage('de')">DE</button>
+            <button id="langEn" class="lang-btn muted" onclick="setLanguage('en')">EN</button>
+          </div>
         </div>
         <a class="btn ghost" href="#features" data-i18n="topbar_secondary"></a>
         <a class="btn primary" href="#features" data-i18n="topbar_cta"></a>
@@ -367,7 +454,7 @@
 
           <div class="floating-card ai-badge-card">
             <div class="badge-head">
-              <div class="ai-icon">AI</div>
+              <img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="ai-icon-img" />
               <div><strong data-i18n="ai_card_title"></strong><div style="font-size:12px;color:var(--muted);margin-top:2px;" data-i18n="ai_card_subtitle"></div></div>
             </div>
             <div class="progress-bars"><div class="progress"><span></span></div><div class="progress"><span></span></div><div class="progress"><span></span></div></div>
@@ -379,6 +466,8 @@
     <div class="logo-strip">
       <div class="marquee">
         <span data-i18n="strip_1"></span><span data-i18n="strip_2"></span><span data-i18n="strip_3"></span><span data-i18n="strip_4"></span><span data-i18n="strip_5"></span><span data-i18n="strip_6"></span>
+      </div>
+      <div class="marquee" aria-hidden="true">
         <span data-i18n="strip_1"></span><span data-i18n="strip_2"></span><span data-i18n="strip_3"></span><span data-i18n="strip_4"></span><span data-i18n="strip_5"></span><span data-i18n="strip_6"></span>
       </div>
     </div>
@@ -434,7 +523,7 @@
         </article>
 
         <article class="product-card ai reveal">
-          <div class="product-top"><div class="product-icon">AI</div><span class="pill" data-i18n="motivation_badge"></span></div>
+          <div class="product-top"><img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="product-icon-img" /><span class="pill" data-i18n="motivation_badge"></span></div>
           <div><h3 data-i18n="motivation_title"></h3><p data-i18n="motivation_desc"></p></div>
           <ul class="product-list">
             <li data-i18n="motivation_point_1"></li><li data-i18n="motivation_point_2"></li><li data-i18n="motivation_point_3"></li><li data-i18n="motivation_point_4"></li>
@@ -451,10 +540,10 @@
       </div>
       <div class="deep-grid stagger">
         <article class="deep-card"><div class="deep-icon">01</div><h3 data-i18n="deep_1_title"></h3><p data-i18n="deep_1_desc"></p></article>
-        <article class="deep-card ai"><div class="deep-icon">AI</div><h3 data-i18n="deep_2_title"></h3><p data-i18n="deep_2_desc"></p></article>
+        <article class="deep-card ai"><img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="deep-icon-img" /><h3 data-i18n="deep_2_title"></h3><p data-i18n="deep_2_desc"></p></article>
         <article class="deep-card"><div class="deep-icon">03</div><h3 data-i18n="deep_3_title"></h3><p data-i18n="deep_3_desc"></p></article>
         <article class="deep-card"><div class="deep-icon">04</div><h3 data-i18n="deep_4_title"></h3><p data-i18n="deep_4_desc"></p></article>
-        <article class="deep-card ai"><div class="deep-icon">AI</div><h3 data-i18n="deep_5_title"></h3><p data-i18n="deep_5_desc"></p></article>
+        <article class="deep-card ai"><img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="deep-icon-img" /><h3 data-i18n="deep_5_title"></h3><p data-i18n="deep_5_desc"></p></article>
         <article class="deep-card"><div class="deep-icon">06</div><h3 data-i18n="deep_6_title"></h3><p data-i18n="deep_6_desc"></p></article>
       </div>
     </section>
@@ -815,8 +904,8 @@
       currentLang = lang;
       document.documentElement.lang = lang;
       localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
-      document.getElementById("langDe").classList.toggle("active", lang === "de");
-      document.getElementById("langEn").classList.toggle("active", lang === "en");
+      document.getElementById("langDe").classList.toggle("muted", lang !== "de");
+      document.getElementById("langEn").classList.toggle("muted", lang !== "en");
       document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.getAttribute("data-i18n")));
       document.querySelectorAll("[data-i18n-html]").forEach(el => el.innerHTML = t(el.getAttribute("data-i18n-html")));
     }

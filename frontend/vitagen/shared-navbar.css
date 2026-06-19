@@ -31,8 +31,17 @@
   text-decoration: none;
 }
 
+.brand-img {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: contain;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(17, 24, 39, 0.08);
+}
+
 .brand-mark {
-  display: grid;
+  display: none !important;
   width: 34px;
   height: 34px;
   place-items: center;
