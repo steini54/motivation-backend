@@ -898,8 +898,17 @@ function showToast(message, type = "info", title) {
   window.setTimeout(removeToast, type === "error" ? 5200 : 3800);
 }
 
+function updateAiGeneratedTextState(isAi) {
+  const badge = document.getElementById("ai-text-badge");
+  if (badge) {
+    const hasText = (document.getElementById("stichwoerter2")?.value || "").trim() !== "";
+    badge.style.display = isAi && hasText ? "inline-flex" : "none";
+  }
+}
+
 function saveAllFields() {
   const data = getStoredData();
+  const isAi = data.stichwoerter2_is_ai || false;
 
   data.name = document.getElementById("name")?.value || "";
   data.adresse = document.getElementById("adresse")?.value || "";
@@ -915,7 +924,10 @@ function saveAllFields() {
   data.unterschrift = document.getElementById("unterschrift")?.value || "";
   delete data.foto;
 
+  data.stichwoerter2_is_ai = isAi && (data.stichwoerter2.trim() !== "");
+
   setStoredData(data);
+  updateAiGeneratedTextState(data.stichwoerter2_is_ai);
   return data;
 }
 
@@ -1075,6 +1087,8 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  updateAiGeneratedTextState(saved.stichwoerter2_is_ai);
+
   renderOptionPlaceholders();
   updateCounter();
 
@@ -1225,6 +1239,11 @@ if (textBtn) {
     textBtn.disabled = true;
     textBtn.innerText = translateValue("Generiere Text...");
 
+    const wrapper = document.getElementById("stichwoerter2")?.closest(".textarea-wrapper");
+    if (wrapper) {
+      wrapper.classList.add("is-generating");
+    }
+
     try {
       const response = await fetch(`${AI_API_BASE_URL}/generate-text`, {
         method: "POST",
@@ -1250,6 +1269,12 @@ if (textBtn) {
 
       if (result.text) {
         document.getElementById("stichwoerter2").value = result.text;
+        
+        // Save the AI generation flag to local storage
+        const saved = getStoredData();
+        saved.stichwoerter2_is_ai = true;
+        setStoredData(saved);
+
         saveAllFields();
         syncLivePreview();
         showToast("Motivationstext wurde erstellt und bleibt editierbar.", "success", "KI-Text bereit");
@@ -1262,6 +1287,9 @@ if (textBtn) {
     } finally {
       textBtn.disabled = false;
       textBtn.innerText = originalButtonText;
+      if (wrapper) {
+        wrapper.classList.remove("is-generating");
+      }
     }
   });
 }

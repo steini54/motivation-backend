@@ -674,6 +674,12 @@
     preview.querySelectorAll(".document-watermark, .watermark").forEach((element) => {
       element.remove();
     });
+    preview.querySelectorAll(".ai-highlight-badge").forEach((element) => {
+      element.remove();
+    });
+    preview.querySelectorAll(".ai-generated").forEach((element) => {
+      element.classList.remove("ai-generated");
+    });
     preview.querySelectorAll(".page-break").forEach((element) => {
       element.style.display = "none";
       element.style.breakBefore = "auto";

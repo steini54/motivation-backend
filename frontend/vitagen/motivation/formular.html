@@ -171,7 +171,33 @@
           <div class="field">
             <label id="pv-fliesstext" for="stichwoerter2">Motivationstext</label>
             <p class="hint">Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.</p>
-            <textarea id="stichwoerter2" name="stichwoerter2" rows="7" placeholder="Erfahrung, Motivation, passende Staerken, konkrete Beispiele..."></textarea>
+            <div class="textarea-wrapper">
+              <textarea id="stichwoerter2" name="stichwoerter2" rows="7" placeholder="Erfahrung, Motivation, passende Staerken, konkrete Beispiele..."></textarea>
+              <div id="ai-skeleton-loader" class="ai-skeleton-loader">
+                <div class="ai-loader-header">
+                  <img src="../assets/Ai icon.png" class="ai-loader-icon" alt="AI Icon">
+                  <div class="ai-loader-title-group">
+                    <div class="ai-loader-title">KI-Textassistent</div>
+                    <div class="ai-loader-subtitle">Motivationstext wird generiert...</div>
+                  </div>
+                </div>
+                <div class="ai-skeleton-lines">
+                  <div class="ai-skeleton-line-track">
+                    <div class="ai-skeleton-line line-1"></div>
+                  </div>
+                  <div class="ai-skeleton-line-track">
+                    <div class="ai-skeleton-line line-2"></div>
+                  </div>
+                  <div class="ai-skeleton-line-track">
+                    <div class="ai-skeleton-line line-3"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ai-text-badge" class="ai-text-badge" style="display: none;">
+              <span class="ai-badge-sparkle"></span>
+              <span>Generiert mit KI · Editierbar</span>
+            </div>
           </div>
 
           <button type="button" id="generateTextBtn" class="ai-button text-button">KI Hilfe zum Fliesstext erstellen</button>
