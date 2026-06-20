@@ -2232,3 +2232,62 @@ textarea:focus {
   transform: none !important;
   transform-origin: top center;
 }
+
+/* Additional Mobile Responsive Refinements */
+@media (max-width: 920px) {
+  .hero-badges {
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 720px) {
+  .modal-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .photo-actions {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+  .photo-actions button {
+    width: 100%;
+  }
+  .photo-options {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px;
+  }
+  .photo-option-placeholder,
+  .generated-option {
+    min-height: auto !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4;
+    padding: 8px;
+  }
+  .empty-avatar {
+    width: 48px;
+    height: 48px;
+  }
+  .empty-shoulders {
+    width: 80%;
+    height: 32px;
+  }
+  .empty-caption {
+    font-size: 9px;
+    padding: 4px 6px;
+    min-height: auto;
+  }
+  .photo-upload-shell {
+    min-height: auto;
+  }
+  .photo-upload-drop {
+    min-height: 200px;
+    padding: 16px;
+  }
+  .photo-current {
+    bottom: 50px;
+  }
+  .photo-current img {
+    max-height: 140px;
+  }
+}

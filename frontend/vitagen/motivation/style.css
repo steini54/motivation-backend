@@ -2259,3 +2259,91 @@ select:focus {
   color: var(--ui-blue);
   font-weight: 700;
 }
+
+/* Mobile Responsive Optimizations */
+@media (max-width: 1120px) {
+  .builder-grid {
+    grid-template-columns: 1fr;
+  }
+  .builder-side {
+    position: static;
+  }
+  .hero-panel {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero-badges {
+    justify-content: center;
+    margin-top: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-shell {
+    width: min(100% - 20px, 1240px);
+    padding: 16px 0 36px;
+  }
+  .form-card {
+    padding: 16px;
+  }
+  .field-grid.two,
+  .split-card,
+  .photo-card-grid,
+  .modal-grid {
+    grid-template-columns: 1fr;
+  }
+  .photo-options {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px;
+  }
+  .photo-option-placeholder,
+  .generated-option {
+    min-height: auto !important;
+    height: auto !important;
+    aspect-ratio: 3 / 4;
+    padding: 8px;
+  }
+  .empty-avatar {
+    width: 48px;
+    height: 48px;
+  }
+  .empty-shoulders {
+    width: 80%;
+    height: 32px;
+  }
+  .empty-caption {
+    font-size: 9px;
+    padding: 4px 6px;
+    min-height: auto;
+  }
+  .photo-upload-shell {
+    min-height: auto;
+  }
+  .photo-upload-drop {
+    min-height: 200px;
+    padding: 16px;
+  }
+  .photo-current {
+    bottom: 50px;
+  }
+  .photo-current img {
+    max-height: 140px;
+  }
+  .photo-actions {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    text-align: center;
+  }
+  .photo-button {
+    min-width: auto;
+    width: 100%;
+  }
+  .preview-modal {
+    width: 95%;
+    max-height: 90vh;
+  }
+  .payment-dialog {
+    width: 95%;
+    padding: 16px;
+  }
+}
