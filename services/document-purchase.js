@@ -14,9 +14,18 @@ const DOCUMENT_TYPES = {
 };
 
 const STYLE_NAMES = new Set([
+  "aqua-arc-contrast.css",
+  "aqua-arc-default.css",
+  "aqua-arc-soft.css",
   "charcoal-frame.css",
   "cobalt-ribbon.css",
+  "corporate-axis-default.css",
+  "corporate-axis-navy.css",
+  "corporate-axis-steel.css",
   "editorial-azure.css",
+  "editorial-mono-classic.css",
+  "editorial-mono-default.css",
+  "editorial-mono-warm.css",
   "executive-ink.css",
   "graphite-pro.css",
   "midnight-column.css",

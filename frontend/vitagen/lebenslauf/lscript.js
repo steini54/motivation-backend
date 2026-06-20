@@ -4,9 +4,10 @@ let aiImageCount = 0;
 const MAX_IMAGES = 3;
 const STORAGE_KEY = "vitagen_lebenslauf";
 const STYLE_STORAGE_KEY = "vitagen_lebenslauf_style";
+const TEMPLATE_STORAGE_KEY = "vitagen_lebenslauf_template";
 const LANGUAGE_STORAGE_KEY = "vitagen_language";
 const DEFAULT_STYLE = "swiss-line.css";
-const DOCUMENT_STYLES = [
+const EXISTING_TEMPLATE_STYLES = [
   "charcoal-frame.css",
   "cobalt-ribbon.css",
   "editorial-azure.css",
@@ -22,6 +23,62 @@ const DOCUMENT_STYLES = [
   "teal-balance.css",
   "terracotta-arch.css",
 ];
+const CV_TEMPLATES = [
+  {
+    id: "existing",
+    name: "Existing Template",
+    description: "Current CV layout",
+    defaultStyle: DEFAULT_STYLE,
+    styles: EXISTING_TEMPLATE_STYLES,
+  },
+  {
+    id: "aqua-arc",
+    name: "Aqua Arc",
+    description: "Clean teal two-column CV",
+    defaultStyle: "aqua-arc-default.css",
+    styles: ["aqua-arc-default.css", "aqua-arc-soft.css", "aqua-arc-contrast.css"],
+  },
+  {
+    id: "corporate-axis",
+    name: "Corporate Axis",
+    description: "Corporate geometric layout",
+    defaultStyle: "corporate-axis-default.css",
+    styles: ["corporate-axis-default.css", "corporate-axis-steel.css", "corporate-axis-navy.css"],
+  },
+  {
+    id: "editorial-mono",
+    name: "Editorial Mono",
+    description: "Editorial monochrome layout",
+    defaultStyle: "editorial-mono-default.css",
+    styles: ["editorial-mono-default.css", "editorial-mono-warm.css", "editorial-mono-classic.css"],
+  },
+];
+const DOCUMENT_STYLES = CV_TEMPLATES.flatMap((template) => template.styles);
+const STYLE_META = {
+  "swiss-line.css": { name: "Swiss Line", tone: "Empfohlen", thumb: "swiss" },
+  "charcoal-frame.css": { name: "Charcoal Frame", tone: "Kontrast", thumb: "charcoal" },
+  "cobalt-ribbon.css": { name: "Cobalt Ribbon", tone: "Dynamisch", thumb: "cobalt" },
+  "editorial-azure.css": { name: "Editorial Azure", tone: "Editorial", thumb: "azure" },
+  "executive-ink.css": { name: "Executive Ink", tone: "Premium", thumb: "executive" },
+  "graphite-pro.css": { name: "Graphite Pro", tone: "Business", thumb: "graphite" },
+  "midnight-column.css": { name: "Midnight Column", tone: "Modern", thumb: "midnight" },
+  "monograph.css": { name: "Monograph", tone: "Minimal", thumb: "monograph" },
+  "navy-wave.css": { name: "Navy Wave", tone: "Elegant", thumb: "navy" },
+  "nordic-panel.css": { name: "Nordic Panel", tone: "Ruhig", thumb: "nordic" },
+  "pearl-classic.css": { name: "Pearl Classic", tone: "Klassisch", thumb: "pearl" },
+  "soft-sand.css": { name: "Soft Sand", tone: "Warm Soft", thumb: "sand" },
+  "teal-balance.css": { name: "Teal Balance", tone: "Klar", thumb: "teal" },
+  "terracotta-arch.css": { name: "Terracotta Arch", tone: "Warm", thumb: "terracotta" },
+  "aqua-arc-default.css": { name: "Aqua Arc", tone: "Default", thumb: "aqua" },
+  "aqua-arc-soft.css": { name: "Aqua Arc Soft", tone: "Soft", thumb: "aqua-soft" },
+  "aqua-arc-contrast.css": { name: "Aqua Arc Contrast", tone: "Contrast", thumb: "aqua-contrast" },
+  "corporate-axis-default.css": { name: "Corporate Axis", tone: "Default", thumb: "axis" },
+  "corporate-axis-steel.css": { name: "Corporate Axis Steel", tone: "Steel", thumb: "axis-steel" },
+  "corporate-axis-navy.css": { name: "Corporate Axis Navy", tone: "Navy", thumb: "axis-navy" },
+  "editorial-mono-default.css": { name: "Editorial Mono", tone: "Default", thumb: "mono" },
+  "editorial-mono-warm.css": { name: "Editorial Mono Warm", tone: "Warm", thumb: "mono-warm" },
+  "editorial-mono-classic.css": { name: "Editorial Mono Classic", tone: "Classic", thumb: "mono-classic" },
+};
 let resolveInitialPhotoReady;
 let pendingPhotoMigration = Promise.resolve();
 window.VitaGenPhotoReady = new Promise((resolve) => {
@@ -101,6 +158,17 @@ const UI_TRANSLATIONS = {
     "Lebenslauf": "Lebenslauf",
     "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.": "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.",
     "Dokumentstil": "Dokumentstil",
+    "CV Template": "CV Template",
+    "Template direkt testen": "Template direkt testen",
+    "Das Template bestimmt Layout, Struktur und Komposition.": "Das Template bestimmt Layout, Struktur und Komposition.",
+    "Existing Template": "Existing Template",
+    "Current CV layout": "Bestehendes CV Layout",
+    "Aqua Arc": "Aqua Arc",
+    "Clean teal two-column CV": "Cleanes zweispaltiges CV in Teal",
+    "Corporate Axis": "Corporate Axis",
+    "Corporate geometric layout": "Corporate Layout mit geometrischen Akzenten",
+    "Editorial Mono": "Editorial Mono",
+    "Editorial monochrome layout": "Editoriales monochromes Layout",
     "Stil direkt testen": "Stil direkt testen",
     "Der Stil veraendert sich direkt in der Vorschau.": "Der Stil veraendert sich direkt in der Vorschau.",
     "Empfohlen": "Empfohlen",
@@ -115,6 +183,12 @@ const UI_TRANSLATIONS = {
     "Ruhig": "Ruhig",
     "Klassisch": "Klassisch",
     "Warm Soft": "Warm Soft",
+    "Default": "Default",
+    "Soft": "Soft",
+    "Contrast": "Contrast",
+    "Steel": "Steel",
+    "Navy": "Navy",
+    "Classic": "Classic",
     "Klar": "Klar",
     "Warm": "Warm",
     "PDF ohne Wasserzeichen vorbereiten": "PDF ohne Wasserzeichen vorbereiten",
@@ -265,6 +339,17 @@ const UI_TRANSLATIONS = {
     "Lebenslauf": "CV",
     "Strukturierte, zuverlaessige Fachkraft mit Erfahrung in Organisation, Kommunikation und serviceorientierter Zusammenarbeit.": "Structured, reliable professional with experience in organization, communication, and service-oriented collaboration.",
     "Dokumentstil": "Document style",
+    "CV Template": "CV template",
+    "Template direkt testen": "Test template directly",
+    "Das Template bestimmt Layout, Struktur und Komposition.": "The template controls layout, structure, and composition.",
+    "Existing Template": "Existing Template",
+    "Current CV layout": "Current CV layout",
+    "Aqua Arc": "Aqua Arc",
+    "Clean teal two-column CV": "Clean teal two-column CV",
+    "Corporate Axis": "Corporate Axis",
+    "Corporate geometric layout": "Corporate geometric layout",
+    "Editorial Mono": "Editorial Mono",
+    "Editorial monochrome layout": "Editorial monochrome layout",
     "Stil direkt testen": "Test style directly",
     "Der Stil veraendert sich direkt in der Vorschau.": "The style changes directly in the preview.",
     "Empfohlen": "Recommended",
@@ -279,6 +364,12 @@ const UI_TRANSLATIONS = {
     "Ruhig": "Calm",
     "Klassisch": "Classic",
     "Warm Soft": "Warm soft",
+    "Default": "Default",
+    "Soft": "Soft",
+    "Contrast": "Contrast",
+    "Steel": "Steel",
+    "Navy": "Navy",
+    "Classic": "Classic",
     "Klar": "Clear",
     "Warm": "Warm",
     "PDF ohne Wasserzeichen vorbereiten": "Prepare PDF without watermark",
@@ -599,6 +690,8 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
   translateTextNodes(dictionary);
   translateAttributes(dictionary);
   updateCounter();
+  renderTemplateOptions(getSelectedTemplate());
+  renderStyleOptions(getSelectedStyle());
 }
 
 function installLanguageSwitch() {
@@ -618,6 +711,79 @@ function installLanguageSwitch() {
 function normalizeDocumentStyle(styleName = DEFAULT_STYLE) {
   const cleanName = String(styleName || DEFAULT_STYLE).trim().split(/[\\/]/).pop();
   return DOCUMENT_STYLES.includes(cleanName) ? cleanName : DEFAULT_STYLE;
+}
+
+function getTemplateById(templateId = "existing") {
+  return CV_TEMPLATES.find((template) => template.id === templateId) || CV_TEMPLATES[0];
+}
+
+function getTemplateByStyle(styleName = DEFAULT_STYLE) {
+  const normalized = normalizeDocumentStyle(styleName);
+  return CV_TEMPLATES.find((template) => template.styles.includes(normalized)) || CV_TEMPLATES[0];
+}
+
+function normalizeDocumentTemplate(templateId = "existing") {
+  return getTemplateById(templateId).id;
+}
+
+function getSelectedTemplate() {
+  const storedStyle = normalizeDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
+  const storedTemplate = localStorage.getItem(TEMPLATE_STORAGE_KEY);
+  if (storedTemplate && getTemplateById(storedTemplate).styles.includes(storedStyle)) {
+    return normalizeDocumentTemplate(storedTemplate);
+  }
+  return getTemplateByStyle(storedStyle).id;
+}
+
+function getSelectedStyle() {
+  const template = getTemplateById(getSelectedTemplate());
+  const storedStyle = normalizeDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || document.getElementById("preview")?.dataset.style || template.defaultStyle);
+  return template.styles.includes(storedStyle) ? storedStyle : template.defaultStyle;
+}
+
+function renderTemplateOptions(activeTemplateId = getSelectedTemplate()) {
+  const container = document.querySelector("[data-template-options]");
+  if (!container) return;
+  container.innerHTML = "";
+  CV_TEMPLATES.forEach((template) => {
+    const button = document.createElement("button");
+    const active = template.id === activeTemplateId;
+    button.type = "button";
+    button.className = `template-chip${active ? " active" : ""}`;
+    button.dataset.template = template.id;
+    button.setAttribute("aria-pressed", String(active));
+    button.innerHTML = `
+      <span class="template-thumb template-thumb--${template.id}" aria-hidden="true"></span>
+      <strong>${translateValue(template.name)}</strong>
+      <small>${translateValue(template.description)}</small>
+    `;
+    button.addEventListener("click", () => applyDocumentTemplate(template.id));
+    container.appendChild(button);
+  });
+}
+
+function renderStyleOptions(activeStyle = getSelectedStyle()) {
+  const container = document.querySelector("[data-style-options]");
+  if (!container) return;
+  const template = getTemplateById(getSelectedTemplate());
+  container.innerHTML = "";
+  template.styles.forEach((styleName) => {
+    const meta = STYLE_META[styleName] || { name: styleName.replace(".css", ""), tone: "", thumb: "" };
+    const button = document.createElement("button");
+    const active = styleName === activeStyle;
+    button.type = "button";
+    button.className = `style-chip${active ? " active" : ""}`;
+    button.dataset.style = styleName;
+    button.dataset.tone = meta.thumb;
+    button.setAttribute("aria-pressed", String(active));
+    button.innerHTML = `
+      <span class="style-thumb ${meta.thumb}" aria-hidden="true"></span>
+      <strong>${translateValue(meta.name)}</strong>
+      <small>${translateValue(meta.tone)}</small>
+    `;
+    button.addEventListener("click", () => applyDocumentStyle(styleName));
+    container.appendChild(button);
+  });
 }
 
 function setTextWithBreaks(element, value, fallback = "") {
@@ -761,6 +927,7 @@ window.saveAllFields = saveFormData;
 
 function applyDocumentStyle(styleName = DEFAULT_STYLE) {
   const normalized = normalizeDocumentStyle(styleName);
+  const template = getTemplateByStyle(normalized);
   const themeLink = document.getElementById("theme-style");
   const preview = document.getElementById("preview");
 
@@ -769,16 +936,23 @@ function applyDocumentStyle(styleName = DEFAULT_STYLE) {
   }
   if (preview) {
     preview.dataset.style = normalized;
+    preview.dataset.template = template.id;
   }
 
+  localStorage.setItem(TEMPLATE_STORAGE_KEY, template.id);
   localStorage.setItem(STYLE_STORAGE_KEY, normalized);
-  document.querySelectorAll(".style-chip").forEach((button) => {
-    const active = button.dataset.style === normalized;
-    button.classList.toggle("active", active);
-    button.setAttribute("aria-pressed", String(active));
-  });
+  renderTemplateOptions(template.id);
+  renderStyleOptions(normalized);
 
   syncLivePreview();
+}
+
+function applyDocumentTemplate(templateId = "existing") {
+  const template = getTemplateById(templateId);
+  const storedStyle = normalizeDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || template.defaultStyle);
+  const nextStyle = template.styles.includes(storedStyle) ? storedStyle : template.defaultStyle;
+  localStorage.setItem(TEMPLATE_STORAGE_KEY, template.id);
+  applyDocumentStyle(nextStyle);
 }
 
 function pulseLivePreview() {
@@ -788,10 +962,6 @@ function pulseLivePreview() {
   void card.offsetWidth;
   card.classList.add("is-updating");
   window.setTimeout(() => card.classList.remove("is-updating"), 720);
-}
-
-function getSelectedStyle() {
-  return normalizeDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || document.getElementById("preview")?.dataset.style || DEFAULT_STYLE);
 }
 
 function fitPreviewFrame() {
@@ -887,6 +1057,7 @@ function syncLivePreview({ pulse = true } = {}) {
     type: "cv",
     data,
     styleName: getSelectedStyle(),
+    templateId: getSelectedTemplate(),
     language: currentLanguage,
     watermark: true,
   });
@@ -1125,7 +1296,8 @@ function loadFormData() {
   renderOptionPlaceholders();
   updateCounter();
 
-  applyDocumentStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE);
+  const storedTemplate = localStorage.getItem(TEMPLATE_STORAGE_KEY) || getTemplateByStyle(localStorage.getItem(STYLE_STORAGE_KEY) || DEFAULT_STYLE).id;
+  applyDocumentTemplate(storedTemplate);
   syncLivePreview({ pulse: false });
   setPhotoReady(
     restoreSelectedPhoto().finally(() => {
@@ -1149,10 +1321,6 @@ function installFormListeners() {
       saveFormData();
       syncLivePreview();
     });
-  });
-
-  document.querySelectorAll(".style-chip").forEach((button) => {
-    button.addEventListener("click", () => applyDocumentStyle(button.dataset.style));
   });
 
   document.getElementById("saveBtn")?.addEventListener("click", () => {

@@ -63,9 +63,18 @@ function createFakePaymentService(overrides = {}) {
 
 test("payment style allowlist matches the current VitaGen style set", () => {
   const styleNames = [
+    "aqua-arc-contrast.css",
+    "aqua-arc-default.css",
+    "aqua-arc-soft.css",
     "charcoal-frame.css",
     "cobalt-ribbon.css",
+    "corporate-axis-default.css",
+    "corporate-axis-navy.css",
+    "corporate-axis-steel.css",
     "editorial-azure.css",
+    "editorial-mono-classic.css",
+    "editorial-mono-default.css",
+    "editorial-mono-warm.css",
     "executive-ink.css",
     "graphite-pro.css",
     "midnight-column.css",

@@ -23,6 +23,18 @@ const styleNames = [
   "teal-balance.css",
   "terracotta-arch.css",
 ];
+const cvTemplateStyleNames = [
+  "aqua-arc-contrast.css",
+  "aqua-arc-default.css",
+  "aqua-arc-soft.css",
+  "corporate-axis-default.css",
+  "corporate-axis-navy.css",
+  "corporate-axis-steel.css",
+  "editorial-mono-classic.css",
+  "editorial-mono-default.css",
+  "editorial-mono-warm.css",
+];
+const cvStyleNames = [...styleNames, ...cvTemplateStyleNames];
 
 test("all current motivation themes are included and import the shared base", () => {
   for (const styleName of styleNames) {
@@ -36,7 +48,7 @@ test("all current motivation themes are included and import the shared base", ()
   }
 });
 
-test("current motivation and lebenslauf theme sets stay in sync", () => {
+test("motivation keeps the existing style set while CV adds template variants", () => {
   const motivationStyles = fs
     .readdirSync(path.join(vitagenPath, "motivation", "styles"))
     .filter((name) => name.endsWith(".css") && !name.startsWith("_"))
@@ -47,7 +59,7 @@ test("current motivation and lebenslauf theme sets stay in sync", () => {
     .sort();
 
   assert.deepEqual(motivationStyles, styleNames.slice().sort());
-  assert.deepEqual(lebenslaufStyles, styleNames.slice().sort());
+  assert.deepEqual(lebenslaufStyles, cvStyleNames.slice().sort());
 });
 
 test("motivation builder exposes every current style in the live carousel", () => {
@@ -81,8 +93,20 @@ test("lebenslauf builder keeps preview, styles, payment, and AI photo on one pag
     formHtml.matchAll(/class="style-chip[^"]*"[^>]*data-style="([^"]+)"/g),
     (match) => match[1]
   ).sort();
+  const templateIds = Array.from(
+    formHtml.matchAll(/class="template-chip[^"]*"[^>]*data-template="([^"]+)"/g),
+    (match) => match[1]
+  ).sort();
 
   assert.deepEqual(carouselStyles, styleNames.slice().sort());
+  assert.deepEqual(templateIds, ["aqua-arc", "corporate-axis", "editorial-mono", "existing"].sort());
+  assert.match(script, /const CV_TEMPLATES = \[/);
+  assert.match(script, /id: "aqua-arc"/);
+  assert.match(script, /id: "corporate-axis"/);
+  assert.match(script, /id: "editorial-mono"/);
+  assert.match(script, /styles: \["aqua-arc-default\.css", "aqua-arc-soft\.css", "aqua-arc-contrast\.css"\]/);
+  assert.match(script, /styles: \["corporate-axis-default\.css", "corporate-axis-steel\.css", "corporate-axis-navy\.css"\]/);
+  assert.match(script, /styles: \["editorial-mono-default\.css", "editorial-mono-warm\.css", "editorial-mono-classic\.css"\]/);
   assert.match(formHtml, /id="preview"/);
   assert.match(formHtml, /class="cv"/);
   assert.match(formHtml, /id="previewModal"/);
@@ -220,6 +244,10 @@ test("CV renderer uses measured pagination and the required typography scale", (
   );
 
   assert.match(rendererScript, /function createCvMeasurer/);
+  assert.match(rendererScript, /CV_TEMPLATE_BY_STYLE/);
+  assert.match(rendererScript, /buildTemplateCvHero/);
+  assert.match(rendererScript, /cv-template--\$\{templateId\}/);
+  assert.match(rendererScript, /target\.dataset\.template = cvTemplateId\(options\)/);
   assert.match(rendererScript, /document-measurement-root/);
   assert.match(rendererScript, /getBoundingClientRect\(\)/);
   assert.match(rendererScript, /function splitEntryToMeasuredChunks/);

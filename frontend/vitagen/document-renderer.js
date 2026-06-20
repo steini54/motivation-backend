@@ -2,6 +2,17 @@
   "use strict";
 
   const DEFAULT_STYLE = "swiss-line.css";
+  const CV_TEMPLATE_BY_STYLE = {
+    "aqua-arc-default.css": "aqua-arc",
+    "aqua-arc-soft.css": "aqua-arc",
+    "aqua-arc-contrast.css": "aqua-arc",
+    "corporate-axis-default.css": "corporate-axis",
+    "corporate-axis-steel.css": "corporate-axis",
+    "corporate-axis-navy.css": "corporate-axis",
+    "editorial-mono-default.css": "editorial-mono",
+    "editorial-mono-warm.css": "editorial-mono",
+    "editorial-mono-classic.css": "editorial-mono",
+  };
   const BODY_WORD_LIMIT = 270;
   const CV_SAFE_BOTTOM_PX = 18;
   const CV_MIN_BODY_CHUNK_WORDS = 36;
@@ -101,6 +112,16 @@
     return clean || fallback;
   }
 
+  function cvTemplateId(options = {}) {
+    const explicit = String(options.templateId || "").trim();
+    if (explicit && explicit !== "existing") {
+      return explicit;
+    }
+
+    const styleName = String(options.styleName || DEFAULT_STYLE).trim().split(/[\\/]/).pop();
+    return CV_TEMPLATE_BY_STYLE[styleName] || "existing";
+  }
+
   function words(value) {
     return String(value || "").trim().split(/\s+/).filter(Boolean);
   }
@@ -163,11 +184,13 @@
       .filter((line) => !cleanSignature || line.toLowerCase() !== cleanSignature);
   }
 
-  function createPage({ type, pageNumber, pageCount, watermark, language }) {
+  function createPage({ type, pageNumber, pageCount, watermark, language, templateId }) {
+    const templateClass = templateId ? ` document-page--template-${templateId}` : "";
     const page = node("section", {
-      className: `document-page document-page--${type}`,
+      className: `document-page document-page--${type}${templateClass}`,
       "data-page": String(pageNumber),
       "data-page-count": String(pageCount),
+      "data-template": templateId || undefined,
     });
 
     if (watermark) {
@@ -316,14 +339,17 @@
     return page.sections.reduce((count, section) => count + section.entries.length, 0);
   }
 
-  function cvSectionEntries(data, language) {
+  function cvSectionEntries(data, language, templateId = "existing") {
+    const isExistingTemplate = templateId === "existing";
     const sections = [];
     const profile = text(data.profil, t(language, "defaultProfile"));
-    sections.push({
-      key: "profile",
-      title: t(language, "profile"),
-      entries: [{ title: "", meta: "", body: profile }],
-    });
+    if (isExistingTemplate) {
+      sections.push({
+        key: "profile",
+        title: t(language, "profile"),
+        entries: [{ title: "", meta: "", body: profile }],
+      });
+    }
 
     const work = cleanEntries(data.beruf).map((entry) => ({
       title: text(entry["beruf-position"], t(language, "position")),
@@ -345,11 +371,13 @@
         .join(" | "),
       body: "",
     }));
-    sections.push({
-      key: "education",
-      title: t(language, "education"),
-      entries: education.length ? education : [{ title: t(language, "education"), meta: "", body: t(language, "addNow") }],
-    });
+    if (isExistingTemplate) {
+      sections.push({
+        key: "education",
+        title: t(language, "education"),
+        entries: education.length ? education : [{ title: t(language, "education"), meta: "", body: t(language, "addNow") }],
+      });
+    }
 
     const training = cleanEntries(data.weiterbildung).map((entry) => ({
       title: text(entry["weiterbildung-titel"], t(language, "training")),
@@ -363,7 +391,7 @@
     }
 
     const skills = cleanEntries(data.kenntnisse).map((entry) => entry.kenntnisse).filter(Boolean);
-    if (skills.length > 12) {
+    if (isExistingTemplate && skills.length > 12) {
       sections.push({
         key: "skills-extra",
         title: t(language, "skills"),
@@ -425,16 +453,17 @@
     return Math.max(0, bottom);
   }
 
-  function createCvMeasurer(data, language) {
+  function createCvMeasurer(data, language, templateId = "existing") {
     if (!global.document?.body || !global.getComputedStyle) {
       return null;
     }
 
     const root = node("div", { className: "preview-paper document-rendered document-measurement-root" });
-    const page = createPage({ type: "cv", pageNumber: 1, pageCount: 1, watermark: false, language });
-    const article = node("article", { className: "document-content cv" });
+    root.dataset.template = templateId;
+    const page = createPage({ type: "cv", pageNumber: 1, pageCount: 1, watermark: false, language, templateId });
+    const article = node("article", { className: `document-content cv cv-template--${templateId}` });
     const main = node("section", { className: "cv-main" });
-    article.append(buildCvSidebar(data, language, 1, 1), main);
+    article.append(buildCvSidebar(data, language, 1, 1, templateId), main);
     page.appendChild(article);
     root.appendChild(page);
     global.document.body.appendChild(root);
@@ -452,7 +481,11 @@
 
     function renderMain(pageModel, includeFooter = false) {
       main.innerHTML = "";
-      main.appendChild(node("p", { className: "document-label", text: t(language, "cvLabel") }));
+      if (templateId === "existing") {
+        main.appendChild(node("p", { className: "document-label", text: t(language, "cvLabel") }));
+      } else {
+        main.appendChild(buildTemplateCvHero(data, language));
+      }
       pageModel.sections.forEach((section) => main.appendChild(renderCvSection(section)));
       if (includeFooter) {
         main.appendChild(renderCvFooter(data, language));
@@ -516,9 +549,9 @@
     return chunks;
   }
 
-  function paginateCvFallback(data, language) {
+  function paginateCvFallback(data, language, templateId = "existing") {
     const pages = [{ sections: [] }];
-    cvSectionEntries(data, language).forEach((section) => {
+    cvSectionEntries(data, language, templateId).forEach((section) => {
       section.entries.forEach((entry) => addEntryToPage(pages[0], section, entry));
     });
     return pages;
@@ -542,17 +575,17 @@
     }
   }
 
-  function paginateCv(data, language) {
-    const measurer = createCvMeasurer(data, language);
+  function paginateCv(data, language, templateId = "existing") {
+    const measurer = createCvMeasurer(data, language, templateId);
     if (!measurer) {
-      return paginateCvFallback(data, language);
+      return paginateCvFallback(data, language, templateId);
     }
 
     try {
       const pages = [{ sections: [] }];
       let current = pages[0];
 
-      cvSectionEntries(data, language).forEach((section) => {
+      cvSectionEntries(data, language, templateId).forEach((section) => {
         section.entries.forEach((rawEntry) => {
           const emptyPage = { sections: [] };
           addEntryToPage(emptyPage, section, rawEntry);
@@ -589,12 +622,102 @@
     return values.slice(0, limit).map((value) => node("span", { text: value }));
   }
 
-  function buildCvSidebar(data, language, pageNumber, pageCount) {
+  function makeSidebarEntry(title, meta, body) {
+    return node("div", { className: "cv-side-entry" }, [
+      node("strong", { text: title }),
+      meta ? node("span", { text: meta }) : null,
+      body ? node("p", { text: body }) : null,
+    ]);
+  }
+
+  function buildCvSidebarSection(title, children, className = "") {
+    return node("div", { className: `cv-block ${className}`.trim() }, [
+      node("h3", { text: title }),
+      ...children,
+    ]);
+  }
+
+  function educationSidebarEntries(data, language) {
+    const entries = cleanEntries(data.schulbildung).map((entry) =>
+      makeSidebarEntry(
+        text(entry["schule-abschluss"] || entry.schule, t(language, "education")),
+        [entry.schule, entry["schule-ort"]].filter(Boolean).join(" | "),
+        [entry["schule-von"], entry["schule-bis"]].filter(Boolean).join(" - ")
+      )
+    );
+
+    return entries.length
+      ? entries.slice(0, 3)
+      : [makeSidebarEntry(t(language, "education"), "", t(language, "addNow"))];
+  }
+
+  function trainingSidebarEntries(data, language) {
+    return cleanEntries(data.weiterbildung)
+      .map((entry) =>
+        makeSidebarEntry(
+          text(entry["weiterbildung-titel"], t(language, "training")),
+          [entry["weiterbildung-ort"], [entry["weiterbildung-von"], entry["weiterbildung-bis"]].filter(Boolean).join(" - ")]
+            .filter(Boolean)
+            .join(" | "),
+          ""
+        )
+      )
+      .slice(0, 2);
+  }
+
+  function buildTemplateCvHero(data, language) {
+    return node("header", { className: "cv-template-hero" }, [
+      node("p", { className: "document-label", text: t(language, "cvLabel") }),
+      node("h1", { id: "pv-name", text: text(data.name, t(language, "cvName")) }),
+      node("p", {
+        id: "pv-headline",
+        className: "cv-template-headline",
+        text: text(data.headline, t(language, "role")).toUpperCase(),
+      }),
+      node("p", {
+        className: "cv-template-profile",
+        text: text(data.profil, t(language, "defaultProfile")),
+      }),
+    ]);
+  }
+
+  function buildCvSidebar(data, language, pageNumber, pageCount, templateId = "existing") {
     const skills = cleanEntries(data.kenntnisse).map((entry) => entry.kenntnisse).filter(Boolean);
     const interests = cleanEntries(data.hobbys).map((entry) => entry.hobbys).filter(Boolean);
     const sidebar = node("aside", {
       className: pageNumber === 1 ? "cv-side" : "cv-side cv-side--compact",
     });
+
+    if (templateId !== "existing" && pageNumber === 1) {
+      if (data.foto) {
+        sidebar.appendChild(node("img", { id: "pv-foto", src: data.foto, alt: "Bewerbungsfoto" }));
+      }
+
+      sidebar.append(
+        buildCvSidebarSection(t(language, "contact"), [
+          node("p", { id: "pv-kontakt" }, [
+            textWithBreaks(text(data.kontakt, t(language, "defaultContact"))),
+          ]),
+          node("p", { id: "pv-adresse" }, [
+            textWithBreaks(text(data.adresse, t(language, "defaultAddress"))),
+          ]),
+        ]),
+        buildCvSidebarSection(t(language, "education"), educationSidebarEntries(data, language), "cv-side-education"),
+        ...(
+          trainingSidebarEntries(data, language).length
+            ? [buildCvSidebarSection(t(language, "training"), trainingSidebarEntries(data, language), "cv-side-training")]
+            : []
+        ),
+        buildCvSidebarSection(t(language, "skills"), [
+          node("div", { id: "pv-kenntnisse", className: "pill-list" }, makePills(skills.length ? skills : ["MS Office", "Organisation", "Kommunikation"], 14)),
+        ]),
+        buildCvSidebarSection(t(language, "interests"), [
+          node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : ["Lesen", "Sport"], 8)),
+        ])
+      );
+
+      return sidebar;
+    }
 
     if (pageNumber === 1 && data.foto) {
       sidebar.appendChild(node("img", { id: "pv-foto", src: data.foto, alt: "Bewerbungsfoto" }));
@@ -643,7 +766,8 @@
   function buildCv(options) {
     const language = locale(options.language);
     const data = options.data || {};
-    const pageModels = paginateCv(data, language);
+    const templateId = cvTemplateId(options);
+    const pageModels = paginateCv(data, language, templateId);
     const warnings = pageModels.length > 3 ? [t(language, "cvWarning")] : [];
     const pages = pageModels.map((model, index) => {
       const pageNumber = index + 1;
@@ -653,12 +777,19 @@
         pageCount: pageModels.length,
         watermark: options.watermark,
         language,
+        templateId,
       });
+      const templateClass = templateId === "existing" ? "" : ` cv-template--${templateId}`;
       const article = node("article", {
-        className: pageNumber === 1 ? "document-content cv" : "document-content cv cv--continuation",
+        className: `${pageNumber === 1 ? "document-content cv" : "document-content cv cv--continuation"}${templateClass}`,
       });
+      const mainChildren = templateId === "existing"
+        ? [node("p", { className: "document-label", text: t(language, "cvLabel") })]
+        : pageNumber === 1
+          ? [buildTemplateCvHero(data, language)]
+          : [node("p", { className: "document-label", text: `${t(language, "cvLabel")} - ${t(language, "continued")}` })];
       const main = node("section", { className: "cv-main" }, [
-        node("p", { className: "document-label", text: t(language, "cvLabel") }),
+        ...mainChildren,
         ...model.sections.map(renderCvSection),
       ]);
 
@@ -666,7 +797,7 @@
         main.appendChild(renderCvFooter(data, language));
       }
 
-      article.append(buildCvSidebar(data, language, pageNumber, pageModels.length), main);
+      article.append(buildCvSidebar(data, language, pageNumber, pageModels.length, templateId), main);
       page.appendChild(article);
       return page;
     });
@@ -702,6 +833,7 @@
     target.innerHTML = "";
     target.classList.add("document-rendered");
     target.dataset.style = options.styleName || DEFAULT_STYLE;
+    target.dataset.template = cvTemplateId(options);
     target.dataset.documentType = options.type === "lebenslauf" ? "cv" : options.type;
     target.dataset.pageCount = String(result.pageCount);
     target.dataset.documentHash = result.documentHash;
