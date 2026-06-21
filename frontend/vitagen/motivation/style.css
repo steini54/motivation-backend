@@ -1020,6 +1020,12 @@ select:focus {
   padding: 7.5% 7.2%;
   background: var(--doc-paper-bg);
   box-shadow: inset 0 0 0 var(--doc-frame-width) var(--doc-frame);
+  font-family: var(--doc-font, inherit);
+}
+
+.preview-paper .letterhead h1,
+.preview-paper .letter-subject {
+  font-family: var(--doc-title-font, var(--doc-font, inherit));
 }
 
 .preview-paper.document-rendered .anschreiben {
@@ -1187,6 +1193,8 @@ select:focus {
   --doc-accent: #8a929a;
   --doc-frame-width: 8px;
   --doc-frame: rgba(47, 52, 56, 0.28);
+  --doc-font: Arial, "Helvetica Neue", sans-serif;
+  --doc-title-font: "Segoe UI", Arial, sans-serif;
 }
 
 .preview-paper[data-style="cobalt-ribbon.css"] {
@@ -1195,6 +1203,8 @@ select:focus {
   --doc-accent: #7bb4e6;
   --doc-overlay: linear-gradient(135deg, rgba(36, 92, 170, 0.14) 0 16%, transparent 16% 100%);
   --doc-rule-height: 3px;
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: "Segoe UI", Arial, sans-serif;
 }
 
 .preview-paper[data-style="editorial-azure.css"] {
@@ -1202,6 +1212,8 @@ select:focus {
   --doc-muted: #526981;
   --doc-accent: #57a5e5;
   --doc-overlay: linear-gradient(90deg, rgba(87, 165, 229, 0.12) 0 14%, transparent 14% 100%);
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: "Segoe UI", Arial, sans-serif;
 }
 
 .preview-paper[data-style="executive-ink.css"] {
@@ -1209,6 +1221,8 @@ select:focus {
   --doc-muted: #596273;
   --doc-accent: #b38b58;
   --doc-rule-height: 3px;
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="graphite-pro.css"] {
@@ -1216,6 +1230,8 @@ select:focus {
   --doc-muted: #606970;
   --doc-accent: #a0a7ae;
   --doc-overlay: linear-gradient(180deg, rgba(52, 58, 64, 0.08) 0 9%, transparent 9% 100%);
+  --doc-font: Arial, "Helvetica Neue", sans-serif;
+  --doc-title-font: "Segoe UI", Arial, sans-serif;
 }
 
 .preview-paper[data-style="midnight-column.css"] {
@@ -1223,6 +1239,8 @@ select:focus {
   --doc-muted: #536070;
   --doc-accent: #caa86b;
   --doc-overlay: linear-gradient(90deg, rgba(36, 50, 75, 0.12) 0 18%, transparent 18% 100%);
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: "Segoe UI", Arial, sans-serif;
 }
 
 .preview-paper[data-style="monograph.css"] {
@@ -1230,6 +1248,8 @@ select:focus {
   --doc-muted: #5d5d5d;
   --doc-accent: #b8b8b8;
   --doc-rule-height: 1px;
+  --doc-font: Arial, "Helvetica Neue", sans-serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="navy-wave.css"] {
@@ -1238,6 +1258,8 @@ select:focus {
   --doc-accent: #d3af63;
   --doc-overlay: radial-gradient(circle at 100% 0, rgba(20, 33, 61, 0.18) 0 17%, transparent 18%),
     linear-gradient(180deg, transparent 0 86%, rgba(211, 175, 99, 0.12) 86% 100%);
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="nordic-panel.css"] {
@@ -1245,6 +1267,8 @@ select:focus {
   --doc-muted: #697587;
   --doc-accent: #c9d2dc;
   --doc-overlay: linear-gradient(90deg, rgba(201, 210, 220, 0.2) 0 22%, transparent 22% 100%);
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: "Segoe UI", Arial, sans-serif;
 }
 
 .preview-paper[data-style="pearl-classic.css"] {
@@ -1252,6 +1276,8 @@ select:focus {
   --doc-muted: #736d62;
   --doc-accent: #c5b99f;
   --doc-paper-bg: #fffdf7;
+  --doc-font: Georgia, Cambria, serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="soft-sand.css"] {
@@ -1260,12 +1286,16 @@ select:focus {
   --doc-accent: #e1c2a6;
   --doc-overlay: radial-gradient(circle at 0 0, rgba(225, 194, 166, 0.28) 0 18%, transparent 19%),
     radial-gradient(circle at 100% 100%, rgba(166, 109, 74, 0.16) 0 19%, transparent 20%);
+  --doc-font: Arial, "Helvetica Neue", sans-serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="swiss-line.css"] {
   --doc-primary: #24597a;
   --doc-muted: #627083;
   --doc-accent: #9caebf;
+  --doc-font: Arial, "Helvetica Neue", sans-serif;
+  --doc-title-font: "Helvetica Neue", Arial, sans-serif;
 }
 
 .preview-paper[data-style="teal-balance.css"] {
@@ -1273,6 +1303,8 @@ select:focus {
   --doc-muted: #5d7371;
   --doc-accent: #9bc9c7;
   --doc-overlay: linear-gradient(180deg, transparent 0 84%, rgba(14, 102, 107, 0.12) 84% 100%);
+  --doc-font: "Segoe UI", Arial, sans-serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="terracotta-arch.css"] {
@@ -1280,6 +1312,8 @@ select:focus {
   --doc-muted: #765f55;
   --doc-accent: #ebb995;
   --doc-overlay: radial-gradient(circle at 0 0, rgba(235, 185, 149, 0.25) 0 19%, transparent 20%);
+  --doc-font: Arial, "Helvetica Neue", sans-serif;
+  --doc-title-font: Georgia, Cambria, serif;
 }
 
 .preview-paper[data-style="aqua-arc-default.css"] { --doc-primary: #3f7480; --doc-muted: #5d6e72; --doc-accent: #a7c2c9; --doc-overlay: radial-gradient(circle at 96% 6%, rgba(167, 194, 201, 0.2), transparent 19%); }
