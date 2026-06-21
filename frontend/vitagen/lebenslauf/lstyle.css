@@ -1576,12 +1576,21 @@ textarea:focus {
 .preview-paper[data-style="aqua-arc-default.css"] { --doc-primary: #3f7480; --doc-muted: #5d6e72; --doc-accent: #a7c2c9; }
 .preview-paper[data-style="aqua-arc-soft.css"] { --doc-primary: #4f7f7b; --doc-muted: #667470; --doc-accent: #c9dad6; }
 .preview-paper[data-style="aqua-arc-contrast.css"] { --doc-primary: #255f68; --doc-muted: #40545b; --doc-accent: #7fb3bd; }
+.preview-paper[data-style="aqua-arc-emerald.css"] { --doc-primary: #2e7d58; --doc-muted: #5e7a6b; --doc-accent: #8ac2a5; }
+.preview-paper[data-style="aqua-arc-sunset.css"] { --doc-primary: #d36a3d; --doc-muted: #7d6b63; --doc-accent: #f4be9e; }
+.preview-paper[data-style="aqua-arc-amethyst.css"] { --doc-primary: #6b4c8a; --doc-muted: #6b6375; --doc-accent: #bca4d9; }
 .preview-paper[data-style="corporate-axis-default.css"] { --doc-primary: #173b57; --doc-muted: #5b6470; --doc-accent: #4d8dc0; }
 .preview-paper[data-style="corporate-axis-steel.css"] { --doc-primary: #263b4c; --doc-muted: #5f6871; --doc-accent: #87a9c2; }
 .preview-paper[data-style="corporate-axis-navy.css"] { --doc-primary: #12253d; --doc-muted: #556070; --doc-accent: #2c67a0; }
+.preview-paper[data-style="corporate-axis-burgundy.css"] { --doc-primary: #421018; --doc-muted: #6e5559; --doc-accent: #8b2536; }
+.preview-paper[data-style="corporate-axis-forest.css"] { --doc-primary: #10331e; --doc-muted: #556b5e; --doc-accent: #256641; }
+.preview-paper[data-style="corporate-axis-monochrome.css"] { --doc-primary: #111111; --doc-muted: #666666; --doc-accent: #777777; }
 .preview-paper[data-style="editorial-mono-default.css"] { --doc-primary: #3f3b37; --doc-muted: #6f6861; --doc-accent: #bfb8b0; }
 .preview-paper[data-style="editorial-mono-warm.css"] { --doc-primary: #4f4740; --doc-muted: #766c63; --doc-accent: #d7c7b7; }
 .preview-paper[data-style="editorial-mono-classic.css"] { --doc-primary: #1f1f1f; --doc-muted: #5d5a56; --doc-accent: #9c9a95; }
+.preview-paper[data-style="editorial-mono-sepia.css"] { --doc-primary: #5e4630; --doc-muted: #807261; --doc-accent: #d6cab8; }
+.preview-paper[data-style="editorial-mono-mint.css"] { --doc-primary: #21403b; --doc-muted: #5b736f; --doc-accent: #a5c2bc; }
+.preview-paper[data-style="editorial-mono-rose.css"] { --doc-primary: #57353f; --doc-muted: #755b63; --doc-accent: #cfa8b4; }
 
 .cv-template-hero {
   margin: 0 0 18px;

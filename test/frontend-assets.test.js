@@ -24,14 +24,23 @@ const styleNames = [
   "terracotta-arch.css",
 ];
 const cvTemplateStyleNames = [
+  "aqua-arc-amethyst.css",
   "aqua-arc-contrast.css",
   "aqua-arc-default.css",
+  "aqua-arc-emerald.css",
   "aqua-arc-soft.css",
+  "aqua-arc-sunset.css",
+  "corporate-axis-burgundy.css",
   "corporate-axis-default.css",
+  "corporate-axis-forest.css",
+  "corporate-axis-monochrome.css",
   "corporate-axis-navy.css",
   "corporate-axis-steel.css",
   "editorial-mono-classic.css",
   "editorial-mono-default.css",
+  "editorial-mono-mint.css",
+  "editorial-mono-rose.css",
+  "editorial-mono-sepia.css",
   "editorial-mono-warm.css",
 ];
 const cvStyleNames = [...styleNames, ...cvTemplateStyleNames];
@@ -87,9 +96,9 @@ test("motivation builder exposes existing styles, templates, and dynamic variant
   assert.match(script, /id: "aqua-arc"/);
   assert.match(script, /id: "corporate-axis"/);
   assert.match(script, /id: "editorial-mono"/);
-  assert.match(script, /styles: \["aqua-arc-default\.css", "aqua-arc-soft\.css", "aqua-arc-contrast\.css"\]/);
-  assert.match(script, /styles: \["corporate-axis-default\.css", "corporate-axis-steel\.css", "corporate-axis-navy\.css"\]/);
-  assert.match(script, /styles: \["editorial-mono-default\.css", "editorial-mono-warm\.css", "editorial-mono-classic\.css"\]/);
+  assert.match(script, /styles: \["aqua-arc-default\.css", "aqua-arc-soft\.css", "aqua-arc-contrast\.css", "aqua-arc-emerald\.css", "aqua-arc-sunset\.css", "aqua-arc-amethyst\.css"\]/);
+  assert.match(script, /styles: \["corporate-axis-default\.css", "corporate-axis-steel\.css", "corporate-axis-navy\.css", "corporate-axis-burgundy\.css", "corporate-axis-forest\.css", "corporate-axis-monochrome\.css"\]/);
+  assert.match(script, /styles: \["editorial-mono-default\.css", "editorial-mono-warm\.css", "editorial-mono-classic\.css", "editorial-mono-sepia\.css", "editorial-mono-mint\.css", "editorial-mono-rose\.css"\]/);
   assert.match(formHtml, /<div class="watermark">VORSCHAU<\/div>/);
 });
 
@@ -121,9 +130,9 @@ test("lebenslauf builder keeps preview, styles, payment, and AI photo on one pag
   assert.match(script, /id: "aqua-arc"/);
   assert.match(script, /id: "corporate-axis"/);
   assert.match(script, /id: "editorial-mono"/);
-  assert.match(script, /styles: \["aqua-arc-default\.css", "aqua-arc-soft\.css", "aqua-arc-contrast\.css"\]/);
-  assert.match(script, /styles: \["corporate-axis-default\.css", "corporate-axis-steel\.css", "corporate-axis-navy\.css"\]/);
-  assert.match(script, /styles: \["editorial-mono-default\.css", "editorial-mono-warm\.css", "editorial-mono-classic\.css"\]/);
+  assert.match(script, /styles: \["aqua-arc-default\.css", "aqua-arc-soft\.css", "aqua-arc-contrast\.css", "aqua-arc-emerald\.css", "aqua-arc-sunset\.css", "aqua-arc-amethyst\.css"\]/);
+  assert.match(script, /styles: \["corporate-axis-default\.css", "corporate-axis-steel\.css", "corporate-axis-navy\.css", "corporate-axis-burgundy\.css", "corporate-axis-forest\.css", "corporate-axis-monochrome\.css"\]/);
+  assert.match(script, /styles: \["editorial-mono-default\.css", "editorial-mono-warm\.css", "editorial-mono-classic\.css", "editorial-mono-sepia\.css", "editorial-mono-mint\.css", "editorial-mono-rose\.css"\]/);
   assert.match(formHtml, /id="preview"/);
   assert.match(formHtml, /class="cv"/);
   assert.match(formHtml, /id="previewModal"/);

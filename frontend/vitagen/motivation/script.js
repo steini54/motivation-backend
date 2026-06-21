@@ -35,21 +35,21 @@ const MOTIVATION_TEMPLATES = [
     name: "Aqua Arc",
     description: "Clean teal letter",
     defaultStyle: "aqua-arc-default.css",
-    styles: ["aqua-arc-default.css", "aqua-arc-soft.css", "aqua-arc-contrast.css"],
+    styles: ["aqua-arc-default.css", "aqua-arc-soft.css", "aqua-arc-contrast.css", "aqua-arc-emerald.css", "aqua-arc-sunset.css", "aqua-arc-amethyst.css"],
   },
   {
     id: "corporate-axis",
     name: "Corporate Axis",
     description: "Corporate geometric letter",
     defaultStyle: "corporate-axis-default.css",
-    styles: ["corporate-axis-default.css", "corporate-axis-steel.css", "corporate-axis-navy.css"],
+    styles: ["corporate-axis-default.css", "corporate-axis-steel.css", "corporate-axis-navy.css", "corporate-axis-burgundy.css", "corporate-axis-forest.css", "corporate-axis-monochrome.css"],
   },
   {
     id: "editorial-mono",
     name: "Editorial Mono",
     description: "Editorial monochrome letter",
     defaultStyle: "editorial-mono-default.css",
-    styles: ["editorial-mono-default.css", "editorial-mono-warm.css", "editorial-mono-classic.css"],
+    styles: ["editorial-mono-default.css", "editorial-mono-warm.css", "editorial-mono-classic.css", "editorial-mono-sepia.css", "editorial-mono-mint.css", "editorial-mono-rose.css"],
   },
 ];
 const DOCUMENT_STYLES = MOTIVATION_TEMPLATES.flatMap((template) => template.styles);
@@ -71,12 +71,21 @@ const STYLE_META = {
   "aqua-arc-default.css": { name: "Aqua Arc", tone: "Default", thumb: "aqua" },
   "aqua-arc-soft.css": { name: "Aqua Arc Soft", tone: "Soft", thumb: "aqua-soft" },
   "aqua-arc-contrast.css": { name: "Aqua Arc Contrast", tone: "Contrast", thumb: "aqua-contrast" },
+  "aqua-arc-emerald.css": { name: "Aqua Arc Emerald", tone: "Emerald", thumb: "aqua-emerald" },
+  "aqua-arc-sunset.css": { name: "Aqua Arc Sunset", tone: "Sunset", thumb: "aqua-sunset" },
+  "aqua-arc-amethyst.css": { name: "Aqua Arc Amethyst", tone: "Amethyst", thumb: "aqua-amethyst" },
   "corporate-axis-default.css": { name: "Corporate Axis", tone: "Default", thumb: "axis" },
   "corporate-axis-steel.css": { name: "Corporate Axis Steel", tone: "Steel", thumb: "axis-steel" },
   "corporate-axis-navy.css": { name: "Corporate Axis Navy", tone: "Navy", thumb: "axis-navy" },
+  "corporate-axis-burgundy.css": { name: "Corporate Axis Burgundy", tone: "Burgundy", thumb: "axis-burgundy" },
+  "corporate-axis-forest.css": { name: "Corporate Axis Forest", tone: "Forest", thumb: "axis-forest" },
+  "corporate-axis-monochrome.css": { name: "Corporate Axis Monochrome", tone: "Monochrome", thumb: "axis-monochrome" },
   "editorial-mono-default.css": { name: "Editorial Mono", tone: "Default", thumb: "mono" },
   "editorial-mono-warm.css": { name: "Editorial Mono Warm", tone: "Warm", thumb: "mono-warm" },
   "editorial-mono-classic.css": { name: "Editorial Mono Classic", tone: "Classic", thumb: "mono-classic" },
+  "editorial-mono-sepia.css": { name: "Editorial Mono Sepia", tone: "Sepia", thumb: "mono-sepia" },
+  "editorial-mono-mint.css": { name: "Editorial Mono Mint", tone: "Mint", thumb: "mono-mint" },
+  "editorial-mono-rose.css": { name: "Editorial Mono Rose", tone: "Rose", thumb: "mono-rose" },
 };
 let resolveInitialPhotoReady;
 let pendingPhotoMigration = Promise.resolve();

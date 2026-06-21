@@ -6,12 +6,21 @@
     "aqua-arc-default.css": "aqua-arc",
     "aqua-arc-soft.css": "aqua-arc",
     "aqua-arc-contrast.css": "aqua-arc",
+    "aqua-arc-emerald.css": "aqua-arc",
+    "aqua-arc-sunset.css": "aqua-arc",
+    "aqua-arc-amethyst.css": "aqua-arc",
     "corporate-axis-default.css": "corporate-axis",
     "corporate-axis-steel.css": "corporate-axis",
     "corporate-axis-navy.css": "corporate-axis",
+    "corporate-axis-burgundy.css": "corporate-axis",
+    "corporate-axis-forest.css": "corporate-axis",
+    "corporate-axis-monochrome.css": "corporate-axis",
     "editorial-mono-default.css": "editorial-mono",
     "editorial-mono-warm.css": "editorial-mono",
     "editorial-mono-classic.css": "editorial-mono",
+    "editorial-mono-sepia.css": "editorial-mono",
+    "editorial-mono-mint.css": "editorial-mono",
+    "editorial-mono-rose.css": "editorial-mono",
   };
   const BODY_WORD_LIMIT = 270;
   const CV_SAFE_BOTTOM_PX = 18;
