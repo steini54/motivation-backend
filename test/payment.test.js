@@ -100,6 +100,87 @@ test("payment style allowlist matches the current VitaGen style set", () => {
   assert.deepEqual([...STYLE_NAMES].sort(), styleNames.sort());
 });
 
+test("all registered styles can pass checkout and paid PDF download", async () => {
+  const documentDataByType = {
+    motivation: { name: "Max Muster", funktion: "Kaufmann" },
+    lebenslauf: {
+      name: "Max Muster",
+      beruf: [{ position: "Kaufmann", arbeitgeber: "Musterfirma AG" }],
+    },
+  };
+
+  const verifiedPairs = new Set();
+  await withServer(
+    createApp({
+      env: { ...process.env, PAYMENT_RATE_LIMIT: "500" },
+      paymentService: createFakePaymentService({
+        async createCheckoutSession(input) {
+          return {
+            id: `cs_${input.documentType}_${input.styleName.replace(/[^a-z0-9]+/gi, "_")}`,
+            url: `https://checkout.stripe.com/c/pay/${input.documentHash}`,
+          };
+        },
+        async verifyPaidSession(input) {
+          const expectedHash = createDocumentHash({
+            documentType: input.documentType,
+            styleName: input.styleName,
+            documentData: documentDataByType[input.documentType],
+          });
+          assert.equal(input.documentHash, expectedHash);
+          verifiedPairs.add(`${input.documentType}:${input.styleName}`);
+          return {
+            id: input.sessionId,
+            paymentStatus: "paid",
+            documentType: input.documentType,
+            styleName: input.styleName,
+            documentHash: input.documentHash,
+            filename:
+              input.documentType === "lebenslauf" ? "Lebenslauf.pdf" : "Bewerbung.pdf",
+          };
+        },
+      }),
+    }),
+    async (url) => {
+      for (const documentType of Object.keys(documentDataByType)) {
+        for (const styleName of STYLE_NAMES) {
+          const documentData = documentDataByType[documentType];
+          const documentHash = createDocumentHash({
+            documentType,
+            styleName,
+            documentData,
+          });
+          const checkout = await fetch(`${url}/checkout/create-session`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ documentType, styleName, documentHash }),
+          });
+          assert.equal(checkout.status, 200, `${documentType} ${styleName} checkout failed`);
+
+          const checkoutBody = await checkout.json();
+          const pdf = await fetch(`${url}/generate-pdf`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              sessionId: checkoutBody.id,
+              documentType,
+              styleName,
+              documentHash,
+              documentData,
+            }),
+          });
+          const bytes = Buffer.from(await pdf.arrayBuffer());
+
+          assert.equal(pdf.status, 200, `${documentType} ${styleName} PDF failed`);
+          assert.match(pdf.headers.get("content-type"), /^application\/pdf/);
+          assert.equal(bytes.subarray(0, 4).toString("utf8"), "%PDF");
+        }
+      }
+    }
+  );
+
+  assert.equal(verifiedPairs.size, STYLE_NAMES.size * 2);
+});
+
 test("checkout session endpoint returns a Stripe redirect URL", async () => {
   const documentData = { name: "Max Muster", funktion: "Kaufmann" };
   const documentHash = createDocumentHash({
