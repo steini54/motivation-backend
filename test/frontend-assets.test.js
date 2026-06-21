@@ -35,9 +35,10 @@ const cvTemplateStyleNames = [
   "editorial-mono-warm.css",
 ];
 const cvStyleNames = [...styleNames, ...cvTemplateStyleNames];
+const documentStyleNames = cvStyleNames;
 
 test("all current motivation themes are included and import the shared base", () => {
-  for (const styleName of styleNames) {
+  for (const styleName of documentStyleNames) {
     const css = fs.readFileSync(
       path.join(frontendPath, "styles", styleName),
       "utf8"
@@ -48,7 +49,7 @@ test("all current motivation themes are included and import the shared base", ()
   }
 });
 
-test("motivation keeps the existing style set while CV adds template variants", () => {
+test("motivation and CV expose the matching template style sets", () => {
   const motivationStyles = fs
     .readdirSync(path.join(vitagenPath, "motivation", "styles"))
     .filter((name) => name.endsWith(".css") && !name.startsWith("_"))
@@ -58,21 +59,37 @@ test("motivation keeps the existing style set while CV adds template variants", 
     .filter((name) => name.endsWith(".css") && !name.startsWith("_"))
     .sort();
 
-  assert.deepEqual(motivationStyles, styleNames.slice().sort());
+  assert.deepEqual(motivationStyles, documentStyleNames.slice().sort());
   assert.deepEqual(lebenslaufStyles, cvStyleNames.slice().sort());
 });
 
-test("motivation builder exposes every current style in the live carousel", () => {
+test("motivation builder exposes existing styles, templates, and dynamic variant sets", () => {
   const formHtml = fs.readFileSync(
     path.join(frontendPath, "formular.html"),
+    "utf8"
+  );
+  const script = fs.readFileSync(
+    path.join(frontendPath, "script.js"),
     "utf8"
   );
   const carouselStyles = Array.from(
     formHtml.matchAll(/class="style-chip[^"]*"[^>]*data-style="([^"]+)"/g),
     (match) => match[1]
   ).sort();
+  const templateIds = Array.from(
+    formHtml.matchAll(/class="template-chip[^"]*"[^>]*data-template="([^"]+)"/g),
+    (match) => match[1]
+  ).sort();
 
   assert.deepEqual(carouselStyles, styleNames.slice().sort());
+  assert.deepEqual(templateIds, ["aqua-arc", "corporate-axis", "editorial-mono", "existing"].sort());
+  assert.match(script, /const MOTIVATION_TEMPLATES = \[/);
+  assert.match(script, /id: "aqua-arc"/);
+  assert.match(script, /id: "corporate-axis"/);
+  assert.match(script, /id: "editorial-mono"/);
+  assert.match(script, /styles: \["aqua-arc-default\.css", "aqua-arc-soft\.css", "aqua-arc-contrast\.css"\]/);
+  assert.match(script, /styles: \["corporate-axis-default\.css", "corporate-axis-steel\.css", "corporate-axis-navy\.css"\]/);
+  assert.match(script, /styles: \["editorial-mono-default\.css", "editorial-mono-warm\.css", "editorial-mono-classic\.css"\]/);
   assert.match(formHtml, /<div class="watermark">VORSCHAU<\/div>/);
 });
 
@@ -266,9 +283,13 @@ test("CV renderer uses measured pagination and the required typography scale", (
   assert.doesNotMatch(lebenslaufCss, /font-size: 12pt;/);
 });
 
-test("motivation letter body typography uses 11pt", () => {
+test("motivation letter body typography uses 11pt and supports templates", () => {
   const motivationCss = fs.readFileSync(
     path.join(frontendPath, "style.css"),
+    "utf8"
+  );
+  const renderer = fs.readFileSync(
+    path.join(vitagenPath, "document-renderer.js"),
     "utf8"
   );
 
@@ -278,6 +299,10 @@ test("motivation letter body typography uses 11pt", () => {
   );
   assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-greeting \{\s*margin: 0 0 5mm;\s*font-size: 11pt;/);
   assert.match(motivationCss, /\.preview-paper\.document-rendered \.closing-block strong \{[\s\S]*font-size: 11pt;/);
+  assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--aqua-arc/);
+  assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--corporate-axis/);
+  assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--editorial-mono/);
+  assert.match(renderer, /letter-template--\$\{templateId\}/);
 });
 
 test("motivation renderer does not invent an empty closing sentence", () => {

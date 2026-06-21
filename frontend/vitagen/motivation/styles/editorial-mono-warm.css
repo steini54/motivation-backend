@@ -1,0 +1,44 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: "Segoe UI", Arial, sans-serif;
+  --letter-title-font: Georgia, "Times New Roman", serif;
+  --letter-bg: #f3eee8;
+  --letter-paper: #fffdf9;
+  --letter-ink: #4f4740;
+  --letter-muted: #766c63;
+  --letter-accent: #4f4740;
+  --letter-accent-2: #d7c7b7;
+  --letter-rule: #d7c7b7;
+  --letter-soft: #f2ebe3;
+  --letter-main-padding: 20mm 24mm 18mm;
+  --letter-cover-bg: linear-gradient(90deg, #f2ebe3 0 31%, #fffdf9 31% 100%);
+  --letter-cover-mark-bg: #4f4740;
+  --letter-cover-mark-height: 1px;
+  --letter-cover-mark-radius: 0;
+  --letter-cover-shape-bg: transparent;
+  --letter-photo-width: 24mm;
+  --letter-photo-height: 30mm;
+  --letter-photo-radius: 0;
+  --letter-photo-shadow: none;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0 0 7mm;
+  --letter-letterhead-margin: 0 0 7mm;
+  --letter-subject-padding: 0;
+}
+
+.letter-template--editorial-mono .letterhead {
+  border-bottom: 1px solid rgba(79, 71, 64, 0.66);
+}
+
+.letter-template--editorial-mono .letterhead h1 {
+  font-size: 25pt;
+  letter-spacing: 0.01em;
+}
+
+.letter-template--editorial-mono h2 {
+  border-bottom: 0;
+  font-family: var(--letter-title-font);
+  font-size: 13.5pt;
+}

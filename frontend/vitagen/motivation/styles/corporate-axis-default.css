@@ -1,0 +1,43 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: "Segoe UI", Arial, sans-serif;
+  --letter-bg: #eef3f8;
+  --letter-paper: #ffffff;
+  --letter-ink: #1b2530;
+  --letter-muted: #5b6470;
+  --letter-accent: #173b57;
+  --letter-accent-2: #4d8dc0;
+  --letter-rule: #c9d8e5;
+  --letter-soft: #f2f6fa;
+  --letter-main-padding: 25mm 23mm 18mm;
+  --letter-cover-bg: linear-gradient(135deg, #173b57 0 32%, #4d8dc0 32% 42%, #ffffff 42% 100%);
+  --letter-cover-accent: #173b57;
+  --letter-cover-mark-bg: #4d8dc0;
+  --letter-cover-shape-bg: rgba(77, 141, 192, 0.18);
+  --letter-cover-shape-width: 74mm;
+  --letter-cover-shape-height: 74mm;
+  --letter-cover-shape-inset: auto -28mm -30mm auto;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0;
+  --letter-page-mark-bg: #173b57;
+  --letter-page-mark-width: 210mm;
+  --letter-page-mark-height: 8mm;
+  --letter-page-mark-inset: 0 0 auto 0;
+  --letter-subject-padding: 0 0 3mm;
+}
+
+.letter-template--corporate-axis .letterhead h1 {
+  color: #4a4a4a;
+  font-size: 24pt;
+}
+
+.letter-template--corporate-axis .letterhead p {
+  color: var(--letter-accent);
+}
+
+.letter-template--corporate-axis h2 {
+  border-bottom-color: rgba(23, 59, 87, 0.35);
+}

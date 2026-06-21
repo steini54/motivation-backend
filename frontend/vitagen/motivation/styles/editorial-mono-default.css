@@ -1,0 +1,44 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: "Segoe UI", Arial, sans-serif;
+  --letter-title-font: Georgia, "Times New Roman", serif;
+  --letter-bg: #efedea;
+  --letter-paper: #ffffff;
+  --letter-ink: #3f3b37;
+  --letter-muted: #6f6861;
+  --letter-accent: #3f3b37;
+  --letter-accent-2: #bfb8b0;
+  --letter-rule: #c8c1ba;
+  --letter-soft: #efedea;
+  --letter-main-padding: 20mm 24mm 18mm;
+  --letter-cover-bg: linear-gradient(90deg, #efedea 0 31%, #ffffff 31% 100%);
+  --letter-cover-mark-bg: #3f3b37;
+  --letter-cover-mark-height: 1px;
+  --letter-cover-mark-radius: 0;
+  --letter-cover-shape-bg: transparent;
+  --letter-photo-width: 24mm;
+  --letter-photo-height: 30mm;
+  --letter-photo-radius: 0;
+  --letter-photo-shadow: none;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0 0 7mm;
+  --letter-letterhead-margin: 0 0 7mm;
+  --letter-subject-padding: 0;
+}
+
+.letter-template--editorial-mono .letterhead {
+  border-bottom: 1px solid rgba(63, 59, 55, 0.7);
+}
+
+.letter-template--editorial-mono .letterhead h1 {
+  font-size: 25pt;
+  letter-spacing: 0.01em;
+}
+
+.letter-template--editorial-mono h2 {
+  border-bottom: 0;
+  font-family: var(--letter-title-font);
+  font-size: 13.5pt;
+}

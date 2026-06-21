@@ -207,6 +207,7 @@
   function buildMotivation(options) {
     const language = locale(options.language);
     const data = options.data || {};
+    const templateId = cvTemplateId(options);
     const warnings = [];
     const role = text(data.posten || data.funktion, t(language, "role"));
     const signature = text(data.unterschrift || data.name, t(language, "name"));
@@ -229,8 +230,10 @@
       pageCount: 1,
       watermark: options.watermark,
       language,
+      templateId,
     });
-    const content = node("article", { className: "document-content anschreiben letter-content" });
+    const templateClass = templateId === "existing" ? "" : ` letter-template--${templateId}`;
+    const content = node("article", { className: `document-content anschreiben letter-content${templateClass}` });
     const header = node("header", { className: "letterhead" }, [
       node("div", { className: "letter-identity" }, [
         node("h1", { id: "pv-name", text: text(data.name, t(language, "name")) }),

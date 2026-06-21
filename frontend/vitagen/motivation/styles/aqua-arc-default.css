@@ -1,0 +1,44 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: "Segoe UI", Arial, sans-serif;
+  --letter-bg: #edf5f6;
+  --letter-paper: #ffffff;
+  --letter-ink: #213238;
+  --letter-muted: #5d6e72;
+  --letter-accent: #3f7480;
+  --letter-accent-2: #a7c2c9;
+  --letter-rule: #d6e4e7;
+  --letter-soft: #f3f7f8;
+  --letter-main-padding: 18mm 23mm 18mm;
+  --letter-cover-bg: radial-gradient(circle at 86% 12%, rgba(167, 194, 201, 0.36), transparent 18%), #ffffff;
+  --letter-cover-mark-bg: #3f7480;
+  --letter-cover-shape-bg: rgba(167, 194, 201, 0.24);
+  --letter-cover-shape-width: 64mm;
+  --letter-cover-shape-height: 64mm;
+  --letter-cover-shape-inset: auto -20mm -22mm auto;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0;
+  --letter-page-mark-bg: #3f7480;
+  --letter-page-mark-width: 42mm;
+  --letter-page-mark-height: 1.3mm;
+  --letter-page-mark-inset: 43mm auto auto 23mm;
+  --letter-subject-bg: rgba(167, 194, 201, 0.2);
+  --letter-subject-padding: 3mm 4mm;
+  --letter-subject-radius: 1.5mm;
+}
+
+.letter-template--aqua-arc .letterhead {
+  align-items: center;
+}
+
+.letter-template--aqua-arc .letterhead h1 {
+  color: var(--letter-accent);
+  font-size: 25pt;
+}
+
+.letter-template--aqua-arc #pv-foto {
+  box-shadow: 0 0 0 6px rgba(167, 194, 201, 0.28);
+}
