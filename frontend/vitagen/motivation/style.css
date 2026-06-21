@@ -1366,12 +1366,29 @@ select:focus {
   font-family: Arial, "Helvetica Neue", sans-serif;
 }
 
+/* Geometric top-left header banner */
 .letter-template--corporate-axis::before {
   content: "";
   position: absolute;
-  inset: 0 0 auto;
-  height: 18mm;
-  background: linear-gradient(118deg, var(--doc-primary) 0 42%, var(--doc-accent) 42% 100%);
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 44%;
+  height: 25mm;
+  background: linear-gradient(135deg, var(--doc-primary) 82%, transparent 82%);
+  pointer-events: none;
+}
+
+/* Lighter accent top-right banner */
+.letter-template--corporate-axis::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 40%;
+  right: 0;
+  height: 12mm;
+  background: var(--doc-accent);
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -1387,22 +1404,28 @@ select:focus {
   z-index: 1;
 }
 
+/* Candidate name styled entirely with the primary color */
 .letter-template--corporate-axis .letterhead h1 {
-  color: #4a4a4a;
+  color: var(--doc-primary);
   font-size: 24pt;
   font-weight: 900;
   text-transform: uppercase;
 }
 
 .letter-template--corporate-axis .letterhead p {
-  color: var(--doc-primary);
+  color: var(--doc-accent);
   font-size: 10pt;
   letter-spacing: 0.16em;
 }
 
+/* Avatar photo styled with dynamic corporate shadows */
 .letter-template--corporate-axis #pv-foto {
-  border: 4px solid #ffffff;
-  box-shadow: 0 0 0 2px rgba(23, 59, 87, 0.14);
+  width: 24mm;
+  height: 24mm;
+  border: 5px solid #ffffff;
+  border-radius: 50% !important;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), 0 0 0 2px color-mix(in srgb, var(--doc-primary) 15%, transparent);
 }
 
 .preview-paper.document-rendered .letter-template--corporate-axis .document-rule {
@@ -1412,51 +1435,54 @@ select:focus {
 
 .letter-template--corporate-axis .letter-subject {
   padding-bottom: 3mm;
-  border-bottom: 1px solid rgba(23, 59, 87, 0.35);
+  border-bottom: 2px solid var(--doc-primary);
+  color: var(--doc-primary);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 .preview-paper.document-rendered .letter-template--editorial-mono {
   padding: 20mm 24mm 18mm;
-  background: linear-gradient(90deg, rgba(239, 237, 234, 0.72) 0 31%, var(--doc-paper-bg) 31% 100%);
+  background: color-mix(in srgb, var(--doc-accent) 6%, var(--doc-paper-bg));
   color: #3d3935;
   font-family: Georgia, "Times New Roman", serif;
 }
 
 .letter-template--editorial-mono .letterhead {
   padding-bottom: 7mm;
-  border-bottom: 1px solid rgba(63, 59, 55, 0.7);
+  border-bottom: 1px solid var(--doc-primary);
 }
 
 .letter-template--editorial-mono .letterhead h1 {
   color: var(--doc-primary);
   font-family: Georgia, "Times New Roman", serif;
   font-size: 32pt;
-  font-weight: 400;
+  font-weight: 300;
   letter-spacing: -0.01em;
 }
 
 .letter-template--editorial-mono .letterhead p {
-  color: #3d3935;
+  color: var(--doc-muted);
   font-family: "Segoe UI", Arial, sans-serif;
   font-size: 9.5pt;
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.22em;
 }
 
+/* User photo avatar shaped like an arched doorway */
 .letter-template--editorial-mono #pv-foto {
   width: 24mm;
   height: 30mm;
   border: 0;
-  border-radius: 0;
+  border-radius: 12mm 12mm 0 0 !important;
+  object-fit: cover;
   box-shadow: none;
 }
 
 .preview-paper.document-rendered .letter-template--editorial-mono .document-rule {
   height: 0;
   margin: 7mm 0 7mm;
-  border-top: 1px solid rgba(63, 59, 55, 0.7);
+  border-top: 1px solid var(--doc-primary);
   background: transparent;
 }
 
