@@ -1304,17 +1304,20 @@ select:focus {
   min-height: 33mm;
 }
 
-.letter-template--aqua-arc .letterhead::after {
+/* Concentric circular arc wrapping the avatar */
+.letter-template--aqua-arc .letterhead:has(#pv-foto:not([style*="display:none"]):not([style*="display: none"]))::after {
   content: "";
   position: absolute;
-  right: -2mm;
-  top: -2mm;
-  width: 27mm;
-  height: 27mm;
-  border: 3mm solid var(--doc-accent);
+  right: -4mm;
+  top: 50%;
+  transform: translateY(-50%) rotate(15deg);
+  width: 32mm;
+  height: 32mm;
+  border: 2.5mm solid var(--doc-accent);
   border-left-color: transparent;
   border-radius: 50%;
   pointer-events: none;
+  box-sizing: border-box;
 }
 
 .letter-template--aqua-arc .letterhead h1 {
@@ -1338,6 +1341,10 @@ select:focus {
   height: 24mm;
   border: 0;
   box-shadow: none;
+  border-radius: 50% !important;
+  object-fit: cover;
+  justify-self: end;
+  align-self: center;
 }
 
 .preview-paper.document-rendered .letter-template--aqua-arc .document-rule {

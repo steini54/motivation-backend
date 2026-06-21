@@ -30,11 +30,42 @@
   --letter-subject-radius: 1.5mm;
 }
 
+.letter-template--aqua-arc .letterhead {
+  position: relative;
+  align-items: center;
+  min-height: 33mm;
+}
+
+/* Concentric circular arc wrapping the avatar */
+.letter-template--aqua-arc .letterhead:has(#pv-foto:not([style*="display:none"]):not([style*="display: none"]))::after {
+  content: "";
+  position: absolute;
+  right: -4mm;
+  top: 50%;
+  transform: translateY(-50%) rotate(15deg);
+  width: 32mm;
+  height: 32mm;
+  border: 2.5mm solid var(--letter-accent-2);
+  border-left-color: transparent;
+  border-radius: 50%;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
 .letter-template--aqua-arc .letterhead h1 {
   color: var(--letter-accent);
   font-size: 25pt;
 }
 
 .letter-template--aqua-arc #pv-foto {
-  box-shadow: 0 0 0 6px rgba(127, 179, 189, 0.3);
+  position: relative;
+  z-index: 1;
+  width: 24mm;
+  height: 24mm;
+  border: 0;
+  box-shadow: none;
+  border-radius: 50% !important;
+  object-fit: cover;
+  justify-self: end;
+  align-self: center;
 }
