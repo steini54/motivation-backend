@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="de">
+	
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-18Q6CWP558');
+</script>	
+	
+<head>
+		<meta charset="utf-8">			<!-- allgemeine deutsche Formatierung dass auch Umlaute eingegeben werden können -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
+		<title>About SYNTEXT</title>
+		<link rel="stylesheet" href="demo.css">	
+		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
+<div class="topbar">
+      <nav class="nav">
+        <a href="index.html" class="brand">
+          <div class="brand-mark">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
+              <path d="M5 3v4"/>
+              <path d="M19 17v4"/>
+              <path d="M3 5h4"/>
+              <path d="M17 19h4"/>
+            </svg>
+          </div>
+          <span class="brand-name">SYNTEXT</span>
+        </a>
+
+        <!-- Hamburger Icon -->
+        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
+          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
+          <a href="Steini_About.html" class="nav-item">About</a>
+          <a href="Steini_Shop.html" class="nav-item">Shop</a>
+          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
+          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        </div>
+      </nav>
+    </div>
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('mobile-menu-btn');
+        const links = document.getElementById('nav-links');
+
+        if (btn && links) {
+          btn.addEventListener('click', () => {
+            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
+            btn.setAttribute('aria-expanded', !expanded);
+            links.classList.toggle('open');
+          });
+        }
+      });
+    </script>
+		
+<main>
+<article>
+		<h1 id="typewriter"></h1>
+
+<script>
+  const text = "About us";
+  const target = document.getElementById("typewriter");
+  let i = 0;
+
+  function typeWriter() {
+    if (i < text.length) {
+      target.innerHTML += text.charAt(i);
+      i++;
+      setTimeout(typeWriter, 100); // Geschwindigkeit in ms
+    }
+  }
+
+  typeWriter(); // Start
+</script>
+<br>
+<hr>	
+			<div class="bildcontainer2">
+			<div class="hoverbild2"></div>
+			</div>
+			<h3>Thomas Steinhardt</h3>
+			<p>Founder</p>
+</article>
+<br>
+<br>
+<br>
+<article>
+			<div class="bildcontainer3">
+			<div class="hoverbild3"></div>
+			</div>
+			<h3>Freelancer & Partner</h3>
+			<p>Wir profitieren vom Wissen und Erfahrung unterschiedlicher Charaktere aus der Welt der Texte.</p>
+</article>
+<br>
+<br>
+<br>
+</main>
+	<footer>
+		<p>© copyright; 2024 Syntext by Steinhardt</p>
+		<p><a href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
+		<p><a href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
+		<p><a href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
+	</footer>
+</div>
+</body>
+</html>

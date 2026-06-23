@@ -278,6 +278,10 @@ test("CV renderer uses measured pagination and the required typography scale", (
   assert.match(rendererScript, /getBoundingClientRect\(\)/);
   assert.match(rendererScript, /function splitEntryToMeasuredChunks/);
   assert.match(rendererScript, /function ensureFinalFooterFits/);
+  assert.match(rendererScript, /function paginateCvSidebar/);
+  assert.match(rendererScript, /function addSidebarUnitToPage/);
+  assert.match(rendererScript, /sidebarFits/);
+  assert.match(rendererScript, /buildCvSidebar\(data, language, pageNumber, pageModels\.length, templateId, model\.sidebar\)/);
   assert.doesNotMatch(rendererScript, /function entryUnits/);
   assert.doesNotMatch(rendererScript, /CV_PAGE_ONE_BUDGET/);
   assert.doesNotMatch(rendererScript, /CV_CONTINUATION_BUDGET/);

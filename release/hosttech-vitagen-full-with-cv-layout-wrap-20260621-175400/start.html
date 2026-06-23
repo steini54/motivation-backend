@@ -1,0 +1,950 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VitaGen – Bewerbungsassistent</title>
+  <meta name="description" content="Erstelle professionelle Lebensläufe und Motivationsschreiben mit Live-Vorschau, KI-Unterstützung und wählbaren Stilen." />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root{
+      --bg:#f5f6f8;
+      --surface:#ffffff;
+      --surface-soft:#f9fafb;
+      --text:#1f2933;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --primary:#202833;
+      --primary2:#384252;
+      --accent:#b99768;
+      --accent-soft:#f4efe7;
+      --success:#12725a;
+      --ai-purple:#6366f1;
+      --ai-violet:#8b5cf6;
+      --ai-blue:#2563eb;
+      --ai-teal:#0f766e;
+      --ai-cyan:#0ea5e9;
+      --shadow:0 22px 60px rgba(17,24,39,.08);
+      --soft-shadow:0 12px 36px rgba(17,24,39,.055);
+      --radius-xl:28px;
+      --radius-lg:20px;
+      --radius-md:14px;
+      --font:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(circle at 8% 0%,rgba(185,151,104,.13),transparent 32%),
+        radial-gradient(circle at 88% 9%,rgba(99,102,241,.07),transparent 28%),
+        var(--bg);
+      overflow-x:hidden;
+    }
+    a{color:inherit;text-decoration:none}
+    button,a{font:inherit}
+
+    .scroll-progress{display:none;}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      background:rgba(245,246,248,.98);
+      border-bottom:1px solid rgba(229,231,235,.82);
+    }
+    .topbar-inner{
+      max-width:1500px;
+      margin:0 auto;
+      padding:15px 28px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:220px}
+    .brand img{width:46px;height:46px;border-radius:50%;object-fit:contain;background:#fff;box-shadow:0 8px 22px rgba(17,24,39,.08)}
+    .brand strong{display:block;font-size:16px;letter-spacing:-.02em}
+    .brand span{display:block;font-size:12px;color:var(--muted)}
+    .nav{display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:999px;padding:5px}
+    .nav a{padding:8px 11px;color:#475569;font-size:12px;font-weight:700;border-radius:999px;transition:.18s ease;white-space:nowrap}
+    .nav a:hover{background:#fff;color:var(--primary);box-shadow:0 8px 18px rgba(17,24,39,.06)}
+    .top-actions{display:flex;gap:10px;align-items:center}
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 6px 4px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: #ffffff;
+    }
+    .lang-icon {
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+    .lang-options {
+      display: flex;
+      gap: 4px;
+    }
+    .lang-btn {
+      border: 0;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: var(--primary);
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lang-btn.muted {
+      background: transparent;
+      color: var(--muted);
+    }
+    .lang-btn:not(.muted):hover {
+      background: var(--primary2);
+    }
+
+    .topbar-inner .btn {
+      display: inline-flex;
+      min-height: 42px;
+      align-items: center;
+      justify-content: center;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 900;
+      line-height: 1;
+      text-decoration: none;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      white-space: nowrap;
+    }
+    .topbar-inner .btn.primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+    }
+    .topbar-inner .btn.ghost {
+      border-color: var(--line);
+      background: #ffffff;
+      color: var(--primary);
+      box-shadow: none;
+    }
+    .topbar-inner .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .btn{
+      border:0;
+      border-radius:999px;
+      padding:12px 16px;
+      transition:.18s ease;
+      white-space:nowrap;
+      font-weight:750;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+    }
+    .btn:hover{transform:translateY(-1px)}
+    .btn.primary{background:var(--primary);color:#fff;box-shadow:0 12px 28px rgba(17,24,39,.16)}
+    .btn.ghost{background:#fff;color:var(--primary);border:1px solid var(--line)}
+    .btn.gold{background:var(--accent-soft);color:#6e5128;border:1px solid #e9dcc5}
+    .btn.ai{position:relative;overflow:hidden;color:#fff;background:linear-gradient(135deg,var(--ai-purple),var(--ai-violet),var(--ai-blue));box-shadow:0 14px 34px rgba(99,102,241,.24)}
+    .btn.ai::after{display:none}
+
+    .hero{
+      max-width:1500px;
+      margin:0 auto;
+      padding:70px 28px 54px;
+      display:grid;
+      grid-template-columns:minmax(0,1.04fr) minmax(420px,.96fr);
+      gap:34px;
+      align-items:center;
+      position:relative;
+    }
+    .hero::before{
+      content:"";
+      position:absolute;
+      width:460px;
+      height:460px;
+      border-radius:50%;
+      right:-190px;
+      top:40px;
+      background:radial-gradient(circle,rgba(99,102,241,.14),transparent 68%);
+      pointer-events:none;
+    }
+    .eyebrow{display:inline-flex;align-items:center;gap:8px;padding:8px 11px;border-radius:999px;border:1px solid rgba(185,151,104,.22);background:rgba(255,255,255,.72);color:#7a5a2c;font-size:12px;font-weight:800;margin-bottom:18px}
+    .eyebrow-dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px rgba(185,151,104,.13)}
+    .hero h1{margin:0;font-size:clamp(42px,5.4vw,82px);line-height:.92;letter-spacing:-.075em;max-width:920px}
+    .hero h1 span{background:linear-gradient(135deg,#202833,#516070 54%,#b99768);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .hero p{margin:20px 0 0;max-width:760px;color:var(--muted);line-height:1.7;font-size:17px}
+    .hero-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:28px}
+    .hero-metrics{display:flex;gap:10px;flex-wrap:wrap;margin-top:24px}
+    .metric-pill{background:rgba(255,255,255,.78);border:1px solid var(--line);border-radius:999px;padding:9px 12px;color:#445063;font-size:12px;font-weight:700}
+
+    .hero-visual{position:relative;min-height:560px;display:grid;place-items:center}
+    .visual-stage{position:relative;width:min(100%,560px);height:540px;will-change: transform;}
+    .floating-card{position:absolute;border-radius:26px;border:1px solid rgba(229,231,235,.9);background:rgba(255,255,255,.88);box-shadow:0 22px 70px rgba(17,24,39,.10);backdrop-filter:blur(14px);overflow:hidden;will-change: transform;}
+    .doc-card{left:82px;top:20px;width:300px;height:420px;transform:translateY(-6px) rotate(-1deg)}
+    .doc-card.second{left:220px;top:110px;width:280px;height:390px;opacity:.96;transform:translateY(0) rotate(1deg)}
+    .doc-top{height:92px;padding:22px;background:linear-gradient(135deg,#202833,#384252);color:#fff}
+    .doc-top strong{display:block;font-size:18px;letter-spacing:-.04em;margin-bottom:6px}
+    .doc-top span{color:rgba(255,255,255,.72);font-size:11px}
+    .doc-body{padding:22px;display:grid;gap:12px}
+    .line{height:8px;border-radius:999px;background:#e5e7eb}
+    .line.dark{background:#cbd5e1}.line.short{width:64%}.line.mid{width:82%}.line.gold{background:rgba(185,151,104,.38)}
+    .mini-preview{right:12px;top:16px;width:175px;padding:14px;transform:translateY(-6px)}
+    .mini-preview strong{display:block;font-size:13px;margin-bottom:10px}
+    .mini-preview .mini-doc{aspect-ratio:210/297;border-radius:12px;border:1px solid var(--line);background:linear-gradient(90deg,#f6f8fa 0 30%,white 30% 100%);padding:12px;display:grid;grid-template-columns:30% 70%;gap:10px}
+    .mini-side,.mini-main{display:grid;gap:7px;align-content:start}
+    .mini-circle{width:28px;height:28px;border-radius:50%;background:#d9a98e;box-shadow:0 20px 0 7px #243044;margin-bottom:6px;transform:scale(.75);transform-origin:left top}
+    .ai-badge-card{left:0;bottom:42px;width:240px;padding:16px;transform:translateY(-6px)}
+    .ai-badge-card .badge-head{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    .ai-icon{width:38px;height:38px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--ai-purple),var(--ai-violet),var(--ai-blue));color:#fff;font-weight:900;box-shadow:0 12px 28px rgba(99,102,241,.22)}
+    .ai-badge-card strong{font-size:13px}
+    .progress-bars{display:grid;gap:9px}
+    .progress{height:8px;border-radius:999px;background:#edf1f6;overflow:hidden}
+    .progress span{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--ai-purple),var(--ai-blue));width:85%}
+    .progress:nth-child(2) span{background:linear-gradient(90deg,var(--ai-teal),var(--ai-cyan));width:65%}
+    .progress:nth-child(3) span{background:linear-gradient(90deg,var(--accent),#d9c29e);width:90%}
+
+    .section{max-width:1500px;margin:0 auto;padding:78px 28px}
+    .section.compact{padding-top:48px}
+    .section-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:26px}
+    .section-kicker{color:#76572c;font-size:12px;font-weight:900;letter-spacing:.12em;text-transform:uppercase;margin-bottom:10px}
+    .section h2{margin:0;font-size:clamp(30px,3.4vw,54px);line-height:1;letter-spacing:-.055em;max-width:830px}
+    .section-head p{margin:0;max-width:500px;color:var(--muted);line-height:1.65;font-size:15px}
+
+    .logo-strip{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:rgba(255,255,255,.55);overflow:hidden;display:flex}
+    .marquee{display:flex;gap:14px;padding:18px 14px 18px 0;white-space:nowrap;animation:marquee 14s linear infinite;will-change: transform;flex-shrink:0}
+    .marquee span{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border:1px solid var(--line);background:#fff;border-radius:999px;color:#64748b;font-size:13px;font-weight:700}
+    @keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-100%)}}
+
+    .problem-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:20px}
+    .problem-card{border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:30px;box-shadow:var(--soft-shadow);padding:28px;position:relative;overflow:hidden}
+    .problem-card h3{margin:0;font-size:28px;letter-spacing:-.045em}
+    .problem-card p{margin:12px 0 0;color:var(--muted);line-height:1.65}
+    .problem-list{display:grid;gap:12px;margin-top:22px}
+    .problem-item{display:flex;gap:11px;align-items:flex-start;border:1px solid var(--line);background:#fff;border-radius:18px;padding:14px;color:#475569;font-size:14px;line-height:1.45}
+    .problem-item .mark{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;background:#fff4e8;color:#b7791f;font-weight:900;flex:0 0 auto}
+    .solution-card{border:1px solid rgba(185,151,104,.22);background:linear-gradient(135deg,#fff,#fbf7ef);border-radius:30px;box-shadow:var(--soft-shadow);padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:center}
+    .solution-preview{border:1px solid var(--line);background:#fff;border-radius:24px;padding:18px;min-height:300px;display:grid;gap:12px}
+    .solution-preview .window-top{height:46px;border-radius:16px;background:#f8fafc;border:1px solid var(--line);display:flex;align-items:center;gap:8px;padding:0 14px}
+    .dot{width:9px;height:9px;border-radius:50%;background:#cbd5e1}.dot:nth-child(1){background:#f6b7b7}.dot:nth-child(2){background:#f6d98b}.dot:nth-child(3){background:#a7e2bc}
+    .solution-preview .split{display:grid;grid-template-columns:44% 56%;gap:12px}
+    .panel{border:1px solid var(--line);border-radius:18px;background:#fbfcfd;padding:14px;display:grid;gap:10px}
+    .a4-small{aspect-ratio:210/297;border:1px solid var(--line);border-radius:14px;background:linear-gradient(90deg,#f6f8fa 0 32%,#fff 32% 100%);padding:14px;display:grid;gap:8px}
+
+    .feature-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+    .product-card{position:relative;overflow:hidden;border-radius:30px;border:1px solid var(--line);background:rgba(255,255,255,.9);box-shadow:var(--soft-shadow);padding:28px;min-height:460px;display:grid;grid-template-rows:auto auto 1fr auto;gap:22px;transition:.22s ease}
+    .product-card:hover{transform:translateY(-4px);box-shadow:0 26px 70px rgba(17,24,39,.10)}
+    .product-card::before{content:"";position:absolute;width:300px;height:300px;border-radius:50%;right:-120px;top:-130px;background:radial-gradient(circle,rgba(185,151,104,.18),transparent 66%);pointer-events:none}
+    .product-card.ai::before{background:radial-gradient(circle,rgba(99,102,241,.18),transparent 66%)}
+    .product-top{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:16px;z-index:1}
+    .product-icon{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:#f7f1e7;color:#76572c;font-weight:900;border:1px solid #eadcc6;box-shadow:0 14px 30px rgba(185,151,104,.12)}
+    .product-card.ai .product-icon{color:#fff;background:linear-gradient(135deg,var(--ai-purple),var(--ai-violet),var(--ai-blue));border:0;box-shadow:0 16px 32px rgba(99,102,241,.24)}
+    .pill{border-radius:999px;padding:7px 10px;background:#eef2f6;color:#475569;font-size:12px;font-weight:800}
+    .product-card h3{position:relative;margin:0;font-size:28px;line-height:1;letter-spacing:-.04em;z-index:1}
+    .product-card p{position:relative;margin:12px 0 0;color:var(--muted);line-height:1.65;z-index:1}
+    .product-list{display:grid;gap:12px;align-content:start;z-index:1;position:relative;padding:0;margin:0}
+    .product-list li{list-style:none;display:flex;gap:10px;color:#475569;line-height:1.45;font-size:14px}
+    .product-list li::before{content:"✓";width:22px;height:22px;border-radius:50%;flex:0 0 auto;display:grid;place-items:center;background:#e8f6ef;color:var(--success);font-weight:900;font-size:12px}
+    .product-actions{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+
+    .deep-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .deep-card{border:1px solid var(--line);background:rgba(255,255,255,.9);box-shadow:var(--soft-shadow);border-radius:28px;padding:24px;min-height:260px;position:relative;overflow:hidden}
+    .deep-card::before{content:"";position:absolute;width:160px;height:160px;border-radius:50%;right:-80px;top:-80px;background:radial-gradient(circle,rgba(185,151,104,.13),transparent 70%)}
+    .deep-card.ai::before{background:radial-gradient(circle,rgba(99,102,241,.14),transparent 70%)}
+    .deep-icon{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;background:var(--surface-soft);border:1px solid var(--line);font-weight:900;margin-bottom:16px}
+    .deep-card.ai .deep-icon{background:linear-gradient(135deg,var(--ai-purple),var(--ai-violet),var(--ai-blue));color:#fff;border:0}
+    .deep-card h3{margin:0;font-size:18px;letter-spacing:-.025em;position:relative;z-index:1}
+    .deep-card p{margin:10px 0 0;color:var(--muted);line-height:1.62;font-size:14px;position:relative;z-index:1}
+
+    .story{display:grid;grid-template-columns:420px 1fr;gap:22px;align-items:start}
+    .story-sticky{position:sticky;top:92px;border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:30px;padding:26px;box-shadow:var(--soft-shadow)}
+    .story-sticky h3{margin:0;font-size:30px;letter-spacing:-.045em;line-height:1}
+    .story-sticky p{margin:14px 0 0;color:var(--muted);line-height:1.65}
+    .story-flow{display:grid;gap:16px}
+    .story-step{border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:28px;padding:24px;box-shadow:var(--soft-shadow);display:grid;grid-template-columns:70px 1fr;gap:18px;align-items:start}
+    .story-number{width:58px;height:58px;border-radius:20px;display:grid;place-items:center;background:#f7f1e7;color:#76572c;font-weight:900;border:1px solid #eadcc6}
+    .story-step h3{margin:0;font-size:20px;letter-spacing:-.025em}
+    .story-step p{margin:8px 0 0;color:var(--muted);line-height:1.62}
+
+    .template-wall{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .template-card{border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:24px;padding:14px;box-shadow:var(--soft-shadow);transition:.22s ease}
+    .template-card:hover{transform:translateY(-4px)}
+    .template-thumb{height:190px;border:1px solid var(--line);border-radius:18px;background:linear-gradient(90deg,#f6f8fa 0 34%,#fff 34% 100%);padding:14px;display:grid;grid-template-columns:30% 70%;gap:12px;margin-bottom:12px}
+    .template-thumb.letter{grid-template-columns:1fr;background:#fff}
+    .template-card strong{display:block;font-size:13px}.template-card span{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+
+    .steps{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+    .step-card{border:1px solid var(--line);background:rgba(255,255,255,.88);box-shadow:var(--soft-shadow);border-radius:26px;padding:22px;min-height:230px;position:relative;overflow:hidden}
+    .step-card::before{content:attr(data-step);position:absolute;right:18px;top:12px;font-size:64px;font-weight:900;color:rgba(15,23,42,.045);letter-spacing:-.08em}
+    .step-card .step-icon{width:44px;height:44px;border-radius:16px;display:grid;place-items:center;background:var(--surface-soft);border:1px solid var(--line);margin-bottom:16px;color:var(--primary);font-weight:900}
+    .step-card h3{margin:0;font-size:18px;letter-spacing:-.02em}.step-card p{margin:10px 0 0;color:var(--muted);line-height:1.6;font-size:14px}
+
+    .advantage-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+    .advantage-card{border:1px solid var(--line);background:rgba(255,255,255,.88);border-radius:26px;padding:22px;box-shadow:var(--soft-shadow);position:relative;overflow:hidden}
+    .advantage-card::after{content:"";position:absolute;width:160px;height:160px;right:-80px;top:-80px;border-radius:50%;background:radial-gradient(circle,rgba(185,151,104,.12),transparent 70%)}
+    .advantage-card h3{margin:0;font-size:18px;letter-spacing:-.02em;position:relative;z-index:1}.advantage-card p{margin:10px 0 0;color:var(--muted);line-height:1.6;font-size:14px;position:relative;z-index:1}
+
+    .comparison{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+    .compare-card{border:1px solid var(--line);border-radius:30px;padding:26px;background:rgba(255,255,255,.9);box-shadow:var(--soft-shadow)}
+    .compare-card.bad{background:linear-gradient(180deg,#fff,#fff8f4)}
+    .compare-card.good{background:linear-gradient(180deg,#fff,#f5fbf8)}
+    .compare-card h3{margin:0 0 18px;font-size:24px;letter-spacing:-.04em}
+    .compare-list{display:grid;gap:12px}
+    .compare-item{display:flex;gap:10px;color:#475569;line-height:1.45;font-size:14px}
+    .compare-dot{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;font-weight:900}
+    .bad .compare-dot{background:#fff0ea;color:#b45309}.good .compare-dot{background:#e8f6ef;color:var(--success)}
+
+    .demo-strip{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:stretch}
+    .demo-panel{border-radius:30px;border:1px solid var(--line);background:rgba(255,255,255,.9);box-shadow:var(--shadow);padding:24px;overflow:hidden;min-height:390px;position:relative}
+    .demo-panel h3{margin:0;font-size:24px;letter-spacing:-.04em}.demo-panel p{margin:10px 0 22px;color:var(--muted);line-height:1.6}
+    .demo-ui{display:grid;gap:12px}.fake-input{height:48px;border-radius:14px;border:1px solid var(--line);background:#fff;display:flex;align-items:center;padding:0 14px;color:#475569;font-size:13px}
+    .fake-preview{margin-top:12px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(90deg,#f6f8fa 0 32%,#fff 32% 100%);height:180px;padding:18px;display:grid;grid-template-columns:30% 70%;gap:16px}
+    .fake-preview .sidebar,.fake-preview .main{display:grid;align-content:start;gap:8px}
+
+    .pricing-card{display:grid;grid-template-columns:1fr 1fr;gap:20px;border:1px solid var(--line);background:rgba(255,255,255,.9);box-shadow:var(--shadow);border-radius:34px;padding:28px}
+    .price-box{border-radius:28px;background:linear-gradient(135deg,#202833,#384252);color:#fff;padding:28px;display:grid;align-content:center}
+    .price-box h3{margin:0;font-size:28px;letter-spacing:-.045em}.price-box p{color:rgba(255,255,255,.72);line-height:1.65}.price-number{font-size:48px;font-weight:900;letter-spacing:-.06em;margin:12px 0}.price-number span{font-size:14px;letter-spacing:0;color:rgba(255,255,255,.7)}
+    .pricing-details{display:grid;gap:12px;align-content:center}
+    .pricing-details .compare-item{font-size:15px}
+
+    .faq-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    details{border:1px solid var(--line);background:rgba(255,255,255,.9);border-radius:22px;padding:18px;box-shadow:var(--soft-shadow)}
+    summary{cursor:pointer;font-weight:800;letter-spacing:-.015em}
+    details p{margin:12px 0 0;color:var(--muted);line-height:1.6;font-size:14px}
+
+    .cta{max-width:1500px;margin:0 auto 72px;padding:0 28px}
+    .cta-box{position:relative;overflow:hidden;border-radius:34px;border:1px solid rgba(229,231,235,.9);background:radial-gradient(circle at 10% 0%,rgba(185,151,104,.20),transparent 32%),radial-gradient(circle at 90% 20%,rgba(99,102,241,.14),transparent 30%),linear-gradient(135deg,#202833,#384252);color:#fff;padding:46px;display:grid;grid-template-columns:1fr auto;gap:24px;align-items:center;box-shadow:0 28px 90px rgba(17,24,39,.18)}
+    .cta-box h2{margin:0;font-size:clamp(30px,3.6vw,54px);line-height:1;letter-spacing:-.055em}
+    .cta-box p{margin:14px 0 0;max-width:700px;color:rgba(255,255,255,.72);line-height:1.65}
+    .cta-box .btn{background:#fff;color:var(--primary)}
+    .footer{border-top:1px solid rgba(229,231,235,.9);background:rgba(255,255,255,.55)}
+    .footer-inner{max-width:1500px;margin:0 auto;padding:24px 28px;display:flex;justify-content:space-between;gap:18px;color:var(--muted);font-size:13px}
+
+    .reveal{opacity:1;transform:none}
+    .stagger > *{opacity:1;transform:none}
+
+    @media(max-width:1120px){
+      .hero{grid-template-columns:1fr}.hero-visual{min-height:520px}.feature-grid,.demo-strip,.problem-grid,.solution-card,.story,.comparison,.pricing-card{grid-template-columns:1fr}
+      .steps,.advantage-grid,.deep-grid,.template-wall,.faq-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+      .nav{display:none}.cta-box{grid-template-columns:1fr}.story-sticky{position:static}
+    }
+    @media(max-width:760px){
+      .topbar-inner{padding:12px 16px;gap:12px}.brand{min-width:auto;gap:8px}.brand img{width:36px;height:36px}.brand strong{font-size:15px}.brand span{display:none}.top-actions .btn{display:none}
+      .hero{padding:40px 16px 24px}.hero h1{font-size:clamp(34px,10vw,54px)}.hero-actions{align-items:stretch;flex-direction:column;gap:10px}.hero-actions .btn{width:100%}
+      .hero-visual{min-height:380px;padding:16px 0}.visual-stage{width:100%;max-width:340px;height:340px;margin:0 auto}
+      .doc-card{left:0px;top:10px;width:180px;height:250px;transform:translateY(0) rotate(-1deg)}
+      .doc-card.second{left:90px;top:60px;width:180px;height:250px;transform:translateY(0) rotate(1deg)}
+      .mini-preview{right:-10px;top:20px;width:120px;padding:10px;transform:none}
+      .mini-preview strong{font-size:11px;margin-bottom:6px}
+      .ai-badge-card{left:-10px;bottom:10px;width:180px;padding:10px;transform:none}
+      .ai-icon-img{width:30px;height:30px}
+      .section{padding:48px 16px}.section-head{display:grid;gap:12px}
+      .steps,.advantage-grid,.deep-grid,.faq-grid{grid-template-columns:1fr}
+      .template-wall{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      .product-card{padding:22px;min-height:auto}
+      .solution-preview{min-height:auto;padding:12px}
+      .solution-preview .split{grid-template-columns:1fr 1fr !important;gap:8px}
+      .cta{padding:0 16px;margin-bottom:44px}
+      .cta-box{padding:28px 20px;display:flex;flex-direction:column;text-align:center;align-items:center;gap:18px}
+      .cta-box .btn{width:100%;max-width:320px}
+      .footer-inner{padding:20px 16px;display:grid;text-align:center;gap:8px}
+      
+      /* Mobile refinement fixes */
+      .problem-card, .solution-card, .pricing-card { padding: 16px; border-radius: 24px; }
+      .price-box { padding: 20px; border-radius: 20px; }
+      .deep-card { min-height: auto; }
+    }
+    @media(max-width:480px){
+      .story-step{grid-template-columns:1fr;gap:12px;text-align:center;padding:20px 16px}
+      .story-number{margin:0 auto}
+      .template-wall{grid-template-columns:1fr}
+      .visual-stage{transform:scale(0.82);transform-origin:center center;margin:-30px auto}
+      .hero-visual{min-height:300px}
+    }
+    @media(max-width:380px){
+      .visual-stage{transform:scale(0.72);transform-origin:center center;margin:-50px auto}
+      .hero-visual{min-height:260px}
+    }
+    .ai-icon-img {
+      width: 38px;
+      height: 38px;
+      object-fit: contain;
+    }
+    .product-icon-img {
+      width: 52px;
+      height: 52px;
+      object-fit: contain;
+    }
+    .deep-icon-img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+  <div class="scroll-progress" id="scrollProgress"></div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="#">
+        <img src="/bewerbungs-generator/assets/vitagen-logo.png" alt="VitaGen Logo" />
+        <div>
+          <strong>VitaGen</strong>
+          <span data-i18n="brand_subtitle"></span>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="#features" data-i18n="nav_features"></a>
+        <a href="#process" data-i18n="nav_how"></a>
+        <a href="#templates" data-i18n="nav_templates"></a>
+        <a href="#pricing" data-i18n="nav_pricing"></a>
+        <a href="#faq" data-i18n="nav_faq"></a>
+      </nav>
+
+      <div class="top-actions">
+        <div class="lang-switch" aria-label="Language switcher">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lang-icon">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="2" y1="12" x2="22" y2="12"></line>
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <div class="lang-options">
+            <button id="langDe" class="lang-btn" onclick="setLanguage('de')">DE</button>
+            <button id="langEn" class="lang-btn muted" onclick="setLanguage('en')">EN</button>
+          </div>
+        </div>
+        <a class="btn ghost" href="#features" data-i18n="topbar_secondary"></a>
+        <a class="btn primary" href="#features" data-i18n="topbar_cta"></a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="start">
+      <div class="hero-copy reveal">
+        <div class="eyebrow"><span class="eyebrow-dot"></span><span data-i18n="eyebrow"></span></div>
+        <h1 data-i18n-html="hero_title"></h1>
+        <p data-i18n="hero_subtitle"></p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#features" data-i18n="hero_cta_primary"></a>
+          <a class="btn ghost" href="#preview" data-i18n="hero_cta_secondary"></a>
+        </div>
+        <div class="hero-metrics">
+          <span class="metric-pill" data-i18n="metric_1"></span>
+          <span class="metric-pill" data-i18n="metric_2"></span>
+          <span class="metric-pill" data-i18n="metric_3"></span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" data-parallax>
+        <div class="visual-stage">
+          <div class="floating-card doc-card">
+            <div class="doc-top"><strong>Lebenslauf</strong><span>Swiss Line · PDF Preview</span></div>
+            <div class="doc-body">
+              <div class="line dark short"></div><div class="line"></div><div class="line mid"></div><div class="line gold short"></div><div class="line"></div><div class="line mid"></div><div class="line"></div><div class="line short"></div>
+            </div>
+          </div>
+
+          <div class="floating-card doc-card second">
+            <div class="doc-top"><strong>Motivation</strong><span>AI Text · Clean PDF</span></div>
+            <div class="doc-body">
+              <div class="line dark"></div><div class="line"></div><div class="line mid"></div><div class="line"></div><div class="line gold"></div><div class="line"></div><div class="line short"></div>
+            </div>
+          </div>
+
+          <div class="floating-card mini-preview">
+            <strong data-i18n="mini_preview_title"></strong>
+            <div class="mini-doc">
+              <div class="mini-side"><div class="mini-circle"></div><div class="line short"></div><div class="line"></div><div class="line mid"></div></div>
+              <div class="mini-main"><div class="line dark mid"></div><div class="line"></div><div class="line short"></div><div class="line gold"></div><div class="line"></div><div class="line mid"></div></div>
+            </div>
+          </div>
+
+          <div class="floating-card ai-badge-card">
+            <div class="badge-head">
+              <img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="ai-icon-img" />
+              <div><strong data-i18n="ai_card_title"></strong><div style="font-size:12px;color:var(--muted);margin-top:2px;" data-i18n="ai_card_subtitle"></div></div>
+            </div>
+            <div class="progress-bars"><div class="progress"><span></span></div><div class="progress"><span></span></div><div class="progress"><span></span></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="logo-strip">
+      <div class="marquee">
+        <span data-i18n="strip_1"></span><span data-i18n="strip_2"></span><span data-i18n="strip_3"></span><span data-i18n="strip_4"></span><span data-i18n="strip_5"></span><span data-i18n="strip_6"></span>
+      </div>
+      <div class="marquee" aria-hidden="true">
+        <span data-i18n="strip_1"></span><span data-i18n="strip_2"></span><span data-i18n="strip_3"></span><span data-i18n="strip_4"></span><span data-i18n="strip_5"></span><span data-i18n="strip_6"></span>
+      </div>
+    </div>
+
+    <section class="section compact" id="problem">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="problem_kicker"></div><h2 data-i18n="problem_title"></h2></div>
+        <p data-i18n="problem_desc"></p>
+      </div>
+      <div class="problem-grid">
+        <article class="problem-card reveal">
+          <h3 data-i18n="problem_card_title"></h3>
+          <p data-i18n="problem_card_desc"></p>
+          <div class="problem-list">
+            <div class="problem-item"><span class="mark">!</span><span data-i18n="problem_1"></span></div>
+            <div class="problem-item"><span class="mark">!</span><span data-i18n="problem_2"></span></div>
+            <div class="problem-item"><span class="mark">!</span><span data-i18n="problem_3"></span></div>
+            <div class="problem-item"><span class="mark">!</span><span data-i18n="problem_4"></span></div>
+          </div>
+        </article>
+
+        <article class="solution-card reveal">
+          <div>
+            <div class="section-kicker" data-i18n="solution_kicker"></div>
+            <h3 style="margin:0;font-size:34px;letter-spacing:-.055em;line-height:1;" data-i18n="solution_title"></h3>
+            <p style="margin:14px 0 0;color:var(--muted);line-height:1.65;" data-i18n="solution_desc"></p>
+          </div>
+          <div class="solution-preview">
+            <div class="window-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="line short"></div></div>
+            <div class="split">
+              <div class="panel"><div class="line dark"></div><div class="line"></div><div class="line mid"></div><div class="line short"></div></div>
+              <div class="a4-small"><div class="line dark"></div><div class="line"></div><div class="line mid"></div><div class="line gold"></div><div class="line"></div><div class="line short"></div></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="features_kicker"></div><h2 data-i18n="features_title"></h2></div>
+        <p data-i18n="features_desc"></p>
+      </div>
+
+      <div class="feature-grid">
+        <article class="product-card reveal">
+          <div class="product-top"><div class="product-icon">CV</div><span class="pill" data-i18n="cv_badge"></span></div>
+          <div><h3 data-i18n="cv_title"></h3><p data-i18n="cv_desc"></p></div>
+          <ul class="product-list">
+            <li data-i18n="cv_point_1"></li><li data-i18n="cv_point_2"></li><li data-i18n="cv_point_3"></li><li data-i18n="cv_point_4"></li>
+          </ul>
+          <div class="product-actions"><a class="btn primary" href="lebenslauf/lebensformular.html" data-i18n="cv_cta"></a><a class="btn ghost" href="#preview" data-i18n="learn_more"></a></div>
+        </article>
+
+        <article class="product-card ai reveal">
+          <div class="product-top"><img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="product-icon-img" /><span class="pill" data-i18n="motivation_badge"></span></div>
+          <div><h3 data-i18n="motivation_title"></h3><p data-i18n="motivation_desc"></p></div>
+          <ul class="product-list">
+            <li data-i18n="motivation_point_1"></li><li data-i18n="motivation_point_2"></li><li data-i18n="motivation_point_3"></li><li data-i18n="motivation_point_4"></li>
+          </ul>
+          <div class="product-actions"><a class="btn ai" href="motivation/formular.html" data-i18n="motivation_cta"></a><a class="btn ghost" href="#preview" data-i18n="learn_more"></a></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="deep">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="deep_kicker"></div><h2 data-i18n="deep_title"></h2></div>
+        <p data-i18n="deep_desc"></p>
+      </div>
+      <div class="deep-grid stagger">
+        <article class="deep-card"><div class="deep-icon">01</div><h3 data-i18n="deep_1_title"></h3><p data-i18n="deep_1_desc"></p></article>
+        <article class="deep-card ai"><img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="deep-icon-img" /><h3 data-i18n="deep_2_title"></h3><p data-i18n="deep_2_desc"></p></article>
+        <article class="deep-card"><div class="deep-icon">03</div><h3 data-i18n="deep_3_title"></h3><p data-i18n="deep_3_desc"></p></article>
+        <article class="deep-card"><div class="deep-icon">04</div><h3 data-i18n="deep_4_title"></h3><p data-i18n="deep_4_desc"></p></article>
+        <article class="deep-card ai"><img src="/bewerbungs-generator/assets/Ai icon.png" alt="AI Icon" class="deep-icon-img" /><h3 data-i18n="deep_5_title"></h3><p data-i18n="deep_5_desc"></p></article>
+        <article class="deep-card"><div class="deep-icon">06</div><h3 data-i18n="deep_6_title"></h3><p data-i18n="deep_6_desc"></p></article>
+      </div>
+    </section>
+
+    <section class="section" id="process">
+      <div class="story">
+        <div class="story-sticky reveal">
+          <div class="section-kicker" data-i18n="how_kicker"></div>
+          <h3 data-i18n="how_title"></h3>
+          <p data-i18n="how_desc"></p>
+          <div style="margin-top:18px;"><a class="btn primary" href="#features" data-i18n="how_cta"></a></div>
+        </div>
+        <div class="story-flow">
+          <article class="story-step reveal"><div class="story-number">01</div><div><h3 data-i18n="step_1_title"></h3><p data-i18n="step_1_desc"></p></div></article>
+          <article class="story-step reveal"><div class="story-number">02</div><div><h3 data-i18n="step_2_title"></h3><p data-i18n="step_2_desc"></p></div></article>
+          <article class="story-step reveal"><div class="story-number">03</div><div><h3 data-i18n="step_3_title"></h3><p data-i18n="step_3_desc"></p></div></article>
+          <article class="story-step reveal"><div class="story-number">04</div><div><h3 data-i18n="step_4_title"></h3><p data-i18n="step_4_desc"></p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="templates">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="templates_kicker"></div><h2 data-i18n="templates_title"></h2></div>
+        <p data-i18n="templates_desc"></p>
+      </div>
+      <div class="template-wall stagger">
+        <article class="template-card"><div class="template-thumb"><div class="mini-side"><div class="mini-circle"></div><div class="line short"></div><div class="line"></div></div><div class="mini-main"><div class="line dark"></div><div class="line"></div><div class="line gold"></div><div class="line mid"></div></div></div><strong>Swiss Line</strong><span data-i18n="template_1"></span></article>
+        <article class="template-card"><div class="template-thumb"><div class="mini-side"><div class="mini-circle"></div><div class="line short"></div><div class="line"></div></div><div class="mini-main"><div class="line dark"></div><div class="line"></div><div class="line gold"></div><div class="line mid"></div></div></div><strong>Executive Ink</strong><span data-i18n="template_2"></span></article>
+        <article class="template-card"><div class="template-thumb letter"><div class="mini-main"><div class="line dark"></div><div class="line mid"></div><div class="line"></div><div class="line gold"></div><div class="line"></div><div class="line short"></div></div></div><strong>Editorial Azure</strong><span data-i18n="template_3"></span></article>
+        <article class="template-card"><div class="template-thumb letter"><div class="mini-main"><div class="line dark"></div><div class="line mid"></div><div class="line"></div><div class="line gold"></div><div class="line"></div><div class="line short"></div></div></div><strong>Pearl Classic</strong><span data-i18n="template_4"></span></article>
+      </div>
+    </section>
+
+    <section class="section" id="advantages">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="advantages_kicker"></div><h2 data-i18n="advantages_title"></h2></div>
+        <p data-i18n="advantages_desc"></p>
+      </div>
+      <div class="advantage-grid stagger">
+        <article class="advantage-card"><h3 data-i18n="adv_1_title"></h3><p data-i18n="adv_1_desc"></p></article>
+        <article class="advantage-card"><h3 data-i18n="adv_2_title"></h3><p data-i18n="adv_2_desc"></p></article>
+        <article class="advantage-card"><h3 data-i18n="adv_3_title"></h3><p data-i18n="adv_3_desc"></p></article>
+        <article class="advantage-card"><h3 data-i18n="adv_4_title"></h3><p data-i18n="adv_4_desc"></p></article>
+        <article class="advantage-card"><h3 data-i18n="adv_5_title"></h3><p data-i18n="adv_5_desc"></p></article>
+        <article class="advantage-card"><h3 data-i18n="adv_6_title"></h3><p data-i18n="adv_6_desc"></p></article>
+      </div>
+    </section>
+
+    <section class="section" id="comparison">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="comparison_kicker"></div><h2 data-i18n="comparison_title"></h2></div>
+        <p data-i18n="comparison_desc"></p>
+      </div>
+      <div class="comparison">
+        <article class="compare-card bad reveal">
+          <h3 data-i18n="compare_bad_title"></h3>
+          <div class="compare-list">
+            <div class="compare-item"><span class="compare-dot">×</span><span data-i18n="compare_bad_1"></span></div>
+            <div class="compare-item"><span class="compare-dot">×</span><span data-i18n="compare_bad_2"></span></div>
+            <div class="compare-item"><span class="compare-dot">×</span><span data-i18n="compare_bad_3"></span></div>
+          </div>
+        </article>
+        <article class="compare-card good reveal">
+          <h3 data-i18n="compare_good_title"></h3>
+          <div class="compare-list">
+            <div class="compare-item"><span class="compare-dot">✓</span><span data-i18n="compare_good_1"></span></div>
+            <div class="compare-item"><span class="compare-dot">✓</span><span data-i18n="compare_good_2"></span></div>
+            <div class="compare-item"><span class="compare-dot">✓</span><span data-i18n="compare_good_3"></span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="preview">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="preview_kicker"></div><h2 data-i18n="preview_title"></h2></div>
+        <p data-i18n="preview_desc"></p>
+      </div>
+      <div class="demo-strip">
+        <article class="demo-panel reveal">
+          <h3 data-i18n="demo_cv_title"></h3>
+          <p data-i18n="demo_cv_desc"></p>
+          <div class="demo-ui">
+            <div class="fake-input" data-i18n="demo_cv_input_1"></div>
+            <div class="fake-input" data-i18n="demo_cv_input_2"></div>
+            <div class="fake-preview">
+              <div class="sidebar"><div class="mini-circle"></div><div class="line short"></div><div class="line"></div><div class="line mid"></div></div>
+              <div class="main"><div class="line dark"></div><div class="line mid"></div><div class="line gold"></div><div class="line"></div><div class="line mid"></div><div class="line short"></div></div>
+            </div>
+          </div>
+        </article>
+        <article class="demo-panel reveal">
+          <h3 data-i18n="demo_motivation_title"></h3>
+          <p data-i18n="demo_motivation_desc"></p>
+          <div class="demo-ui">
+            <div class="fake-input" data-i18n="demo_motivation_input_1"></div>
+            <div class="fake-input" data-i18n="demo_motivation_input_2"></div>
+            <div class="fake-preview" style="grid-template-columns:1fr;background:white;">
+              <div class="main"><div class="line dark"></div><div class="line"></div><div class="line mid"></div><div class="line"></div><div class="line gold"></div><div class="line"></div><div class="line short"></div></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="pricing">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="pricing_kicker"></div><h2 data-i18n="pricing_title"></h2></div>
+        <p data-i18n="pricing_desc"></p>
+      </div>
+      <div class="pricing-card reveal">
+        <div class="price-box">
+          <h3 data-i18n="price_box_title"></h3>
+          <div class="price-number">9.90 <span>CHF</span></div>
+          <p data-i18n="price_box_desc"></p>
+          <a class="btn" href="#features" style="background:white;color:var(--primary);width:max-content;" data-i18n="price_cta"></a>
+        </div>
+        <div class="pricing-details">
+          <div class="compare-item"><span class="compare-dot" style="background:#e8f6ef;color:var(--success)">✓</span><span data-i18n="price_point_1"></span></div>
+          <div class="compare-item"><span class="compare-dot" style="background:#e8f6ef;color:var(--success)">✓</span><span data-i18n="price_point_2"></span></div>
+          <div class="compare-item"><span class="compare-dot" style="background:#e8f6ef;color:var(--success)">✓</span><span data-i18n="price_point_3"></span></div>
+          <div class="compare-item"><span class="compare-dot" style="background:#e8f6ef;color:var(--success)">✓</span><span data-i18n="price_point_4"></span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="section-head reveal">
+        <div><div class="section-kicker" data-i18n="faq_kicker"></div><h2 data-i18n="faq_title"></h2></div>
+        <p data-i18n="faq_desc"></p>
+      </div>
+      <div class="faq-grid">
+        <details class="reveal"><summary data-i18n="faq_1_q"></summary><p data-i18n="faq_1_a"></p></details>
+        <details class="reveal"><summary data-i18n="faq_2_q"></summary><p data-i18n="faq_2_a"></p></details>
+        <details class="reveal"><summary data-i18n="faq_3_q"></summary><p data-i18n="faq_3_a"></p></details>
+        <details class="reveal"><summary data-i18n="faq_4_q"></summary><p data-i18n="faq_4_a"></p></details>
+        <details class="reveal"><summary data-i18n="faq_5_q"></summary><p data-i18n="faq_5_a"></p></details>
+        <details class="reveal"><summary data-i18n="faq_6_q"></summary><p data-i18n="faq_6_a"></p></details>
+      </div>
+    </section>
+
+    <section class="cta">
+      <div class="cta-box reveal">
+        <div>
+          <h2 data-i18n="cta_title"></h2>
+          <p data-i18n="cta_desc"></p>
+        </div>
+        <a class="btn" href="#features" data-i18n="cta_button"></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div>© VitaGen</div>
+      <div data-i18n="footer_text"></div>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      de: {
+        brand_subtitle:"Bewerbungsunterlagen erstellen",
+        nav_features:"Funktionen", nav_how:"Ablauf", nav_templates:"Stile", nav_pricing:"Preis", nav_faq:"FAQ",
+        topbar_secondary:"Funktionen ansehen", topbar_cta:"Jetzt starten",
+        eyebrow:"Professionelle Bewerbungsunterlagen",
+        hero_title:"CV und Motivationsschreiben <span>modern erstellen</span>",
+        hero_subtitle:"VitaGen hilft Bewerberinnen und Bewerbern, strukturierte Lebensläufe und überzeugende Motivationsschreiben zu erstellen — mit Live-Vorschau, professionellen Stilen und optionaler KI-Unterstützung für Foto und Text.",
+        hero_cta_primary:"Dokument erstellen", hero_cta_secondary:"Vorschau ansehen",
+        metric_1:"CV Generator", metric_2:"Motivationsschreiben Generator", metric_3:"PDF ohne Wasserzeichen",
+        mini_preview_title:"Live-Vorschau", ai_card_title:"KI-Unterstützung", ai_card_subtitle:"Foto & Text",
+        strip_1:"Lebenslauf", strip_2:"Motivationsschreiben", strip_3:"KI-Foto", strip_4:"KI-Text", strip_5:"Live-Vorschau", strip_6:"PDF ohne Wasserzeichen",
+
+        problem_kicker:"Das Problem", problem_title:"Bewerbungsunterlagen wirken oft komplizierter, als sie sein müssten.",
+        problem_desc:"Viele Nutzer wissen nicht, was in einen professionellen CV gehört, wie ein Motivationsschreiben klingen soll oder ob das finale Dokument wirklich gut aussieht.",
+        problem_card_title:"Typische Hürden", problem_card_desc:"VitaGen ist darauf ausgelegt, diese Unsicherheit zu reduzieren.",
+        problem_1:"Zu viele unstrukturierte Felder ohne klare Reihenfolge.",
+        problem_2:"Unsicherheit bei Foto, Text, Stil und Layout.",
+        problem_3:"Kein Gefühl dafür, wie das finale PDF wirken wird.",
+        problem_4:"Preis oder Zahlung erscheinen oft, bevor der Nutzer den Wert sieht.",
+        solution_kicker:"Die Lösung", solution_title:"Ein geführter Editor mit direkter Vorschau.",
+        solution_desc:"VitaGen führt den Nutzer Schritt für Schritt durch CV und Motivationsschreiben. Jede Eingabe wird sofort visuell, KI bleibt optional und die finale PDF wird erst nach der Vorschau freigeschaltet.",
+
+        features_kicker:"Zwei starke Werkzeuge", features_title:"Alles, was Bewerber für professionelle Unterlagen brauchen.",
+        features_desc:"VitaGen kombiniert CV-Erstellung und Motivationsschreiben in einem klaren, modernen Prozess. Nutzer sehen sofort, wie ihr Dokument wirkt.",
+        cv_badge:"Strukturierter CV", cv_title:"CV Generator",
+        cv_desc:"Erstellen Sie einen professionellen Lebenslauf mit klaren Abschnitten, optionalem Foto, Berufserfahrung, Schulbildung, Weiterbildung, Kenntnissen, Hobbys und Live-Vorschau.",
+        cv_point_1:"Europäischer CV-Aufbau mit klarer Reihenfolge", cv_point_2:"Berufserfahrung, Bildung, Weiterbildung, Kenntnisse und Hobbys als wiederholbare Einträge", cv_point_3:"Optionales Bewerbungsfoto mit KI-Fotoassistent (3 Varianten)", cv_point_4:"14 verschiedene Stile direkt testen und als PDF vorbereiten",
+        cv_cta:"CV erstellen",
+        motivation_badge:"Text & Foto", motivation_title:"Motivationsschreiben Generator",
+        motivation_desc:"Erstellen Sie ein professionelles Motivationsschreiben mit persönlichen Angaben, Arbeitgeberdaten, KI-Textvorschlag (mit wählbarem Ton und Umfang) und direkter Dokumentvorschau.",
+        motivation_point_1:"Stichwörter in professionellen Fliesstext umwandeln", motivation_point_2:"Begrüssung, Verabschiedung, Datum, Unterschrift und Bewerbungstitel anpassen", motivation_point_3:"KI-Bewerbungsfoto direkt in das Dokument übernehmen", motivation_point_4:"14 verschiedene Stile mit Wasserzeichen kostenlos prüfen",
+        motivation_cta:"Motivation erstellen", learn_more:"Mehr erfahren",
+
+        deep_kicker:"Funktionen im Detail", deep_title:"Mehr als ein Formular: ein komplettes Bewerbungsstudio.",
+        deep_desc:"Jede Funktion ist darauf ausgelegt, den Nutzer schneller zu einem professionellen, überprüfbaren Ergebnis zu bringen.",
+        deep_1_title:"Geführte Eingaben", deep_1_desc:"Formulare sind in logische Karten gegliedert. Nutzer sehen sofort, welche Information wohin gehört.",
+        deep_2_title:"KI-Fotoassistent", deep_2_desc:"Ein normales Foto kann in 3 professionelle Bewerbungsfoto-Varianten umgewandelt werden.",
+        deep_3_title:"Live-Dokumentvorschau", deep_3_desc:"CV und Motivationsschreiben werden während der Eingabe direkt im Dokumentlayout angezeigt.",
+        deep_4_title:"14 Professionelle Stile", deep_4_desc:"Nutzer können 14 verschiedene visuelle Stile testen, bevor sie die finale PDF freischalten.",
+        deep_5_title:"KI-Textassistent", deep_5_desc:"Stichwörter werden mit wählbarem Ton und Umfang in einen professionellen, bearbeitbaren Motivationstext umgewandelt.",
+        deep_6_title:"Saubere PDF-Logik", deep_6_desc:"Kostenlose Vorschau mit Wasserzeichen, finale PDF ohne Wasserzeichen nach Freischaltung.",
+
+        how_kicker:"Einfacher Ablauf", how_title:"Vom Formular zur fertigen Bewerbung in wenigen Schritten.",
+        how_desc:"Der Nutzer wird nicht mit einem langen Formular allein gelassen. Alles ist in klare Schritte, Karten und Vorschauen aufgeteilt.",
+        how_cta:"Dokument erstellen",
+        step_1_title:"Daten eingeben", step_1_desc:"Name, Kontakt, Rolle und relevante Bewerbungsdetails werden in klaren Formularabschnitten erfasst.",
+        step_2_title:"KI optional nutzen", step_2_desc:"Foto professionell vorbereiten oder Stichwörter in einen sauberen Motivationstext umwandeln.",
+        step_3_title:"Vorschau prüfen", step_3_desc:"Der Nutzer sieht direkt, wie CV oder Motivationsschreiben im gewählten Stil aussehen.",
+        step_4_title:"PDF freischalten", step_4_desc:"Erst nach der Vorschau erscheint der Preis. Die finale PDF wird ohne Wasserzeichen heruntergeladen.",
+
+        templates_kicker:"Stile & Dokumente", templates_title:"Professionelle Dokumentstile für unterschiedliche Bewerbungen.",
+        templates_desc:"Die Landing Page zeigt, dass VitaGen nicht nur Text sammelt, sondern echte, gestaltete Bewerbungsunterlagen erzeugt.",
+        template_1:"Sicher, klar, professionell", template_2:"Premium und geschäftlich", template_3:"Modernes Anschreiben", template_4:"Klassisch und ruhig",
+
+        advantages_kicker:"Warum VitaGen", advantages_title:"Professionell, ruhig und auf Bewerbungssituationen optimiert.",
+        advantages_desc:"Das Design wirkt seriös und modern, ohne wie ein verspieltes KI-Tool auszusehen.",
+        adv_1_title:"Live-Vorschau statt Blindflug", adv_1_desc:"Jede Eingabe wirkt sofort im Dokument. Das reduziert Unsicherheit und macht den Prozess greifbar.",
+        adv_2_title:"Klare CV-Struktur", adv_2_desc:"Viele CV-Felder werden in übersichtliche Abschnitte aufgeteilt, damit der Nutzer nicht überfordert wird.",
+        adv_3_title:"KI dort, wo sie nützt", adv_3_desc:"KI-Foto und KI-Text werden hervorgehoben, während normale Formularfelder bewusst ruhig bleiben.",
+        adv_4_title:"Professionelle Stile", adv_4_desc:"Nutzer können verschiedene Dokumentstile testen, bevor sie die finale PDF freischalten.",
+        adv_5_title:"Sichere Zahlungslogik", adv_5_desc:"Der Preis erscheint erst, wenn der Nutzer den Wert gesehen hat und die PDF ohne Wasserzeichen möchte.",
+        adv_6_title:"Deutsch und Englisch", adv_6_desc:"Die Oberfläche unterstützt DE/EN, damit die Lösung flexibler für unterschiedliche Nutzergruppen ist.",
+
+        comparison_kicker:"Vorher / Nachher", comparison_title:"Von Unsicherheit zu einem klaren Bewerbungsprozess.",
+        comparison_desc:"Die Landing Page sollte sichtbar machen, warum VitaGen besser ist als ein normales Formular.",
+        compare_bad_title:"Ohne VitaGen", compare_bad_1:"Lange Formulare ohne visuelle Kontrolle.", compare_bad_2:"Unklare Reihenfolge und unsichere Texte.", compare_bad_3:"Kein Vertrauen in das finale PDF.",
+        compare_good_title:"Mit VitaGen", compare_good_1:"Geführte Abschnitte mit Live-Vorschau.", compare_good_2:"KI-Unterstützung für Foto und Motivationstext.", compare_good_3:"Saubere PDF erst nach überprüfter Vorschau.",
+
+        preview_kicker:"Produktgefühl", preview_title:"Ein Editor, der sich wie ein modernes Dokumentstudio anfühlt.",
+        preview_desc:"Die Landing Page zeigt direkt, dass VitaGen mehr ist als ein altes Formular: Es ist ein geführter Prozess mit klarer Ausgabe.",
+        demo_cv_title:"CV mit Struktur", demo_cv_desc:"Der Lebenslauf wird in wiederverwendbare Abschnitte zerlegt und rechts als professionelles Dokument dargestellt.",
+        demo_cv_input_1:"Berufserfahrung · Kaufmännischer Mitarbeiter", demo_cv_input_2:"Kenntnisse · MS Office, Kundenservice, CRM",
+        demo_motivation_title:"Motivation mit KI-Hilfe", demo_motivation_desc:"Kurze Stichwörter werden in einen professionellen Textentwurf verwandelt, der jederzeit bearbeitet werden kann.",
+        demo_motivation_input_1:"Stichwörter · Erfahrung, Motivation, Stärken", demo_motivation_input_2:"Ton · Professionell · Umfang · Standard",
+
+        pricing_kicker:"Preislogik", pricing_title:"Kostenlos prüfen, saubere PDF freischalten.",
+        pricing_desc:"Der Nutzer sieht zuerst den Wert des Dokuments. Erst beim Download ohne Wasserzeichen erscheint der Preis.",
+        price_box_title:"Finale PDF", price_box_desc:"Einmalige Freischaltung für die druckfertige PDF ohne Wasserzeichen.", price_cta:"Dokument starten",
+        price_point_1:"Kostenlose Vorschau mit Wasserzeichen", price_point_2:"PDF ohne Wasserzeichen nach Freischaltung", price_point_3:"Sichere Zahlung über Stripe", price_point_4:"Kein Account für den Download erforderlich",
+
+        faq_kicker:"FAQ", faq_title:"Häufige Fragen vor dem Start.",
+        faq_desc:"Kurze Antworten helfen Nutzern, Vertrauen zu fassen und schneller zu starten.",
+        faq_1_q:"Kann ich die Vorschau kostenlos prüfen?", faq_1_a:"Ja. Die Vorschau kann mit Wasserzeichen geprüft werden, bevor die finale PDF freigeschaltet wird.",
+        faq_2_q:"Muss ich ein Foto verwenden?", faq_2_a:"Nein. Das Foto ist optional. Der CV funktioniert auch ohne Foto.",
+        faq_3_q:"Kann ich den KI-Text bearbeiten?", faq_3_a:"Ja. KI-generierter Text ist nur ein Vorschlag und bleibt vollständig bearbeitbar.",
+        faq_4_q:"Wann sehe ich den Preis?", faq_4_a:"Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.",
+        faq_5_q:"Gibt es Deutsch und Englisch?", faq_5_a:"Ja. Die Oberfläche unterstützt Deutsch und Englisch.",
+        faq_6_q:"Sind die Dokumente professionell gestaltet?", faq_6_a:"Ja. Die Stile sind auf klare, moderne und seriöse Bewerbungsunterlagen ausgelegt.",
+
+        cta_title:"Bereit, professionelle Bewerbungsunterlagen zu erstellen?",
+        cta_desc:"Starten Sie mit CV oder Motivationsschreiben, prüfen Sie die Vorschau kostenlos und laden Sie die finale PDF ohne Wasserzeichen nach Freischaltung herunter.",
+        cta_button:"Funktionen auswählen",
+        footer_text:"Moderne Bewerbungstools mit professioneller Vorschau."
+      },
+      en: {
+        brand_subtitle:"Create application documents",
+        nav_features:"Features", nav_how:"Flow", nav_templates:"Styles", nav_pricing:"Price", nav_faq:"FAQ",
+        topbar_secondary:"View features", topbar_cta:"Get started",
+        eyebrow:"Professional application documents",
+        hero_title:"Create your CV and motivation letter <span>in a modern way</span>",
+        hero_subtitle:"VitaGen helps applicants create structured CVs and convincing motivation letters — with live preview, professional styles and optional AI assistance for photo and text.",
+        hero_cta_primary:"Create document", hero_cta_secondary:"View preview",
+        metric_1:"CV Generator", metric_2:"Motivation Letter Generator", metric_3:"PDF without watermark",
+        mini_preview_title:"Live preview", ai_card_title:"AI assistance", ai_card_subtitle:"Photo & text",
+        strip_1:"CV", strip_2:"Motivation letter", strip_3:"AI photo", strip_4:"AI text", strip_5:"Live preview", strip_6:"PDF without watermark",
+
+        problem_kicker:"The problem", problem_title:"Application documents often feel more complicated than they should.",
+        problem_desc:"Many users do not know what belongs in a professional CV, how a motivation letter should sound, or whether the final document really looks good.",
+        problem_card_title:"Common barriers", problem_card_desc:"VitaGen is designed to reduce this uncertainty.",
+        problem_1:"Too many unstructured fields without a clear order.",
+        problem_2:"Uncertainty around photo, text, style and layout.",
+        problem_3:"No feeling for how the final PDF will look.",
+        problem_4:"Price or payment often appears before the user sees value.",
+        solution_kicker:"The solution", solution_title:"A guided editor with direct preview.",
+        solution_desc:"VitaGen guides the user step by step through CV and motivation letter. Every input becomes visual immediately, AI remains optional and the final PDF is unlocked only after preview.",
+
+        features_kicker:"Two strong tools", features_title:"Everything applicants need for professional documents.",
+        features_desc:"VitaGen combines CV creation and motivation letters in one clear, modern process. Users immediately see how their document will look.",
+        cv_badge:"Structured CV", cv_title:"CV Generator",
+        cv_desc:"Create a professional CV with clear sections, optional photo, work experience, education, training, skills, hobbies and live preview.",
+        cv_point_1:"European CV structure with clear ordering", cv_point_2:"Work experience, education, training, skills and hobbies as repeatable entries", cv_point_3:"Optional application photo with AI Photo Assistant (3 options)", cv_point_4:"Test 14 different styles directly and prepare the PDF",
+        cv_cta:"Create CV",
+        motivation_badge:"Text & photo", motivation_title:"Motivation Letter Generator",
+        motivation_desc:"Create a professional motivation letter with personal details, employer data, AI text suggestion (selectable tone and length) and direct document preview.",
+        motivation_point_1:"Turn keywords into a professional paragraph", motivation_point_2:"Adjust greeting, closing, date, signature and application title", motivation_point_3:"Add an AI application photo directly to the document", motivation_point_4:"Check 14 different styles for free with a watermarked preview",
+        motivation_cta:"Create motivation letter", learn_more:"Learn more",
+
+        deep_kicker:"Feature details", deep_title:"More than a form: a complete application studio.",
+        deep_desc:"Every feature is designed to help the user reach a professional, checkable result faster.",
+        deep_1_title:"Guided inputs", deep_1_desc:"Forms are grouped into logical cards. Users immediately understand which information belongs where.",
+        deep_2_title:"AI Photo Assistant", deep_2_desc:"A normal photo can be transformed into 3 professional application portrait options.",
+        deep_3_title:"Live document preview", deep_3_desc:"CV and motivation letter are shown directly in document layout while the user types.",
+        deep_4_title:"14 Professional styles", deep_4_desc:"Users can test 14 different visual styles before unlocking the final PDF.",
+        deep_5_title:"AI Text Assistant", deep_5_desc:"Keywords are turned into a professional, editable motivation text with selectable tone and length.",
+        deep_6_title:"Clean PDF logic", deep_6_desc:"Free preview with watermark, final PDF without watermark after unlocking.",
+
+        how_kicker:"Simple flow", how_title:"From form to final application in a few clear steps.",
+        how_desc:"The user is not left alone with a long form. Everything is split into clear steps, cards and previews.",
+        how_cta:"Create document",
+        step_1_title:"Enter details", step_1_desc:"Name, contact, role and relevant application details are captured in clear form sections.",
+        step_2_title:"Use AI optionally", step_2_desc:"Prepare a professional photo or turn keywords into a clean motivation text.",
+        step_3_title:"Check preview", step_3_desc:"The user immediately sees how the CV or motivation letter looks in the selected style.",
+        step_4_title:"Unlock PDF", step_4_desc:"The price appears only after preview. The final PDF is downloaded without watermark.",
+
+        templates_kicker:"Styles & documents", templates_title:"Professional document styles for different applications.",
+        templates_desc:"The landing page shows that VitaGen does not just collect text, but creates real designed application documents.",
+        template_1:"Safe, clear, professional", template_2:"Premium and business-like", template_3:"Modern letter style", template_4:"Classic and calm",
+
+        advantages_kicker:"Why VitaGen", advantages_title:"Professional, calm and optimized for application situations.",
+        advantages_desc:"The design feels serious and modern, without looking like a playful AI tool.",
+        adv_1_title:"Live preview, not guesswork", adv_1_desc:"Every input immediately affects the document. This reduces uncertainty and makes the process tangible.",
+        adv_2_title:"Clear CV structure", adv_2_desc:"Many CV fields are split into clean sections so the user does not feel overwhelmed.",
+        adv_3_title:"AI where it is useful", adv_3_desc:"AI photo and AI text are highlighted, while normal form fields intentionally stay calm.",
+        adv_4_title:"Professional styles", adv_4_desc:"Users can test different document styles before unlocking the final PDF.",
+        adv_5_title:"Safe payment logic", adv_5_desc:"The price appears only when the user has seen the value and wants the PDF without watermark.",
+        adv_6_title:"German and English", adv_6_desc:"The interface supports DE/EN, making the solution more flexible for different user groups.",
+
+        comparison_kicker:"Before / after", comparison_title:"From uncertainty to a clear application process.",
+        comparison_desc:"The landing page should show why VitaGen is better than a normal form.",
+        compare_bad_title:"Without VitaGen", compare_bad_1:"Long forms without visual control.", compare_bad_2:"Unclear order and uncertain text.", compare_bad_3:"No confidence in the final PDF.",
+        compare_good_title:"With VitaGen", compare_good_1:"Guided sections with live preview.", compare_good_2:"AI assistance for photo and motivation text.", compare_good_3:"Clean PDF only after checked preview.",
+
+        preview_kicker:"Product feel", preview_title:"An editor that feels like a modern document studio.",
+        preview_desc:"The landing page immediately shows that VitaGen is more than an old form: it is a guided process with a clear output.",
+        demo_cv_title:"Structured CV", demo_cv_desc:"The CV is broken into reusable sections and displayed on the right as a professional document.",
+        demo_cv_input_1:"Work experience · Commercial Assistant", demo_cv_input_2:"Skills · MS Office, customer service, CRM",
+        demo_motivation_title:"Motivation with AI help", demo_motivation_desc:"Short keywords are transformed into a professional draft text that remains fully editable.",
+        demo_motivation_input_1:"Keywords · experience, motivation, strengths", demo_motivation_input_2:"Tone · Professional · Length · Standard",
+
+        pricing_kicker:"Pricing logic", pricing_title:"Preview for free, unlock the clean PDF.",
+        pricing_desc:"The user sees the document value first. The price appears only when the PDF without watermark is requested.",
+        price_box_title:"Final PDF", price_box_desc:"One-time unlock for the print-ready PDF without watermark.", price_cta:"Start document",
+        price_point_1:"Free preview with watermark", price_point_2:"PDF without watermark after unlocking", price_point_3:"Secure payment via Stripe", price_point_4:"No account required for download",
+
+        faq_kicker:"FAQ", faq_title:"Common questions before starting.",
+        faq_desc:"Short answers help users build trust and start faster.",
+        faq_1_q:"Can I check the preview for free?", faq_1_a:"Yes. The preview can be checked with a watermark before the final PDF is unlocked.",
+        faq_2_q:"Do I have to use a photo?", faq_2_a:"No. The photo is optional. The CV also works without a photo.",
+        faq_3_q:"Can I edit AI text?", faq_3_a:"Yes. AI-generated text is only a suggestion and remains fully editable.",
+        faq_4_q:"When do I see the price?", faq_4_a:"The price appears only when the PDF without watermark is requested.",
+        faq_5_q:"Is German and English supported?", faq_5_a:"Yes. The interface supports German and English.",
+        faq_6_q:"Are the documents professionally designed?", faq_6_a:"Yes. The styles are designed for clear, modern and serious application documents.",
+
+        cta_title:"Ready to create professional application documents?",
+        cta_desc:"Start with CV or motivation letter, check the preview for free and download the final PDF without watermark after unlocking.",
+        cta_button:"Choose feature",
+        footer_text:"Modern application tools with professional preview."
+      }
+    };
+
+    const LANGUAGE_STORAGE_KEY = "vitagen_language";
+    let currentLang = localStorage.getItem(LANGUAGE_STORAGE_KEY) || "de";
+    function t(key){return translations[currentLang][key] || key}
+
+    function setLanguage(lang){
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+      document.getElementById("langDe").classList.toggle("muted", lang !== "de");
+      document.getElementById("langEn").classList.toggle("muted", lang !== "en");
+      document.querySelectorAll("[data-i18n]").forEach(el => el.textContent = t(el.getAttribute("data-i18n")));
+      document.querySelectorAll("[data-i18n-html]").forEach(el => el.innerHTML = t(el.getAttribute("data-i18n-html")));
+    }
+
+    // Scroll animations and observer removed to fix performance lag
+
+    // Mouse parallax removed to eliminate lag
+
+    setLanguage(currentLang);
+  </script>
+</body>
+</html>

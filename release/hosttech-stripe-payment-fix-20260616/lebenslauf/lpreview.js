@@ -1,0 +1,105 @@
+console.log("lpreview.js loaded");
+
+const saved = JSON.parse(localStorage.getItem("vitagen_lebenslauf") || "{}");
+
+document.getElementById("pv-name").textContent = saved.name || "";
+document.getElementById("pv-adresse").textContent = saved.adresse || "";
+document.getElementById("pv-kontakt").textContent = saved.kontakt || "";
+
+const fotoEl = document.getElementById("pv-foto");
+if (saved.foto && fotoEl) {
+  fotoEl.src = saved.foto;
+  fotoEl.style.display = "block";
+}
+
+function fillSection(containerId, entries) {
+  const container = document.getElementById(containerId);
+  if (!container || !Array.isArray(entries)) {
+    return;
+  }
+
+  container.innerHTML = "";
+
+  entries.forEach((entry) => {
+    const div = document.createElement("div");
+    div.className = "pv-entry";
+
+    const values = Object.values(entry || {}).filter(
+      (value) => value && String(value).trim() !== ""
+    );
+
+    if (
+      containerId === "pv-schulbildung" ||
+      containerId === "pv-beruf" ||
+      containerId === "pv-weiterbildung"
+    ) {
+      if (values.length >= 4) {
+        const firstRow = document.createElement("div");
+        firstRow.className = "pv-row";
+
+        const left = document.createElement("span");
+        left.textContent = values[0];
+
+        const right = document.createElement("span");
+        right.className = "pv-date";
+        right.textContent = `${values[2]} - ${values[3]}`;
+
+        firstRow.appendChild(left);
+        firstRow.appendChild(right);
+        div.appendChild(firstRow);
+
+        values.forEach((value, index) => {
+          if (index !== 0 && index !== 2 && index !== 3) {
+            const p = document.createElement("p");
+            p.textContent = value;
+            div.appendChild(p);
+          }
+        });
+      }
+    } else {
+      values.forEach((value) => {
+        const p = document.createElement("p");
+        p.textContent = value;
+        div.appendChild(p);
+      });
+    }
+
+    container.appendChild(div);
+  });
+}
+
+fillSection("pv-schulbildung", saved.schulbildung);
+fillSection("pv-beruf", saved.beruf);
+fillSection("pv-weiterbildung", saved.weiterbildung);
+fillSection("pv-kenntnisse", saved.kenntnisse);
+fillSection("pv-hobbys", saved.hobbys);
+
+document.getElementById("pv-datum").textContent = saved.datum || "";
+document.getElementById("pv-unterschrift").textContent = saved.unterschrift || "";
+
+const backBtn = document.getElementById("backBtn");
+if (backBtn) {
+  backBtn.addEventListener("click", () => {
+    window.location.href = "lebensformular.html";
+  });
+}
+
+const printBtn = document.getElementById("printBtn");
+if (printBtn) {
+  printBtn.addEventListener("click", () => window.print());
+}
+
+document.querySelectorAll(".style-switch button").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const themeLink = document.getElementById("theme-style");
+    if (themeLink) {
+      themeLink.href = "styles/" + btn.dataset.style;
+    }
+
+    document.querySelectorAll(".style-switch button").forEach((button) => {
+      button.classList.remove("active");
+    });
+
+    btn.classList.add("active");
+  });
+});

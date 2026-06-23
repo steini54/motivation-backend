@@ -1,0 +1,31 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-title-font: Georgia, Cambria, serif;
+  --cv-bg: #efefed;
+  --cv-paper: #ffffff;
+  --cv-ink: #141414;
+  --cv-muted: #686868;
+  --cv-accent: #141414;
+  --cv-accent-2: #b8b8b8;
+  --cv-rule: #cfcfcf;
+  --cv-cover-bg: #ffffff;
+  --cv-cover-align: center;
+  --cv-cover-mark-inset: 18mm auto auto 18mm;
+  --cv-cover-mark-width: 174mm;
+  --cv-cover-mark-height: 1px;
+  --cv-cover-mark-bg: #141414;
+  --cv-cover-mark-radius: 0;
+  --cv-photo-width: 30mm;
+  --cv-photo-height: 38mm;
+  --cv-photo-radius: 0;
+  --cv-photo-shadow: none;
+  --cv-section-transform: none;
+  --cv-section-letter: 0;
+}
+
+.cover,
+.cv {
+  box-shadow: inset 0 0 0 1px #d8d8d8;
+}

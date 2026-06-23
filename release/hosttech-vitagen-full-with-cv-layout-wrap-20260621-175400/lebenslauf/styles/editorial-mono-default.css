@@ -1,0 +1,9 @@
+@import url("_base.css");
+
+:root {
+  --cv-accent: #3f3b37;
+  --cv-accent-2: #bfb8b0;
+  --cv-muted: #6f6861;
+  --cv-soft: #efedea;
+  --cv-rule: #c8c1ba;
+}

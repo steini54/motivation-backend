@@ -1,0 +1,83 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: "Segoe UI", Arial, sans-serif;
+  --letter-title-font: Georgia, "Times New Roman", serif;
+  --letter-bg: #eeeeec;
+  --letter-paper: #ffffff;
+  --letter-ink: #1f1f1f;
+  --letter-muted: #5d5a56;
+  --letter-accent: #1f1f1f;
+  --letter-accent-2: #9c9a95;
+  --letter-rule: #c9c7c3;
+  --letter-soft: #eeeeec;
+  --letter-main-padding: 20mm 24mm 18mm;
+  --letter-cover-bg: linear-gradient(90deg, #eeeeec 0 31%, #ffffff 31% 100%);
+  --letter-cover-mark-bg: #1f1f1f;
+  --letter-cover-mark-height: 1px;
+  --letter-cover-mark-radius: 0;
+  --letter-cover-shape-bg: transparent;
+  --letter-photo-width: 24mm;
+  --letter-photo-height: 30mm;
+  --letter-photo-radius: 0;
+  --letter-photo-shadow: none;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0 0 7mm;
+  --letter-letterhead-margin: 0 0 7mm;
+  --letter-subject-padding: 0;
+}
+
+.letter-template--editorial-mono {
+  background: color-mix(in srgb, var(--letter-accent-2) 6%, var(--letter-paper));
+  color: #3d3935;
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+.letter-template--editorial-mono .letterhead {
+  padding-bottom: 7mm;
+  border-bottom: 1px solid var(--letter-accent);
+}
+
+.letter-template--editorial-mono .letterhead h1 {
+  color: var(--letter-accent);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 32pt;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+}
+
+.letter-template--editorial-mono .letterhead p {
+  color: var(--letter-muted);
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-size: 9.5pt;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+}
+
+/* User photo avatar shaped like an arched doorway */
+.letter-template--editorial-mono #pv-foto {
+  width: 24mm;
+  height: 30mm;
+  border: 0;
+  border-radius: 12mm 12mm 0 0 !important;
+  object-fit: cover;
+  box-shadow: none;
+}
+
+.letter-template--editorial-mono .document-rule {
+  height: 0;
+  margin: 7mm 0 7mm;
+  border-top: 1px solid var(--letter-accent);
+  background: transparent;
+}
+
+.letter-template--editorial-mono .letter-subject {
+  border-bottom: 0;
+  color: var(--letter-accent);
+  font-family: var(--letter-title-font);
+  font-size: 13.5pt;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}

@@ -1,0 +1,199 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #fff;
+  color: #000;
+ max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  line-height: 2.1;
+}
+
+h1 {
+  text-align: center;
+}
+
+h2 {
+  margin-top: 30px;
+}
+
+label {
+  display: block;
+  margin-top: 15px;
+  font-weight: bold;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  box-sizing: border-box;
+}
+
+textarea {
+  min-height: 80px;
+}
+
+.hint {
+  font-size: 13px;
+  color: #555;
+}
+.pv-kontakt {
+  margin-top: 3px;
+  font-size: 11pt;
+  line-height: 1.4;
+}
+
+.pv-kontakt div {
+  display: block;
+}
+.buttons {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+#preview {
+  position: relative; /* 🔴 DAS war der fehlende Punkt */
+}
+
+.watermark {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-30deg);
+  font-size: 70px;
+  color: rgba(200,200,200,0.35);
+  pointer-events: none;
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+.style-switch {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.style-switch button {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.style-switch button:hover {
+  background-color: #5ce687 !important;
+  color: white !important;
+}
+.style-switch button.active {
+  background-color: #2eb50d;
+  color: white;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header .adresse {
+  text-align: left;
+}
+
+.header .datum {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* =============================
+   Basis-Layout für Preview
+   ============================= */
+body {
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+  line-height: 2.1;
+}
+
+#preview-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+#preview {
+  background: white;
+  max-width: 210mm; /* DIN-A4 Breite */
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* =============================
+   Seitenumbrüche
+   ============================= */
+.page-break {
+  page-break-before: always; /* ältere Browser */
+  break-before: page;        /* moderner Standard */
+}
+
+/* =============================
+   Drucklayout
+   ============================= */
+@page {
+  size: A4;
+  margin: 2.5cm 2cm 2.5cm 2.5cm;
+}
+
+@media print {
+  body {
+    margin: 0;
+    padding: 0;
+    background: white;
+  }
+
+  #preview-wrapper,
+  #preview {
+    padding: 0;
+    margin: 0 auto;
+    max-width: 210mm;
+    background: white;
+    box-shadow: none; /* Schatten beim Drucken entfernen */
+  }
+
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+
+  /* Optional: Bilder skalieren für Druck */
+  #pv-foto {
+    max-width: 40mm;
+    height: auto;
+  }
+}
+
+.cover {
+  text-align: center; /* Alles horizontal zentrieren */
+  padding: 40px 20px; /* optional: Abstand oben/unten */
+}
+
+.cover h1,
+.cover h2 {
+  margin: 0 0 10px 0;
+}
+
+#pv-foto {
+  display: block; /* block damit margin auto wirkt */
+  margin: 20px auto 0 auto; /* oben Abstand, zentriert horizontal */
+  max-width: 150px; /* Foto nicht zu groß */
+  height: auto; /* proportional skalieren */
+  border-radius: 4px; /* optional: leicht abgerundete Ecken */
+}
+
+@media print {
+  #pv-foto {
+    max-width: 40mm; /* passt gut auf Deckblatt */
+    height: auto;
+  }
+}

@@ -1,0 +1,32 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: "Segoe UI", Arial, sans-serif;
+  --cv-title-font: Georgia, Cambria, serif;
+  --cv-bg: #eceff2;
+  --cv-ink: #151b25;
+  --cv-muted: #6b6258;
+  --cv-accent: #172033;
+  --cv-accent-2: #b38b58;
+  --cv-rule: #c8b79e;
+  --cv-cover-bg: linear-gradient(90deg, #172033 0 52mm, #fbfaf7 52mm 100%);
+  --cv-cover-padding: 35mm 28mm 32mm 64mm;
+  --cv-cover-accent: #b38b58;
+  --cv-cover-mark-bg: #b38b58;
+  --cv-cover-shape-bg: #172033;
+  --cv-cover-shape-width: 210mm;
+  --cv-cover-shape-height: 8mm;
+  --cv-cover-shape-inset: 0 0 auto 0;
+  --cv-cover-shape-radius: 0;
+  --cv-photo-width: 30mm;
+  --cv-photo-height: 40mm;
+  --cv-photo-radius: 8px;
+  --cv-name-size: 29pt;
+  --cv-main-padding: 22mm 24mm 20mm 34mm;
+  --cv-sidebar-width: 12mm;
+  --cv-sidebar-bg: #172033;
+  --cv-section-letter: 0.04em;
+  --cv-section-transform: none;
+  --cv-entry-border-left: 1.3mm solid #e2d3bd;
+  --cv-entry-padding: 0 0 0 4mm;
+}

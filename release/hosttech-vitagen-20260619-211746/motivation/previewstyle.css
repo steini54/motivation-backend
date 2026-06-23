@@ -1,0 +1,129 @@
+/* =============================
+   Preview-Layout (nur Bildschirm)
+   ============================= */
+
+#preview-wrapper {
+  display: block;
+}
+
+#preview {
+  background: #f7f7f7;
+  max-width: 210mm; /* DIN-A4 Breite für Bildschirm */
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* =============================
+   Wasserzeichen für Vorschau & Druck
+   ============================= */
+.watermark {
+  position: absolute; /* für Bildschirm-Vorschau */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-50deg);
+  font-size: 90px;
+  color: rgba(0,0,0,0.1);
+  pointer-events: none;
+  z-index: 9999;
+  white-space: nowrap;
+}
+
+/* Druckmodus: auf jeder Seite wiederholen */
+@media print {
+  .watermark {
+    position: absolute; /* fixed kann auf mehreren Seiten problematisch sein */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(-50deg);
+    font-size: 90px;
+    color: rgba(0,0,0,0.1);
+    page-break-inside: avoid; /* verhindert Abschneiden */
+  }
+
+  body::after {
+    content: "";
+    display: block;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 9998;
+  }
+}
+
+/* =============================
+   Style-Switch (Preview)
+   ============================= */
+.style-switch {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.style-switch button {
+  margin: 0 6px;
+}
+
+.style-switch button.active {
+  background-color: #007BFF;
+  color: white;
+}
+
+/* =============================
+   Header im Anschreiben
+   ============================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header .adresse {
+  text-align: left;
+}
+
+.header .datum {
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* =============================
+   Deckblatt
+   ============================= */
+.cover {
+  text-align: center;
+  padding: 0;
+}
+
+.cover h1,
+.cover h2 {
+  margin: 0 0 10px 0;
+}
+
+#pv-foto {
+  display: block;
+  margin: 20px auto 0 auto;
+  max-width: 150px;
+  height: auto;
+  border-radius: 4px;
+}
+
+/* ===== Datum rechts neben erster Zeile ===== */
+.cv {
+	width: 100%;
+  padding-right: 0;
+}
+
+.pv-row {
+  display: flex;
+  width: 100%;              /* 🔥 volle Breite erzwingen */
+}
+
+.pv-row span:first-child {
+  font-weight: 600;
+}
+
+.pv-row span:last-child {
+  margin-left: auto;        /* 🔥 drückt es komplett nach rechts */
+  text-align: right;
+  font-weight: 800;         /* 🔥 deutlich fett */
+  white-space: nowrap;
+}

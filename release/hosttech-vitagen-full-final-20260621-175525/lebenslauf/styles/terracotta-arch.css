@@ -1,0 +1,30 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-title-font: Georgia, Cambria, serif;
+  --cv-bg: #f3eee9;
+  --cv-paper: #fffdf9;
+  --cv-ink: #30251f;
+  --cv-muted: #776b61;
+  --cv-accent: #b55f3d;
+  --cv-accent-2: #ebb995;
+  --cv-rule: #ead2c3;
+  --cv-cover-bg: #fffdf9;
+  --cv-cover-mark-inset: 0 auto auto 0;
+  --cv-cover-mark-width: 50mm;
+  --cv-cover-mark-height: 50mm;
+  --cv-cover-mark-bg: #ebb995;
+  --cv-cover-mark-radius: 0 0 999px 0;
+  --cv-cover-shape-bg: #f2c7ab;
+  --cv-cover-shape-width: 64mm;
+  --cv-cover-shape-height: 64mm;
+  --cv-cover-shape-inset: auto -20mm -20mm auto;
+  --cv-cover-shape-radius: 999px 0 0 0;
+  --cv-photo-size: 34mm;
+  --cv-photo-border: 3px solid #f6e6dc;
+  --cv-section-transform: none;
+  --cv-section-letter: 0;
+  --cv-entry-border-left: 1mm solid #f0c7ae;
+  --cv-entry-padding: 0 0 0 3mm;
+}

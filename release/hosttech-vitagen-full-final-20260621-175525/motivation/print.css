@@ -1,0 +1,97 @@
+@page {
+  size: A4 portrait;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    width: 210mm !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #fff !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: visible !important;
+  }
+
+  body > * {
+    display: none !important;
+  }
+
+  body > #preview-wrapper {
+    display: block !important;
+  }
+
+  #preview-wrapper {
+    width: 210mm !important;
+    max-width: 210mm !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
+  #preview {
+    position: static !important;
+    width: 210mm !important;
+    max-width: 210mm !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+
+  #preview .cover,
+  #preview .anschreiben {
+    box-sizing: border-box !important;
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+  }
+
+  #preview .cover {
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  #preview .anschreiben {
+    height: auto !important;
+    overflow: visible !important;
+    break-before: auto !important;
+    page-break-before: auto !important;
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  #preview .page-break {
+    display: none !important;
+  }
+
+  #preview .watermark {
+    display: block !important;
+    visibility: visible !important;
+    position: fixed !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: auto !important;
+    height: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    transform: translate(-50%, -50%) rotate(-35deg) !important;
+    font-size: 70px !important;
+    line-height: 1 !important;
+    color: rgba(0, 0, 0, 0.1) !important;
+    pointer-events: none !important;
+    white-space: nowrap !important;
+    z-index: 9999 !important;
+  }
+}

@@ -1,0 +1,30 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: "Segoe UI", Arial, sans-serif;
+  --cv-title-font: "Segoe UI", Arial, sans-serif;
+  --cv-bg: #eef4fb;
+  --cv-ink: #162033;
+  --cv-muted: #607084;
+  --cv-accent: #1d5fa9;
+  --cv-accent-2: #57a5e5;
+  --cv-rule: #b8d3ee;
+  --cv-cover-bg: linear-gradient(180deg, #edf6ff 0 22mm, #ffffff 22mm 100%);
+  --cv-cover-mark-inset: 20mm auto auto 30mm;
+  --cv-cover-mark-width: 70mm;
+  --cv-cover-mark-height: 5mm;
+  --cv-cover-mark-bg: #1d5fa9;
+  --cv-cover-mark-radius: 2px;
+  --cv-cover-shape-bg: #e4f1ff;
+  --cv-cover-shape-width: 46mm;
+  --cv-cover-shape-height: 46mm;
+  --cv-cover-shape-inset: auto 17mm 20mm auto;
+  --cv-cover-shape-radius: 10mm;
+  --cv-photo-size: 32mm;
+  --cv-photo-radius: 8px;
+  --cv-section-bg: #eef6ff;
+  --cv-section-padding: 2mm 3mm;
+  --cv-section-radius: 3mm;
+  --cv-entry-border-left: 1mm solid #d7e9fa;
+  --cv-entry-padding: 0 0 0 3mm;
+}

@@ -1,0 +1,32 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: "Segoe UI", Arial, sans-serif;
+  --letter-title-font: "Segoe UI", Arial, sans-serif;
+  --letter-bg: #edf3fb;
+  --letter-ink: #16243a;
+  --letter-muted: #637386;
+  --letter-accent: #245caa;
+  --letter-accent-2: #7bb4e6;
+  --letter-rule: #c3d8ee;
+  --letter-cover-bg: linear-gradient(135deg, #245caa 0 24mm, #ffffff 24mm 100%);
+  --letter-cover-mark-inset: 0 auto auto 0;
+  --letter-cover-mark-width: 82mm;
+  --letter-cover-mark-height: 18mm;
+  --letter-cover-mark-bg: #245caa;
+  --letter-cover-mark-radius: 0;
+  --letter-cover-shape-bg: #7bb4e6;
+  --letter-cover-shape-width: 54mm;
+  --letter-cover-shape-height: 9mm;
+  --letter-cover-shape-inset: auto 0 0 auto;
+  --letter-cover-shape-radius: 0;
+  --letter-photo-size: 25mm;
+  --letter-page-mark-bg: #245caa;
+  --letter-page-mark-width: 210mm;
+  --letter-page-mark-height: 7mm;
+  --letter-page-mark-inset: 0 0 auto 0;
+  --letter-main-padding: 24mm 24mm 22mm;
+  --letter-subject-bg: #eef6ff;
+  --letter-subject-padding: 2.4mm 3mm;
+  --letter-subject-radius: 2mm;
+}

@@ -1,0 +1,21 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: Georgia, Cambria, serif;
+  --letter-title-font: Georgia, Cambria, serif;
+  --letter-bg: #f0ede6;
+  --letter-paper: #fffdf7;
+  --letter-ink: #2c2924;
+  --letter-muted: #736d62;
+  --letter-accent: #6d5d44;
+  --letter-accent-2: #c5b99f;
+  --letter-rule: #ded4c2;
+  --letter-cover-bg: #fffdf7;
+  --letter-cover-mark-bg: #c5b99f;
+  --letter-cover-mark-width: 42mm;
+  --letter-photo-size: 24mm;
+  --letter-photo-border: 1px solid #c5b99f;
+  --letter-photo-shadow: none;
+  --letter-body-size: 11pt;
+  --letter-line-height: 1.5;
+}

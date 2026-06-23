@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SYNTEXT | Professionelle Texte, Bewerbungen und Webauftritte</title>
+  <meta name="description" content="Syntext redigiert, strukturiert und formuliert professionelle Texte fuer Bewerbungen, Unternehmen, Webauftritte und digitale Kommunikation.">
+  <meta property="og:title" content="SYNTEXT | Professionelle Kommunikation">
+  <meta property="og:description" content="Texte, Bewerbungen und Webauftritte, die professionell wirken.">
+  <meta property="og:image" content="images/generated/syntext-hero-editorial.png">
+  <meta property="og:type" content="website">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --ai-purple: #6366f1;
+      --ai-violet: #8b5cf6;
+      --ai-blue: #2563eb;
+      --ai-teal: #0f766e;
+      --ai-cyan: #0ea5e9;
+
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
+
+      /* Mapping previous colors for backwards compatibility */
+      --ink: var(--text);
+      --forest: var(--primary);
+      --forest-2: var(--primary2);
+      --paper: var(--bg);
+      --panel: var(--surface);
+      --stone: var(--accent-soft);
+      --stone-2: #e9dcc5;
+      --brass: var(--accent);
+      --teal: var(--ai-teal);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="page"] {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible,
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before {
+      top: -6px;
+    }
+
+    .menu-toggle span::after {
+      top: 6px;
+    }
+
+    /* Open state transition for hamburger to X */
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0;
+    }
+
+    /* Custom Hero Visual Stage Styling */
+    .hero-visual {
+      position: relative;
+      min-height: 560px;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .visual-stage {
+      position: relative;
+      width: min(100%, 560px);
+      height: 540px;
+      will-change: transform;
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 26px;
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 22px 70px rgba(17, 24, 39, 0.10);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .floating-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 80px rgba(17, 24, 39, 0.15);
+    }
+
+    .editor-card {
+      left: -20px;
+      top: 40px;
+      width: 400px;
+      height: auto;
+      min-height: 320px;
+      padding: 0;
+      transform: rotate(-2deg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      z-index: 5;
+    }
+
+    .editor-top {
+      background: #f1f5f9;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .editor-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .editor-dots span {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+    .editor-dots span:nth-child(1) { background: #fca5a5; }
+    .editor-dots span:nth-child(2) { background: #fde047; }
+    .editor-dots span:nth-child(3) { background: #86efac; }
+
+    .editor-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      margin: 0 auto;
+      transform: translateX(-16px);
+    }
+
+    .editor-body {
+      padding: 28px 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      background: #ffffff;
+      flex: 1;
+    }
+
+    .text-line {
+      height: 10px;
+      border-radius: 5px;
+      background: #e2e8f0;
+    }
+    .text-line.title { height: 20px; width: 75%; background: #cbd5e1; margin-bottom: 12px; }
+    .text-line.full { width: 100%; }
+    .text-line.mid { width: 85%; }
+    .text-line.short { width: 45%; }
+    .text-line.highlight {
+      width: 95%;
+      background: rgba(185, 151, 104, 0.15);
+      border: 1px solid rgba(185, 151, 104, 0.3);
+      position: relative;
+      height: 12px;
+    }
+    .text-line.highlight::after {
+      content: attr(data-label);
+      position: absolute;
+      right: -10px;
+      top: -22px;
+      font-size: 10px;
+      font-weight: 800;
+      color: #8c6a3a;
+      background: #fbf8f3;
+      padding: 3px 8px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      border: 1px solid rgba(185, 151, 104, 0.2);
+    }
+
+    .seo-card {
+      right: -40px;
+      top: -10px;
+      width: 230px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      z-index: 10;
+    }
+
+    .seo-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      color: var(--forest);
+    }
+    .seo-top svg {
+      color: var(--accent);
+    }
+    .seo-top strong {
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .seo-score {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .score-circle {
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: conic-gradient(var(--accent) 98%, #f1f5f9 0);
+      display: grid;
+      place-items: center;
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--forest);
+      position: relative;
+    }
+    .score-circle::before {
+      content: "";
+      position: absolute;
+      inset: 5px;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+    .score-circle span {
+      position: relative;
+      z-index: 2;
+    }
+
+    .score-bars {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .bar-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .bar-track {
+      height: 5px;
+      background: #f1f5f9;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .grammar-card {
+      left: -50px;
+      bottom: 20px;
+      width: 280px;
+      padding: 20px;
+      background: #ffffff;
+      z-index: 15;
+    }
+
+    .grammar-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .grammar-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #10b981;
+      color: white;
+      display: grid;
+      place-items: center;
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    .grammar-header strong {
+      font-size: 14px;
+      color: var(--forest);
+    }
+
+    .grammar-change {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .old-text {
+      color: #ef4444;
+      text-decoration: line-through;
+      background: #fef2f2;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .new-text {
+      color: #10b981;
+      background: #ecfdf5;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: inline-block;
+      width: fit-content;
+    }
+
+    .tone-card {
+      right: -50px;
+      bottom: 80px;
+      width: 220px;
+      padding: 18px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      z-index: 20;
+    }
+
+    .tone-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      color: var(--ai-purple);
+    }
+    .tone-header strong {
+      font-size: 13px;
+      color: var(--forest);
+    }
+    
+    .tone-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .tone-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 99px;
+      background: #f1f5f9;
+      color: var(--muted);
+      border: 1px solid transparent;
+    }
+    .tone-tag.active {
+      background: rgba(185, 151, 104, 0.1);
+      color: var(--accent);
+      border-color: rgba(185, 151, 104, 0.3);
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    .float-anim-1 { animation: float1 6s ease-in-out infinite; }
+    .float-anim-2 { animation: float2 7s ease-in-out infinite; }
+
+    .hero {
+      width: min(1320px, calc(100% - 32px));
+      min-height: calc(100svh - 76px);
+      margin: 0 auto;
+      padding: 54px 0 72px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(420px, 1fr);
+      align-items: center;
+      gap: 46px;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 660px;
+      min-width: 0;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #1c2724 20%, #b99768 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .keyword-band {
+      overflow: hidden;
+      display: flex;
+      padding: 20px 0;
+      mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+    }
+    
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      padding: 4px 0;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+      will-change: transform;
+      flex-shrink: 0;
+    }
+    
+    .marquee-track span {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary2);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .marquee-track span::after {
+      content: "•";
+      margin-left: 24px;
+      margin-right: 24px;
+      color: var(--accent);
+      font-size: 18px;
+    }
+    
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 11ch;
+      margin-bottom: 24px;
+      font-size: clamp(3.2rem, 8vw, 7rem);
+      line-height: 0.93;
+      letter-spacing: -0.06em;
+      font-weight: 800;
+    }
+
+    h1 span {
+      display: block;
+    }
+
+    .hero-lede {
+      max-width: 620px;
+      margin-bottom: 30px;
+      color: #34413d;
+      font-size: clamp(1.06rem, 2vw, 1.28rem);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .hero-actions,
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 13px 17px;
+      font-weight: 800;
+      line-height: 1;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: #fffaf0;
+      box-shadow: 0 18px 42px rgba(15, 59, 51, 0.22);
+    }
+
+    .btn-secondary {
+      border-color: rgba(15, 59, 51, 0.18);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--forest);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .hero-proof {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      max-width: 620px;
+      margin-top: 34px;
+    }
+
+    .proof-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.66);
+      padding: 13px;
+      color: #293733;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .hero-media {
+      position: relative;
+      min-width: 0;
+      min-height: 560px;
+      border: 1px solid rgba(23, 32, 29, 0.12);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: var(--stone);
+      isolation: isolate;
+    }
+
+    .hero-media img {
+      width: 100%;
+      height: 100%;
+      min-height: 560px;
+      object-fit: cover;
+    }
+
+    .media-panel {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      width: min(360px, calc(100% - 48px));
+      border: 1px solid rgba(255, 255, 255, 0.52);
+      border-radius: var(--radius);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(14px);
+      padding: 18px;
+      box-shadow: 0 20px 46px rgba(15, 59, 51, 0.16);
+    }
+
+    .panel-label {
+      margin: 0 0 10px;
+      color: var(--forest);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .panel-title {
+      margin: 0 0 12px;
+      font-size: 1.12rem;
+      line-height: 1.25;
+      font-weight: 800;
+    }
+
+    .panel-list {
+      display: grid;
+      gap: 8px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .panel-list li {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-list li::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--brass);
+      flex: 0 0 auto;
+    }
+
+    /* Removed unused keyword-band, keyword-inner and chip classes */
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(280px, 0.5fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 780px;
+      margin-bottom: 0;
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      font-weight: 800;
+    }
+
+    .section-header p,
+    .section-intro {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .statement {
+      display: grid;
+      grid-template-columns: minmax(0, 0.62fr) minmax(280px, 0.38fr);
+      gap: 28px;
+      align-items: stretch;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      padding: 42px 0;
+    }
+
+    .statement h2 {
+      font-size: clamp(2.3rem, 6vw, 5.6rem);
+    }
+
+    .statement-copy {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .audience-card,
+    .process-step,
+    .cta-block {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.08);
+    }
+
+    .audience-card {
+      min-height: 330px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(15, 59, 51, 0.14);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      color: var(--forest);
+      background: #f4f0e7;
+    }
+
+    .card-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .audience-card h3 {
+      margin: 18px 0 12px;
+      font-size: 1.25rem;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+
+    .audience-card p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .text-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    .process {
+      background: #102b26;
+      color: #fffaf0;
+    }
+
+    .process .section {
+      padding-block: 92px;
+    }
+
+    .process .section-kicker,
+    .process .section-header p {
+      color: rgba(255, 250, 240, 0.72);
+    }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .process-step {
+      background: rgba(255, 255, 255, 0.07);
+      border-color: rgba(255, 255, 255, 0.14);
+      padding: 24px;
+      box-shadow: none;
+    }
+
+    .step-number {
+      margin-bottom: 34px;
+      color: var(--brass);
+      font-size: 0.82rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+    }
+
+    .process-step h3 {
+      margin-bottom: 12px;
+      font-size: 1.24rem;
+      letter-spacing: -0.02em;
+    }
+
+    .process-step p {
+      margin: 0;
+      color: rgba(255, 250, 240, 0.72);
+      font-weight: 600;
+    }
+
+    .closing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.55fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .closing-copy {
+      border-top: 1px solid var(--line);
+      padding-top: 34px;
+    }
+
+    .closing-copy p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .cta-block {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      min-height: 350px;
+      padding: 28px;
+      background:
+        linear-gradient(145deg, rgba(15, 59, 51, 0.96), rgba(25, 83, 72, 0.92)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .cta-block .panel-label,
+    .cta-block p {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .cta-block h3 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .cta-block .btn {
+      width: fit-content;
+      background: #fffaf0;
+      color: var(--forest);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 34px;
+      }
+
+      h1 {
+        max-width: 12ch;
+      }
+
+      .hero-visual {
+        min-height: 480px;
+        padding: 24px 0;
+      }
+
+      .visual-stage {
+        width: 100%;
+        max-width: 360px;
+        height: 360px;
+        margin: 0 auto;
+      }
+
+      .doc-card {
+        left: 0px;
+        top: 10px;
+        width: 200px;
+        height: 280px;
+        transform: translateY(0) rotate(-1deg);
+      }
+
+      .doc-card.second {
+        left: 110px;
+        top: 60px;
+        width: 200px;
+        height: 280px;
+        transform: translateY(0) rotate(1deg);
+      }
+
+      .mini-preview {
+        right: -10px;
+        top: 20px;
+        width: 130px;
+        padding: 10px;
+        transform: none;
+      }
+
+      .mini-preview strong {
+        font-size: 10px;
+        margin-bottom: 6px;
+      }
+
+      .ai-badge-card {
+        left: -10px;
+        bottom: 10px;
+        width: 180px;
+        padding: 10px;
+        transform: none;
+      }
+
+      .section-header,
+      .statement,
+      .closing-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .audience-grid,
+      .process-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body,
+      .site-shell,
+      main {
+        max-width: 100vw;
+        
+      }
+
+      .topbar {
+        max-width: 100vw;
+      }
+
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .visual-stage {
+        transform: scale(0.85);
+        transform-origin: center center;
+        margin: -20px auto;
+      }
+
+      .hero-visual {
+        min-height: 320px;
+      }
+
+      .hero,
+      .section,
+      .footer-inner {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+      }
+
+      .hero {
+        padding-bottom: 48px;
+        gap: 28px;
+      }
+
+      h1 {
+        max-width: calc(100vw - 32px);
+        font-size: clamp(2.2rem, 9.5vw, 2.65rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
+        overflow-wrap: break-word;
+      }
+
+      .hero-copy,
+      .hero-lede {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+        min-width: 0;
+      }
+
+      .hero-lede {
+        width: min(calc(100vw - 42px), 31ch);
+        max-width: min(calc(100vw - 42px), 31ch);
+      }
+
+      .hero-proof {
+        grid-template-columns: 1fr;
+      }
+
+      .media-panel {
+        position: static;
+        width: auto;
+        margin: -90px 12px 12px;
+      }
+
+      .hero-media,
+      .hero-media img {
+        min-height: 360px;
+      }
+
+      .section {
+        padding: 62px 0;
+      }
+
+      .audience-card {
+        min-height: auto;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
+        </a>
+
+        <div class="nav-links" id="site-menu">
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
+          <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
+
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
+        </div>
+      </nav>
+    </header>
+
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy" data-reveal>
+          <p class="eyebrow fade-up" style="animation-delay: 0.1s;" data-de="SYNTEXT by Steinhardt" data-en="SYNTEXT by Steinhardt">SYNTEXT by Steinhardt</p>
+          <h1 id="hero-title">
+            <span class="fade-up" style="animation-delay: 0.2s;" data-de="Texte, die" data-en="Writing that feels">Texte, die</span>
+            <span class="fade-up text-gradient" style="animation-delay: 0.3s;" data-de="professionell" data-en="professionally">professionell</span>
+            <span class="fade-up" style="animation-delay: 0.4s;" data-de="wirken." data-en="prepared.">wirken.</span>
+          </h1>
+          <p class="hero-lede fade-up" style="animation-delay: 0.5s;" data-de="Wir redigieren, strukturieren und formulieren Texte mit Sorgfalt - von der Bewerbung bis zur Website. Klar, stilsicher und auf Wunsch mit sinnvoller KI-Unterstützung." data-en="We edit, structure and write with care - from applications to websites. Clear, polished and supported by AI where it genuinely helps.">Wir redigieren, strukturieren und formulieren Texte mit Sorgfalt - von der Bewerbung bis zur Website. Klar, stilsicher und auf Wunsch mit sinnvoller KI-Unterstützung.</p>
+          <div class="hero-actions fade-up" style="animation-delay: 0.6s;">
+            <a class="btn btn-primary" href="Steini_Dienstleistung.html">
+              <span data-de="Dienstleistungen ansehen" data-en="View services">Dienstleistungen ansehen</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="/bewerbungs-generator/start.html">
+              <span data-de="Bewerbung erstellen" data-en="Create application">Bewerbung erstellen</span>
+            </a>
+          </div>
+
+
+        </div>
+
+        <div class="hero-visual reveal fade-up" style="animation-delay: 0.8s;" data-reveal>
+          <div class="visual-stage">
+            
+            <!-- Mockup Card 1: Text Editor / Lektorat -->
+            <div class="floating-card editor-card float-anim-1">
+              <div class="editor-top">
+                <div class="editor-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="editor-title">syntext-entwurf.docx</div>
+              </div>
+              <div class="editor-body">
+                <div class="text-line title"></div>
+                <div class="text-line full"></div>
+                <div class="text-line mid"></div>
+                <div class="text-line full"></div>
+                <div class="text-line highlight" data-label="Optimiert"></div>
+                <div class="text-line full"></div>
+                <div class="text-line short"></div>
+              </div>
+            </div>
+
+            <!-- Mockup Card 2: SEO Score -->
+            <div class="floating-card seo-card float-anim-2" style="animation-delay: -3s;">
+              <div class="seo-top">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10M18 20V4M6 20v-4"/></svg>
+                <strong data-de="SEO-Analyse" data-en="SEO Analysis">SEO-Analyse</strong>
+              </div>
+              <div class="seo-score">
+                <div class="score-circle"><span>98</span></div>
+                <div class="score-bars">
+                  <div class="bar-row"><span class="bar-label">Keywords</span><div class="bar-track"><div class="bar-fill" style="width: 100%;"></div></div></div>
+                  <div class="bar-row"><span class="bar-label">Struktur</span><div class="bar-track"><div class="bar-fill" style="width: 90%;"></div></div></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mockup Card 3: Grammar Check -->
+            <div class="floating-card grammar-card float-anim-1" style="animation-delay: -1.5s;">
+              <div class="grammar-header">
+                <div class="grammar-icon">✓</div>
+                <strong data-de="Korrektorat" data-en="Proofreading">Korrektorat</strong>
+              </div>
+              <div class="grammar-change">
+                <span class="old-text">Wir machen Texte gut.</span>
+                <span class="new-text">Wir verfassen überzeugende Texte.</span>
+              </div>
+            </div>
+
+            <!-- Mockup Card 4: Tone Assistant -->
+            <div class="floating-card tone-card float-anim-2" style="animation-delay: -2.5s;">
+              <div class="tone-header">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <strong data-de="Tonalität" data-en="Tone">Tonalität</strong>
+              </div>
+              <div class="tone-tags">
+                <span class="tone-tag active">Professionell</span>
+                <span class="tone-tag">Kreativ</span>
+                <span class="tone-tag">Akademisch</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="keyword-band" aria-label="Syntext services">
+        <div class="marquee-track">
+          <span data-de="Artikel" data-en="Articles">Artikel</span>
+          <span data-de="Bewerbung" data-en="Applications">Bewerbung</span>
+          <span data-de="Lebenslauf" data-en="CVs">Lebenslauf</span>
+          <span data-de="Motivationsschreiben" data-en="Motivation letters">Motivationsschreiben</span>
+          <span data-de="Blogbeiträge" data-en="Blog posts">Blogbeiträge</span>
+          <span data-de="Broschüren" data-en="Brochures">Broschüren</span>
+          <span data-de="Webtexte" data-en="Web copy">Webtexte</span>
+          <span data-de="On-Page-Texte" data-en="On-page copy">On-Page-Texte</span>
+          <span data-de="Redigieren" data-en="Editing">Redigieren</span>
+          <span data-de="Zielgruppe" data-en="Audience">Zielgruppe</span>
+          <span data-de="Keywords" data-en="Keywords">Keywords</span>
+          <span data-de="KI-Unterstützung" data-en="AI support">KI-Unterstützung</span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+          <span data-de="Artikel" data-en="Articles">Artikel</span>
+          <span data-de="Bewerbung" data-en="Applications">Bewerbung</span>
+          <span data-de="Lebenslauf" data-en="CVs">Lebenslauf</span>
+          <span data-de="Motivationsschreiben" data-en="Motivation letters">Motivationsschreiben</span>
+          <span data-de="Blogbeiträge" data-en="Blog posts">Blogbeiträge</span>
+          <span data-de="Broschüren" data-en="Brochures">Broschüren</span>
+          <span data-de="Webtexte" data-en="Web copy">Webtexte</span>
+          <span data-de="On-Page-Texte" data-en="On-page copy">On-Page-Texte</span>
+          <span data-de="Redigieren" data-en="Editing">Redigieren</span>
+          <span data-de="Zielgruppe" data-en="Audience">Zielgruppe</span>
+          <span data-de="Keywords" data-en="Keywords">Keywords</span>
+          <span data-de="KI-Unterstützung" data-en="AI support">KI-Unterstützung</span>
+        </div>
+      </section>
+
+      <section class="section statement" aria-labelledby="statement-title">
+        <div data-reveal>
+          <p class="section-kicker" data-de="Kommunikation" data-en="Communication">Kommunikation</p>
+          <h2 id="statement-title" data-de="Gute Kommunikation zeigt Haltung." data-en="Good communication shows intent.">Gute Kommunikation zeigt Haltung.</h2>
+        </div>
+        <div class="statement-copy" data-reveal>
+          <p data-de="Ein Rechtschreibfehler kann klein wirken und trotzdem Vertrauen kosten. Syntext prüft Sprache, Struktur und Wirkung, damit Texte verständlich, stimmig und professionell auftreten." data-en="A small error can still weaken trust. Syntext checks language, structure and impact so your text reads clearly, consistently and professionally.">Ein Rechtschreibfehler kann klein wirken und trotzdem Vertrauen kosten. Syntext prüft Sprache, Struktur und Wirkung, damit Texte verständlich, stimmig und professionell auftreten.</p>
+          <p data-de="Wir verbinden redaktionelle Sorgfalt mit pragmatischer Umsetzung - für digitale Texte, Printmaterial, Bewerbungen und persönliche Projekte." data-en="We combine editorial care with practical delivery - for digital copy, print material, applications and personal projects.">Wir verbinden redaktionelle Sorgfalt mit pragmatischer Umsetzung - für digitale Texte, Printmaterial, Bewerbungen und persönliche Projekte.</p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="audience-title">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Neu hier?" data-en="New here?">Neu hier?</p>
+            <h2 id="audience-title" data-de="Für wen Syntext arbeitet" data-en="Who Syntext helps">Für wen Syntext arbeitet</h2>
+          </div>
+          <p data-de="Ob einzelne Bewerbung oder kompletter Auftritt: der Text muss zur Person, Marke und Zielgruppe passen." data-en="Whether it is one application or a full presence: the text needs to fit the person, brand and audience.">Ob einzelne Bewerbung oder kompletter Auftritt: der Text muss zur Person, Marke und Zielgruppe passen.</p>
+        </div>
+
+        <div class="audience-grid">
+          <article class="audience-card" data-reveal>
+            <div>
+              <div class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M8 7a4 4 0 1 1 8 0 4 4 0 0 1-8 0Zm-2 14a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+              </div>
+              <h3 data-de="Bewerber:innen und Berufseinsteiger:innen" data-en="Applicants and career starters">Bewerber:innen und Berufseinsteiger:innen</h3>
+              <p data-de="Dein Lebenslauf ist dein Portfolio. Dein Motivationsschreiben ist dein Werbetext. Wir helfen dir, deine Stärken klar, individuell und glaubwürdig zu formulieren." data-en="Your CV is your portfolio. Your motivation letter is your pitch. We help you present your strengths clearly, personally and credibly.">Dein Lebenslauf ist dein Portfolio. Dein Motivationsschreiben ist dein Werbetext. Wir helfen dir, deine Stärken klar, individuell und glaubwürdig zu formulieren.</p>
+            </div>
+            <a class="text-link" href="/bewerbungs-generator/start.html">
+              <span data-de="Zum Bewerbungs-Kit" data-en="Go to application kit">Zum Bewerbungs-Kit</span>
+              <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 17 17 7m0 0H9m8 0v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </article>
+
+          <article class="audience-card" data-reveal>
+            <div>
+              <div class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M4 20V7l8-4 8 4v13M8 20v-7h8v7M8 9h.01M12 9h.01M16 9h.01" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 data-de="Unternehmen und Selbstständige" data-en="Companies and self-employed professionals">Unternehmen und Selbstständige</h3>
+              <p data-de="Für Websites, Broschüren, Berichte und Marketingtexte: Syntext macht Inhalte verständlich, markengerecht und lesefreundlich." data-en="For websites, brochures, reports and marketing copy: Syntext makes content clear, brand-aligned and easy to read.">Für Websites, Broschüren, Berichte und Marketingtexte: Syntext macht Inhalte verständlich, markengerecht und lesefreundlich.</p>
+            </div>
+            <a class="text-link" href="Steini_texten.html">
+              <span data-de="Texte optimieren lassen" data-en="Improve business copy">Texte optimieren lassen</span>
+              <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 17 17 7m0 0H9m8 0v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </article>
+
+          <article class="audience-card" data-reveal>
+            <div>
+              <div class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4Zm3 0v13a3 3 0 0 0 3 3M9 8h6M9 12h5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <h3 data-de="Autor:innen und Verfasser" data-en="Authors and writers">Autor:innen und Verfasser</h3>
+              <p data-de="Ob Manuskript, Sachtext oder Speisekarte: wir prüfen Sprache, Stil und Struktur mit Blick auf Lesbarkeit, Wirkung und saubere Details." data-en="From manuscripts to specialist text or menus: we review language, style and structure with attention to readability, effect and detail.">Ob Manuskript, Sachtext oder Speisekarte: wir prüfen Sprache, Stil und Struktur mit Blick auf Lesbarkeit, Wirkung und saubere Details.</p>
+            </div>
+            <a class="text-link" href="Steini_Dienstleistung.html">
+              <span data-de="Lektorat ansehen" data-en="View editing services">Lektorat ansehen</span>
+              <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 17 17 7m0 0H9m8 0v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </article>
+        </div>
+      </section>
+
+      <section class="process" aria-labelledby="process-title">
+        <div class="section">
+          <div class="section-header" data-reveal>
+            <div>
+              <p class="section-kicker" data-de="Ablauf" data-en="Process">Ablauf</p>
+              <h2 id="process-title" data-de="Vom Gedanken zum fertigen Text" data-en="From rough idea to finished text">Vom Gedanken zum fertigen Text</h2>
+            </div>
+            <p data-de="Der Prozess bleibt klar und effizient, damit nicht nur der Text besser wird, sondern auch die Zusammenarbeit." data-en="The process stays clear and efficient, improving both the text and the collaboration around it.">Der Prozess bleibt klar und effizient, damit nicht nur der Text besser wird, sondern auch die Zusammenarbeit.</p>
+          </div>
+
+          <div class="process-grid">
+            <article class="process-step" data-reveal>
+              <div class="step-number">01</div>
+              <h3 data-de="Anliegen klären" data-en="Clarify the brief">Anliegen klären</h3>
+              <p data-de="Wir erfassen Ziel, Zielgruppe, Umfang und gewünschtes Format." data-en="We define goal, audience, scope and required format.">Wir erfassen Ziel, Zielgruppe, Umfang und gewünschtes Format.</p>
+            </article>
+            <article class="process-step" data-reveal>
+              <div class="step-number">02</div>
+              <h3 data-de="Text strukturieren" data-en="Structure the text">Text strukturieren</h3>
+              <p data-de="Wir ordnen Inhalte, schärfen Aussage und verbessern Lesbarkeit." data-en="We organise content, sharpen the message and improve readability.">Wir ordnen Inhalte, schärfen Aussage und verbessern Lesbarkeit.</p>
+            </article>
+            <article class="process-step" data-reveal>
+              <div class="step-number">03</div>
+              <h3 data-de="Finalisieren" data-en="Finalise and deliver">Finalisieren</h3>
+              <p data-de="Der Text wird geprüft, abgestimmt und im passenden Format bereitgestellt." data-en="The text is checked, aligned and delivered in the right format.">Der Text wird geprüft, abgestimmt und im passenden Format bereitgestellt.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section closing-grid" aria-labelledby="closing-title">
+        <div class="closing-copy" data-reveal>
+          <p class="section-kicker" data-de="Gesamteindruck" data-en="Consistency">Gesamteindruck</p>
+          <h2 id="closing-title" data-de="Damit der Auftritt geschlossen wirkt" data-en="So the whole presence feels consistent">Damit der Auftritt geschlossen wirkt</h2>
+          <p data-de="Kommunikation beginnt nicht erst beim Kontaktformular. Sie entsteht in jeder Zeile: auf der Website, in der Bewerbung, im Angebot, in der Broschüre und im persönlichen Auftritt. Syntext sorgt dafür, dass diese Teile zusammenpassen." data-en="Communication does not start at the contact form. It happens in every line: on the website, in an application, in an offer, in a brochure and in personal presentation. Syntext helps these parts work together.">Kommunikation beginnt nicht erst beim Kontaktformular. Sie entsteht in jeder Zeile: auf der Website, in der Bewerbung, im Angebot, in der Broschüre und im persönlichen Auftritt. Syntext sorgt dafür, dass diese Teile zusammenpassen.</p>
+        </div>
+
+        <aside class="cta-block" data-reveal>
+          <p class="panel-label" data-de="VitaGen" data-en="VitaGen">VitaGen</p>
+          <h3 data-de="Dein Bewerbungsgenerator" data-en="Your application generator">Dein Bewerbungsgenerator</h3>
+          <p data-de="Felder ausfüllen, Stil wählen, Vorschau prüfen und PDF vorbereiten - mit KI-Unterstützung für Foto und Motivationstext." data-en="Fill in the fields, choose a style, review the preview and prepare the PDF - with AI support for photo and motivation text.">Felder ausfüllen, Stil wählen, Vorschau prüfen und PDF vorbereiten - mit KI-Unterstützung für Foto und Motivationstext.</p>
+          <a class="btn" href="/bewerbungs-generator/start.html">
+            <span data-de="Jetzt starten" data-en="Start now">Jetzt starten</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const translatable = document.querySelectorAll("[data-de][data-en]");
+      const langButtons = document.querySelectorAll("[data-lang-switch]");
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#site-menu");
+      const revealItems = document.querySelectorAll("[data-reveal]");
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "en" ? "en" : "de";
+        root.lang = nextLang === "en" ? "en" : "de-CH";
+        translatable.forEach((node) => {
+          node.textContent = node.dataset[nextLang];
+        });
+        langButtons.forEach((button) => {
+          const active = button.dataset.langSwitch === nextLang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        localStorage.setItem("syntext-language", nextLang);
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyLanguage(button.dataset.langSwitch));
+      });
+
+      menuToggle?.addEventListener("click", () => {
+        const open = !menu.classList.contains("is-open");
+        menu.classList.toggle("is-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
+
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("is-open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      applyLanguage(localStorage.getItem("syntext-language") || "de");
+    })();
+  </script>
+</body>
+</html>

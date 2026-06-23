@@ -1,0 +1,416 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: var(--letter-font);
+  --letter-bg: #edf1f5;
+  --letter-paper: #ffffff;
+  --letter-ink: #18212f;
+  --letter-muted: #647184;
+  --letter-accent: #1d4f73;
+  --letter-accent-2: #9aa8b8;
+  --letter-soft: #f4f7f9;
+  --letter-rule: #d9e0e7;
+  --letter-cover-bg: var(--letter-paper);
+  --letter-cover-ink: var(--letter-ink);
+  --letter-cover-muted: var(--letter-muted);
+  --letter-cover-accent: var(--letter-accent);
+  --letter-body-size: 10.8pt;
+  --letter-small-size: 9.2pt;
+  --letter-title-size: 27pt;
+  --letter-role-size: 14pt;
+  --letter-line-height: 1.48;
+  --letter-page-x: 24mm;
+  --letter-page-y: 20mm;
+  --letter-main-padding: var(--letter-page-y) var(--letter-page-x) 22mm;
+  --letter-cover-padding: 34mm 30mm;
+  --letter-cover-align: flex-start;
+  --letter-cover-justify: center;
+  --letter-cover-gap: 5mm;
+  --letter-cover-title-order: 1;
+  --letter-cover-role-order: 2;
+  --letter-photo-order: 3;
+  --letter-name-order: 4;
+  --letter-address-order: 5;
+  --letter-contact-order: 6;
+  --letter-photo-size: 27mm;
+  --letter-photo-width: var(--letter-photo-size);
+  --letter-photo-height: var(--letter-photo-size);
+  --letter-photo-radius: 999px;
+  --letter-photo-border: 2px solid #ffffff;
+  --letter-photo-shadow: 0 10px 24px rgba(15, 23, 42, 0.16);
+  --letter-cover-mark-inset: 24mm auto auto 30mm;
+  --letter-cover-mark-width: 28mm;
+  --letter-cover-mark-height: 1.2mm;
+  --letter-cover-mark-bg: var(--letter-cover-accent);
+  --letter-cover-mark-radius: 999px;
+  --letter-cover-shape-inset: auto -34mm -38mm auto;
+  --letter-cover-shape-width: 80mm;
+  --letter-cover-shape-height: 80mm;
+  --letter-cover-shape-bg: transparent;
+  --letter-cover-shape-radius: 999px 0 0 0;
+  --letter-page-mark-bg: transparent;
+  --letter-page-mark-inset: 0 auto auto 0;
+  --letter-page-mark-width: 0mm;
+  --letter-page-mark-height: 0mm;
+  --letter-page-shape-bg: transparent;
+  --letter-page-shape-inset: auto 0 0 auto;
+  --letter-page-shape-width: 0mm;
+  --letter-page-shape-height: 0mm;
+  --letter-header-bg: transparent;
+  --letter-header-padding: 0;
+  --letter-header-radius: 0;
+  --letter-letterhead-bg: var(--letter-soft);
+  --letter-letterhead-padding: 6mm;
+  --letter-letterhead-radius: 3mm;
+  --letter-letterhead-border: 1px solid var(--letter-rule);
+  --letter-letterhead-gap: 7mm;
+  --letter-letterhead-margin: 0 0 11mm;
+  --letter-subject-bg: transparent;
+  --letter-subject-padding: 0 0 3mm;
+  --letter-subject-radius: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  max-width: none;
+  background: var(--letter-bg);
+  color: var(--letter-ink);
+  font-family: var(--letter-font);
+  font-size: var(--letter-body-size);
+  line-height: var(--letter-line-height);
+  padding: 24px;
+}
+
+#preview-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 24px 0 48px;
+}
+
+#preview {
+  width: 210mm;
+  padding: 0;
+  background: var(--letter-paper);
+  box-shadow: 0 18px 42px rgba(15, 23, 42, 0.14);
+}
+
+.cover,
+.anschreiben {
+  width: 210mm;
+  min-height: 297mm;
+  background: var(--letter-paper);
+  color: var(--letter-ink);
+}
+
+.cover {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: var(--letter-cover-justify);
+  align-items: var(--letter-cover-align);
+  gap: var(--letter-cover-gap);
+  overflow: hidden;
+  padding: var(--letter-cover-padding);
+  background: var(--letter-cover-bg);
+  color: var(--letter-cover-ink);
+  break-after: page;
+  page-break-after: always;
+}
+
+.cover::before,
+.cover::after,
+.anschreiben::before,
+.anschreiben::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.cover::before {
+  inset: var(--letter-cover-mark-inset);
+  width: var(--letter-cover-mark-width);
+  height: var(--letter-cover-mark-height);
+  border-radius: var(--letter-cover-mark-radius);
+  background: var(--letter-cover-mark-bg);
+}
+
+.cover::after {
+  inset: var(--letter-cover-shape-inset);
+  width: var(--letter-cover-shape-width);
+  height: var(--letter-cover-shape-height);
+  border-radius: var(--letter-cover-shape-radius);
+  background: var(--letter-cover-shape-bg);
+}
+
+.cover > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cover h1,
+.cover h3,
+.cover h4,
+.cover h5 {
+  margin: 0;
+  color: var(--letter-cover-ink);
+}
+
+.cover h1 {
+  order: var(--letter-cover-title-order);
+  color: var(--letter-cover-accent);
+  font-family: var(--letter-title-font);
+  font-size: var(--letter-title-size);
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.06;
+}
+
+.cover h3 {
+  order: var(--letter-cover-role-order);
+  max-width: 132mm;
+  font-size: var(--letter-role-size);
+  font-weight: 700;
+  line-height: 1.24;
+}
+
+.cover h4 {
+  order: var(--letter-name-order);
+  max-width: 122mm;
+  font-family: var(--letter-title-font);
+  font-size: 17pt;
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.cover h5 {
+  order: var(--letter-address-order);
+  max-width: 122mm;
+  color: var(--letter-cover-muted);
+  font-size: var(--letter-small-size);
+  font-weight: 500;
+  line-height: 1.48;
+}
+
+.cover h5:last-child {
+  order: var(--letter-contact-order);
+}
+
+#pv-foto {
+  order: var(--letter-photo-order);
+  width: var(--letter-photo-width);
+  max-width: none !important;
+  height: var(--letter-photo-height) !important;
+  margin: 0 !important;
+  object-fit: cover;
+  border: var(--letter-photo-border);
+  border-radius: var(--letter-photo-radius) !important;
+  box-shadow: var(--letter-photo-shadow);
+}
+
+.page-break {
+  break-before: page;
+  page-break-before: always;
+}
+
+.anschreiben {
+  position: relative;
+  overflow: hidden;
+  padding: var(--letter-main-padding);
+  background: var(--letter-paper);
+}
+
+.anschreiben::before {
+  inset: var(--letter-page-mark-inset);
+  width: var(--letter-page-mark-width);
+  height: var(--letter-page-mark-height);
+  background: var(--letter-page-mark-bg);
+}
+
+.anschreiben::after {
+  inset: var(--letter-page-shape-inset);
+  width: var(--letter-page-shape-width);
+  height: var(--letter-page-shape-height);
+  background: var(--letter-page-shape-bg);
+}
+
+.anschreiben > * {
+  position: relative;
+  z-index: 1;
+}
+
+.letterhead {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--letter-letterhead-gap);
+  align-items: center;
+  margin: var(--letter-letterhead-margin);
+  padding: var(--letter-letterhead-padding);
+  border: var(--letter-letterhead-border);
+  border-radius: var(--letter-letterhead-radius);
+  background: var(--letter-letterhead-bg);
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+.letter-identity {
+  min-width: 0;
+  order: 1;
+}
+
+.letterhead #pv-foto {
+  order: 0;
+}
+
+.document-label {
+  margin: 0 0 2mm;
+  color: var(--letter-accent);
+  font-size: var(--letter-small-size);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.letterhead h1 {
+  margin: 0 0 1.8mm;
+  color: var(--letter-ink);
+  font-family: var(--letter-title-font);
+  font-size: 20pt;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.08;
+  text-align: left;
+}
+
+.letterhead p {
+  margin: 0;
+}
+
+.letter-identity p:not(.document-label) {
+  max-width: 122mm;
+  color: var(--letter-muted);
+  font-size: var(--letter-small-size);
+  font-weight: 600;
+  line-height: 1.42;
+}
+
+.letter-identity #pv-posten {
+  margin-bottom: 2.2mm;
+  color: var(--letter-ink);
+  font-weight: 800;
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14mm;
+  align-items: start;
+  margin-bottom: 13mm;
+  padding: var(--letter-header-padding);
+  border-radius: var(--letter-header-radius);
+  background: var(--letter-header-bg);
+  color: var(--letter-muted);
+  font-size: var(--letter-small-size);
+  line-height: 1.45;
+}
+
+.header .adresse {
+  max-width: 94mm;
+  text-align: left;
+}
+
+.header .datum {
+  color: var(--letter-ink);
+  font-weight: 700;
+  white-space: nowrap;
+  text-align: right;
+}
+
+h2 {
+  margin: 0 0 8mm;
+  padding: var(--letter-subject-padding);
+  border-bottom: 1px solid var(--letter-rule);
+  border-radius: var(--letter-subject-radius);
+  background: var(--letter-subject-bg);
+  color: var(--letter-accent);
+  font-size: 12.8pt;
+  font-weight: 800;
+  letter-spacing: 0;
+  line-height: 1.28;
+}
+
+p {
+  margin: 0 0 4.1mm;
+}
+
+footer {
+  margin-top: 17mm;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+
+footer p {
+  margin-bottom: 0;
+}
+
+.watermark {
+  color: rgba(15, 23, 42, 0.08);
+  font-family: Arial, sans-serif;
+  font-size: 54pt;
+  font-weight: 800;
+}
+
+@media print {
+  button,
+  .style-switch,
+  .navigation,
+  .top-buttons,
+  hr {
+    display: none !important;
+  }
+
+  html,
+  body {
+    width: 210mm;
+    max-width: none;
+    background: #fff !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  #preview,
+  #preview * {
+    visibility: visible;
+  }
+
+  #preview {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 210mm;
+    box-shadow: none !important;
+  }
+
+  #preview-wrapper {
+    display: block;
+    padding: 0;
+  }
+}

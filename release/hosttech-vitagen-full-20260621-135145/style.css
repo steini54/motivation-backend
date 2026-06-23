@@ -1,0 +1,75 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #ffffff;
+  color: #000;
+}
+
+.start-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.logo {
+  width: 120px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 34px;
+  margin: 10px 0;
+}
+
+.subtitle {
+  font-size: 16px;
+  margin-bottom: 40px;
+  line-height: 1.6;
+}
+
+.tool-buttons {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.tool-btn {
+  display: inline-block;
+  padding: 16px 30px;
+  font-size: 16px;
+  background: #000;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.tool-btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+}
+
+.hint {
+  margin-top: 30px;
+  font-size: 13px;
+  color: #555;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.header .adresse {
+  text-align: left;
+}
+
+.header .datum {
+  text-align: right;
+  white-space: nowrap;
+}

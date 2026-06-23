@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>VitaGen – Vorschau</title>
+  <link rel="stylesheet" href="style.css">
+  <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css">
+  <link rel="stylesheet" href="print.css" media="print">
+</head>
+<body>
+
+<!-- Style-Switch -->
+<div class="style-switch">
+  <button data-style="swiss-line.css">Swiss Line</button>
+  <button data-style="executive-ink.css">Executive Ink</button>
+  <button data-style="editorial-azure.css">Editorial Azure</button>
+  <button data-style="soft-sand.css">Soft Sand</button>
+  <button data-style="nordic-panel.css">Nordic Panel</button>
+  <button data-style="midnight-column.css">Midnight Column</button>
+  <button data-style="terracotta-arch.css">Terracotta Arch</button>
+  <button data-style="graphite-pro.css">Graphite Pro</button>
+  <button data-style="teal-balance.css">Teal Balance</button>
+  <button data-style="monograph.css">Monograph</button>
+  <button data-style="cobalt-ribbon.css">Cobalt Ribbon</button>
+  <button data-style="pearl-classic.css">Pearl Classic</button>
+  <button data-style="charcoal-frame.css">Charcoal Frame</button>
+  <button data-style="navy-wave.css">Navy Wave</button>
+</div>
+
+<hr>
+
+<div style="margin-top:10px; text-align:center;">
+  <button id="backBtn" style="padding:8px 16px; font-size:14px; background-color:#777; color:white; border:none; border-radius:4px; cursor:pointer;">
+    ← Zurück zur Eingabe
+  </button>
+</div>
+
+<div style="margin-top:10px; text-align:center;">
+  <button id="buyBtn" style="padding:10px 20px; font-size:16px; background-color:#28a745; color:white; border:none; border-radius:4px; cursor:pointer;">
+    Kaufen
+  </button>
+</div>
+
+<p style="text-align:center; color:#475569; font-size:14px; margin:10px 0 18px;">
+  Kostenlose Vorschau mit Wasserzeichen. Der PDF-Download ohne Wasserzeichen ist erst nach der Stripe-Zahlung möglich.
+</p>
+
+<!-- Stripe Checkout Modal -->
+<div id="buyModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background-color:rgba(15,23,42,0.62); z-index:1000; justify-content:center; align-items:center; padding:18px;">
+  <div style="background:white; padding:24px; border-radius:14px; max-width:460px; width:100%; box-shadow:0 24px 80px rgba(15,23,42,0.28);">
+    <h3 style="margin:0 0 8px;">Bewerbung ohne Wasserzeichen herunterladen</h3>
+    <p style="margin:0 0 18px; color:#475569; line-height:1.45;">
+      Die Vorschau bleibt kostenlos. Nach der Zahlung von CHF 9.90 wirst du automatisch zur PDF-Datei ohne Wasserzeichen weitergeleitet.
+      Die Zahlungsarten wie Kreditkarte, Google Pay, TWINT oder Banküberweisung werden sicher in Stripe ausgewählt.
+    </p>
+    <label style="display:block; font-weight:600; margin-bottom:10px;">Name
+      <input type="text" id="buyerName" autocomplete="name" style="width:100%; box-sizing:border-box; margin-top:6px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+    </label>
+    <label style="display:block; font-weight:600; margin-bottom:14px;">Email
+      <input type="email" id="buyerEmail" autocomplete="email" style="width:100%; box-sizing:border-box; margin-top:6px; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+    </label>
+    <p id="paymentStatus" style="min-height:20px; margin:0 0 14px; color:#475569;"></p>
+    <button id="payBtn" style="padding:11px 18px; background-color:#2563eb; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:700;">Weiter zu Stripe</button>
+    <button id="cancelPaymentBtn" type="button" style="padding:11px 18px; background-color:#e2e8f0; color:#0f172a; border:none; border-radius:8px; cursor:pointer; margin-left:8px;">Abbrechen</button>
+  </div>
+</div>
+
+<!-- Vorschau -->
+<div id="preview-wrapper">
+  <div id="preview">
+    <div class="watermark">VORSCHAU – PREVIEW</div>
+
+    <!-- Motivationsschreiben -->
+    <div class="anschreiben">
+      <div class="letterhead">
+        <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none; margin:10px auto; max-width:250px; height:auto; border-radius:4px;">
+        <div class="letter-identity">
+          <p class="document-label">Bewerbung</p>
+          <h1 id="pv-name"></h1>
+          <p id="pv-posten"></p>
+          <p id="pv-adresse"></p>
+          <p id="pv-kontakt"></p>
+        </div>
+      </div>
+
+      <div class="header">
+        <div class="adresse" id="pv-arbeitgeber">Firma<br>Straße<br>Ort</div>
+        <div class="datum" id="pv-datum">01.01.2026</div>
+      </div>
+
+      <h2 id="pv-funktion"></h2>
+      <p id="pv-stichwoerter"></p>
+      <p id="pv-stichwoerter2"></p>
+      <br>
+      <p id="pv-stichwoerter3"></p>
+      <br><br>
+
+      <footer>
+        <p>_________________________<br><span id="pv-unterschrift">Max Mustermann</span></p>
+      </footer>
+    </div>
+
+  </div>
+</div>
+
+<script src="photo-storage.js"></script>
+<script src="preview.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="/bewerbungs-generator/payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
+</body>
+</html>

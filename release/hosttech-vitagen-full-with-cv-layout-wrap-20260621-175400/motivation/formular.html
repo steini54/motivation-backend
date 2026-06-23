@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>VitaGen - Motivationsschreiben</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="/bewerbungs-generator/shared-navbar.css">
+  <link id="theme-style" rel="stylesheet" href="styles/swiss-line.css" media="not all">
+</head>
+<body class="builder-page">
+  <div data-vitagen-navbar data-active="motivation"></div>
+
+  <main class="page-shell">
+    <section class="hero-panel" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow" data-i18n="motivation.eyebrow">Bewerbungsunterlagen</p>
+        <h1 id="page-title" data-i18n="motivation.title">Motivationsschreiben erstellen</h1>
+        <p class="hero-copy" data-i18n="motivation.copy">Erfasse deine Angaben, optimiere dein Foto und erstelle einen professionellen Text mit KI-Unterstuetzung.</p>
+      </div>
+      <div class="hero-badges" aria-label="Produktvorteile">
+        <span>Schweiz &amp; Europa</span>
+        <span>KI-Foto</span>
+        <span>KI-Text</span>
+      </div>
+    </section>
+
+    <form id="vitagenForm" class="builder-grid">
+      <div class="builder-main">
+        <section class="form-card">
+          <div class="card-heading">
+            <span class="step">01</span>
+            <div>
+              <h2>Meine Angaben</h2>
+              <p>Diese Daten erscheinen spaeter im Briefkopf deiner Bewerbung.</p>
+            </div>
+          </div>
+
+          <div class="field-grid two">
+            <div class="field">
+              <label for="name">Mein Name</label>
+              <input type="text" id="name" name="name" autocomplete="name" placeholder="Max Mustermann">
+            </div>
+            <div class="field">
+              <label for="kontakt">E-Mail / Telefon</label>
+              <input type="text" id="kontakt" name="kontakt" autocomplete="email" placeholder="+41 76 456 79 00 · max@email.com">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="adresse">Meine Adresse</label>
+            <textarea id="adresse" name="adresse" rows="3" autocomplete="street-address" placeholder="Strasse, PLZ Ort"></textarea>
+          </div>
+        </section>
+
+        <section class="form-card ai-card photo-card" id="foto-section">
+          <div class="photo-card-top">
+            <div class="photo-title-row">
+              <span class="ai-iconbox" aria-hidden="true">
+                <span class="ai-icon"></span>
+              </span>
+              <div>
+                <h2>Bewerbungsfoto vorbereiten</h2>
+                <p>KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.</p>
+                <span class="ai-mini">KI-Fotoassistent</span>
+              </div>
+            </div>
+            <div id="counter" class="counter photo-count-pill">KI-Funktion - 0 / 3 generiert</div>
+          </div>
+
+          <div class="photo-card-grid">
+            <div class="photo-upload-shell">
+              <input type="file" id="foto-upload" accept="image/*">
+              <label for="foto-upload" class="photo-upload-drop">
+                <span class="upload-visual" aria-hidden="true">
+                  <span class="upload-plus">+</span>
+                </span>
+                <strong>Foto hochladen</strong>
+                <span>Laden Sie ein klares Portrait hoch. Danach kann die KI professionelle Varianten erstellen.</span>
+                <span class="upload-action">Datei auswahlen</span>
+              </label>
+              <div id="foto-container" class="photo-current" aria-live="polite"></div>
+              <button type="button" id="changePhotoBtn" class="change-photo-button" hidden>Foto andern</button>
+            </div>
+
+            <div class="generated-panel">
+              <div class="generated-panel-head">
+                <strong>Generierte Optionen</strong>
+                <span id="photo-status">Noch nicht generiert</span>
+              </div>
+              <div class="generated-stage">
+                <div id="foto-auswahl" class="photo-options" aria-live="polite">
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                  <div class="photo-option-placeholder">
+                    <span class="empty-avatar"></span>
+                    <span class="empty-shoulders"></span>
+                    <span class="empty-caption">Bereit fur KI-Foto</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="photo-actions">
+                <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
+                <p>Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="form-card">
+          <div class="card-heading">
+            <span class="step">02</span>
+            <div>
+              <h2>Angaben zur Bewerbung</h2>
+              <p>Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.</p>
+            </div>
+          </div>
+
+          <div class="field-grid two">
+            <div class="field">
+              <label for="posten">Bewerbung als...</label>
+              <input type="text" id="posten" name="posten" placeholder="Marketing Manager">
+            </div>
+            <div class="field">
+              <label for="funktion">Bewerbung als... (fuer Motivationstext)</label>
+              <input type="text" id="funktion" name="funktion" placeholder="z.B. Softwareentwickler">
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="arbeitgeber">Adresse Arbeitgeber</label>
+            <textarea id="arbeitgeber" name="arbeitgeber" rows="4" placeholder="Firma, Ansprechperson, Strasse, Ort"></textarea>
+          </div>
+        </section>
+
+        <section class="form-card ai-card text-card">
+          <div class="card-heading">
+            <span class="ai-iconbox" aria-hidden="true">
+              <span class="ai-icon"></span>
+            </span>
+            <div>
+              <p class="card-kicker">KI-Textassistent</p>
+              <h2>Motivationstext formulieren</h2>
+              <p>Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.</p>
+            </div>
+          </div>
+
+          <div class="tone-chips" aria-label="Tonvorschlaege">
+            <span>Professionell</span>
+            <span>Warm</span>
+            <span>Selbstbewusst</span>
+            <span>Kurz &amp; klar</span>
+          </div>
+
+          <div class="field text-length-field">
+            <label for="motivationTextLength">Textumfang</label>
+            <div class="custom-select" id="customMotivationTextLength">
+              <div class="custom-select-trigger">
+                <span>Standard</span>
+                <span class="custom-select-arrow"></span>
+              </div>
+              <div class="custom-select-options">
+                <div class="custom-select-option" data-value="short">Kurz</div>
+                <div class="custom-select-option selected" data-value="standard">Standard</div>
+                <div class="custom-select-option" data-value="long">Ausfuehrlich</div>
+              </div>
+              <select id="motivationTextLength" name="motivationTextLength" style="display: none;">
+                <option value="short">Kurz</option>
+                <option value="standard" selected>Standard</option>
+                <option value="long">Ausfuehrlich</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field">
+            <label id="pv-fliesstext" for="stichwoerter2">Motivationstext</label>
+            <p class="hint">Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.</p>
+            <div class="textarea-wrapper">
+              <textarea id="stichwoerter2" name="stichwoerter2" rows="7" placeholder="Erfahrung, Motivation, passende Staerken, konkrete Beispiele..."></textarea>
+              <div id="ai-skeleton-loader" class="ai-skeleton-loader">
+                <div class="ai-loader-header">
+                  <img src="../assets/Ai icon.png" class="ai-loader-icon" alt="AI Icon">
+                  <div class="ai-loader-title-group">
+                    <div class="ai-loader-title">KI-Textassistent</div>
+                    <div class="ai-loader-subtitle">Motivationstext wird generiert...</div>
+                  </div>
+                </div>
+                <div class="ai-skeleton-lines">
+                  <div class="ai-skeleton-line-track">
+                    <div class="ai-skeleton-line line-1"></div>
+                  </div>
+                  <div class="ai-skeleton-line-track">
+                    <div class="ai-skeleton-line line-2"></div>
+                  </div>
+                  <div class="ai-skeleton-line-track">
+                    <div class="ai-skeleton-line line-3"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="ai-text-badge" class="ai-text-badge" style="display: none;">
+              <span class="ai-badge-sparkle"></span>
+              <span>Generiert mit KI · Editierbar</span>
+            </div>
+          </div>
+
+          <button type="button" id="generateTextBtn" class="ai-button text-button">KI Hilfe zum Fliesstext erstellen</button>
+        </section>
+
+        <section class="form-card">
+          <div class="card-heading">
+            <span class="step">03</span>
+            <div>
+              <h2>Briefdetails</h2>
+              <p>Begruessung, Abschluss und Signatur fuer den finalen Brief.</p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label id="pv-hallo" for="stichwoerter">Begruessung</label>
+            <p class="hint">z.B. Sehr geehrte Frau Muster</p>
+            <textarea id="stichwoerter" name="stichwoerter" rows="3"></textarea>
+          </div>
+
+          <div class="field">
+            <label id="pv-adieu" for="stichwoerter3">Verabschiedung</label>
+            <p class="hint">z.B. Mit freundlichen Gruessen</p>
+            <textarea id="stichwoerter3" name="stichwoerter3" rows="3"></textarea>
+          </div>
+
+          <div class="field-grid two">
+            <div class="field">
+              <label for="datum">Datum</label>
+              <input type="text" id="datum" name="datum" placeholder="Datum">
+            </div>
+            <div class="field">
+              <label for="unterschrift">Unterschrift</label>
+              <input type="text" id="unterschrift" name="unterschrift" placeholder="Dein Name - Unterschrift">
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <aside class="builder-side" aria-label="Live Vorschau">
+          <section class="preview-card" id="livePreviewCard">
+            <div class="preview-top">
+              <div>
+                <h2>Live-Vorschau</h2>
+                <span>Aktualisiert sich automatisch beim Tippen</span>
+              </div>
+              <span class="live-dot">Aktiv</span>
+            </div>
+
+            <div id="preview-wrapper" class="live-preview-frame">
+              <div id="preview" class="preview-paper" data-style="swiss-line.css">
+                <div class="watermark">VORSCHAU</div>
+                <div class="anschreiben">
+                  <div class="letterhead">
+                    <div>
+                      <h1 id="pv-name">Max Muster</h1>
+                      <p id="pv-kontakt">KAUFMANNISCHER MITARBEITER</p>
+                    </div>
+                    <img id="pv-foto" src="" alt="Bewerbungsfoto" style="display:none;">
+                  </div>
+                  <div class="doc-rule"></div>
+                  <div class="doc-meta">
+                    <p id="pv-arbeitgeber">Musterfirma AG<br>Personalabteilung<br>Limmatquai 10<br>8001 Zuerich</p>
+                    <p id="pv-datum">Zuerich, 18.06.2026</p>
+                  </div>
+                  <div class="doc-body">
+                    <h4 id="pv-funktion">Bewerbung als Kaufmaennischer Mitarbeiter im Kundenservice</h4>
+                    <p id="pv-stichwoerter">Sehr geehrte Damen und Herren</p>
+                    <p id="pv-stichwoerter2">Mit grossem Interesse bewerbe ich mich. Durch meine Erfahrung und meine strukturierte Arbeitsweise bin ich ueberzeugt, Ihr Team sinnvoll unterstuetzen zu koennen.</p>
+                    <p id="pv-stichwoerter3">Gerne ueberzeuge ich Sie in einem persoenlichen Gespraech von meiner Motivation.</p>
+                    <p class="doc-signature">Mit freundlichen Gruessen<br><strong id="pv-unterschrift">Max Muster</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="template-picker" aria-label="Motivation Template">
+            <div>
+              <h3>Template direkt testen</h3>
+              <p>Das Template bestimmt Layout, Struktur und Briefcharakter.</p>
+            </div>
+            <div class="template-scroll" role="list" data-template-options>
+              <button type="button" class="template-chip active" data-template="existing"><span class="template-thumb template-thumb--existing"></span><strong>Modern Clean</strong><small>Modern clean layout</small></button>
+              <button type="button" class="template-chip" data-template="aqua-arc"><span class="template-thumb template-thumb--aqua-arc"></span><strong>Aqua Arc</strong><small>Clean teal letter</small></button>
+              <button type="button" class="template-chip" data-template="corporate-axis"><span class="template-thumb template-thumb--corporate-axis"></span><strong>Corporate Axis</strong><small>Corporate geometric letter</small></button>
+              <button type="button" class="template-chip" data-template="editorial-mono"><span class="template-thumb template-thumb--editorial-mono"></span><strong>Editorial Mono</strong><small>Editorial monochrome letter</small></button>
+            </div>
+          </section>
+
+          <section class="style-picker" aria-label="Dokumentstil">
+            <div>
+              <h3>Stil direkt testen</h3>
+              <p>Der Stil veraendert sich direkt in der Vorschau.</p>
+            </div>
+            <div class="style-scroll" role="list" data-style-options>
+              <button type="button" class="style-chip active" data-style="swiss-line.css" data-tone="swiss">
+                <span class="style-thumb swiss"></span>
+                <strong>Swiss Line</strong>
+                <small>Empfohlen</small>
+              </button>
+              <button type="button" class="style-chip" data-style="charcoal-frame.css" data-tone="charcoal">
+                <span class="style-thumb charcoal"></span>
+                <strong>Charcoal Frame</strong>
+                <small>Kontrast</small>
+              </button>
+              <button type="button" class="style-chip" data-style="cobalt-ribbon.css" data-tone="cobalt">
+                <span class="style-thumb cobalt"></span>
+                <strong>Cobalt Ribbon</strong>
+                <small>Dynamisch</small>
+              </button>
+              <button type="button" class="style-chip" data-style="editorial-azure.css" data-tone="azure">
+                <span class="style-thumb azure"></span>
+                <strong>Editorial Azure</strong>
+                <small>Editorial</small>
+              </button>
+              <button type="button" class="style-chip" data-style="executive-ink.css" data-tone="executive">
+                <span class="style-thumb executive"></span>
+                <strong>Executive Ink</strong>
+                <small>Premium</small>
+              </button>
+              <button type="button" class="style-chip" data-style="graphite-pro.css" data-tone="graphite">
+                <span class="style-thumb graphite"></span>
+                <strong>Graphite Pro</strong>
+                <small>Business</small>
+              </button>
+              <button type="button" class="style-chip" data-style="midnight-column.css" data-tone="midnight">
+                <span class="style-thumb midnight"></span>
+                <strong>Midnight Column</strong>
+                <small>Modern</small>
+              </button>
+              <button type="button" class="style-chip" data-style="monograph.css" data-tone="monograph">
+                <span class="style-thumb monograph"></span>
+                <strong>Monograph</strong>
+                <small>Minimal</small>
+              </button>
+              <button type="button" class="style-chip" data-style="navy-wave.css" data-tone="navy">
+                <span class="style-thumb navy"></span>
+                <strong>Navy Wave</strong>
+                <small>Elegant</small>
+              </button>
+              <button type="button" class="style-chip" data-style="nordic-panel.css" data-tone="nordic">
+                <span class="style-thumb nordic"></span>
+                <strong>Nordic Panel</strong>
+                <small>Ruhig</small>
+              </button>
+              <button type="button" class="style-chip" data-style="pearl-classic.css" data-tone="pearl">
+                <span class="style-thumb pearl"></span>
+                <strong>Pearl Classic</strong>
+                <small>Klassisch</small>
+              </button>
+              <button type="button" class="style-chip" data-style="soft-sand.css" data-tone="sand">
+                <span class="style-thumb sand"></span>
+                <strong>Soft Sand</strong>
+                <small>Warm Soft</small>
+              </button>
+              <button type="button" class="style-chip" data-style="teal-balance.css" data-tone="teal">
+                <span class="style-thumb teal"></span>
+                <strong>Teal Balance</strong>
+                <small>Klar</small>
+              </button>
+              <button type="button" class="style-chip" data-style="terracotta-arch.css" data-tone="terracotta">
+                <span class="style-thumb terracotta"></span>
+                <strong>Terracotta</strong>
+                <small>Warm</small>
+              </button>
+            </div>
+          </section>
+
+          <section class="download-card">
+            <h3>PDF ohne Wasserzeichen vorbereiten</h3>
+            <p>Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.</p>
+            <button type="button" id="buyBtn" class="download-button">PDF ohne Wasserzeichen vorbereiten</button>
+          </section>
+      </aside>
+    </form>
+  </main>
+
+  <div id="previewModal" class="modal-backdrop" aria-hidden="true">
+    <div class="preview-modal" role="dialog" aria-modal="true" aria-labelledby="previewModalTitle">
+      <div class="modal-header">
+        <h2 id="previewModalTitle">Vollbild-Vorschau</h2>
+        <button type="button" class="modal-close" id="closePreviewModal" aria-label="Vorschau schliessen">x</button>
+      </div>
+      <div class="modal-grid">
+        <div id="modalPreviewHost" class="modal-preview-host"></div>
+        <aside class="modal-payment-card">
+          <h3>Kostenlose Vorschau</h3>
+          <p>Die Vorschau zeigt das Dokument mit Wasserzeichen. Nach dem Freischalten wird die PDF ohne Wasserzeichen heruntergeladen.</p>
+          <ul>
+            <li>Stil, Foto und Text vorher pruefen</li>
+            <li>Kein Account erforderlich</li>
+            <li>Download ohne Wasserzeichen nach Zahlung</li>
+          </ul>
+          <button type="button" class="download-button" data-trigger-buy>PDF ohne Wasserzeichen herunterladen</button>
+          <button type="button" class="secondary-button" data-close-preview>Zurueck bearbeiten</button>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <div id="buyModal" class="payment-modal" style="display:none;" aria-hidden="true">
+    <div class="payment-dialog" role="dialog" aria-modal="true" aria-labelledby="paymentModalTitle">
+      <div class="payment-header">
+        <h2 id="paymentModalTitle">PDF ohne Wasserzeichen</h2>
+        <button id="cancelPaymentBtn" type="button" class="payment-close" aria-label="Zahlungsfenster schliessen">x</button>
+      </div>
+      <section class="payment-unlock-card" aria-labelledby="paymentUnlockTitle">
+        <h3 id="paymentUnlockTitle">Finale PDF freischalten</h3>
+        <p>Ihre Vorschau ist kostenlos. Fuer die druckfertige PDF-Version ohne Wasserzeichen koennen Sie das Dokument einmalig freischalten.</p>
+        <div class="payment-price">
+          <strong>9.90</strong>
+          <span>CHF · einmalig</span>
+        </div>
+        <ul class="payment-benefits">
+          <li>PDF ohne Wasserzeichen</li>
+          <li>Sofortiger Download nach Zahlung</li>
+          <li>Sichere Zahlung ueber Stripe</li>
+          <li>Keine Kartendaten auf dieser Website gespeichert</li>
+        </ul>
+        <p id="paymentStatus" class="payment-status"></p>
+        <button id="payBtn" type="button" class="payment-submit">Weiter zur sicheren Zahlung</button>
+        <p class="payment-note">In der finalen Version werden Sie zu Stripe Checkout weitergeleitet und danach automatisch zum Download zurueckgefuehrt.</p>
+      </section>
+    </div>
+  </div>
+
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="/bewerbungs-generator/shared-navbar.js"></script>
+  <script src="/bewerbungs-generator/motivation/photo-storage.js"></script>
+  <script src="/bewerbungs-generator/document-renderer.js"></script>
+  <script src="script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" integrity="sha384-JcnsjUPPylna1s1fvi1u12X5qjY5OL56iySh75FdtrwhO/SWXgMjoVqcKyIIWOLk" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="/bewerbungs-generator/payment.js" data-document-type="motivation" data-storage-key="vitagen_motivation" data-filename="Bewerbung.pdf"></script>
+</body>
+</html>

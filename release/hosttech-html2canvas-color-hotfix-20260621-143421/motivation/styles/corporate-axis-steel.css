@@ -1,0 +1,105 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: "Segoe UI", Arial, sans-serif;
+  --letter-bg: #eef2f4;
+  --letter-paper: #ffffff;
+  --letter-ink: #202a33;
+  --letter-muted: #5f6871;
+  --letter-accent: #263b4c;
+  --letter-accent-2: #87a9c2;
+  --letter-rule: #d0dce4;
+  --letter-soft: #f3f6f8;
+  --letter-main-padding: 25mm 23mm 18mm;
+  --letter-cover-bg: linear-gradient(135deg, #263b4c 0 32%, #87a9c2 32% 42%, #ffffff 42% 100%);
+  --letter-cover-accent: #263b4c;
+  --letter-cover-mark-bg: #87a9c2;
+  --letter-cover-shape-bg: rgba(135, 169, 194, 0.18);
+  --letter-cover-shape-width: 74mm;
+  --letter-cover-shape-height: 74mm;
+  --letter-cover-shape-inset: auto -28mm -30mm auto;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0;
+  --letter-page-mark-bg: #263b4c;
+  --letter-page-mark-width: 210mm;
+  --letter-page-mark-height: 8mm;
+  --letter-page-mark-inset: 0 0 auto 0;
+  --letter-subject-padding: 0 0 3mm;
+}
+
+/* Geometric top-left header banner */
+.letter-template--corporate-axis::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  width: 44%;
+  height: 25mm;
+  background: linear-gradient(135deg, var(--letter-accent) 82%, transparent 82%);
+  pointer-events: none;
+}
+
+/* Lighter accent top-right banner */
+.letter-template--corporate-axis::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 40%;
+  right: 0;
+  height: 12mm;
+  background: var(--letter-accent-2);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.letter-template--corporate-axis .letterhead,
+.letter-template--corporate-axis .document-rule,
+.letter-template--corporate-axis .letter-meta,
+.letter-template--corporate-axis .letter-subject,
+.letter-template--corporate-axis .letter-greeting,
+.letter-template--corporate-axis .letter-body,
+.letter-template--corporate-axis .letter-spacer,
+.letter-template--corporate-axis .closing-block {
+  position: relative;
+  z-index: 1;
+}
+
+/* Candidate name styled entirely with the primary color */
+.letter-template--corporate-axis .letterhead h1 {
+  color: var(--letter-accent);
+  font-size: 24pt;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.letter-template--corporate-axis .letterhead p {
+  color: var(--letter-accent-2);
+  font-size: 10pt;
+  letter-spacing: 0.16em;
+}
+
+/* Avatar photo styled with dynamic corporate shadows */
+.letter-template--corporate-axis #pv-foto {
+  width: 24mm;
+  height: 24mm;
+  border: 5px solid #ffffff;
+  border-radius: 50% !important;
+  object-fit: cover;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08), 0 0 0 2px rgba(15, 23, 42, 0.08);
+}
+
+.letter-template--corporate-axis .document-rule {
+  height: 0.8mm;
+  background: var(--letter-accent);
+}
+
+.letter-template--corporate-axis .letter-subject {
+  padding-bottom: 3mm;
+  border-bottom: 2px solid var(--letter-accent);
+  color: var(--letter-accent);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}

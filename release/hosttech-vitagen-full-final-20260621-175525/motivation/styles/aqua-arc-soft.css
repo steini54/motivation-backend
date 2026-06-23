@@ -1,0 +1,71 @@
+@import url("_base.css");
+
+:root {
+  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-title-font: "Segoe UI", Arial, sans-serif;
+  --letter-bg: #f1f6f4;
+  --letter-paper: #ffffff;
+  --letter-ink: #223330;
+  --letter-muted: #667470;
+  --letter-accent: #4f7f7b;
+  --letter-accent-2: #c9dad6;
+  --letter-rule: #dce8e5;
+  --letter-soft: #f5faf8;
+  --letter-main-padding: 18mm 23mm 18mm;
+  --letter-cover-bg: radial-gradient(circle at 86% 12%, rgba(201, 218, 214, 0.42), transparent 18%), #fffefa;
+  --letter-cover-mark-bg: #4f7f7b;
+  --letter-cover-shape-bg: rgba(201, 218, 214, 0.32);
+  --letter-cover-shape-width: 64mm;
+  --letter-cover-shape-height: 64mm;
+  --letter-cover-shape-inset: auto -20mm -22mm auto;
+  --letter-letterhead-bg: transparent;
+  --letter-letterhead-border: 0;
+  --letter-letterhead-padding: 0;
+  --letter-page-mark-bg: #4f7f7b;
+  --letter-page-mark-width: 42mm;
+  --letter-page-mark-height: 1.3mm;
+  --letter-page-mark-inset: 43mm auto auto 23mm;
+  --letter-subject-bg: rgba(201, 218, 214, 0.26);
+  --letter-subject-padding: 3mm 4mm;
+  --letter-subject-radius: 1.5mm;
+}
+
+.letter-template--aqua-arc .letterhead {
+  position: relative;
+  align-items: center;
+  min-height: 33mm;
+}
+
+/* Concentric circular arc wrapping the avatar */
+.letter-template--aqua-arc .letterhead:has(#pv-foto:not([style*="display:none"]):not([style*="display: none"]))::after {
+  content: "";
+  position: absolute;
+  right: -4mm;
+  top: 50%;
+  transform: translateY(-50%) rotate(15deg);
+  width: 32mm;
+  height: 32mm;
+  border: 2.5mm solid var(--letter-accent-2);
+  border-left-color: transparent;
+  border-radius: 50%;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.letter-template--aqua-arc .letterhead h1 {
+  color: var(--letter-accent);
+  font-size: 25pt;
+}
+
+.letter-template--aqua-arc #pv-foto {
+  position: relative;
+  z-index: 1;
+  width: 24mm;
+  height: 24mm;
+  border: 0;
+  box-shadow: none;
+  border-radius: 50% !important;
+  object-fit: cover;
+  justify-self: end;
+  align-self: center;
+}

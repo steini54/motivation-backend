@@ -1,0 +1,36 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: "Segoe UI", Arial, sans-serif;
+  --cv-title-font: Georgia, Cambria, serif;
+  --cv-bg: #eceff4;
+  --cv-paper: #ffffff;
+  --cv-ink: #162035;
+  --cv-muted: #647085;
+  --cv-accent: #14213d;
+  --cv-accent-2: #d3af63;
+  --cv-rule: #d5dbea;
+  --cv-cover-bg: #ffffff;
+  --cv-cover-accent: #d3af63;
+  --cv-cover-mark-inset: 0 0 auto auto;
+  --cv-cover-mark-width: 72mm;
+  --cv-cover-mark-height: 38mm;
+  --cv-cover-mark-bg: #14213d;
+  --cv-cover-mark-radius: 0 0 0 999px;
+  --cv-cover-shape-bg: #d3af63;
+  --cv-cover-shape-width: 64mm;
+  --cv-cover-shape-height: 3mm;
+  --cv-cover-shape-inset: 34mm 0 auto auto;
+  --cv-cover-shape-radius: 999px;
+  --cv-photo-size: 33mm;
+  --cv-photo-border: 3px solid #ffffff;
+  --cv-main-padding: 22mm 24mm 22mm;
+  --cv-page-shape-bg: #14213d;
+  --cv-page-shape-width: 64mm;
+  --cv-page-shape-height: 14mm;
+  --cv-page-shape-inset: auto 0 0 auto;
+  --cv-section-transform: none;
+  --cv-section-letter: 0;
+  --cv-entry-border-left: 1mm solid #ead9b4;
+  --cv-entry-padding: 0 0 0 3mm;
+}
