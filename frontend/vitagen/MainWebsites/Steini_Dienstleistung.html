@@ -1014,6 +1014,464 @@
       color: var(--forest);
     }
 
+    .fit-map {
+      border-top: 1px solid var(--line);
+    }
+
+    .fit-intro {
+      max-width: 880px;
+      margin-bottom: 34px;
+    }
+
+    .fit-intro p {
+      max-width: 720px;
+      margin-top: 18px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.72;
+    }
+
+    .fit-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .fit-card,
+    .revision-copy,
+    .revision-panel,
+    .scope-note,
+    .scope-step {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fit-card {
+      min-height: 270px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .fit-card strong,
+    .scope-index {
+      color: var(--brass);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .fit-card h3,
+    .scope-step h3 {
+      margin: 18px 0 10px;
+      font-size: 1.24rem;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+    }
+
+    .fit-card p,
+    .scope-step p,
+    .revision-copy p,
+    .revision-panel p,
+    .scope-note p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    .fit-card.featured {
+      background:
+        linear-gradient(145deg, rgba(32, 40, 51, 0.96), rgba(15, 59, 51, 0.9)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .fit-card.featured p,
+    .fit-card.featured strong {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .revision-studio {
+      display: grid;
+      grid-template-columns: minmax(0, 0.82fr) minmax(310px, 0.54fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .revision-copy {
+      min-height: 430px;
+      padding: 34px;
+      display: grid;
+      align-content: space-between;
+      background:
+        linear-gradient(180deg, rgba(244, 240, 231, 0.82), rgba(255, 255, 255, 0.78)),
+        #fff;
+    }
+
+    .revision-copy h2 {
+      margin-bottom: 20px;
+    }
+
+    .revision-panels {
+      display: grid;
+      gap: 14px;
+    }
+
+    .revision-panel {
+      padding: 24px;
+      min-height: 208px;
+      display: grid;
+      align-content: space-between;
+    }
+
+    .revision-panel.after {
+      border-color: rgba(185, 151, 104, 0.44);
+      background: rgba(244, 240, 231, 0.86);
+    }
+
+    .revision-panel h3 {
+      margin: 0 0 14px;
+      font-size: 1.18rem;
+      letter-spacing: -0.02em;
+    }
+
+    .revision-lines {
+      display: grid;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .revision-line {
+      height: 9px;
+      border-radius: 999px;
+      background: rgba(23, 32, 29, 0.09);
+    }
+
+    .revision-line.gold {
+      width: 76%;
+      background: rgba(185, 151, 104, 0.42);
+    }
+
+    .revision-line.short {
+      width: 52%;
+    }
+
+    .scope-ladder {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.48fr) minmax(0, 0.92fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .scope-note {
+      min-height: 360px;
+      padding: 28px;
+      display: grid;
+      align-content: center;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(15, 118, 110, 0.12), transparent 28%),
+        linear-gradient(155deg, rgba(244, 240, 231, 0.94), rgba(255, 255, 255, 0.78) 58%, rgba(185, 151, 104, 0.14)),
+        #fff;
+    }
+
+    .scope-note::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(15, 59, 51, 0.08);
+      border-radius: calc(var(--radius) - 2px);
+      pointer-events: none;
+    }
+
+    .scope-note::after {
+      content: "";
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      width: 106px;
+      height: 106px;
+      border-radius: 50%;
+      border: 1px solid rgba(15, 59, 51, 0.13);
+      box-shadow:
+        inset 0 0 0 18px rgba(185, 151, 104, 0.09),
+        inset 0 0 0 38px rgba(15, 118, 110, 0.06);
+      pointer-events: none;
+    }
+
+    .scope-note h2 {
+      margin-bottom: 18px;
+    }
+
+    .scope-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .scope-step {
+      min-height: 360px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .scope-step::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(244, 240, 231, 0.68), transparent 58%),
+        radial-gradient(circle at 100% 0%, rgba(185, 151, 104, 0.16), transparent 34%);
+      opacity: 0.86;
+    }
+
+    .scope-step::after {
+      content: "";
+      width: 78px;
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brass), rgba(185, 151, 104, 0.12));
+    }
+
+    .scope-step:hover {
+      transform: translateY(-4px);
+      border-color: rgba(185, 151, 104, 0.38);
+      box-shadow: 0 24px 62px rgba(16, 46, 39, 0.11);
+    }
+
+    .deliverable-suite {
+      border-top: 1px solid var(--line);
+    }
+
+    .deliverable-head {
+      max-width: 880px;
+      margin-bottom: 34px;
+    }
+
+    .deliverable-head p {
+      max-width: 720px;
+      margin-top: 18px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.72;
+    }
+
+    .deliverable-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(300px, 0.48fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .deliverable-main,
+    .deliverable-card,
+    .feedback-copy,
+    .feedback-step {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .deliverable-main {
+      min-height: 390px;
+      padding: 34px;
+      display: grid;
+      align-content: space-between;
+      background:
+        radial-gradient(circle at 88% 10%, rgba(185, 151, 104, 0.28), transparent 30%),
+        linear-gradient(145deg, rgba(32, 40, 51, 0.96), rgba(15, 59, 51, 0.9)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .deliverable-main::before {
+      content: "";
+      position: absolute;
+      inset: 22px;
+      border: 1px solid rgba(255, 250, 240, 0.14);
+      border-radius: calc(var(--radius) - 2px);
+      pointer-events: none;
+    }
+
+    .deliverable-main::after {
+      content: "Ready";
+      position: absolute;
+      right: 24px;
+      bottom: 16px;
+      color: rgba(255, 250, 240, 0.08);
+      font-size: clamp(4.5rem, 9vw, 7rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      pointer-events: none;
+    }
+
+    .deliverable-main p,
+    .deliverable-main .deliverable-index {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .deliverable-main h3 {
+      margin: 18px 0 14px;
+      font-size: clamp(1.7rem, 3.4vw, 2.65rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .deliverable-main p,
+    .deliverable-card p,
+    .feedback-copy p,
+    .feedback-step p {
+      margin: 0;
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    .deliverable-side {
+      display: grid;
+      gap: 14px;
+    }
+
+    .deliverable-card {
+      min-height: 118px;
+      padding: 22px;
+      background:
+        linear-gradient(90deg, rgba(244, 240, 231, 0.64), rgba(255, 255, 255, 0.82)),
+        #fff;
+    }
+
+    .deliverable-card::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 18px;
+      bottom: 18px;
+      width: 4px;
+      border-radius: 0 999px 999px 0;
+      background: var(--brass);
+      opacity: 0.52;
+    }
+
+    .deliverable-index,
+    .feedback-index {
+      color: var(--brass);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .deliverable-card h3,
+    .feedback-step h3 {
+      margin: 14px 0 8px;
+      font-size: 1.2rem;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+    }
+
+    .deliverable-card p,
+    .feedback-step p,
+    .feedback-copy p {
+      color: var(--muted);
+    }
+
+    .feedback-loop {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.48fr) minmax(0, 0.92fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .feedback-copy {
+      min-height: 370px;
+      padding: 28px;
+      display: grid;
+      align-content: center;
+      background:
+        radial-gradient(circle at 18% 14%, rgba(15, 118, 110, 0.13), transparent 28%),
+        linear-gradient(155deg, rgba(244, 240, 231, 0.94), rgba(255, 255, 255, 0.78) 62%, rgba(185, 151, 104, 0.13)),
+        #fff;
+    }
+
+    .feedback-copy::after {
+      content: "";
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      width: 118px;
+      height: 78px;
+      border-radius: var(--radius);
+      border: 1px solid rgba(15, 59, 51, 0.12);
+      background:
+        linear-gradient(rgba(15, 59, 51, 0.08), rgba(15, 59, 51, 0.08)) 18px 20px / 70px 7px no-repeat,
+        linear-gradient(rgba(185, 151, 104, 0.36), rgba(185, 151, 104, 0.36)) 18px 38px / 48px 7px no-repeat,
+        rgba(255, 255, 255, 0.38);
+      pointer-events: none;
+    }
+
+    .feedback-copy h2 {
+      margin-bottom: 18px;
+    }
+
+    .feedback-steps {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .feedback-step {
+      min-height: 370px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .feedback-step::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(244, 240, 231, 0.64), transparent 58%),
+        radial-gradient(circle at 100% 0%, rgba(15, 118, 110, 0.12), transparent 34%);
+      opacity: 0.9;
+    }
+
+    .feedback-step::after {
+      content: "";
+      width: 78px;
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brass), rgba(185, 151, 104, 0.12));
+    }
+
+    .feedback-step:hover {
+      transform: translateY(-4px);
+      border-color: rgba(185, 151, 104, 0.38);
+      box-shadow: 0 24px 62px rgba(16, 46, 39, 0.11);
+    }
+
     .site-footer {
       border-top: 1px solid var(--line);
       background: #f2eee5;
@@ -1140,7 +1598,23 @@
       }
 
       .section-header,
-      .split-section {
+      .split-section,
+      .revision-studio,
+      .scope-ladder,
+      .deliverable-grid,
+      .feedback-loop {
+        grid-template-columns: 1fr;
+      }
+
+      .fit-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .scope-steps {
+        grid-template-columns: 1fr;
+      }
+
+      .feedback-steps {
         grid-template-columns: 1fr;
       }
 
@@ -1297,10 +1771,30 @@
       }
 
       .format-inner,
-      .principle-grid {
+      .principle-grid,
+      .fit-grid {
         grid-template-columns: 1fr;
       }
       .principle-wrapper:nth-child(n) { margin-top: 0; }
+
+      .fit-card,
+      .revision-copy,
+      .revision-panel,
+      .scope-note,
+      .scope-step,
+      .deliverable-main,
+      .deliverable-card,
+      .feedback-copy,
+      .feedback-step {
+        min-height: auto;
+      }
+
+      .deliverable-main,
+      .deliverable-card,
+      .feedback-copy,
+      .feedback-step {
+        padding: 22px;
+      }
 
       .consult-card,
       .cta-block {
@@ -1345,6 +1839,7 @@
         </a>
 
         <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
           <a href="Steini_Dienstleistung.html" aria-current="page" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
           <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
           <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
@@ -1461,6 +1956,45 @@
         <div class="format-inner">
           <span class="format-badge" data-de="Formate" data-en="Formats">Formate</span>
           <p data-de="Standardformate wie .docx und druckfähige Dateien sind möglich. Wenn ein anderes Format benötigt wird, klären wir die passende Lösung." data-en="Standard formats such as .docx and print-ready files are available. If another format is needed, we define the right solution together.">Standardformate wie .docx und druckfähige Dateien sind möglich. Wenn ein anderes Format benötigt wird, klären wir die passende Lösung.</p>
+        </div>
+      </section>
+
+      <section class="section fit-map" aria-labelledby="fit-title">
+        <div class="fit-intro" data-reveal>
+          <p class="section-kicker" data-de="Orientierung" data-en="Orientation">Orientierung</p>
+          <h2 id="fit-title" data-de="Welche Leistung passt zu welchem Bedarf?" data-en="Which service fits which need?">Welche Leistung passt zu welchem Bedarf?</h2>
+          <p data-de="Nicht jeder Text braucht eine komplette Neufassung. Manchmal reicht ein präziser Eingriff, manchmal braucht es ein neues Fundament." data-en="Not every text needs a full rewrite. Sometimes a precise intervention is enough, sometimes the foundation needs rebuilding.">Nicht jeder Text braucht eine komplette Neufassung. Manchmal reicht ein präziser Eingriff, manchmal braucht es ein neues Fundament.</p>
+        </div>
+
+        <div class="fit-grid">
+          <article class="fit-card featured" data-reveal>
+            <div>
+              <strong>01</strong>
+              <h3 data-de="Korrigieren" data-en="Correct">Korrigieren</h3>
+            </div>
+            <p data-de="Für Texte, die inhaltlich stehen, aber sprachlich und formal sauber werden müssen." data-en="For texts that already work in content but need clean language and formatting.">Für Texte, die inhaltlich stehen, aber sprachlich und formal sauber werden müssen.</p>
+          </article>
+          <article class="fit-card" data-reveal>
+            <div>
+              <strong>02</strong>
+              <h3 data-de="Schärfen" data-en="Sharpen">Schärfen</h3>
+            </div>
+            <p data-de="Für Inhalte, die verständlicher, knapper oder überzeugender klingen sollen." data-en="For content that should read clearer, tighter or more convincing.">Für Inhalte, die verständlicher, knapper oder überzeugender klingen sollen.</p>
+          </article>
+          <article class="fit-card" data-reveal>
+            <div>
+              <strong>03</strong>
+              <h3 data-de="Strukturieren" data-en="Structure">Strukturieren</h3>
+            </div>
+            <p data-de="Für Material mit guten Gedanken, aber noch ohne klare Reihenfolge." data-en="For material with good ideas but no clear order yet.">Für Material mit guten Gedanken, aber noch ohne klare Reihenfolge.</p>
+          </article>
+          <article class="fit-card" data-reveal>
+            <div>
+              <strong>04</strong>
+              <h3 data-de="Neu texten" data-en="Rewrite">Neu texten</h3>
+            </div>
+            <p data-de="Für Angebote, Seiten oder Dokumente, die eine neue Tonalität brauchen." data-en="For offers, pages or documents that need a new tone of voice.">Für Angebote, Seiten oder Dokumente, die eine neue Tonalität brauchen.</p>
+          </article>
         </div>
       </section>
 
@@ -1588,6 +2122,141 @@
                 <span data-de="DiMe ansehen" data-en="View DiMe">DiMe ansehen</span>
                 <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 17 17 7m0 0H9m8 0v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section revision-studio" aria-labelledby="revision-title">
+        <article class="revision-copy" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Revision" data-en="Revision">Revision</p>
+            <h2 id="revision-title" data-de="Aus Verbesserung wird Entscheidung" data-en="Improvement becomes a decision">Aus Verbesserung wird Entscheidung</h2>
+          </div>
+          <p data-de="Eine Überarbeitung ist keine kosmetische Runde. Wir markieren nicht nur Fehler, sondern zeigen, welche Textentscheidung dem Ziel am besten dient." data-en="A revision is not a cosmetic pass. We do more than mark errors, we show which text decision best serves the goal.">Eine Überarbeitung ist keine kosmetische Runde. Wir markieren nicht nur Fehler, sondern zeigen, welche Textentscheidung dem Ziel am besten dient.</p>
+        </article>
+
+        <div class="revision-panels">
+          <article class="revision-panel" data-reveal>
+            <div>
+              <h3 data-de="Vorher: Inhalt vorhanden, Richtung unklar" data-en="Before: content exists, direction is unclear">Vorher: Inhalt vorhanden, Richtung unklar</h3>
+              <p data-de="Die Aussage ist da, aber Einstieg, Schwerpunkt und Ton wechseln zu stark." data-en="The message is there, but opening, focus and tone shift too much.">Die Aussage ist da, aber Einstieg, Schwerpunkt und Ton wechseln zu stark.</p>
+            </div>
+            <div class="revision-lines" aria-hidden="true">
+              <span class="revision-line"></span>
+              <span class="revision-line short"></span>
+              <span class="revision-line"></span>
+            </div>
+          </article>
+          <article class="revision-panel after" data-reveal>
+            <div>
+              <h3 data-de="Nachher: klare Linie, bessere Lesbarkeit" data-en="After: clear line, better readability">Nachher: klare Linie, bessere Lesbarkeit</h3>
+              <p data-de="Die Reihenfolge führt durch das Thema und jeder Absatz hat eine erkennbare Aufgabe." data-en="The order guides through the topic and every paragraph has a visible job.">Die Reihenfolge führt durch das Thema und jeder Absatz hat eine erkennbare Aufgabe.</p>
+            </div>
+            <div class="revision-lines" aria-hidden="true">
+              <span class="revision-line gold"></span>
+              <span class="revision-line"></span>
+              <span class="revision-line short"></span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section scope-ladder" aria-labelledby="scope-title">
+        <aside class="scope-note" data-reveal>
+          <p class="section-kicker" data-de="Umfang" data-en="Scope">Umfang</p>
+          <h2 id="scope-title" data-de="Sauber geplant, schneller umgesetzt" data-en="Planned cleanly, delivered faster">Sauber geplant, schneller umgesetzt</h2>
+          <p data-de="Je klarer Ziel, Publikum und Format am Anfang sind, desto ruhiger läuft die Textarbeit bis zur finalen Fassung." data-en="The clearer the goal, audience and format are at the start, the smoother the text work runs until the final version.">Je klarer Ziel, Publikum und Format am Anfang sind, desto ruhiger läuft die Textarbeit bis zur finalen Fassung.</p>
+        </aside>
+
+        <div class="scope-steps">
+          <article class="scope-step" data-reveal>
+            <span class="scope-index">Brief</span>
+            <div>
+              <h3 data-de="Ziel und Publikum" data-en="Goal and audience">Ziel und Publikum</h3>
+              <p data-de="Wir klären, für wen der Text gedacht ist und welche Reaktion er auslösen soll." data-en="We clarify who the text is for and what response it should create.">Wir klären, für wen der Text gedacht ist und welche Reaktion er auslösen soll.</p>
+            </div>
+          </article>
+          <article class="scope-step" data-reveal>
+            <span class="scope-index">Material</span>
+            <div>
+              <h3 data-de="Vorlagen und Quellen" data-en="Drafts and sources">Vorlagen und Quellen</h3>
+              <p data-de="Bestehende Texte, Stichworte, Links oder Vorgaben werden gesichtet und geordnet." data-en="Existing texts, notes, links or guidelines are reviewed and organised.">Bestehende Texte, Stichworte, Links oder Vorgaben werden gesichtet und geordnet.</p>
+            </div>
+          </article>
+          <article class="scope-step" data-reveal>
+            <span class="scope-index">Finale</span>
+            <div>
+              <h3 data-de="Fassung und Übergabe" data-en="Version and handover">Fassung und Übergabe</h3>
+              <p data-de="Das Ergebnis wird so übergeben, dass es direkt weiterverwendet werden kann." data-en="The result is handed over so it can be used directly.">Das Ergebnis wird so übergeben, dass es direkt weiterverwendet werden kann.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section deliverable-suite" aria-labelledby="deliverable-title">
+        <div class="deliverable-head" data-reveal>
+          <p class="section-kicker" data-de="Lieferumfang" data-en="Deliverables">Lieferumfang</p>
+          <h2 id="deliverable-title" data-de="Das Ergebnis soll direkt nutzbar sein" data-en="The result should be ready to use">Das Ergebnis soll direkt nutzbar sein</h2>
+          <p data-de="Am Ende zählt nicht nur ein besserer Text, sondern eine Fassung, die im Alltag wirklich weiterhilft." data-en="In the end, what matters is not only better copy, but a version that is actually useful in practice.">Am Ende zählt nicht nur ein besserer Text, sondern eine Fassung, die im Alltag wirklich weiterhilft.</p>
+        </div>
+
+        <div class="deliverable-grid">
+          <article class="deliverable-main" data-reveal>
+            <div>
+              <span class="deliverable-index" data-de="Finale Fassung" data-en="Final version">Finale Fassung</span>
+              <h3 data-de="Sauber, abgestimmt und bereit für den nächsten Einsatz." data-en="Clean, aligned and ready for the next use.">Sauber, abgestimmt und bereit für den nächsten Einsatz.</h3>
+              <p data-de="Je nach Auftrag erhältst du eine überarbeitete Datei, eine klare Empfehlung oder eine neu strukturierte Textfassung." data-en="Depending on the project, you receive an edited file, a clear recommendation or a newly structured text version.">Je nach Auftrag erhältst du eine überarbeitete Datei, eine klare Empfehlung oder eine neu strukturierte Textfassung.</p>
+            </div>
+          </article>
+
+          <div class="deliverable-side">
+            <article class="deliverable-card" data-reveal>
+              <span class="deliverable-index">01</span>
+              <h3 data-de="Kommentarspur" data-en="Comment trail">Kommentarspur</h3>
+              <p data-de="Wichtige Eingriffe bleiben nachvollziehbar, wenn das für den Auftrag sinnvoll ist." data-en="Important edits stay understandable when that makes sense for the project.">Wichtige Eingriffe bleiben nachvollziehbar, wenn das für den Auftrag sinnvoll ist.</p>
+            </article>
+            <article class="deliverable-card" data-reveal>
+              <span class="deliverable-index">02</span>
+              <h3 data-de="Formatcheck" data-en="Format check">Formatcheck</h3>
+              <p data-de="Gliederung, Absätze und sichtbare Ordnung werden auf den Einsatzzweck geprüft." data-en="Structure, paragraphs and visible order are checked against the use case.">Gliederung, Absätze und sichtbare Ordnung werden auf den Einsatzzweck geprüft.</p>
+            </article>
+            <article class="deliverable-card" data-reveal>
+              <span class="deliverable-index">03</span>
+              <h3 data-de="Nutzbare Übergabe" data-en="Usable handover">Nutzbare Übergabe</h3>
+              <p data-de="Das Ergebnis wird so vorbereitet, dass du ohne zusätzliche Sortierarbeit weiterkommst." data-en="The result is prepared so you can continue without extra sorting work.">Das Ergebnis wird so vorbereitet, dass du ohne zusätzliche Sortierarbeit weiterkommst.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section feedback-loop" aria-labelledby="feedback-title">
+        <aside class="feedback-copy" data-reveal>
+          <p class="section-kicker" data-de="Abstimmung" data-en="Alignment">Abstimmung</p>
+          <h2 id="feedback-title" data-de="Feedback bleibt übersichtlich" data-en="Feedback stays clear">Feedback bleibt übersichtlich</h2>
+          <p data-de="Texte werden besser, wenn Rückmeldungen nicht zerfasern. Deshalb arbeiten wir mit klaren Schritten und wenigen offenen Fragen." data-en="Texts improve when feedback does not become fragmented. That is why we work with clear steps and only a few open questions.">Texte werden besser, wenn Rückmeldungen nicht zerfasern. Deshalb arbeiten wir mit klaren Schritten und wenigen offenen Fragen.</p>
+        </aside>
+
+        <div class="feedback-steps">
+          <article class="feedback-step" data-reveal>
+            <span class="feedback-index">01</span>
+            <div>
+              <h3 data-de="Erste Sichtung" data-en="First review">Erste Sichtung</h3>
+              <p data-de="Material, Ziel und Umfang werden eingeordnet, bevor die Textarbeit startet." data-en="Material, goal and scope are assessed before text work begins.">Material, Ziel und Umfang werden eingeordnet, bevor die Textarbeit startet.</p>
+            </div>
+          </article>
+          <article class="feedback-step" data-reveal>
+            <span class="feedback-index">02</span>
+            <div>
+              <h3 data-de="Gezielte Rückfrage" data-en="Targeted question">Gezielte Rückfrage</h3>
+              <p data-de="Offene Punkte werden gebündelt, damit die Entscheidung schnell möglich bleibt." data-en="Open points are bundled so decisions can still be made quickly.">Offene Punkte werden gebündelt, damit die Entscheidung schnell möglich bleibt.</p>
+            </div>
+          </article>
+          <article class="feedback-step" data-reveal>
+            <span class="feedback-index">03</span>
+            <div>
+              <h3 data-de="Finale Freigabe" data-en="Final approval">Finale Freigabe</h3>
+              <p data-de="Die letzte Fassung wird sauber übergeben und ist bereit für Website, Druck oder Bewerbung." data-en="The final version is handed over cleanly and is ready for website, print or application.">Die letzte Fassung wird sauber übergeben und ist bereit für Website, Druck oder Bewerbung.</p>
             </div>
           </article>
         </div>

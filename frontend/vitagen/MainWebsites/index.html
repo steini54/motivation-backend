@@ -1011,6 +1011,533 @@
       font-weight: 800;
     }
 
+    .impact-board {
+      border-top: 1px solid var(--line);
+    }
+
+    .impact-intro {
+      max-width: 860px;
+      margin-bottom: 34px;
+    }
+
+    .impact-intro p {
+      max-width: 720px;
+      margin-top: 18px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.72;
+    }
+
+    .impact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(310px, 0.55fr);
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .impact-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.74);
+      padding: 24px;
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.07);
+    }
+
+    .impact-card-large {
+      min-height: 410px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(145deg, rgba(32, 40, 51, 0.96), rgba(15, 59, 51, 0.9)),
+        var(--forest);
+      color: #fffaf0;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .impact-card-large::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      bottom: -120px;
+      width: 260px;
+      height: 260px;
+      border-radius: 999px;
+      background: rgba(185, 151, 104, 0.22);
+      pointer-events: none;
+    }
+
+    .impact-card h3 {
+      position: relative;
+      margin: 0 0 12px;
+      font-size: clamp(1.4rem, 3vw, 2.35rem);
+      line-height: 1.04;
+      letter-spacing: -0.045em;
+    }
+
+    .impact-card p {
+      position: relative;
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.68;
+    }
+
+    .impact-card-large p,
+    .impact-card-large .impact-label {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .impact-label {
+      display: block;
+      margin-bottom: 18px;
+      color: var(--brass);
+      font-size: 0.76rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .impact-bars {
+      position: relative;
+      display: grid;
+      gap: 10px;
+      margin-top: 34px;
+      max-width: 460px;
+    }
+
+    .impact-bar {
+      display: grid;
+      grid-template-columns: 100px minmax(0, 1fr);
+      gap: 12px;
+      align-items: center;
+      color: rgba(255, 250, 240, 0.74);
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .impact-bar span:last-child {
+      height: 9px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brass), rgba(255, 250, 240, 0.42));
+    }
+
+    .impact-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .impact-stack .impact-card {
+      min-height: 124px;
+    }
+
+    .voice-suite {
+      display: grid;
+      grid-template-columns: minmax(300px, 0.48fr) minmax(0, 0.92fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .voice-canvas,
+    .voice-point,
+    .handover-shell {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.74);
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .voice-canvas {
+      min-height: 450px;
+      padding: 28px;
+      display: grid;
+      align-content: space-between;
+      background:
+        radial-gradient(circle at 88% 8%, rgba(185, 151, 104, 0.24), transparent 28%),
+        linear-gradient(135deg, rgba(244, 240, 231, 0.92), rgba(255, 255, 255, 0.74) 58%, rgba(15, 118, 110, 0.08)),
+        #fff;
+    }
+
+    .voice-canvas::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(15, 59, 51, 0.08);
+      border-radius: calc(var(--radius) - 2px);
+      pointer-events: none;
+    }
+
+    .voice-canvas::after {
+      content: "Aa";
+      position: absolute;
+      right: 24px;
+      bottom: 12px;
+      color: rgba(15, 59, 51, 0.08);
+      font-size: clamp(5.5rem, 12vw, 8.5rem);
+      font-weight: 900;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      pointer-events: none;
+    }
+
+    .voice-canvas p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 700;
+      line-height: 1.72;
+    }
+
+    .voice-lines {
+      display: grid;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .voice-line {
+      height: 12px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(23, 32, 29, 0.09), rgba(23, 32, 29, 0.03));
+    }
+
+    .voice-line.gold {
+      width: 72%;
+      background: rgba(185, 151, 104, 0.4);
+    }
+
+    .voice-line.short {
+      width: 52%;
+    }
+
+    .voice-points {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .voice-point {
+      min-height: 210px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+      transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+    }
+
+    .voice-point::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(244, 240, 231, 0.62), transparent 58%),
+        radial-gradient(circle at 100% 0%, rgba(185, 151, 104, 0.16), transparent 34%);
+      opacity: 0;
+      transition: opacity 180ms ease;
+    }
+
+    .voice-point::after {
+      content: "";
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      bottom: 20px;
+      height: 3px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brass), transparent);
+      opacity: 0.38;
+    }
+
+    .voice-point:hover {
+      transform: translateY(-4px);
+      border-color: rgba(185, 151, 104, 0.38);
+      box-shadow: 0 24px 62px rgba(16, 46, 39, 0.11);
+    }
+
+    .voice-point:hover::before {
+      opacity: 1;
+    }
+
+    .voice-point span,
+    .handover-index {
+      color: var(--brass);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .voice-point h3,
+    .handover-item h3 {
+      margin: 18px 0 10px;
+      font-size: 1.24rem;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+    }
+
+    .voice-point p,
+    .handover-item p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    .handover-shell {
+      padding: 28px;
+    }
+
+    .handover-shell .section-header {
+      margin-bottom: 28px;
+    }
+
+    .handover-board {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(251, 250, 246, 0.78);
+    }
+
+    .handover-item {
+      min-height: 230px;
+      padding: 24px;
+      border-right: 1px solid var(--line);
+    }
+
+    .handover-item:last-child {
+      border-right: 0;
+    }
+
+    .quality-room {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(320px, 0.52fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .quality-copy,
+    .quality-list,
+    .channel-card,
+    .channel-note {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.76);
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.07);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .quality-copy {
+      min-height: 430px;
+      padding: 34px;
+      display: grid;
+      align-content: space-between;
+      background:
+        radial-gradient(circle at 12% 12%, rgba(15, 118, 110, 0.12), transparent 30%),
+        linear-gradient(160deg, rgba(244, 240, 231, 0.92), rgba(255, 255, 255, 0.76) 62%, rgba(185, 151, 104, 0.12)),
+        #fff;
+    }
+
+    .quality-copy::after {
+      content: "";
+      position: absolute;
+      right: 24px;
+      bottom: 24px;
+      width: 116px;
+      height: 116px;
+      border: 1px solid rgba(15, 59, 51, 0.12);
+      border-radius: 50%;
+      box-shadow:
+        inset 0 0 0 18px rgba(185, 151, 104, 0.08),
+        inset 0 0 0 38px rgba(15, 118, 110, 0.06);
+      pointer-events: none;
+    }
+
+    .quality-copy h2 {
+      margin-bottom: 18px;
+    }
+
+    .quality-copy p,
+    .channel-note p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.72;
+    }
+
+    .quality-list {
+      display: grid;
+      align-content: stretch;
+      overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(244, 240, 231, 0.52), rgba(255, 255, 255, 0.78)),
+        #fff;
+    }
+
+    .quality-item {
+      display: grid;
+      grid-template-columns: 58px minmax(0, 1fr);
+      gap: 18px;
+      padding: 24px;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    .quality-item::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 22px;
+      bottom: 22px;
+      width: 4px;
+      border-radius: 0 999px 999px 0;
+      background: var(--brass);
+      opacity: 0.52;
+    }
+
+    .quality-item:last-child {
+      border-bottom: 0;
+    }
+
+    .quality-index,
+    .channel-index {
+      color: var(--brass);
+      font-size: 0.78rem;
+      font-weight: 900;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .quality-item h3,
+    .channel-card h3 {
+      margin: 0 0 8px;
+      font-size: 1.22rem;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+    }
+
+    .quality-item p,
+    .channel-card p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.65;
+    }
+
+    .channel-map {
+      border-top: 1px solid var(--line);
+    }
+
+    .channel-head {
+      max-width: 880px;
+      margin-bottom: 34px;
+    }
+
+    .channel-head p {
+      max-width: 720px;
+      margin-top: 18px;
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.05rem;
+      font-weight: 600;
+      line-height: 1.72;
+    }
+
+    .channel-layout {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .channel-card {
+      min-height: 290px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      isolation: isolate;
+      transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+    }
+
+    .channel-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        linear-gradient(180deg, rgba(244, 240, 231, 0.7), transparent 58%),
+        radial-gradient(circle at 100% 0%, rgba(15, 118, 110, 0.12), transparent 32%);
+      opacity: 0.9;
+    }
+
+    .channel-card::after {
+      content: "";
+      align-self: flex-start;
+      width: 74px;
+      height: 9px;
+      margin-top: 22px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--brass), rgba(185, 151, 104, 0.14));
+    }
+
+    .channel-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(185, 151, 104, 0.38);
+      box-shadow: 0 24px 62px rgba(16, 46, 39, 0.11);
+    }
+
+    .channel-card.featured {
+      background:
+        radial-gradient(circle at 88% 12%, rgba(185, 151, 104, 0.28), transparent 28%),
+        linear-gradient(145deg, rgba(32, 40, 51, 0.96), rgba(15, 59, 51, 0.9)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .channel-card.featured::before {
+      opacity: 0;
+    }
+
+    .channel-card.featured::after {
+      background: linear-gradient(90deg, #fffaf0, rgba(255, 250, 240, 0.18));
+    }
+
+    .channel-card.featured p,
+    .channel-card.featured .channel-index {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .channel-note {
+      grid-column: 1 / -1;
+      padding: 24px;
+      display: grid;
+      grid-template-columns: minmax(220px, 0.36fr) minmax(0, 1fr);
+      gap: 24px;
+      align-items: center;
+      background:
+        linear-gradient(90deg, rgba(244, 240, 231, 0.92), rgba(255, 255, 255, 0.78)),
+        #fff;
+    }
+
+    .channel-note::after {
+      content: "";
+      position: absolute;
+      right: 22px;
+      top: 22px;
+      bottom: 22px;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgba(185, 151, 104, 0.55), transparent);
+      pointer-events: none;
+    }
+
     .process {
       background: #102b26;
       color: #fffaf0;
@@ -1256,13 +1783,34 @@
 
       .section-header,
       .statement,
-      .closing-grid {
+      .closing-grid,
+      .impact-grid,
+      .voice-suite,
+      .quality-room,
+      .channel-note {
         grid-template-columns: 1fr;
       }
 
       .audience-grid,
       .process-grid {
         grid-template-columns: 1fr;
+      }
+
+      .channel-layout {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .channel-card.featured,
+      .channel-note {
+        grid-column: 1 / -1;
+      }
+
+      .handover-board {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .handover-item:nth-child(2) {
+        border-right: 0;
       }
     }
 
@@ -1395,6 +1943,50 @@
         min-height: auto;
       }
 
+      .impact-card-large,
+      .voice-canvas,
+      .quality-copy,
+      .channel-card {
+        min-height: auto;
+      }
+
+      .impact-bar {
+        grid-template-columns: 78px minmax(0, 1fr);
+      }
+
+      .voice-points,
+      .handover-board,
+      .channel-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .quality-copy,
+      .quality-item,
+      .channel-card,
+      .channel-note {
+        padding: 20px;
+      }
+
+      .quality-item {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .handover-shell {
+        padding: 20px;
+      }
+
+      .handover-item,
+      .handover-item:nth-child(2) {
+        min-height: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--line);
+      }
+
+      .handover-item:last-child {
+        border-bottom: 0;
+      }
+
       .footer-inner {
         align-items: flex-start;
         flex-direction: column;
@@ -1432,6 +2024,7 @@
         </a>
 
         <div class="nav-links" id="site-menu">
+          <a href="index.html" aria-current="page" data-de="Home" data-en="Home">Home</a>
           <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
           <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
           <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
@@ -1642,6 +2235,199 @@
               <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M7 17 17 7m0 0H9m8 0v8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </a>
           </article>
+        </div>
+      </section>
+
+      <section class="section impact-board" aria-labelledby="impact-title">
+        <div class="impact-intro" data-reveal>
+          <p class="section-kicker" data-de="Wirkung" data-en="Impact">Wirkung</p>
+          <h2 id="impact-title" data-de="Texte, die leiser arbeiten und stärker wirken" data-en="Copy that works quietly and lands stronger">Texte, die leiser arbeiten und stärker wirken</h2>
+          <p data-de="Ein guter Text drängt sich nicht vor. Er führt, erklärt und schafft Vertrauen, ohne die Lesenden zu verlieren." data-en="Strong copy does not push itself forward. It guides, explains and builds trust without losing the reader.">Ein guter Text drängt sich nicht vor. Er führt, erklärt und schafft Vertrauen, ohne die Lesenden zu verlieren.</p>
+        </div>
+
+        <div class="impact-grid">
+          <article class="impact-card impact-card-large" data-reveal>
+            <div>
+              <span class="impact-label" data-de="Vorher und nachher" data-en="Before and after">Vorher und nachher</span>
+              <h3 data-de="Aus Rohtext wird ein klarer Auftritt." data-en="Raw material becomes a clear presence.">Aus Rohtext wird ein klarer Auftritt.</h3>
+              <p data-de="Syntext glättet nicht einfach Sätze. Wir prüfen, ob Reihenfolge, Ton, Aussage und Format zusammenarbeiten." data-en="Syntext does more than polish sentences. We check whether order, tone, message and format work together.">Syntext glättet nicht einfach Sätze. Wir prüfen, ob Reihenfolge, Ton, Aussage und Format zusammenarbeiten.</p>
+            </div>
+            <div class="impact-bars" aria-hidden="true">
+              <div class="impact-bar"><span>Klarheit</span><span style="width: 92%;"></span></div>
+              <div class="impact-bar"><span>Struktur</span><span style="width: 84%;"></span></div>
+              <div class="impact-bar"><span>Stimme</span><span style="width: 76%;"></span></div>
+            </div>
+          </article>
+
+          <div class="impact-stack">
+            <article class="impact-card" data-reveal>
+              <span class="impact-label" data-de="Lesefluss" data-en="Reading flow">Lesefluss</span>
+              <h3 data-de="Weniger Reibung" data-en="Less friction">Weniger Reibung</h3>
+              <p data-de="Sätze werden so geordnet, dass die zentrale Aussage schneller verstanden wird." data-en="Sentences are arranged so the main point is understood faster.">Sätze werden so geordnet, dass die zentrale Aussage schneller verstanden wird.</p>
+            </article>
+            <article class="impact-card" data-reveal>
+              <span class="impact-label" data-de="Ton" data-en="Tone">Ton</span>
+              <h3 data-de="Mehr Wiedererkennung" data-en="More recognition">Mehr Wiedererkennung</h3>
+              <p data-de="Der Text klingt passend zur Person, zum Angebot und zur Situation." data-en="The text sounds right for the person, offer and situation.">Der Text klingt passend zur Person, zum Angebot und zur Situation.</p>
+            </article>
+            <article class="impact-card" data-reveal>
+              <span class="impact-label" data-de="Sicherheit" data-en="Assurance">Sicherheit</span>
+              <h3 data-de="Saubere Details" data-en="Clean details">Saubere Details</h3>
+              <p data-de="Grammatik, Stil, Format und kleine Stolperstellen werden konsequent geprüft." data-en="Grammar, style, format and small stumbling points are checked consistently.">Grammatik, Stil, Format und kleine Stolperstellen werden konsequent geprüft.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section voice-suite" aria-labelledby="voice-title">
+        <aside class="voice-canvas" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Textsystem" data-en="Text system">Textsystem</p>
+            <h2 id="voice-title" data-de="Eine Stimme für mehrere Situationen" data-en="One voice across several moments">Eine Stimme für mehrere Situationen</h2>
+          </div>
+          <div>
+            <p data-de="Website, Bewerbung, Angebot und Broschüre brauchen nicht denselben Text. Sie brauchen dieselbe Haltung." data-en="Website, application, offer and brochure do not need the same text. They need the same attitude.">Website, Bewerbung, Angebot und Broschüre brauchen nicht denselben Text. Sie brauchen dieselbe Haltung.</p>
+            <div class="voice-lines" aria-hidden="true">
+              <span class="voice-line gold"></span>
+              <span class="voice-line"></span>
+              <span class="voice-line short"></span>
+            </div>
+          </div>
+        </aside>
+
+        <div class="voice-points">
+          <article class="voice-point" data-reveal>
+            <span>01</span>
+            <div>
+              <h3 data-de="Positionierung" data-en="Positioning">Positionierung</h3>
+              <p data-de="Wir schärfen, wofür ein Angebot steht und welche Botschaft im Vordergrund bleibt." data-en="We sharpen what an offer stands for and which message should stay in focus.">Wir schärfen, wofür ein Angebot steht und welche Botschaft im Vordergrund bleibt.</p>
+            </div>
+          </article>
+          <article class="voice-point" data-reveal>
+            <span>02</span>
+            <div>
+              <h3 data-de="Leserführung" data-en="Reader guidance">Leserführung</h3>
+              <p data-de="Absätze, Zwischenüberschriften und Reihenfolge werden so gebaut, dass Orientierung entsteht." data-en="Paragraphs, subheadings and order are shaped to create orientation.">Absätze, Zwischenüberschriften und Reihenfolge werden so gebaut, dass Orientierung entsteht.</p>
+            </div>
+          </article>
+          <article class="voice-point" data-reveal>
+            <span>03</span>
+            <div>
+              <h3 data-de="Sprachrhythmus" data-en="Language rhythm">Sprachrhythmus</h3>
+              <p data-de="Kurze und längere Sätze wechseln bewusst, damit der Text präzise und lebendig bleibt." data-en="Shorter and longer sentences alternate intentionally so the copy stays precise and alive.">Kurze und längere Sätze wechseln bewusst, damit der Text präzise und lebendig bleibt.</p>
+            </div>
+          </article>
+          <article class="voice-point" data-reveal>
+            <span>04</span>
+            <div>
+              <h3 data-de="Formatgefühl" data-en="Format sense">Formatgefühl</h3>
+              <p data-de="Ein Webtext darf anders atmen als ein Bericht, eine Bewerbung oder ein gedrucktes Dokument." data-en="Web copy can breathe differently from a report, an application or a printed document.">Ein Webtext darf anders atmen als ein Bericht, eine Bewerbung oder ein gedrucktes Dokument.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="handover-title">
+        <div class="handover-shell" data-reveal>
+          <div class="section-header">
+            <div>
+              <p class="section-kicker" data-de="Übergabe" data-en="Handover">Übergabe</p>
+              <h2 id="handover-title" data-de="Was du am Ende in der Hand hast" data-en="What you receive at the end">Was du am Ende in der Hand hast</h2>
+            </div>
+            <p data-de="Der finale Text soll nicht nur schöner klingen. Er soll verwendbar, nachvollziehbar und bereit für den nächsten Schritt sein." data-en="The final text should do more than sound better. It should be usable, clear and ready for the next step.">Der finale Text soll nicht nur schöner klingen. Er soll verwendbar, nachvollziehbar und bereit für den nächsten Schritt sein.</p>
+          </div>
+          <div class="handover-board">
+            <article class="handover-item">
+              <span class="handover-index">01</span>
+              <h3 data-de="Bereinigte Fassung" data-en="Clean version">Bereinigte Fassung</h3>
+              <p data-de="Ein Text, der direkt weiterverwendet oder intern abgestimmt werden kann." data-en="A version that can be used directly or reviewed internally.">Ein Text, der direkt weiterverwendet oder intern abgestimmt werden kann.</p>
+            </article>
+            <article class="handover-item">
+              <span class="handover-index">02</span>
+              <h3 data-de="Klare Hinweise" data-en="Clear notes">Klare Hinweise</h3>
+              <p data-de="Wichtige Entscheidungen werden nachvollziehbar gemacht, nicht im Dokument versteckt." data-en="Important decisions are made understandable, not hidden inside the document.">Wichtige Entscheidungen werden nachvollziehbar gemacht, nicht im Dokument versteckt.</p>
+            </article>
+            <article class="handover-item">
+              <span class="handover-index">03</span>
+              <h3 data-de="Passendes Format" data-en="Right format">Passendes Format</h3>
+              <p data-de="Für Website, PDF, Druck oder Bewerbung wird das Ergebnis passend vorbereitet." data-en="For website, PDF, print or application, the result is prepared in the right format.">Für Website, PDF, Druck oder Bewerbung wird das Ergebnis passend vorbereitet.</p>
+            </article>
+            <article class="handover-item">
+              <span class="handover-index">04</span>
+              <h3 data-de="Nächster Schritt" data-en="Next step">Nächster Schritt</h3>
+              <p data-de="Wenn mehr gebraucht wird, ist klar, welche Erweiterung sinnvoll ist." data-en="If more is needed, the useful next expansion is clear.">Wenn mehr gebraucht wird, ist klar, welche Erweiterung sinnvoll ist.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section quality-room" aria-labelledby="quality-title">
+        <article class="quality-copy" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Qualitätsblick" data-en="Quality lens">Qualitätsblick</p>
+            <h2 id="quality-title" data-de="Jeder Text wird auf Wirkung geprüft" data-en="Every text is checked for effect">Jeder Text wird auf Wirkung geprüft</h2>
+          </div>
+          <p data-de="Syntext betrachtet Texte nicht nur als Grammatikaufgabe. Entscheidend ist, ob sie im richtigen Moment die richtige Orientierung geben." data-en="Syntext does not treat copy as a grammar task only. What matters is whether it gives the right orientation at the right moment.">Syntext betrachtet Texte nicht nur als Grammatikaufgabe. Entscheidend ist, ob sie im richtigen Moment die richtige Orientierung geben.</p>
+        </article>
+
+        <div class="quality-list" data-reveal>
+          <article class="quality-item">
+            <span class="quality-index">01</span>
+            <div>
+              <h3 data-de="Verständnis" data-en="Understanding">Verständnis</h3>
+              <p data-de="Ist nach wenigen Sätzen klar, worum es geht und warum es relevant ist?" data-en="Is it clear after a few sentences what this is about and why it matters?">Ist nach wenigen Sätzen klar, worum es geht und warum es relevant ist?</p>
+            </div>
+          </article>
+          <article class="quality-item">
+            <span class="quality-index">02</span>
+            <div>
+              <h3 data-de="Vertrauen" data-en="Trust">Vertrauen</h3>
+              <p data-de="Klingt der Text glaubwürdig, präzise und passend zur Situation?" data-en="Does the text sound credible, precise and right for the situation?">Klingt der Text glaubwürdig, präzise und passend zur Situation?</p>
+            </div>
+          </article>
+          <article class="quality-item">
+            <span class="quality-index">03</span>
+            <div>
+              <h3 data-de="Handlung" data-en="Action">Handlung</h3>
+              <p data-de="Weiss die lesende Person, welcher nächste Schritt sinnvoll ist?" data-en="Does the reader know which next step makes sense?">Weiss die lesende Person, welcher nächste Schritt sinnvoll ist?</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section channel-map" aria-labelledby="channel-title">
+        <div class="channel-head" data-reveal>
+          <p class="section-kicker" data-de="Kanäle" data-en="Channels">Kanäle</p>
+          <h2 id="channel-title" data-de="Ein Textsystem für mehrere Kontaktpunkte" data-en="A text system for several touchpoints">Ein Textsystem für mehrere Kontaktpunkte</h2>
+          <p data-de="Menschen begegnen einer Marke selten nur an einer Stelle. Darum müssen Ton, Versprechen und Detailgrad zusammenpassen." data-en="People rarely meet a brand in one place only. Tone, promise and detail level need to work together.">Menschen begegnen einer Marke selten nur an einer Stelle. Darum müssen Ton, Versprechen und Detailgrad zusammenpassen.</p>
+        </div>
+
+        <div class="channel-layout">
+          <article class="channel-card featured" data-reveal>
+            <span class="channel-index">Website</span>
+            <div>
+              <h3 data-de="Schnell erfassbar" data-en="Easy to grasp">Schnell erfassbar</h3>
+              <p data-de="Webtexte brauchen klare Einstiege, scanbare Struktur und saubere Übergänge." data-en="Web copy needs clear openings, scannable structure and smooth transitions.">Webtexte brauchen klare Einstiege, scanbare Struktur und saubere Übergänge.</p>
+            </div>
+          </article>
+          <article class="channel-card" data-reveal>
+            <span class="channel-index">Bewerbung</span>
+            <div>
+              <h3 data-de="Persönlich und präzise" data-en="Personal and precise">Persönlich und präzise</h3>
+              <p data-de="Bewerbungen sollen Stärken sichtbar machen, ohne nach Vorlage zu klingen." data-en="Applications should make strengths visible without sounding templated.">Bewerbungen sollen Stärken sichtbar machen, ohne nach Vorlage zu klingen.</p>
+            </div>
+          </article>
+          <article class="channel-card" data-reveal>
+            <span class="channel-index">Print</span>
+            <div>
+              <h3 data-de="Ruhig und belastbar" data-en="Calm and robust">Ruhig und belastbar</h3>
+              <p data-de="Gedruckte Texte müssen auch ohne Klickpfad führen und länger Bestand haben." data-en="Printed copy needs to guide without a click path and hold up for longer.">Gedruckte Texte müssen auch ohne Klickpfad führen und länger Bestand haben.</p>
+            </div>
+          </article>
+          <aside class="channel-note" data-reveal>
+            <span class="channel-index" data-de="Gemeinsame Linie" data-en="Shared line">Gemeinsame Linie</span>
+            <p data-de="Syntext verbindet die einzelnen Kontaktpunkte so, dass sie nicht identisch, aber eindeutig zusammengehörig wirken." data-en="Syntext connects the individual touchpoints so they do not feel identical, but clearly belong together.">Syntext verbindet die einzelnen Kontaktpunkte so, dass sie nicht identisch, aber eindeutig zusammengehörig wirken.</p>
+          </aside>
         </div>
       </section>
 
