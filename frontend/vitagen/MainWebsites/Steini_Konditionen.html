@@ -1,188 +1,1526 @@
 <!DOCTYPE html>
-<html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>	
-	
+<html lang="de-CH">
 <head>
-		<meta charset="utf-8">						<!-- allgemeine deutsche Formatierung dass auch Umlaute eingegeben werden können -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
-		<title>Konditionen SYNTEXT</title>
-		<link rel="stylesheet" href="demo.css">	
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-<div class="topbar">
-      <nav class="nav">
-        <a href="index.html" class="brand">
-          <div class="brand-mark">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
-            </svg>
-          </div>
-          <span class="brand-name">SYNTEXT</span>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-de="Konditionen | SYNTEXT" data-en="Conditions & Pricing | SYNTEXT">Konditionen | SYNTEXT</title>
+  <meta name="description" content="Faire Konditionen fuer Textgestaltung, Bewerbungsunterlagen, Marketingtexte, Website-Optimierung, Drucksachen und DiMe. Erstgespraech kostenlos, Offerte nach Aufwand.">
+  <meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhoehen, Suchmaschinen Ranking"/> 
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --ai-purple: #6366f1;
+      --ai-violet: #8b5cf6;
+      --ai-blue: #2563eb;
+      --ai-teal: #0f766e;
+      --ai-cyan: #0ea5e9;
+
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
+
+      /* Mapping previous colors for backwards compatibility */
+      --ink: var(--text);
+      --forest: var(--primary);
+      --forest-2: var(--primary2);
+      --paper: var(--bg);
+      --panel: var(--surface);
+      --stone: var(--accent-soft);
+      --stone-2: #e9dcc5;
+      --brass: var(--accent);
+      --teal: var(--ai-teal);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="page"] {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible,
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before {
+      top: -6px;
+    }
+
+    .menu-toggle span::after {
+      top: 6px;
+    }
+
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0;
+    }
+
+    /* Custom Hero Visual Stage Styling */
+    .hero-visual {
+      position: relative;
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .visual-stage {
+      position: relative;
+      width: min(100%, 560px);
+      height: 420px;
+      will-change: transform;
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 26px;
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 22px 70px rgba(17, 24, 39, 0.10);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .floating-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 80px rgba(17, 24, 39, 0.15);
+    }
+
+    /* Konditionen Custom Visual Cards */
+    .consultation-card {
+      left: -30px;
+      top: 20px;
+      width: 350px;
+      padding: 16px;
+      transform: rotate(-1.5deg);
+      z-index: 5;
+    }
+
+    .consult-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+    }
+
+    .consult-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 11.5px;
+      font-weight: 600;
+    }
+
+    .price-free {
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--success);
+      background: #e6f4ea;
+      padding: 2px 8px;
+      border-radius: 99px;
+    }
+
+    .calculator-card {
+      right: -20px;
+      top: -10px;
+      width: 260px;
+      padding: 16px;
+      transform: rotate(2deg);
+      z-index: 4;
+    }
+
+    .calc-header {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--brass);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .calc-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: var(--text);
+      margin-bottom: 6px;
+    }
+
+    .calc-line.total {
+      border-top: 1px solid var(--line);
+      padding-top: 8px;
+      margin-top: 8px;
+      font-weight: 800;
+    }
+
+    .balance-card {
+      left: -40px;
+      top: 220px;
+      width: 270px;
+      padding: 16px;
+      transform: rotate(1deg);
+      z-index: 7;
+    }
+
+    .balance-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .balance-metric {
+      margin-bottom: 8px;
+    }
+    .metric-label {
+      font-size: 9.5px;
+      font-weight: 700;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+    .metric-bar {
+      height: 5px;
+      background: #f1f5f9;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .metric-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .winwin-badge {
+      margin-top: 8px;
+      display: inline-flex;
+      font-size: 9px;
+      font-weight: 800;
+      color: #fff;
+      background: var(--ai-teal);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .tier-card {
+      right: -30px;
+      top: 200px;
+      width: 240px;
+      padding: 16px;
+      transform: rotate(-2deg);
+      z-index: 6;
+    }
+
+    .tier-header {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .tier-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+    .tier-option.selected {
+      color: var(--primary);
+      font-weight: 700;
+    }
+    
+    .tier-check {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 1.5px solid var(--line);
+      display: grid;
+      place-items: center;
+      font-size: 8px;
+    }
+
+    .tier-option.selected .tier-check {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--accent);
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    .float-anim-1 { animation: float1 6s ease-in-out infinite; }
+    .float-anim-2 { animation: float2 7s ease-in-out infinite; }
+
+    .hero {
+      width: min(1320px, calc(100% - 32px));
+      min-height: calc(100svh - 76px);
+      margin: 0 auto;
+      padding: 54px 0 72px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(420px, 1fr);
+      align-items: center;
+      gap: 46px;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 660px;
+      min-width: 0;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #1c2724 20%, #b99768 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 15ch;
+      margin-bottom: 24px;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+    }
+
+    h1 span {
+      display: block;
+    }
+
+    .hero-lede {
+      max-width: 620px;
+      margin-bottom: 30px;
+      color: #34413d;
+      font-size: clamp(1.06rem, 2vw, 1.28rem);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .hero-actions,
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 13px 17px;
+      font-weight: 800;
+      line-height: 1;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: #fffaf0;
+      box-shadow: 0 18px 42px rgba(15, 59, 51, 0.22);
+    }
+
+    .btn-secondary {
+      border-color: rgba(15, 59, 51, 0.18);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--forest);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(280px, 0.5fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 780px;
+      margin-bottom: 0;
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      font-weight: 800;
+    }
+
+    .section-header p,
+    .section-intro {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .section-alt-bg {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.45);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .statement {
+      display: grid;
+      grid-template-columns: minmax(0, 0.62fr) minmax(280px, 0.38fr);
+      gap: 28px;
+      align-items: stretch;
+      padding: 42px 0;
+    }
+
+    .statement h2 {
+      font-size: clamp(2.3rem, 6vw, 5.6rem);
+    }
+
+    .statement-copy {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .price-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 380px;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .price-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(185, 151, 104, 0.4);
+      box-shadow: var(--shadow);
+    }
+
+    .price-card-header h3 {
+      margin: 0 0 6px;
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .price-tag {
+      font-size: clamp(1.6rem, 3vw, 2.2rem);
+      font-weight: 800;
+      color: var(--accent);
+      margin-bottom: 18px;
+    }
+
+    .price-card p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.55;
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+
+    .package-list {
+      list-style: none;
+      padding-left: 0;
+      margin: 0 0 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .package-list li {
+      position: relative;
+      padding-left: 18px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .package-list li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .price-card .btn {
+      width: 100%;
+      font-size: 0.88rem;
+      padding: 10px 14px;
+      min-height: 42px;
+    }
+
+    .quote-section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 68px 0;
+      text-align: center;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .quote-text {
+      font-size: clamp(1.8rem, 4vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.1;
+      color: var(--primary);
+      margin-bottom: 18px;
+      letter-spacing: -0.04em;
+    }
+
+    .quote-author {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .closing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.55fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .closing-copy {
+      border-top: 1px solid var(--line);
+      padding-top: 34px;
+    }
+
+    .closing-copy p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .cta-block {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      min-height: 350px;
+      padding: 28px;
+      background:
+        linear-gradient(145deg, rgba(15, 59, 51, 0.96), rgba(25, 83, 72, 0.92)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .cta-block .panel-label,
+    .cta-block p {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .cta-block h3 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .cta-block .btn {
+      width: fit-content;
+      background: #fffaf0;
+      color: var(--forest);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 34px;
+      }
+
+      h1 {
+        max-width: 12ch;
+      }
+
+      .hero-visual {
+        min-height: 480px;
+        padding: 24px 0;
+      }
+
+      .visual-stage {
+        width: 100%;
+        max-width: 360px;
+        height: 360px;
+        margin: 0 auto;
+      }
+
+      .consultation-card {
+        left: 0px;
+        top: 10px;
+        width: 220px;
+        transform: translateY(0) rotate(-1deg);
+      }
+
+      .calculator-card {
+        right: 0px;
+        top: 20px;
+        width: 150px;
+        transform: none;
+      }
+
+      .balance-card {
+        left: -10px;
+        top: auto;
+        bottom: 10px;
+        width: 200px;
+        transform: none;
+      }
+
+      .tier-card {
+        right: -10px;
+        top: auto;
+        bottom: 30px;
+        width: 180px;
+        transform: none;
+      }
+
+      .section-header,
+      .statement,
+      .closing-grid,
+      .pricing-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body,
+      main {
+        max-width: 100vw;
+      }
+
+      .topbar {
+        max-width: 100vw;
+      }
+
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .visual-stage {
+        transform: scale(0.85);
+        transform-origin: center center;
+        margin: -20px auto;
+      }
+
+      .hero-visual {
+        min-height: 320px;
+      }
+
+      .hero,
+      .section,
+      .footer-inner {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+      }
+
+      .hero {
+        padding-bottom: 48px;
+        gap: 28px;
+      }
+
+      h1 {
+        max-width: calc(100vw - 32px);
+        font-size: clamp(2.2rem, 9.5vw, 2.65rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
+        overflow-wrap: break-word;
+      }
+
+      .hero-copy,
+      .hero-lede {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+        min-width: 0;
+      }
+
+      .hero-lede {
+        width: min(calc(100vw - 42px), 31ch);
+        max-width: min(calc(100vw - 42px), 31ch);
+      }
+
+      .section {
+        padding: 62px 0;
+      }
+
+      .price-card,
+      .cta-block {
+        min-height: auto;
+        padding: 24px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms" aria-current="page">Konditionen</a>
+          <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
 
-        <div class="nav-links" id="nav-links">
-          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
-          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
-          <a href="Steini_About.html" class="nav-item">About</a>
-          <a href="Steini_Shop.html" class="nav-item">Shop</a>
-          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
-          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
         </div>
       </nav>
-    </div>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
-        const links = document.getElementById('nav-links');
+    </header>
 
-        if (btn && links) {
-          btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
-            links.classList.toggle('open');
-          });
-        }
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy" data-reveal>
+          <p class="eyebrow fade-up" style="animation-delay: 0.1s;" data-de="KONDITIONEN" data-en="CONDITIONS">KONDITIONEN</p>
+          <h1 id="hero-title">
+            <span class="fade-up" style="animation-delay: 0.2s;" data-de="Faire Preise für" data-en="Fair prices for">Faire Preise für</span>
+            <span class="fade-up text-gradient" style="animation-delay: 0.3s;" data-de="klare Leistungen." data-en="clear services.">klare Leistungen.</span>
+          </h1>
+          <p class="hero-lede fade-up" style="animation-delay: 0.5s;" data-de="Textgestaltung hängt stark vom Bedürfnis des Klienten ab. Deshalb beginnt jedes Projekt mit einem kostenlosen Erstgespräch, in dem Bedarf, Umfang und Aufwand geklärt werden." data-en="Text work depends strongly on the client’s needs. That is why every project starts with a free initial consultation to clarify requirements, scope and effort.">Textgestaltung hängt stark vom Bedürfnis des Klienten ab. Deshalb beginnt jedes Projekt mit einem kostenlosen Erstgespräch, in dem Bedarf, Umfang und Aufwand geklärt werden.</p>
+          <div class="hero-actions fade-up" style="animation-delay: 0.6s;">
+            <a class="btn btn-primary" href="Steini_Kontakt.html">
+              <span data-de="Kostenloses Erstgespräch anfragen" data-en="Request a free consultation">Kostenloses Erstgespräch anfragen</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="Steini_Dienstleistung.html">
+              <span data-de="Leistungen ansehen" data-en="View services">Leistungen ansehen</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal fade-up" style="animation-delay: 0.8s;" data-reveal>
+          <div class="visual-stage">
+            
+            <!-- Mockup Card 1: Free Consultation -->
+            <div class="floating-card consultation-card float-anim-1">
+              <div class="consult-header" data-de="Erstgespräch / Kennenlernen" data-en="Initial Consultation">Erstgespräch / Kennenlernen</div>
+              <div class="consult-row">
+                <span data-de="Dauer: ca. 30 Minuten" data-en="Duration: approx. 30 mins">Dauer: ca. 30 Minuten</span>
+                <span class="price-free" data-de="CHF 0.00" data-en="CHF 0.00">CHF 0.00</span>
+              </div>
+            </div>
+
+            <!-- Mockup Card 2: Calculator Card -->
+            <div class="floating-card calculator-card float-anim-2" style="animation-delay: -3s;">
+              <div class="calc-header" data-de="Kostenschätzung" data-en="Estimate">Kostenschätzung</div>
+              <div class="calc-line">
+                <span data-de="Page-Upgrade" data-en="Page-Upgrade">Page-Upgrade</span>
+                <span>CHF 150.00</span>
+              </div>
+              <div class="calc-line">
+                <span data-de="Korrektorat" data-en="Proofreading">Korrektorat</span>
+                <span data-de="Inklusive" data-en="Included">Inklusive</span>
+              </div>
+              <div class="calc-line total">
+                <span>Total</span>
+                <span>CHF 150.00</span>
+              </div>
+            </div>
+
+            <!-- Mockup Card 3: Balance Graph -->
+            <div class="floating-card balance-card float-anim-1" style="animation-delay: -1.5s;">
+              <div class="balance-header" data-de="Win-Win Abgleich" data-en="Win-Win Alignment">Win-Win Abgleich</div>
+              <div class="balance-metric">
+                <div class="metric-label" data-de="Nutzen für Sie" data-en="Value to Client">Nutzen für Sie</div>
+                <div class="metric-bar"><div class="metric-fill" style="width: 95%;"></div></div>
+              </div>
+              <div class="balance-metric">
+                <div class="metric-label" data-de="Aufwanddeckung" data-en="Cost Coverage">Aufwanddeckung</div>
+                <div class="metric-bar"><div class="metric-fill" style="width: 90%;"></div></div>
+              </div>
+              <span class="winwin-badge">Win-Win</span>
+            </div>
+
+            <!-- Mockup Card 4: Tier Option -->
+            <div class="floating-card tier-card float-anim-2" style="animation-delay: -2.5s;">
+              <div class="tier-header" data-de="Bewerbungs-Kit Tiers" data-en="CV Kit Tiers">Bewerbungs-Kit Tiers</div>
+              <div class="tier-option">
+                <div class="tier-check"></div>
+                <span>Light</span>
+              </div>
+              <div class="tier-option selected">
+                <div class="tier-check">✓</div>
+                <span>Basic (CHF 150)</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section statement" aria-labelledby="pricing-philosophy-title">
+        <div data-reveal>
+          <p class="section-kicker" data-de="Kalkulation" data-en="Calculation">Kalkulation</p>
+          <h2 id="pricing-philosophy-title" data-de="Warum es keine Einheitslösung gibt" data-en="Why there is no one-size-fits-all price">Warum es keine Einheitslösung gibt</h2>
+        </div>
+        <div class="statement-copy" data-reveal>
+          <p data-de="Textgestaltung und der damit verbundene Aufwand hängen stark vom Bedürfnis des Klienten ab. Eine fixe Preisgestaltung ist daher schwierig zu definieren." data-en="Text design and the related effort depend strongly on the client’s needs. A fixed price is therefore difficult to define.">Textgestaltung und der damit verbundene Aufwand hängen stark vom Bedürfnis des Klienten ab. Eine fixe Preisgestaltung ist daher schwierig zu definieren.</p>
+          <p data-de="Im kostenlosen Erstgespräch werden Bedarf und Aufwand ausgewertet. Darauf basierend entsteht eine passende Offerte. Eine klare Kommunikation ist ausschlaggebend für ein Resultat, das Erwartungen, Zielgruppe und Tonalität zusammenbringt." data-en="In the free initial consultation, requirements and effort are evaluated. Based on this, a suitable offer is created. Clear communication is essential for a result that brings expectations, audience and tone together.">Im kostenlosen Erstgespräch werden Bedarf und Aufwand ausgewertet. Darauf basierend entsteht eine passende Offerte. Eine klare Kommunikation ist ausschlaggebend für ein Resultat, das Erwartungen, Zielgruppe und Tonalität zusammenbringt.</p>
+          <p data-de="Wir respektieren unser Gegenüber, gehen auf Bedürfnisse ein und achten auf eine faire Preisgestaltung für alle beteiligten Parteien." data-en="We respect the other party, respond to their needs and aim for fair pricing for everyone involved.">Wir respektieren unser Gegenüber, gehen auf Bedürfnisse ein und achten auf eine faire Preisgestaltung für alle beteiligten Parteien.</p>
+        </div>
+      </section>
+
+      <div class="section-alt-bg">
+        <section class="section" aria-labelledby="clarification-title">
+          <div class="section-header" data-reveal>
+            <div>
+              <p class="section-kicker" data-de="Vorbereitung" data-en="Preparation">Vorbereitung</p>
+              <h2 id="clarification-title" data-de="Was wir vor einer Offerte klären" data-en="What we clarify before an offer">Was wir vor einer Offerte klären</h2>
+            </div>
+            <p data-de="Damit die Offerte genau zu deinem Projekt passt, definieren wir im Vorfeld vier entscheidende Eckpfeiler." data-en="So that the offer fits your project perfectly, we define four crucial pillars in advance.">Damit die Offerte genau zu deinem Projekt passt, definieren wir im Vorfeld vier entscheidende Eckpfeiler.</p>
+          </div>
+
+          <div class="pricing-grid" style="grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;">
+            <article class="price-card" style="min-height: auto; padding: 24px;" data-reveal>
+              <strong style="color: var(--accent); font-weight: 800; font-size: 0.85rem;" data-de="01. BEDARF" data-en="01. NEED">01. BEDARF</strong>
+              <p style="font-size: 0.88rem; margin: 8px 0 0;" data-de="Was genau wird benötigt und welche Erwartungen soll der fertige Text erfüllen?" data-en="What exactly is required and what expectations should the finished text meet?">Was genau wird benötigt und welche Erwartungen soll der fertige Text erfüllen?</p>
+            </article>
+            <article class="price-card" style="min-height: auto; padding: 24px;" data-reveal>
+              <strong style="color: var(--accent); font-weight: 800; font-size: 0.85rem;" data-de="02. GRENZEN" data-en="02. BOUNDARIES">02. GRENZEN</strong>
+              <p style="font-size: 0.88rem; margin: 8px 0 0;" data-de="Welche Formulierungsmuster oder Stile sollen im Projekt vermieden werden?" data-en="Which wording styles or phrasing habits should be avoided in the project?">Welche Formulierungsmuster oder Stile sollen im Projekt vermieden werden?</p>
+            </article>
+            <article class="price-card" style="min-height: auto; padding: 24px;" data-reveal>
+              <strong style="color: var(--accent); font-weight: 800; font-size: 0.85rem;" data-de="03. BOTSCHAFT" data-en="03. MESSAGE">03. BOTSCHAFT</strong>
+              <p style="font-size: 0.88rem; margin: 8px 0 0;" data-de="Welche Kernaussage und welche Tonalität sollen vermittelt werden?" data-en="What key message and what tone of voice should be communicated?">Welche Kernaussage und welche Tonalität sollen vermittelt werden?</p>
+            </article>
+            <article class="price-card" style="min-height: auto; padding: 24px;" data-reveal>
+              <strong style="color: var(--accent); font-weight: 800; font-size: 0.85rem;" data-de="04. ZIELGRUPPE" data-en="04. AUDIENCE">04. ZIELGRUPPE</strong>
+              <p style="font-size: 0.88rem; margin: 8px 0 0;" data-de="Welche Menschen und Empfänger sollen mit dem Text erreicht werden?" data-en="Which people or recipients are supposed to be reached with the text?">Welche Menschen und Empfänger sollen mit dem Text erreicht werden?</p>
+            </article>
+          </div>
+        </section>
+      </div>
+
+      <section class="section" aria-labelledby="pricing-overview-title">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Preise" data-en="Prices">Preise</p>
+            <h2 id="pricing-overview-title" data-de="Womit Sie ungefähr rechnen können" data-en="Pricing Overview">Womit Sie ungefähr rechnen können</h2>
+          </div>
+          <p data-de="Die folgenden Preise dienen als Orientierung. Der definitive Preis hängt vom Umfang, Ausgangsmaterial und gewünschten Ergebnis ab." data-en="The following prices serve as a guide. The final price depends on scope, source material and desired outcome.">Die folgenden Preise dienen als Orientierung. Der definitive Preis hängt vom Umfang, Ausgangsmaterial und gewünschten Ergebnis ab.</p>
+        </div>
+
+        <div class="pricing-grid">
+          
+          <!-- Card 1: Page-Upgrade -->
+          <div class="price-card" data-reveal>
+            <div class="price-card-header">
+              <h3 data-de="Page-Upgrade" data-en="Page-Upgrade">Page-Upgrade</h3>
+              <div class="price-tag">CHF 100.00 – 300.00</div>
+              <p data-de="Für einfaches Korrekturlesen, Webtexte, Bücher oder umfassenderes Lektorat mit stilistischer Überarbeitung." data-en="For simple proofreading, web copy, books or comprehensive editing with stylistic rewriting.">Für einfaches Korrekturlesen, Webtexte, Bücher oder umfassenderes Lektorat mit stilistischer Überarbeitung.</p>
+            </div>
+            <a class="btn btn-secondary" href="Steini_Kontakt.html">
+              <span data-de="Page-Upgrade anfragen" data-en="Request Page-Upgrade">Page-Upgrade anfragen</span>
+            </a>
+          </div>
+
+          <!-- Card 2: Bewerbungs-Kit -->
+          <div class="price-card" data-reveal>
+            <div class="price-card-header">
+              <h3 data-de="Bewerbungs-Kit" data-en="Bewerbungs-Kit">Bewerbungs-Kit</h3>
+              <div class="price-tag"><span style="font-size: 0.95rem; font-weight: 500; color: var(--muted);" data-de="ab" data-en="from">ab</span> CHF 100.00</div>
+              <p data-de="Erstellung oder Redigierung von Lebenslauf (CV) und Motivationsschreiben." data-en="Creation or editing of resume (CV) and cover letter.">Erstellung oder Redigierung von Lebenslauf (CV) und Motivationsschreiben.</p>
+              <ul class="package-list">
+                <li>Light: CHF 100.00</li>
+                <li>Basic: CHF 150.00</li>
+                <li>Premium: CHF 250.00</li>
+              </ul>
+            </div>
+            <a class="btn btn-secondary" href="Steini_Kontakt.html">
+              <span data-de="Bewerbungs-Kit anfragen" data-en="Request Bewerbungs-Kit">Bewerbungs-Kit anfragen</span>
+            </a>
+          </div>
+
+          <!-- Card 3: Werbe- & Marketingtexte -->
+          <div class="price-card" data-reveal>
+            <div class="price-card-header">
+              <h3 data-de="Werbe- & Marketingtexte" data-en="Werbe- & Marketingtexte">Werbe- & Marketingtexte</h3>
+              <div class="price-tag">CHF 100.00 – 600.00</div>
+              <p data-de="Erstellung oder Redigierung von Produktbeschreibungen, Werbetexten und weiteren Marketingtexten." data-en="Creation or editing of product descriptions, promotional copy and other marketing texts.">Erstellung oder Redigierung von Produktbeschreibungen, Werbetexten und weiteren Marketingtexten.</p>
+              <ul class="package-list">
+                <li>Impact Copy 1: CHF 100.00 – 600.00</li>
+                <li>Impact Copy 2: CHF 100.00 – 600.00</li>
+              </ul>
+            </div>
+            <a class="btn btn-secondary" href="Steini_Kontakt.html">
+              <span data-de="Impact Copy anfragen" data-en="Request Impact Copy">Impact Copy anfragen</span>
+            </a>
+          </div>
+
+          <!-- Card 4: Webseiten & SEO -->
+          <div class="price-card" data-reveal>
+            <div class="price-card-header">
+              <h3 data-de="Webseiten & SEO" data-en="Webseiten & SEO">Webseiten & SEO</h3>
+              <div class="price-tag">CHF 100.00 – 600.00</div>
+              <p data-de="On-Page-Optimierung, Zielgruppenklärung und Definition von Schlüsselwörtern für eine bessere Struktur, Verständlichkeit und Wirkung der Website." data-en="On-page optimisation, audience clarification and key term definitions for better structure, clarity and web impact.">On-Page-Optimierung, Zielgruppenklärung und Definition von Schlüsselwörtern für eine bessere Struktur, Verständlichkeit und Wirkung der Website.</p>
+              <ul class="package-list">
+                <li>ON-PAGE Optimierung: CHF 100.00 – 600.00</li>
+              </ul>
+            </div>
+            <a class="btn btn-secondary" href="Steini_Kontakt.html">
+              <span data-de="ON-PAGE Optimierung anfragen" data-en="Request ON-PAGE Optimisation">ON-PAGE Optimierung anfragen</span>
+            </a>
+          </div>
+
+          <!-- Card 5: Drucksachen -->
+          <div class="price-card" data-reveal>
+            <div class="price-card-header">
+              <h3 data-de="Drucksachen" data-en="Print Materials">Drucksachen</h3>
+              <div class="price-tag" data-de="CHF variiert" data-en="CHF varies">CHF variiert</div>
+              <p data-de="Auf Wunsch organisieren wir den Druck. Die Kosten werden individuell addiert und richten sich nach Gestaltungsaufwand und Druckoptionen." data-en="Upon request, we arrange the print process. Costs are added individually and depend on design effort and print specifications.">Auf Wunsch organisieren wir den Druck. Die Kosten werden individuell addiert und richten sich nach Gestaltungsaufwand und Druckoptionen.</p>
+              <ul class="package-list">
+                <li data-de="Anzahl Seiten & Exemplare" data-en="Page & copy counts">Anzahl Seiten & Exemplare</li>
+                <li data-de="Umfang & Gestaltungsaufwand" data-en="Scope & design effort">Umfang & Gestaltungsaufwand</li>
+                <li data-de="Optionen wie Farbe oder s/w" data-en="Options like color or black/white">Optionen wie Farbe oder s/w</li>
+              </ul>
+            </div>
+            <a class="btn btn-secondary" href="Steini_Kontakt.html">
+              <span data-de="Drucksachen anfragen" data-en="Inquire about Print">Drucksachen anfragen</span>
+            </a>
+          </div>
+
+          <!-- Card 6: DiMe -->
+          <div class="price-card" data-reveal style="border-color: var(--accent);">
+            <div class="price-card-header">
+              <h3 data-de="DiMe" data-en="DiMe">DiMe</h3>
+              <div class="price-tag">CHF 2750.00</div>
+              <p data-de="DiMe beinhaltet die Konkretisierung unter regelmässigem Kontaktaustausch, eine eigene Webdomain und Aktualisierungen nach Wunsch." data-en="DiMe includes project definition with regular exchange of contacts, an own web domain and updates on request.">DiMe beinhaltet die Konkretisierung unter regelmässigem Kontaktaustausch, eine eigene Webdomain und Aktualisierungen nach Wunsch.</p>
+              <ul class="package-list">
+                <li data-de="Inklusive 100 Visitenkarten" data-en="Includes 100 business cards">Inklusive 100 Visitenkarten</li>
+                <li data-de="Erste Domain-Jahresgebühr" data-en="First domain annual fee">Erste Domain-Jahresgebühr</li>
+                <li data-de="Laufende Updates" data-en="Continuous updates">Laufende Updates</li>
+              </ul>
+            </div>
+            <a class="btn btn-primary" href="Steini_Kontakt.html">
+              <span data-de="DiMe Projekt starten" data-en="Start DiMe Project">DiMe Projekt starten</span>
+            </a>
+          </div>
+
+        </div>
+
+        <div style="margin-top: 34px; text-align: center;" data-reveal>
+          <span style="font-size: 0.95rem; color: var(--muted);" data-de="Für eine detaillierte Auflistung der Leistungen finden Sie die Übersicht im Bereich Dienstleistung / Produktportfolio." data-en="For a detailed list of services, you can find the overview in our service / product portfolio section.">Für eine detaillierte Auflistung der Leistungen finden Sie die Übersicht im Bereich Dienstleistung / Produktportfolio.</span><br>
+          <a href="Steini_Dienstleistung.html" style="color: var(--forest); font-weight: 800; display: inline-flex; align-items: center; gap: 6px; margin-top: 8px;">
+            <span data-de="Produktportfolio ansehen" data-en="View product portfolio">Produktportfolio ansehen</span>
+            <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" style="stroke:currentColor; stroke-width:2; fill:none;"><path d="M5 12h14m-6-6 6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </div>
+      </section>
+
+      <section class="quote-section" data-reveal>
+        <blockquote style="margin: 0;">
+          <p class="quote-text" data-de="„Was nichts kostet, ist nichts wert.“" data-en="“What costs nothing is worth nothing.”">„Was nichts kostet, ist nichts wert.“</p>
+          <footer class="quote-author" data-de="Albert Einstein zugeschrieben" data-en="Attributed to Albert Einstein">Albert Einstein zugeschrieben</footer>
+        </blockquote>
+      </section>
+
+      <section class="section closing-grid" aria-labelledby="closing-title">
+        <div class="closing-copy" data-reveal>
+          <p class="section-kicker" data-de="Win-Win" data-en="Win-Win">Win-Win</p>
+          <h2 id="closing-title" data-de="Etwas Passendes dabei — oder Fragen?" data-en="Something suitable — or questions?">Etwas Passendes dabei — oder Fragen?</h2>
+          <p data-de="Schreiben Sie uns kurz, was Sie brauchen. Im kostenlosen Erstgespräch klären wir den passenden Umfang. Faire Preise für Ihre Bedürfnisse und unsere Kostendeckung resultieren in einer Win-Win-Situation." data-en="Send us a short message about what you need. In the free initial consultation, we clarify the suitable scope. Fair prices for your needs and our cost coverage result in a win-win situation.">Schreiben Sie uns kurz, was Sie brauchen. Im kostenlosen Erstgespräch klären wir den passenden Umfang. Faire Preise für Ihre Bedürfnisse und unsere Kostendeckung resultieren in einer Win-Win-Situation.</p>
+        </div>
+
+        <aside class="cta-block" data-reveal>
+          <p class="panel-label" data-de="Anfrage" data-en="Inquiry">Anfrage</p>
+          <h3 data-de="Erstgespräch?" data-en="Initial Consult?">Erstgespräch?</h3>
+          <p data-de="Gerne klären wir dein Anliegen persönlich. Schicke uns deine Anfrage über das Kontaktformular." data-en="We gladly clarify your concerns personally. Send us your inquiry via the contact form.">Gerne klären wir dein Anliegen persönlich. Schicke uns deine Anfrage über das Kontaktformular.</p>
+          <a class="btn" href="Steini_Kontakt.html">
+            <span data-de="Kontaktformular öffnen" data-en="Open contact form">Kontaktformular öffnen</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const translatable = document.querySelectorAll("[data-de][data-en]");
+      const langButtons = document.querySelectorAll("[data-lang-switch]");
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#site-menu");
+      const revealItems = document.querySelectorAll("[data-reveal]");
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "en" ? "en" : "de";
+        root.lang = nextLang === "en" ? "en" : "de-CH";
+        translatable.forEach((node) => {
+          node.textContent = node.dataset[nextLang];
+        });
+        langButtons.forEach((button) => {
+          const active = button.dataset.langSwitch === nextLang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        localStorage.setItem("syntext-language", nextLang);
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyLanguage(button.dataset.langSwitch));
       });
-    </script>
-		
-<main>
-	<article>
-		<h1 id="typewriter"></h1>
 
-<script>
-  const text = "Konditionen";
-  const target = document.getElementById("typewriter");
-  let i = 0;
+      menuToggle?.addEventListener("click", () => {
+        const open = !menu.classList.contains("is-open");
+        menu.classList.toggle("is-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
 
-  function typeWriter() {
-    if (i < text.length) {
-      target.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typeWriter, 100); // Geschwindigkeit in ms
-    }
-  }
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("is-open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
 
-  typeWriter(); // Start
-</script>
-<p>Textgestaltung und der damit verbundene Aufwand ist eine komplizierte Angelegenheit und hängt stark vom Bedürfnis des Klienten ab. Eine fixe Preisgestaltung ist daher schwierig zu definieren. 
-		Das Erstgespräch ist gratis - es werden Bedarf und Aufwand ausgewertet und darauf basierend eine Offerte erstellt. Eine klare Kommunikation ist ausschlaggebend für das passende Resultat. 
-		Wir respektieren unser Gegenüber, gehen auf seine Bedürfnisse ein und garantieren eine für alle beteiligten Parteien faire Preisgestaltung.</p>
-		<p>Wichtige Punkte die wir hierbei bearbeiten und festhalten:</p>
-			<ul>		
-				<li>Was wird benötigt, was wird erwartet?</li> 
-				<li>Was soll vermieden werden?</li>
-				<li>Welche Botschaft, welche Tonalität?</li>
-				<li>Welche Zielgruppe soll erreicht werden?</li>
-			</ul>
-			<p>Man kann von folgenden ca.-Preisen ausgehen</p>
-<br>
-<hr>
-			<h3>🛠️ Page-Upgrade</h3>
-			<p>Beinhaltet:</p>
-			<ul>		
-				<li>Einfaches Korrekturlesen von Webtexten oder Büchern</li>
-				<li>Umfassendes Lektorat - stilistische Überarbeitung</li>
-			</ul>
-			<p>Abrechnung variiert</p>
-			<p>zwischen CHF 100.00 - CHF 300.00</p>
-			<p>Für eine detaillierte Auflistung siehe Dienstleistung/Produktportfolio</p>
-		<p><a href="Steini_Kontakt.html"><span class="grautext">Page-Upgrade jetzt bestellen</span></a></p>
-<br>
-<br>
-			<h3>🧩 Bewerbungs-Kit</h3>
-			<p>Erstellung oder Redigierung des CV und Motivationsschreiben</p>
-			<ul>		
-				<li>Light: CHF 100.00</li>
-				<li>Basic: CHF 150.00</li>
-				<li>Premium: CHF: 250.00</li>
-			</ul>
-			<p>Für eine detaillierte Auflistung siehe Dienstleistung/Produktportfolio</p>
-		<p><a href="Steini_Kontakt.html"><span class="grautext">Bewerbungs-Kit jetzt bestellen</span></a></p>
-<br>
-<br>
-			<h3>📣 Werbe- & Marketingtexte</h3>
-			<p>Erstellung oder Redigierung von Produktbeschreibungen, Werbetexten etc.. Je nach Projektumfang:</p>
-			<ul>		
-				<li>Impact Copy 1: CHF 100.00 - CHF 600.00</li>
-				<li>Impact Copy 2: CHF 100.00 - CHF 600.00</li>
-			</ul>
-			<p>Für eine detaillierte Auflistung siehe Dienstleistung/Produktportfolio</p>
-		<p><a href="Steini_Kontakt.html"><span class="grautext">Impact Copy jetzt bestellen</span></a></p>
-<br>
-<br>
-			<h3>🎯 Webseiten & SEO</h3>
-			<p>Suchmaschinenoptimierung auf der Webseite. Definierung von Zielgruppen und Schlüsselwörtern. Je nach Projektumfang:</p>
-			<ul>		
-				<li>ON-PAGE Optimierung: CHF 100.00 - CHF 600.00</li>
-			</ul>
-			<p>Für eine detaillierte Auflistung siehe Dienstleistung/Produktportfolio</p>
-		<p><a href="Steini_Kontakt.html"><span class="grautext">ON-PAGE Optimierung jetzt bestellen</span></a></p>
-<br>
-<br>			
-			<h3>🖼️ Drucksachen</h3>
-			<p>Auf Wunsch organisieren wir den Druck:</p>
-			<ul>		
-				<li>Anzahl Seiten</li>
-				<li>Anzahl Exemplare</li>
-				<li>Umfang und Gestaltungsaufwand (Farbe, s/w etc.)</li>
-			</ul>
-			<p>Kosten werden individuell addiert</p>
-			<p>CHF variiert</p>		
-<br>
-<br>
-			<h3>💻 DiMe</h3>
-			<p>Beinhaltet:</p>
-			<ul>		
-				<li>Konkretisierung unter regelmässigem Kontaktaustausch</li>
-				<li>Eigene Webdomain</li>
-				<li>Aktualisierung nach Wunsch</li>
-			</ul>
-			<p>incl. 100 Visitenkarten & erste Domain Jahresgebühr</p>
-			<p>CHF 2750.00 Installationskosten</p>		
-<br>
-<br>
-<br>		
-			<p>Was passendes dabei - oder noch Fragen offen? Hier gehts zum <a target="_blank" href="Steini_Kontakt.html">Kontaktformular</a></p>
-				
-		
-	</article>
-<br>
-<br>	
-	<aside class="fullwidth">
-		<h2>"Was nichts kostet, ist nichts wert"</h2>
-		<p>Haben Väter und Grossväter schon gesagt. Das eigentliche Zitat soll von Albert Einstein stammen.  
-		Faire Preise für Ihre Bedürfnisse und unsere Kostendeckung resultieren in einer Win-Win Situation. Einverstanden?!</p>
-	</aside>
-</main>
-	<footer>
-		<p>© copyright; 2024 Syntext by Steinhardt</p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
-		<p><a target="_blank" href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
-	</footer>
-</div>
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      applyLanguage(localStorage.getItem("syntext-language") || "de");
+    })();
+  </script>
 </body>
 </html>

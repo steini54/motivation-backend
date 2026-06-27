@@ -1,176 +1,1664 @@
 <!DOCTYPE html>
-<html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>	
-	
+<html lang="de-CH">
 <head>
-		<meta charset="utf-8">														
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
-		<title>Strukturieren SYNTEXT</title>
-		<link rel="stylesheet" href="demo.css">	
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-</head>																				<!-- link zum css Stylesheet. Hier in demo.css wird alles extern festgehalten -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-de="Strukturieren | SYNTEXT" data-en="Structuring Texts | SYNTEXT">Strukturieren | SYNTEXT</title>
+  <meta name="description" content="SYNTEXT bringt Notizen, Entwuerfe und bestehende Texte in eine klare, verstaendliche und professionelle Struktur.">
+  <meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhoehen, Suchmaschinen Ranking"/> 
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --ai-purple: #6366f1;
+      --ai-violet: #8b5cf6;
+      --ai-blue: #2563eb;
+      --ai-teal: #0f766e;
+      --ai-cyan: #0ea5e9;
 
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
+
+      /* Mapping previous colors for backwards compatibility */
+      --ink: var(--text);
+      --forest: var(--primary);
+      --forest-2: var(--primary2);
+      --paper: var(--bg);
+      --panel: var(--surface);
+      --stone: var(--accent-soft);
+      --stone-2: #e9dcc5;
+      --brass: var(--accent);
+      --teal: var(--ai-teal);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="page"] {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible,
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before {
+      top: -6px;
+    }
+
+    .menu-toggle span::after {
+      top: 6px;
+    }
+
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0;
+    }
+
+    /* Custom Hero Visual Stage Styling */
+    .hero-visual {
+      position: relative;
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .visual-stage {
+      position: relative;
+      width: min(100%, 560px);
+      height: 420px;
+      will-change: transform;
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 26px;
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 22px 70px rgba(17, 24, 39, 0.10);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .floating-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 80px rgba(17, 24, 39, 0.15);
+    }
+
+    /* Gliederung / Strukturieren Custom Visual Cards */
+    .outline-card {
+      left: -30px;
+      top: 20px;
+      width: 350px;
+      padding: 16px;
+      transform: rotate(-1.5deg);
+      z-index: 5;
+    }
+
+    .outline-header {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--muted);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .outline-nodes {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      position: relative;
+    }
+
+    .outline-node {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      width: fit-content;
+      position: relative;
+      z-index: 2;
+    }
+
+    .outline-node.active {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .outline-line {
+      position: absolute;
+      left: 20px;
+      top: 15px;
+      bottom: 15px;
+      width: 2px;
+      background: var(--line);
+      z-index: 1;
+    }
+
+    .paragraph-card {
+      right: -20px;
+      top: -10px;
+      width: 260px;
+      padding: 16px;
+      transform: rotate(2deg);
+      z-index: 4;
+    }
+
+    .para-title {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--teal);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .para-blocks {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .para-block {
+      background: #f1f5f9;
+      border-radius: 6px;
+      padding: 8px;
+    }
+
+    .para-block-line {
+      height: 6px;
+      background: #cbd5e1;
+      border-radius: 3px;
+      margin-bottom: 4px;
+    }
+    .para-block-line:last-child {
+      margin-bottom: 0;
+      width: 70%;
+    }
+
+    .architecture-card {
+      left: -40px;
+      top: 220px;
+      width: 280px;
+      padding: 16px;
+      transform: rotate(1deg);
+      z-index: 7;
+    }
+
+    .arch-header {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
+
+    .arch-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .arch-item:last-child {
+      margin-bottom: 0;
+    }
+    
+    .arch-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 1px solid var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .arch-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .preset-card {
+      right: -30px;
+      top: 200px;
+      width: 240px;
+      padding: 16px;
+      transform: rotate(-2deg);
+      z-index: 6;
+    }
+
+    .preset-header {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .preset-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-soft);
+      border: 1px solid rgba(185, 151, 104, 0.3);
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    .float-anim-1 { animation: float1 6s ease-in-out infinite; }
+    .float-anim-2 { animation: float2 7s ease-in-out infinite; }
+
+    .hero {
+      width: min(1320px, calc(100% - 32px));
+      min-height: calc(100svh - 76px);
+      margin: 0 auto;
+      padding: 54px 0 72px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(420px, 1fr);
+      align-items: center;
+      gap: 46px;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 660px;
+      min-width: 0;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #1c2724 20%, #b99768 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 15ch;
+      margin-bottom: 24px;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+    }
+
+    h1 span {
+      display: block;
+    }
+
+    .hero-lede {
+      max-width: 620px;
+      margin-bottom: 30px;
+      color: #34413d;
+      font-size: clamp(1.06rem, 2vw, 1.28rem);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .hero-actions,
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 13px 17px;
+      font-weight: 800;
+      line-height: 1;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: #fffaf0;
+      box-shadow: 0 18px 42px rgba(15, 59, 51, 0.22);
+    }
+
+    .btn-secondary {
+      border-color: rgba(15, 59, 51, 0.18);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--forest);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(280px, 0.5fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 780px;
+      margin-bottom: 0;
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      font-weight: 800;
+    }
+
+    .section-header p,
+    .section-intro {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .section-alt-bg {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.45);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .statement {
+      display: grid;
+      grid-template-columns: minmax(0, 0.62fr) minmax(280px, 0.38fr);
+      gap: 28px;
+      align-items: stretch;
+      padding: 42px 0;
+    }
+
+    .statement h2 {
+      font-size: clamp(2.3rem, 6vw, 5.6rem);
+    }
+
+    .statement-copy {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .accordion-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .accordion-item {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface);
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .accordion-item:hover {
+      border-color: rgba(185, 151, 104, 0.5);
+      box-shadow: var(--soft-shadow);
+    }
+
+    .accordion-trigger {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      background: none;
+      border: none;
+      text-align: left;
+      cursor: pointer;
+      font: inherit;
+    }
+
+    .accordion-trigger h3 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .accordion-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1.5px solid var(--line);
+      display: grid;
+      place-items: center;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+      color: var(--muted);
+    }
+
+    .accordion-trigger[aria-expanded="true"] .accordion-icon {
+      transform: rotate(45deg);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .accordion-panel {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .accordion-content {
+      padding: 0 24px 24px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.6;
+    }
+
+    .accordion-content p {
+      margin-bottom: 12px;
+    }
+    .accordion-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .accent-ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 16px 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .accent-ul li {
+      position: relative;
+      padding-left: 20px;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+    .accent-ul li::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 7px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .tag-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+    
+    .tag-item {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 99px;
+      background: var(--bg);
+      color: var(--muted);
+      border: 1px solid var(--line);
+    }
+
+    .usecases-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 38px;
+    }
+
+    .usecase-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.7);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .usecase-card strong {
+      font-size: 1.15rem;
+      color: var(--primary);
+    }
+    .usecase-card span {
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .process-timeline {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+      margin-top: 38px;
+    }
+
+    .process-step {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      position: relative;
+    }
+
+    .step-num {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--accent-soft);
+      border: 1.5px solid var(--accent);
+      display: grid;
+      place-items: center;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--accent);
+    }
+
+    .process-step h4 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .process-step p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .closing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.55fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .closing-copy {
+      border-top: 1px solid var(--line);
+      padding-top: 34px;
+    }
+
+    .closing-copy p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .cta-block {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      min-height: 350px;
+      padding: 28px;
+      background:
+        linear-gradient(145deg, rgba(15, 59, 51, 0.96), rgba(25, 83, 72, 0.92)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .cta-block .panel-label,
+    .cta-block p {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .cta-block h3 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .cta-block .btn {
+      width: fit-content;
+      background: #fffaf0;
+      color: var(--forest);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 34px;
+      }
+
+      h1 {
+        max-width: 12ch;
+      }
+
+      .hero-visual {
+        min-height: 480px;
+        padding: 24px 0;
+      }
+
+      .visual-stage {
+        width: 100%;
+        max-width: 360px;
+        height: 360px;
+        margin: 0 auto;
+      }
+
+      .outline-card {
+        left: 0px;
+        top: 10px;
+        width: 220px;
+        transform: translateY(0) rotate(-1deg);
+      }
+
+      .paragraph-card {
+        right: 0px;
+        top: 20px;
+        width: 150px;
+        transform: none;
+      }
+
+      .architecture-card {
+        left: -10px;
+        top: auto;
+        bottom: 10px;
+        width: 200px;
+        transform: none;
+      }
+
+      .preset-card {
+        right: -10px;
+        top: auto;
+        bottom: 30px;
+        width: 180px;
+        transform: none;
+      }
+
+      .section-header,
+      .statement,
+      .closing-grid,
+      .usecases-grid,
+      .process-timeline {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body,
+      main {
+        max-width: 100vw;
+      }
+
+      .topbar {
+        max-width: 100vw;
+      }
+
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .visual-stage {
+        transform: scale(0.85);
+        transform-origin: center center;
+        margin: -20px auto;
+      }
+
+      .hero-visual {
+        min-height: 320px;
+      }
+
+      .hero,
+      .section,
+      .footer-inner {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+      }
+
+      .hero {
+        padding-bottom: 48px;
+        gap: 28px;
+      }
+
+      h1 {
+        max-width: calc(100vw - 32px);
+        font-size: clamp(2.2rem, 9.5vw, 2.65rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
+        overflow-wrap: break-word;
+      }
+
+      .hero-copy,
+      .hero-lede {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+        min-width: 0;
+      }
+
+      .hero-lede {
+        width: min(calc(100vw - 42px), 31ch);
+        max-width: min(calc(100vw - 42px), 31ch);
+      }
+
+      .section {
+        padding: 62px 0;
+      }
+
+      .usecase-card,
+      .cta-block,
+      .process-step {
+        min-height: auto;
+        padding: 20px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
 <body>
-<div id="holder">																	<!-- oberster Layoutcontainer in der Hierarchie. holder oder wrapper. Alles darin wird vereinheitlicht -->
-<div class="topbar">
-      <nav class="nav">
-        <a href="index.html" class="brand">
-          <div class="brand-mark">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
-            </svg>
-          </div>
-          <span class="brand-name">SYNTEXT</span>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
+          <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
 
-        <div class="nav-links" id="nav-links">
-          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
-          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
-          <a href="Steini_About.html" class="nav-item">About</a>
-          <a href="Steini_Shop.html" class="nav-item">Shop</a>
-          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
-          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
         </div>
       </nav>
-    </div>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
-        const links = document.getElementById('nav-links');
+    </header>
 
-        if (btn && links) {
-          btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
-            links.classList.toggle('open');
-          });
-        }
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy" data-reveal>
+          <p class="eyebrow fade-up" style="animation-delay: 0.1s;" data-de="STRUKTURIEREN" data-en="STRUCTURING">STRUKTURIEREN</p>
+          <h1 id="hero-title">
+            <span class="fade-up" style="animation-delay: 0.2s;" data-de="Aus Gedanken wird" data-en="Thoughts become">Aus Gedanken wird</span>
+            <span class="fade-up text-gradient" style="animation-delay: 0.3s;" data-de="ein klarer Text." data-en="clear text.">ein klarer Text.</span>
+          </h1>
+          <p class="hero-lede fade-up" style="animation-delay: 0.5s;" data-de="Eine gute Struktur führt Leser:innen sicher durch den Inhalt. SYNTEXT ordnet Notizen, Entwürfe und bestehende Texte so, dass Botschaft, Aufbau und Sprache zusammenpassen." data-en="Good structure guides readers safely through the content. SYNTEXT organises notes, drafts and existing texts so message, structure and language fit together.">Eine gute Struktur führt Leser:innen sicher durch den Inhalt. SYNTEXT ordnet Notizen, Entwürfe und bestehende Texte so, dass Botschaft, Aufbau und Sprache zusammenpassen.</p>
+          <div class="hero-actions fade-up" style="animation-delay: 0.6s;">
+            <a class="btn btn-primary" href="Steini_Kontakt.html">
+              <span data-de="Text strukturieren lassen" data-en="Structure my text">Text strukturieren lassen</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="#aufbau">
+              <span data-de="Aufbau ansehen" data-en="View structure">Aufbau ansehen</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal fade-up" style="animation-delay: 0.8s;" data-reveal>
+          <div class="visual-stage">
+            
+            <!-- Mockup Card 1: Outline Tree Card -->
+            <div class="floating-card outline-card float-anim-1">
+              <div class="outline-header" data-de="Textaufbau / Gliederung" data-en="Text Outline">Textaufbau / Gliederung</div>
+              <div class="outline-nodes">
+                <div class="outline-line"></div>
+                <div class="outline-node" data-de="1. Einleitung" data-en="1. Introduction">1. Einleitung</div>
+                <div class="outline-node active" data-de="2. Hauptteil" data-en="2. Main Part">2. Hauptteil</div>
+                <div class="outline-node" data-de="3. Schluss" data-en="3. Conclusion">3. Schluss</div>
+              </div>
+            </div>
+
+            <!-- Mockup Card 2: Paragraph Layout Card -->
+            <div class="floating-card paragraph-card float-anim-2" style="animation-delay: -3s;">
+              <div class="para-title" data-de="Strukturierung" data-en="Structuring">Strukturierung</div>
+              <div class="para-blocks">
+                <div class="para-block">
+                  <div class="para-block-line"></div>
+                  <div class="para-block-line"></div>
+                </div>
+                <div class="para-block" style="border-left: 2.5px solid var(--accent);">
+                  <div class="para-block-line"></div>
+                  <div class="para-block-line"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mockup Card 3: Architecture Checklist -->
+            <div class="floating-card architecture-card float-anim-1" style="animation-delay: -1.5s;">
+              <div class="arch-header" data-de="Text-Architektur" data-en="Text Architecture">Text-Architektur</div>
+              <div class="arch-item">
+                <div class="arch-dot">✓</div>
+                <div class="arch-label">Typografie</div>
+              </div>
+              <div class="arch-item">
+                <div class="arch-dot">✓</div>
+                <div class="arch-label">Orthografie</div>
+              </div>
+              <div class="arch-item">
+                <div class="arch-dot">✓</div>
+                <div class="arch-label" data-de="Grammatik & Syntax" data-en="Grammar & Syntax">Grammatik & Syntax</div>
+              </div>
+              <div class="arch-item">
+                <div class="arch-dot">✓</div>
+                <div class="arch-label">Semantik</div>
+              </div>
+            </div>
+
+            <!-- Mockup Card 4: Preset Badge -->
+            <div class="floating-card preset-card float-anim-2" style="animation-delay: -2.5s;">
+              <div class="preset-header" data-de="Aktives Profil" data-en="Active Profile">Aktives Profil</div>
+              <div class="preset-badge">
+                <span data-de="Bewerbung & CV" data-en="Application & CV">Bewerbung & CV</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section statement" aria-labelledby="why-structure-title">
+        <div data-reveal>
+          <p class="section-kicker" data-de="Grundsatz" data-en="Principle">Grundsatz</p>
+          <h2 id="why-structure-title" data-de="Warum Struktur entscheidet" data-en="Why structure matters">Warum Struktur entscheidet</h2>
+        </div>
+        <div class="statement-copy" data-reveal>
+          <p data-de="Eine professionelle Strukturierung von Texten ist entscheidend, um den Leser zu fesseln und die gewünschten Informationen klar und verständlich zu vermitteln." data-en="Professional text structure is essential to keep the reader engaged and communicate the desired information clearly and understandably.">Eine professionelle Strukturierung von Texten ist entscheidend, um den Leser zu fesseln und die gewünschten Informationen klar und verständlich zu vermitteln.</p>
+          <p data-de="Ob Bewerbung, Aufsatz, Referenz, Speise- oder Weinkarte, Blogbeitrag oder Buch: Ein Text wirkt stärker, wenn der rote Faden erkennbar ist und jede Information ihren Platz hat." data-en="Whether application, essay, reference, food or wine menu, blog article or book: a text becomes stronger when the guiding thread is visible and every piece of information has its place.">Ob Bewerbung, Aufsatz, Referenz, Speise- oder Weinkarte, Blogbeitrag oder Buch: Ein Text wirkt stärker, wenn der rote Faden erkennbar ist und jede Information ihren Platz hat.</p>
+        </div>
+      </section>
+
+      <section class="section" id="aufbau" aria-labelledby="blocks-title">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Methodik" data-en="Methodology">Methodik</p>
+            <h2 id="blocks-title" data-de="Vier Bausteine für verständliche Texte" data-en="Four building blocks">Vier Bausteine für verständliche Texte</h2>
+          </div>
+          <p data-de="Ein logisch aufgebauter Text gliedert sich in bewährte Elemente, die das Leseerlebnis flüssig gestalten." data-en="A logically constructed text is divided into proven elements that make the reading experience fluid.">Ein logisch aufgebauter Text gliedert sich in bewährte Elemente, die das Leseerlebnis flüssig gestalten.</p>
+        </div>
+
+        <div class="accordion-grid">
+          
+          <!-- Accordion 1: Einleitung -->
+          <div class="accordion-item" data-reveal>
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="panel-intro">
+              <h3 data-de="1. Einleitung — Der Einstieg" data-en="1. Introduction — The Entry">1. Einleitung — Der Einstieg</h3>
+              <div class="accordion-icon" aria-hidden="true">+</div>
+            </button>
+            <div class="accordion-panel" id="panel-intro">
+              <div class="accordion-content">
+                <p data-de="Die Einleitung weckt Interesse und stellt das Thema klar vor. Sie setzt den Kontext und bereitet Leser:innen auf das vor, was folgt." data-en="Creates interest, presents the topic and prepares readers for what follows.">Die Einleitung weckt Interesse und stellt das Thema klar vor. Sie setzt den Kontext und bereitet Leser:innen auf das vor, was folgt.</p>
+                <strong data-de="Eine starke Einleitung ist:" data-en="A strong introduction is:">Eine starke Einleitung ist:</strong>
+                <ul class="accent-ul">
+                  <li data-de="Prägnant und klar formuliert" data-en="Concise and clearly formulated">Prägnant und klar formuliert</li>
+                  <li data-de="Kurz genug für sofortige Aufmerksamkeit" data-en="Short enough for immediate attention">Kurz genug für sofortige Aufmerksamkeit</li>
+                  <li data-de="Interessant genug, um weiterzulesen" data-en="Interesting enough to read on">Interessant genug, um weiterzulesen</li>
+                  <li data-de="Bei Bedarf mit einer anregenden Frage verbunden" data-en="Connected with a thought-provoking question if needed">Bei Bedarf mit einer anregenden Frage verbunden</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 2: Hauptteil -->
+          <div class="accordion-item" data-reveal>
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="panel-body">
+              <h3 data-de="2. Hauptteil — Die ausführliche Erklärung" data-en="2. Main Part — The Explanation">2. Hauptteil — Die ausführliche Erklärung</h3>
+              <div class="accordion-icon" aria-hidden="true">+</div>
+            </button>
+            <div class="accordion-panel" id="panel-body">
+              <div class="accordion-content">
+                <p data-de="Der Hauptteil ist das Herzstück des Textes. Hier werden Informationen präsentiert, strukturiert und logisch aufeinander aufgebaut." data-en="Presents, structures and connects information logically. This is the heart of the text.">Der Hauptteil ist das Herzstück des Textes. Hier werden Informationen präsentiert, strukturiert und logisch aufeinander aufgebaut.</p>
+                <strong data-de="Ein klarer Hauptteil nutzt:" data-en="A clear main part uses:">Ein klarer Hauptteil nutzt:</strong>
+                <ul class="accent-ul">
+                  <li data-de="Sinnvolle Unterüberschriften für Struktur" data-en="Meaningful subheadings for structure">Sinnvolle Unterüberschriften für Struktur</li>
+                  <li data-de="Kurze Absätze für leichtere Lesbarkeit" data-en="Short paragraphs for easier readability">Kurze Absätze für leichtere Lesbarkeit</li>
+                  <li data-de="Aufzählungspunkte für schnelle Übersicht" data-en="Bullet points for quick overview">Aufzählungspunkte für schnelle Übersicht</li>
+                  <li data-de="Veranschaulichende Beispiele und handfeste Fakten" data-en="Illustrative examples and concrete facts">Veranschaulichende Beispiele und handfeste Fakten</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 3: Schluss -->
+          <div class="accordion-item" data-reveal>
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="panel-conclusion">
+              <h3 data-de="3. Schluss — Der schliessende Teil" data-en="3. Conclusion — The Closing">3. Schluss — Der schliessende Teil</h3>
+              <div class="accordion-icon" aria-hidden="true">+</div>
+            </button>
+            <div class="accordion-panel" id="panel-conclusion">
+              <div class="accordion-content">
+                <p data-de="Der Schluss fasst die wichtigsten Punkte zusammen und gibt dem Leser eine klare Richtung. Je nach Ziel kann das eine Handlungsaufforderung, ein Gedanke oder ein Ausblick sein." data-en="Summarises the main points and gives the reader a clear next step or call-to-action.">Der Schluss fasst die wichtigsten Punkte zusammen und gibt dem Leser eine klare Richtung. Je nach Ziel kann das eine Handlungsaufforderung, ein Gedanke oder ein Ausblick sein.</p>
+                <strong data-de="Ein guter Schluss:" data-en="A good conclusion:">Ein guter Schluss:</strong>
+                <ul class="accent-ul">
+                  <li data-de="Bringt die Hauptaussage präzise auf den Punkt" data-en="Brings the main message precisely to the point">Bringt die Hauptaussage präzise auf den Punkt</li>
+                  <li data-de="Enthält bei Bedarf einen klaren Call-to-Action (CTA)" data-en="Contains a clear call-to-action (CTA) if needed">Enthält bei Bedarf einen klaren Call-to-Action (CTA)</li>
+                  <li data-de="Gibt Orientierung für die nächsten Schritte" data-en="Gives guidance for the next steps">Gibt Orientierung für die nächsten Schritte</li>
+                  <li data-de="Bleibt beim Empfänger positiv im Gedächtnis" data-en="Leaves a positive, memorable impression">Bleibt beim Empfänger positiv im Gedächtnis</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion 4: Stil -->
+          <div class="accordion-item" data-reveal>
+            <button class="accordion-trigger" type="button" aria-expanded="false" aria-controls="panel-style">
+              <h3 data-de="4. Stil & Sprache — Die Architektur" data-en="4. Style & Language — The Architecture">4. Stil & Sprache — Die Architektur</h3>
+              <div class="accordion-icon" aria-hidden="true">+</div>
+            </button>
+            <div class="accordion-panel" id="panel-style">
+              <div class="accordion-content">
+                <p data-de="Neben dem Aufbau entscheidet auch der Sprachstil. Der Text soll gut lesbar, verständlich und passend zur Zielgruppe sein. Ein gesunder Mix macht Sätze lebendig." data-en="Makes the text readable, understandable and appropriate for the target audience. A good mix makes sentences lively.">Neben dem Aufbau entscheidet auch der Sprachstil. Der Text soll gut lesbar, verständlich und passend zur Zielgruppe sein. Ein gesunder Mix macht Sätze lebendig.</p>
+                <strong data-de="Wir legen besonderen Fokus auf:" data-en="We put a special focus on:">Wir legen besonderen Fokus auf:</strong>
+                <ul class="accent-ul">
+                  <li data-de="Typografie (Satzbild und Layout)" data-en="Typography (text layout and typesetting)">Typografie (Satzbild und Layout)</li>
+                  <li data-de="Ortografie (fehlerfreie Rechtschreibung)" data-en="Orthography (correct spelling)">Ortografie (fehlerfreie Rechtschreibung)</li>
+                  <li data-de="Grammatik & Syntax (Satzbau)" data-en="Grammar & Syntax (sentence structure)">Grammatik & Syntax (Satzbau)</li>
+                  <li data-de="Semantik (präziser Wortsinn)" data-en="Semantics (precise word meanings)">Semantik (präziser Wortsinn)</li>
+                  <li data-de="Betonung, Bedeutung und Lesefluss" data-en="Emphasis, meaning and reading flow">Betonung, Bedeutung und Lesefluss</li>
+                </ul>
+                <div class="tag-grid">
+                  <span class="tag-item">Typografie</span>
+                  <span class="tag-item">Orthografie</span>
+                  <span class="tag-item">Syntax</span>
+                  <span class="tag-item">Semantik</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <div class="section-alt-bg">
+        <section class="section" aria-labelledby="usecases-title">
+          <div class="section-header" data-reveal>
+            <div>
+              <p class="section-kicker" data-de="Einsatzbereiche" data-en="Use Cases">Einsatzbereiche</p>
+              <h2 id="usecases-title" data-de="Welche Texte lassen sich strukturieren?" data-en="Which texts can be structured?">Welche Texte lassen sich strukturieren?</h2>
+            </div>
+            <p data-de="Wir bringen Notizen, bestehende Texte und unklare Entwürfe in Form — für private, berufliche und geschäftliche Zwecke." data-en="We shape notes, existing texts and unclear drafts — for private, professional and business purposes.">Wir bringen Notizen, bestehende Texte und unklare Entwürfe in Form — für private, berufliche und geschäftliche Zwecke.</p>
+          </div>
+
+          <div class="usecases-grid">
+            <div class="usecase-card" data-reveal>
+              <strong data-de="Bewerbung & CV" data-en="Applications & CVs">Bewerbung & CV</strong>
+              <span data-de="Klare Gliederung der Berufserfahrungen und ein überzeugend aufgebautes Anschreiben." data-en="Clear outline of work experience and a convincingly structured cover letter.">Klare Gliederung der Berufserfahrungen und ein überzeugend aufgebautes Anschreiben.</span>
+            </div>
+            <div class="usecase-card" data-reveal>
+              <strong data-de="Bücher & Manuskripte" data-en="Books & Manuscripts">Bücher & Manuskripte</strong>
+              <span data-de="Aufbau roter Fäden, Kapitelstrukturierungen und logischer Szenenfluss." data-en="Developing guiding threads, chapter structures and logical flow of ideas.">Aufbau roter Fäden, Kapitelstrukturierungen und logischer Szenenfluss.</span>
+            </div>
+            <div class="usecase-card" data-reveal>
+              <strong data-de="Blog- & Webtexte" data-en="Blog posts & Web copy">Blog- & Webtexte</strong>
+              <span data-de="SEO-gerechte Absätze, Zwischenüberschriften und lesefreundliche Gliederung." data-en="SEO-friendly paragraphs, subheadings and reading-friendly outlines.">SEO-gerechte Absätze, Zwischenüberschriften und lesefreundliche Gliederung.</span>
+            </div>
+            <div class="usecase-card" data-reveal>
+              <strong data-de="Aufsätze & Referenzen" data-en="Essays & References">Aufsätze & Referenzen</strong>
+              <span data-de="Objektive Strukturierungen, Belegführung und fachliche Lesbarkeit." data-en="Objective structuring, logical argument flows and academic readability.">Objektive Strukturierungen, Belegführung und fachliche Lesbarkeit.</span>
+            </div>
+            <div class="usecase-card" data-reveal>
+              <strong data-de="Speise- & Weinkarten" data-en="Food & Wine menus">Speise- & Weinkarten</strong>
+              <span data-de="Übersichtliche Einteilungen, appetitanregende Formatierungen." data-en="Clear arrangements, eye-catching formatting for dishes.">Übersichtliche Einteilungen, appetitanregende Formatierungen.</span>
+            </div>
+            <div class="usecase-card" data-reveal>
+              <strong data-de="Präsentationen" data-en="Presentations">Präsentationen</strong>
+              <span data-de="Folienstrukturierungen, logische Argumentationsketten und Konzepte." data-en="Slide structure designs, logical flow of arguments and business concepts.">Folienstrukturierungen, logische Argumentationsketten und Konzepte.</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="section" aria-labelledby="process-title">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Ablauf" data-en="Process">Ablauf</p>
+            <h2 id="process-title" data-de="So entsteht ein klarer Aufbau" data-en="How a clear structure is built">So entsteht ein klarer Aufbau</h2>
+          </div>
+          <p data-de="Unser strukturierter Ablauf führt Schritt für Schritt zu einem professionellen und wirkungsvollen Text." data-en="Our structured process leads step-by-step to a professional and effective text.">Unser strukturierter Ablauf führt Schritt für Schritt zu einem professionellen und wirkungsvollen Text.</p>
+        </div>
+
+        <div class="process-timeline">
+          <div class="process-step" data-reveal>
+            <div class="step-num">1</div>
+            <h4 data-de="Material sichten" data-en="Review material">Material sichten</h4>
+            <p data-de="Wir prüfen, welche Inhalte bereits vorhanden sind und welches Ziel der fertige Text erfüllen soll." data-en="We check what content exists and what goal the final text is supposed to achieve.">Wir prüfen, welche Inhalte bereits vorhanden sind und welches Ziel der fertige Text erfüllen soll.</p>
+          </div>
+          <div class="process-step" data-reveal>
+            <div class="step-num">2</div>
+            <h4 data-de="Struktur entwickeln" data-en="Develop structure">Struktur entwickeln</h4>
+            <p data-de="Inhalte werden sortiert, logisch gewichtet und in eine nachvollziehbare Reihenfolge gebracht." data-en="Content is sorted, logically weighted and brought into a clear order.">Inhalte werden sortiert, logisch gewichtet und in eine nachvollziehbare Reihenfolge gebracht.</p>
+          </div>
+          <div class="process-step" data-reveal>
+            <div class="step-num">3</div>
+            <h4 data-de="Sprache schärfen" data-en="Sharpen language">Sprache schärfen</h4>
+            <p data-de="Sätze, Absätze und Übergänge werden flüssiger, lesbarer dan prägnanter formuliert." data-en="Sentences, paragraphs and transitions are formulated more smoothly and concisely.">Sätze, Absätze und Übergänge werden flüssiger, lesbarer dan prägnanter formuliert.</p>
+          </div>
+          <div class="process-step" data-reveal>
+            <div class="step-num">4</div>
+            <h4 data-de="Finalisieren" data-en="Finalise result">Finalisieren</h4>
+            <p data-de="Der fertige Text erhält einen klaren roten Faden und einen rundum kompetenten Auftritt." data-en="The final text receives a clear red thread and a completely professional look.">Der fertige Text erhält einen klaren roten Faden und einen rundum kompetenten Auftritt.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section closing-grid" aria-labelledby="closing-title">
+        <div class="closing-copy" data-reveal>
+          <p class="section-kicker" data-de="Kompetenz" data-en="Competence">Kompetenz</p>
+          <h2 id="closing-title" data-de="Notizen oder Texte brauchen Ordnung?" data-en="Do your notes need order?">Notizen oder Texte brauchen Ordnung?</h2>
+          <p data-de="Wir helfen dabei, Inhalte so zu strukturieren, dass sie verständlich, professionell und wirkungsvoll werden. Gemeinsam sorgen wir für einen kompetenten Auftritt." data-en="We help structure content so it becomes understandable, professional and effective. Together, we ensure a competent presentation.">Wir helfen dabei, Inhalte so zu strukturieren, dass sie verständlich, professionell und wirkungsvoll werden. Gemeinsam sorgen wir für einen kompetenten Auftritt.</p>
+        </div>
+
+        <aside class="cta-block" data-reveal>
+          <p class="panel-label" data-de="Struktur" data-en="Structuring">Struktur</p>
+          <h3 data-de="Inhalte ordnen?" data-en="Organise content?">Inhalte ordnen?</h3>
+          <p data-de="Lass uns deine Entwürfe und Gedanken sichten und in ein sauberes, klares Textgerüst übersetzen." data-en="Let's review your drafts and thoughts and translate them into a clean, clear text structure.">Lass uns deine Entwürfe und Gedanken sichten und in ein sauberes, klares Textgerüst übersetzen.</p>
+          <a class="btn" href="Steini_Kontakt.html">
+            <span data-de="Kontakt aufnehmen" data-en="Get in touch">Kontakt aufnehmen</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const translatable = document.querySelectorAll("[data-de][data-en]");
+      const langButtons = document.querySelectorAll("[data-lang-switch]");
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#site-menu");
+      const revealItems = document.querySelectorAll("[data-reveal]");
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "en" ? "en" : "de";
+        root.lang = nextLang === "en" ? "en" : "de-CH";
+        translatable.forEach((node) => {
+          node.textContent = node.dataset[nextLang];
+        });
+        langButtons.forEach((button) => {
+          const active = button.dataset.langSwitch === nextLang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        localStorage.setItem("syntext-language", nextLang);
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyLanguage(button.dataset.langSwitch));
       });
-    </script>
-<main>
-<h2>Korrektur</h2>
 
-		<p>Eine professionelle Strukturierung von Texten ist entscheidend, um den Leser zu fesseln und die gewünschten Informationen klar und verständlich zu vermitteln. 
-			Was braucht es, um einen Text professionell zu strukturieren:</p>
-<hr>
-<br>			
-	<input type="checkbox" id="toggle5">
-<label for="toggle5"><span class="pluszeichen"><h3><strong>1. Einleitung ...+... </strong></h3></span></label>
-<div class="dialog5">
-  <label for="toggle5"><em>DER EINSTIEG</em></label>
-<br>
-	<p>Die Einleitung sollte das Interesse des Lesers wecken und das Thema des Textes klar vorstellen. 
-	Sie dient dazu, den Kontext zu setzen und den Leser auf das Folgende vorzubereiten.</p>
-	<p>Formel für eine starke Einleitung:</p>
-	<ul>
-		<li>Prägnant und klar: Formuliere in wenigen Sätzen, worum es geht.</li>
-		<li>Fragen stellen: Regt den Leser zum Nachdenken an.</li>
-		<li>zu lange Absätze vermeiden: Ein kurzer, prägnanter Einstieg sorgt für sofortige Aufmerksamkeit.</li>
-	</ul>
-</div>
-<br>
-<br>
+      menuToggle?.addEventListener("click", () => {
+        const open = !menu.classList.contains("is-open");
+        menu.classList.toggle("is-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
 
-<input type="checkbox" id="toggle6">
-<label for="toggle6"><span class="pluszeichen"><h3><strong>2. Hauptteil ...+... </strong></h3></span></label>
-<div class="dialog6">
-  <label for="toggle6"><em>DIE AUSFÜHRLICHE ERKLÄRUNG</em></label>
-<br>
-		<p>Der Hauptteil ist das Herzstück des Textes. Hier werden alle relevanten Informationen präsentiert, strukturiert und aufeinander aufgebaut. 
-		Eine gute Struktur im Hauptteil sorgt dafür, dass der Leser leicht folgen kann.</p>
-		<p>Erfolgsrezept für einen klar strukturierten Hauptteil:</p>
-	<ul>
-		<li>Unterüberschriften verwenden: <em>Text in sinnvolle Abschnitte gliedern. Dies erleichtert dem Leser das Verständnis und die Orientierung.</em></li>
-		<li>Kurze Absätze: <em>Zu lange Absätze vermeiden. Jeder Absatz sollte einen klaren Gedanken oder Punkt enthalten.</em></li>
-		<li>Bulletpoints oder Nummerierungen: <em>Bei Aufzählungen sorgen sie für Übersichtlichkeit.</em></li>
-		<li>Beispiele und Fakten: <em>Argumente mit praktischen Beispielen oder Zahlen veranschaulichen</em>.</li>
-	</ul>
-</div>
-<br>
-<br>
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("is-open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
 
-<input type="checkbox" id="toggle7">
-<label for="toggle7"><span class="pluszeichen"><h3><strong>3. Schluss ...+... </strong></h3></span></label>
-<div class="dialog7">
-  <label for="toggle7"><em>DER SCHLIESSENDE TEIL</em></label>
-<br>
-		<p>Der Schluss fasst die wichtigsten Punkte zusammen und gibt dem Leser eine klare Handlungsaufforderung (Call-to-Action). 
-		Hier sollte der Text noch einmal auf den Punkt gebracht und dem Leser ein abschließender Gedanke mit auf den Weg gegeben werden.</p>
-		<p>Erfolgsrezept für einen prägnanten Schlussteil:</p>
-	<ul>
-		<li>Zusammenfassen: <em>Die wichtigsten Aussagen des Textes zusammengefasst.</em></li>
-		<li>Call-to-Action: <em>Den Leser zu einer Handlung auffordern – sei es eine Kontaktaufnahme, ein Kauf oder das Weitermachen mit einem nächsten Schritt.</em></li>
-		<li>Offene Frage oder Ausblick: <em>Hinterlasse dem Leser etwas, das ihn zum Nachdenken anregt oder neugierig macht.</em></li>
-	</ul>
-</div>
-<br>
-<br>
+      // Accordions
+      const accordions = document.querySelectorAll(".accordion-item");
+      accordions.forEach((acc) => {
+        const trigger = acc.querySelector(".accordion-trigger");
+        const panel = acc.querySelector(".accordion-panel");
 
-<input type="checkbox" id="toggle8">
-<label for="toggle8"><span class="pluszeichen"><h3><strong>4. Stil & Sprache ...+... </strong></h3></span></label>
-<div class="dialog8">
-  <label for="toggle8"><em>ARCHITEKTUR DES TEXTES</em></label>
-<br>
-		<p>Neben der Struktur ist auch der Sprachstil wichtig. Der Text sollte gut lesbar und verständlich sein. Zu komplexe oder lange Sätze solten vermieden werden.
-		Zielgruppengerechte Sprache, gezielter Einsatz von Fachjargon, aktive Sprache und ein gesunder Mix aus kurzen und langen Sätzen sind nur einige der vielen Faktoren, die einen Text interessant wirken lassen.</p>
-		<p>Erfolgsrezept für einen perfekte Textaufbau:</p>
-	<ul>
-		<li>Typografie: <em>Der richtige Umgang mit Texten und Schriften.</em></li>
-		<li>Ortografie: <em>Einhaltung der allgemein gültigen Rechtschreibung.</em></li>
-		<li>Grammatik, Syntax: <em>Der richtige Satzbau, der zu Ihnen und Ihrem Klientel passt.</em></li>
-		<li>Semantik: <em>Bedeutsamer Einsatz von Zeichen, Phrasen und Wörtern.</em>.</li>
-		<li>Phoneme, Morpheme: <em>Gezielter und erkennbarer Einsatz von Betonung und Bedeutung.</em></li>
-	</ul>
-</div>
-<br>
-<br>
+        trigger.addEventListener("click", () => {
+          const expanded = trigger.getAttribute("aria-expanded") === "true";
+          
+          // Close others
+          accordions.forEach((otherAcc) => {
+            if (otherAcc !== acc) {
+              const otherTrigger = otherAcc.querySelector(".accordion-trigger");
+              const otherPanel = otherAcc.querySelector(".accordion-panel");
+              otherTrigger.setAttribute("aria-expanded", "false");
+              otherPanel.style.maxHeight = null;
+            }
+          });
 
-<p>Notizen und bestehende Texte in Form bringen und aktualisieren</p>
-<ul>
-		<li><strong>Bewerbung, Lebenslauf</strong></li>
-		<li><strong>Aufsätze</strong></li>
-		<li><strong>Referenzen</strong></li>
-		<li><strong>Speise- und Weinkarten</strong></li>
-		<li><strong>Artikel, Blogbeiträge</strong></li>
-		<li><strong>Bücher</strong></li>
-	</ul>
-	<p>Wir sorgen für einen kompetenten Auftritt</p>
+          trigger.setAttribute("aria-expanded", String(!expanded));
+          if (!expanded) {
+            panel.style.maxHeight = panel.scrollHeight + "px";
+          } else {
+            panel.style.maxHeight = null;
+          }
+        });
+      });
 
-	<p><a target="_blank" href="Steini_Kontakt.html">Kontakt</a></p>		
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
 
-<br>
-
-</main>
-	<footer>
-		<p>© copyright; 2024 Syntext by Steinhardt</p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
-		<p><a target="_blank" href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
-	</footer>
-</div>
+      applyLanguage(localStorage.getItem("syntext-language") || "de");
+    })();
+  </script>
 </body>
 </html>

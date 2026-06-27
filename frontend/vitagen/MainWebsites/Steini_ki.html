@@ -1,112 +1,1490 @@
 <!DOCTYPE html>
-<html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>	
-	
+<html lang="de-CH">
 <head>
-		<meta charset="utf-8">														<!-- allgemeine deutsche Formatierung dass auch Umlaute eingegeben werden können -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
-		<title>KI & Wir SYNTEXT</title>
-		<link rel="stylesheet" href="demo.css">	
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-</head>																				<!-- link zum css Stylesheet. Hier in demo.css wird alles extern festgehalten -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-de="KI & Wir | SYNTEXT" data-en="AI & Us | SYNTEXT">KI & Wir | SYNTEXT</title>
+  <meta name="description" content="Wie SYNTEXT kuenstliche Intelligenz versteht und nutzt: als Unterstuetzung, Inspirationsquelle und Werkzeug, dessen Ergebnisse sorgfaeltig geprueft werden muessen.">
+  <meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhoehen, Suchmaschinen Ranking"/> 
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --ai-purple: #6366f1;
+      --ai-violet: #8b5cf6;
+      --ai-blue: #2563eb;
+      --ai-teal: #0f766e;
+      --ai-cyan: #0ea5e9;
 
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
+
+      /* Mapping previous colors for backwards compatibility */
+      --ink: var(--text);
+      --forest: var(--primary);
+      --forest-2: var(--primary2);
+      --paper: var(--bg);
+      --panel: var(--surface);
+      --stone: var(--accent-soft);
+      --stone-2: #e9dcc5;
+      --brass: var(--accent);
+      --teal: var(--ai-teal);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    img,
+    svg {
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="page"] {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible,
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before {
+      top: -6px;
+    }
+
+    .menu-toggle span::after {
+      top: 6px;
+    }
+
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0;
+    }
+
+    /* Custom Hero Visual Stage Styling */
+    .hero-visual {
+      position: relative;
+      min-height: 440px;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+    }
+
+    .visual-stage {
+      position: relative;
+      width: min(100%, 560px);
+      height: 420px;
+      will-change: transform;
+    }
+
+    .floating-card {
+      position: absolute;
+      border-radius: 26px;
+      border: 1px solid rgba(229, 231, 235, 0.9);
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 22px 70px rgba(17, 24, 39, 0.10);
+      backdrop-filter: blur(14px);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .floating-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 30px 80px rgba(17, 24, 39, 0.15);
+    }
+
+    /* KI & Wir Custom Visual Cards */
+    .prompt-response-card {
+      left: -30px;
+      top: 20px;
+      width: 400px;
+      padding: 16px;
+      transform: rotate(-1.5deg);
+      z-index: 5;
+    }
+
+    .prompt-header {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 8px;
+      margin-bottom: 10px;
+      font-size: 11px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+
+    .chat-bubble {
+      padding: 8px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .user-bubble {
+      background: #f1f5f9;
+      color: var(--text);
+      align-self: flex-start;
+    }
+
+    .ai-bubble {
+      background: rgba(99, 102, 241, 0.08);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      color: var(--primary2);
+      position: relative;
+    }
+
+    .edit-indicator {
+      position: absolute;
+      right: -10px;
+      bottom: -12px;
+      background: var(--accent);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 2px 6px;
+      border-radius: 4px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .moravec-card {
+      right: -20px;
+      top: -10px;
+      width: 240px;
+      padding: 16px;
+      transform: rotate(2deg);
+      z-index: 4;
+    }
+
+    .moravec-header {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--brass);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .moravec-bar-row {
+      margin-bottom: 10px;
+    }
+    .moravec-bar-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .moravec-bar-track {
+      height: 6px;
+      background: #f1f5f9;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .moravec-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 3px;
+    }
+
+    .cookie-metaphor-card {
+      left: -40px;
+      top: 220px;
+      width: 280px;
+      padding: 16px;
+      transform: rotate(1deg);
+      z-index: 7;
+    }
+
+    .cookie-visual {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .cookie-graphic {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #f4e8d1;
+      border: 3px dashed #b99768;
+      position: relative;
+    }
+    .cookie-graphic::before {
+      content: "•• •";
+      position: absolute;
+      color: #5c4033;
+      font-size: 16px;
+      font-weight: 800;
+      top: 4px;
+      left: 8px;
+      letter-spacing: 2px;
+    }
+
+    .cookie-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .cookie-text strong {
+      font-size: 12px;
+      color: var(--primary);
+    }
+    .cookie-text span {
+      font-size: 9.5px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .cookie-code {
+      margin-top: 10px;
+      background: #1e293b;
+      color: #38bdf8;
+      font-family: monospace;
+      font-size: 9px;
+      padding: 6px;
+      border-radius: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+
+    .quality-check-card {
+      right: -30px;
+      top: 200px;
+      width: 270px;
+      padding: 16px;
+      transform: rotate(-2deg);
+      z-index: 6;
+    }
+
+    .checklist-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .checklist-row:last-child {
+      margin-bottom: 0;
+    }
+    .check-box {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 2px solid var(--accent);
+      display: grid;
+      place-items: center;
+      color: var(--accent);
+      font-size: 10px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+    .check-box.checked {
+      background: var(--accent-soft);
+    }
+    .checklist-text {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    @keyframes float1 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+    @keyframes float2 {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+    .float-anim-1 { animation: float1 6s ease-in-out infinite; }
+    .float-anim-2 { animation: float2 7s ease-in-out infinite; }
+
+    .hero {
+      width: min(1320px, calc(100% - 32px));
+      min-height: calc(100svh - 76px);
+      margin: 0 auto;
+      padding: 54px 0 72px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(420px, 1fr);
+      align-items: center;
+      gap: 46px;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 2;
+      max-width: 660px;
+      min-width: 0;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, #1c2724 20%, #b99768 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .keyword-band {
+      overflow: hidden;
+      display: flex;
+      padding: 20px 0;
+      mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 15%, #000 85%, transparent 100%);
+    }
+    
+    .marquee-track {
+      display: flex;
+      gap: 0;
+      padding: 4px 0;
+      white-space: nowrap;
+      animation: marquee 25s linear infinite;
+      will-change: transform;
+      flex-shrink: 0;
+    }
+    
+    .marquee-track span {
+      display: inline-flex;
+      align-items: center;
+      color: var(--primary2);
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .marquee-track span::after {
+      content: "•";
+      margin-left: 24px;
+      margin-right: 24px;
+      color: var(--accent);
+      font-size: 18px;
+    }
+    
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1 {
+      max-width: 15ch;
+      margin-bottom: 24px;
+      font-size: clamp(2.6rem, 6vw, 4.8rem);
+      line-height: 1.05;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+    }
+
+    h1 span {
+      display: block;
+    }
+
+    .hero-lede {
+      max-width: 620px;
+      margin-bottom: 30px;
+      color: #34413d;
+      font-size: clamp(1.06rem, 2vw, 1.28rem);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .hero-actions,
+    .section-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 13px 17px;
+      font-weight: 800;
+      line-height: 1;
+      transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: #fffaf0;
+      box-shadow: 0 18px 42px rgba(15, 59, 51, 0.22);
+    }
+
+    .btn-secondary {
+      border-color: rgba(15, 59, 51, 0.18);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--forest);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .section-header {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(280px, 0.5fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 38px;
+    }
+
+    .section-kicker {
+      margin-bottom: 12px;
+      color: var(--teal);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      max-width: 780px;
+      margin-bottom: 0;
+      font-size: clamp(2.2rem, 5vw, 4.7rem);
+      line-height: 0.98;
+      letter-spacing: -0.055em;
+      font-weight: 800;
+    }
+
+    .section-header p,
+    .section-intro {
+      margin-bottom: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+      line-height: 1.7;
+      font-weight: 600;
+    }
+
+    .section-alt-bg {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.45);
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .statement {
+      display: grid;
+      grid-template-columns: minmax(0, 0.62fr) minmax(280px, 0.38fr);
+      gap: 28px;
+      align-items: stretch;
+      padding: 42px 0;
+    }
+
+    .statement h2 {
+      font-size: clamp(2.3rem, 6vw, 5.6rem);
+    }
+
+    .statement-copy {
+      display: grid;
+      align-content: center;
+      gap: 16px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .audience-card,
+    .cta-block {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: 0 18px 54px rgba(16, 46, 39, 0.08);
+    }
+
+    .audience-card {
+      min-height: 330px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(15, 59, 51, 0.14);
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      color: var(--forest);
+      background: #f4f0e7;
+    }
+
+    .card-icon svg {
+      width: 22px;
+      height: 22px;
+    }
+
+    .audience-card h3 {
+      margin: 18px 0 12px;
+      font-size: 1.25rem;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+
+    .audience-card p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .closing-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.95fr) minmax(320px, 0.55fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .closing-copy {
+      border-top: 1px solid var(--line);
+      padding-top: 34px;
+    }
+
+    .closing-copy p {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 1.08rem;
+      font-weight: 600;
+      line-height: 1.75;
+    }
+
+    .cta-block {
+      display: grid;
+      align-content: center;
+      gap: 18px;
+      min-height: 350px;
+      padding: 28px;
+      background:
+        linear-gradient(145deg, rgba(15, 59, 51, 0.96), rgba(25, 83, 72, 0.92)),
+        var(--forest);
+      color: #fffaf0;
+    }
+
+    .cta-block .panel-label,
+    .cta-block p {
+      color: rgba(255, 250, 240, 0.76);
+    }
+
+    .cta-block h3 {
+      margin: 0;
+      font-size: clamp(1.7rem, 3vw, 2.4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .cta-block .btn {
+      width: fit-content;
+      background: #fffaf0;
+      color: var(--forest);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        grid-template-columns: minmax(0, 1fr);
+        padding-top: 34px;
+      }
+
+      h1 {
+        max-width: 12ch;
+      }
+
+      .hero-visual {
+        min-height: 480px;
+        padding: 24px 0;
+      }
+
+      .visual-stage {
+        width: 100%;
+        max-width: 360px;
+        height: 360px;
+        margin: 0 auto;
+      }
+
+      .prompt-response-card {
+        left: 0px;
+        top: 10px;
+        width: 240px;
+        transform: translateY(0) rotate(-1deg);
+      }
+
+      .moravec-card {
+        right: 0px;
+        top: 20px;
+        width: 150px;
+        transform: none;
+      }
+
+      .cookie-metaphor-card {
+        left: -10px;
+        top: auto;
+        bottom: 10px;
+        width: 200px;
+        transform: none;
+      }
+
+      .quality-check-card {
+        right: -10px;
+        top: auto;
+        bottom: 30px;
+        width: 180px;
+        transform: none;
+      }
+
+      .section-header,
+      .statement,
+      .closing-grid,
+      .audience-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      body,
+      main {
+        max-width: 100vw;
+      }
+
+      .topbar {
+        max-width: 100vw;
+      }
+
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .visual-stage {
+        transform: scale(0.85);
+        transform-origin: center center;
+        margin: -20px auto;
+      }
+
+      .hero-visual {
+        min-height: 320px;
+      }
+
+      .hero,
+      .section,
+      .footer-inner {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+      }
+
+      .hero {
+        padding-bottom: 48px;
+        gap: 28px;
+      }
+
+      h1 {
+        max-width: calc(100vw - 32px);
+        font-size: clamp(2.2rem, 9.5vw, 2.65rem);
+        line-height: 1;
+        letter-spacing: -0.045em;
+        overflow-wrap: break-word;
+      }
+
+      .hero-copy,
+      .hero-lede {
+        width: calc(100vw - 22px);
+        max-width: calc(100vw - 22px);
+        min-width: 0;
+      }
+
+      .hero-lede {
+        width: min(calc(100vw - 42px), 31ch);
+        max-width: min(calc(100vw - 42px), 31ch);
+      }
+
+      .section {
+        padding: 62px 0;
+      }
+
+      .audience-card,
+      .cta-block {
+        min-height: auto;
+        padding: 20px;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+      }
+
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
 <body>
-<div id="holder">																	<!-- oberster Layoutcontainer in der Hierarchie. holder oder wrapper. Alles darin wird vereinheitlicht -->
-<div class="topbar">
-      <nav class="nav">
-        <a href="index.html" class="brand">
-          <div class="brand-mark">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
-            </svg>
-          </div>
-          <span class="brand-name">SYNTEXT</span>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
+          <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
 
-        <div class="nav-links" id="nav-links">
-          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
-          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
-          <a href="Steini_About.html" class="nav-item">About</a>
-          <a href="Steini_Shop.html" class="nav-item">Shop</a>
-          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
-          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
         </div>
       </nav>
-    </div>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
-        const links = document.getElementById('nav-links');
+    </header>
 
-        if (btn && links) {
-          btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
-            links.classList.toggle('open');
-          });
-        }
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy" data-reveal>
+          <p class="eyebrow fade-up" style="animation-delay: 0.1s;" data-de="KI & WIR" data-en="AI & US">KI & WIR</p>
+          <h1 id="hero-title">
+            <span class="fade-up" style="animation-delay: 0.2s;" data-de="Künstliche Intelligenz" data-en="Artificial intelligence">Künstliche Intelligenz</span>
+            <span class="fade-up text-gradient" style="animation-delay: 0.3s;" data-de="braucht menschliche" data-en="needs human">braucht menschliche</span>
+            <span class="fade-up" style="animation-delay: 0.4s;" data-de="Verantwortung." data-en="responsibility.">Verantwortung.</span>
+          </h1>
+          <p class="hero-lede fade-up" style="animation-delay: 0.5s;" data-de="KI kann Texte, Ideen und Prozesse unterstützen. Doch jedes Ergebnis braucht Kontext, Prüfung und ein klares Verständnis dafür, was wirklich stimmt, passt und professionell wirkt." data-en="AI can support texts, ideas and processes. But every result still needs context, review and a clear understanding of what is accurate, appropriate and professional.">KI kann Texte, Ideen und Prozesse unterstützen. Doch jedes Ergebnis braucht Kontext, Prüfung und ein klares Verständnis dafür, was wirklich stimmt, passt und professionell wirkt.</p>
+          <div class="hero-actions fade-up" style="animation-delay: 0.6s;">
+            <a class="btn btn-primary" href="Steini_Kontakt.html">
+              <span data-de="KI-unterstützte Texte anfragen" data-en="Request AI-supported writing">KI-unterstützte Texte anfragen</span>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+            <a class="btn btn-secondary" href="Steini_Dienstleistung.html">
+              <span data-de="Mehr über unsere Arbeitsweise" data-en="View our approach">Mehr über unsere Arbeitsweise</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal fade-up" style="animation-delay: 0.8s;" data-reveal>
+          <div class="visual-stage">
+            
+            <!-- Mockup Card 1: AI Prompt & Response -->
+            <div class="floating-card prompt-response-card float-anim-1">
+              <div class="prompt-header">
+                <span data-de="KI-Assistent" data-en="AI Assistant">KI-Assistent</span>
+                <span>Active</span>
+              </div>
+              <div class="chat-bubble user-bubble">
+                <span data-de="Entwurf für Anschreiben..." data-en="Draft a cover letter...">Entwurf für Anschreiben...</span>
+              </div>
+              <div class="chat-bubble ai-bubble">
+                <span data-de="Sehr geehrte Damen und Herren, hiermit bewerbe ich..." data-en="Dear Sir or Madam, I hereby apply...">Sehr geehrte Damen und Herren, hiermit bewerbe ich...</span>
+                <span class="edit-indicator" data-de="Menschlicher Feinschliff" data-en="Human Polish">Menschlicher Feinschliff</span>
+              </div>
+            </div>
+
+            <!-- Mockup Card 2: Moravec’s Paradox -->
+            <div class="floating-card moravec-card float-anim-2" style="animation-delay: -3s;">
+              <div class="moravec-header" data-de="Moravec’s Paradoxon" data-en="Moravec’s Paradox">Moravec’s Paradoxon</div>
+              <div class="moravec-bar-row">
+                <div class="moravec-bar-label">
+                  <span data-de="Logik & Rechnen" data-en="Logic & Calculation">Logik & Rechnen</span>
+                  <span>10%</span>
+                </div>
+                <div class="moravec-bar-track"><div class="moravec-bar-fill" style="width: 10%;"></div></div>
+              </div>
+              <div class="moravec-bar-row">
+                <div class="moravec-bar-label">
+                  <span data-de="Wahrnehmung & Sinn" data-en="Perception & Senses">Wahrnehmung & Sinn</span>
+                  <span>95%</span>
+                </div>
+                <div class="moravec-bar-track"><div class="moravec-bar-fill" style="width: 95%;"></div></div>
+              </div>
+            </div>
+
+            <!-- Mockup Card 3: Cookies Metaphor -->
+            <div class="floating-card cookie-metaphor-card float-anim-1" style="animation-delay: -1.5s;">
+              <div class="cookie-visual">
+                <div class="cookie-graphic"></div>
+                <div class="cookie-text">
+                  <strong data-de="Magic Cookie" data-en="Magic Cookie">Magic Cookie</strong>
+                  <span data-de="Lou Montulli (1994)" data-en="Lou Montulli (1994)">Lou Montulli (1994)</span>
+                </div>
+              </div>
+              <div class="cookie-code">document.cookie = "session=active"</div>
+            </div>
+
+            <!-- Mockup Card 4: Quality Checkbox -->
+            <div class="floating-card quality-check-card float-anim-2" style="animation-delay: -2.5s;">
+              <div class="checklist-row">
+                <div class="check-box checked">✓</div>
+                <div class="checklist-text" data-de="KI-generierter Rohtext" data-en="AI-generated raw text">KI-generierter Rohtext</div>
+              </div>
+              <div class="checklist-row">
+                <div class="check-box checked" style="border-color:var(--success); color:var(--success);">✓</div>
+                <div class="checklist-text" data-de="Menschliche Qualitätsprüfung" data-en="Human quality check" style="font-weight: 700;">Menschliche Qualitätsprüfung</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <section class="section statement" aria-labelledby="ai-def-title">
+        <div data-reveal>
+          <p class="section-kicker" data-de="Definition" data-en="Definition">Definition</p>
+          <h2 id="ai-def-title" data-de="Was bedeutet AI oder KI?" data-en="What does AI mean?">Was bedeutet AI oder KI?</h2>
+        </div>
+        <div class="statement-copy" data-reveal>
+          <p data-de="Artificial Intelligence und Künstliche Intelligenz beschreiben im Kern dieselbe Methodik: Programme erkennen Eingaben, verarbeiten Informationen, setzen Aufgaben um und können aus Mustern lernen." data-en="Artificial Intelligence and Künstliche Intelligenz describe the same basic method: programs recognise input, process information, execute tasks and can learn from patterns.">Artificial Intelligence und Künstliche Intelligenz beschreiben im Kern dieselbe Methodik: Programme erkennen Eingaben, verarbeiten Informationen, setzen Aufgaben um und können aus Mustern lernen.</p>
+          <p data-de="Entcheidend ist dabei nicht nur, dass ein System antwortet. Entscheidend ist, ob das Ergebnis korrekt, verständlich, passend und für den jeweiligen Zweck brauchbar ist." data-en="The key question is not only whether a system can answer. The key question is whether the result is correct, clear, suitable and useful for the intended purpose.">Entcheidend ist dabei nicht nur, dass ein System antwortet. Entscheidend ist, ob das Ergebnis korrekt, verständlich, passend und für den jeweiligen Zweck brauchbar ist.</p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="ai-work-title">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Infrastruktur" data-en="Infrastructure">Infrastruktur</p>
+            <h2 id="ai-work-title" data-de="KI funktioniert nur mit dem richtigen Umfeld" data-en="AI needs the right environment">KI funktioniert nur mit dem richtigen Umfeld</h2>
+          </div>
+          <p data-de="Wie bei jeder Arbeit braucht auch der Einsatz von KI das passende Arbeitsumfeld und die richtigen Werkzeuge. In einer Bäckerei lässt sich schliesslich auch nur schwer ein Auto reparieren." data-en="Like any kind of work, using AI requires the right environment and the right tools. After all, repairing a car in a bakery would be difficult.">Wie bei jeder Arbeit braucht auch der Einsatz von KI das passende Arbeitsumfeld und die richtigen Werkzeuge. In einer Bäckerei lässt sich schliesslich auch nur schwer ein Auto reparieren.</p>
+        </div>
+
+        <div class="audience-grid" style="grid-template-columns: repeat(2, minmax(0, 1fr));">
+          <article class="audience-card" data-reveal style="min-height: auto;">
+            <div>
+              <div class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              </div>
+              <h3 data-de="Das Arbeitsumfeld" data-en="The Environment">Das Arbeitsumfeld</h3>
+              <p data-de="Das Arbeitsumfeld stellt unser Endgerät dar: sei es ein PC, Laptop oder Smartphone. Hier laufen die Operationen zusammen." data-en="The work environment is the device: PC, laptop or smartphone. This is where all operations run.">Das Arbeitsumfeld stellt unser Endgerät dar: sei es ein PC, Laptop oder Smartphone. Hier laufen die Operationen zusammen.</p>
+            </div>
+          </article>
+
+          <article class="audience-card" data-reveal style="min-height: auto;">
+            <div>
+              <div class="card-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+              </div>
+              <h3 data-de="Die Werkzeuge" data-en="The Tools">Die Werkzeuge</h3>
+              <p data-de="Als Werkzeuge dienen die benötigten Softwareprogramme, welche die Befehle und Eingaben erkennen, verarbeiten und bearbeiten." data-en="The tools are software programs that recognise inputs, process commands and generate outputs.">Als Werkzeuge dienen die benötigten Softwareprogramme, welche die Befehle und Eingaben erkennen, verarbeiten und bearbeiten.</p>
+            </div>
+          </article>
+        </div>
+
+        <div style="margin-top: 34px; padding: 24px; border: 1px solid var(--line); border-radius: var(--radius); background: rgba(255,255,255,0.4);" data-reveal>
+          <strong style="color: var(--primary); display: block; margin-bottom: 8px;" data-de="Interessant bleibt Moravec’s Paradoxon:" data-en="Moravec’s Paradox remains interesting:">Interessant bleibt Moravec’s Paradoxon:</strong>
+          <p style="font-size: 0.95rem; color: var(--muted); margin: 0; line-height: 1.6;" data-de="Logisches Denken benötigt oft vergleichsweise wenig Rechenleistung, während sensorische, motorische und wahrnehmungsbezogene Fähigkeiten enorme Rechenfähigkeiten verlangen. Diese Tatsache verblüfft noch mehr, wenn man sie auf das Verhalten mancher unserer Mitmenschen anwendet." data-en="Logical reasoning can require comparatively little computing power, while sensory, motor and perception-based abilities require enormous computational effort. This fact is even more striking when applied to the behavior of some of our fellow human beings.">Logisches Denken benötigt oft vergleichsweise wenig Rechenleistung, während sensorische, motorische und wahrnehmungsbezogene Fähigkeiten enorme Rechenfähigkeiten verlangen. Diese Tatsache verblüfft noch mehr, wenn man sie auf das Verhalten mancher unserer Mitmenschen anwendet.</p>
+        </div>
+      </section>
+
+      <div class="section-alt-bg">
+        <section class="section statement" aria-labelledby="ai-support-title">
+          <div data-reveal>
+            <p class="section-kicker" data-de="Arbeitsweise" data-en="Methodology">Arbeitsweise</p>
+            <h2 id="ai-support-title" data-de="Wir nutzen KI als Unterstützung" data-en="We use AI as support">Wir nutzen KI als Unterstützung</h2>
+          </div>
+          <div class="statement-copy" data-reveal>
+            <p data-de="KI erstellt heute vieles auf Knopfdruck: Eingabe formulieren, Enter drücken, Ergebnis abwarten. Das klingt nach perfekter Zeitersparnis — und kann tatsächlich sehr hilfreich sein." data-en="AI can now create many things with a simple command: write the input, press enter, wait for the result. It sounds like perfect time-saving — and it can indeed be very useful.">KI erstellt heute vieles auf Knopfdruck: Eingabe formulieren, Enter drücken, Ergebnis abwarten. Das klingt nach perfekter Zeitersparnis — und kann tatsächlich sehr hilfreich sein.</p>
+            <p data-de="Trotzdem gilt: Jedes noch so vollständige und überzeugend wirkende Ergebnis muss auf Korrektheit geprüft werden. KI macht Fehler, besonders bei Fakten, Bildern, Rechtschreibung, Grammatik und Kontext." data-en="Still, every result, however complete or convincing it may look, must be checked for accuracy. AI makes mistakes, especially with facts, images, spelling, grammar and context.">Trotzdem gilt: Jedes noch so vollständige und überzeugend wirkende Ergebnis muss auf Korrektheit geprüft werden. KI macht Fehler, besonders bei Fakten, Bildern, Rechtschreibung, Grammatik und Kontext.</p>
+            <p data-de="Deshalb sehen wir KI nicht als Ersatz für menschliche Sorgfalt, sondern als Support und Inspirationsquelle. Verteufeln wäre der falsche Ansatz. Entwicklung lässt sich nicht aufhalten — sinnvoll ist, sie bewusst, kritisch und verantwortungsvoll zu nutzen." data-en="That is why we do not see AI as a replacement for human care, but as support and inspiration. Demonising it would be the wrong approach. Development cannot be stopped — it should be used consciously, critically and responsibly.">Deshalb sehen wir KI nicht als Ersatz für menschliche Sorgfalt, sondern als Support und Inspirationsquelle. Verteufeln wäre the falsche Ansatz. Entwicklung lässt sich nicht aufhalten — sinnvoll ist, sie bewusst, kritisch und verantwortungsvoll zu nutzen.</p>
+            <div style="border-left: 3px solid var(--accent); padding-left: 16px; margin-top: 14px;">
+              <strong style="color: var(--primary); font-size: 1.15rem;" data-de="Am Ende hat der Mensch das letzte Wort." data-en="In the end, the human has the final word.">Am Ende hat der Mensch das letzte Wort.</strong>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <section class="section" aria-labelledby="ai-help-title">
+        <div class="section-header" data-reveal>
+          <div>
+            <p class="section-kicker" data-de="Anwendungsbereiche" data-en="Applications">Anwendungsbereiche</p>
+            <h2 id="ai-help-title" data-de="Wo KI helfen kann" data-en="Where AI can help">Wo KI helfen kann</h2>
+          </div>
+          <p data-de="Unter menschlicher Begleitung und sorgfältiger Redaktion entfaltet künstliche Intelligenz ihr volles Potenzial." data-en="Under human guidance and careful editing, artificial intelligence unfolds its full potential.">Unter menschlicher Begleitung und sorgfältiger Redaktion entfaltet künstliche Intelligenz ihr volles Potenzial.</p>
+        </div>
+
+        <div class="audience-grid" style="grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px;">
+          <article class="audience-card" data-reveal style="min-height: auto; padding: 20px;">
+            <h4 style="color: var(--accent); margin: 0 0 8px; font-weight: 800; font-size: 0.85rem;" data-de="01. IDEEN FINDEN" data-en="01. FIND IDEAS">01. IDEEN FINDEN</h4>
+            <p style="font-size: 0.88rem; line-height: 1.45;" data-de="KI kann erste Ansätze, Varianten und neue Perspektiven für ein Thema liefern." data-en="AI can deliver initial angles, variants and new perspectives for a topic.">KI kann erste Ansätze, Varianten und neue Perspektiven für ein Thema liefern.</p>
+          </article>
+          <article class="audience-card" data-reveal style="min-height: auto; padding: 20px;">
+            <h4 style="color: var(--accent); margin: 0 0 8px; font-weight: 800; font-size: 0.85rem;" data-de="02. STRUKTUR" data-en="02. STRUCTURE">02. STRUKTUR</h4>
+            <p style="font-size: 0.88rem; line-height: 1.45;" data-de="Komplexe Inhalte lassen sich schneller ordnen und in Form bringen." data-en="Complex content can be organised and shaped much faster.">Komplexe Inhalte lassen sich schneller ordnen und in Form bringen.</p>
+          </article>
+          <article class="audience-card" data-reveal style="min-height: auto; padding: 20px;">
+            <h4 style="color: var(--accent); margin: 0 0 8px; font-weight: 800; font-size: 0.85rem;" data-de="03. FEINSCHLIFF" data-en="03. POLISH">03. FEINSCHLIFF</h4>
+            <p style="font-size: 0.88rem; line-height: 1.45;" data-de="Texte können sprachlich geschärft, vereinfacht oder anders gewichtet werden." data-en="Texts can be linguistically sharpened, simplified or weighted differently.">Texte können sprachlich geschärft, vereinfacht oder anders gewichtet werden.</p>
+          </article>
+          <article class="audience-card" data-reveal style="min-height: auto; padding: 20px;">
+            <h4 style="color: var(--accent); margin: 0 0 8px; font-weight: 800; font-size: 0.85rem;" data-de="04. GRENZEN" data-en="04. LIMITS">04. GRENZEN</h4>
+            <p style="font-size: 0.88rem; line-height: 1.45;" data-de="Fakten, Tonalität, Zielgruppe und Kontext müssen zwingend menschlich geprüft werden." data-en="Facts, tone, audience and context must strictly be checked by humans.">Fakten, Tonalität, Zielgruppe und Kontext müssen zwingend menschlich geprüft werden.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section statement" id="cookies" aria-labelledby="cookies-title">
+        <div data-reveal>
+          <p class="section-kicker" data-de="Transparenz" data-en="Transparency">Transparenz</p>
+          <h2 id="cookies-title" data-de="Ein Wort zu Cookies" data-en="A word on cookies">Ein Wort zu Cookies</h2>
+        </div>
+        <div class="statement-copy" data-reveal>
+          <p data-de="Auch die oft scheinbar aus dem Nichts aufpoppenden Cookies sind nicht so gern gesehen wie die Namensgeber aus Omas Backstube." data-en="Cookies are small text snippets stored by websites on a user’s computer. They can remember login details, language settings or shopping carts. They can also be used for tracking and personalised advertising, which can raise privacy concerns.">Auch die oft scheinbar aus dem Nichts aufpoppenden Cookies sind nicht so gern gesehen wie die Namensgeber aus Omas Backstube.</p>
+          
+          <div style="margin: 18px 0; padding: 20px; border-left: 2px solid var(--accent); background: rgba(0,0,0,0.02);" data-reveal>
+            <strong style="color: var(--primary); display: block; margin-bottom: 6px;" data-de="Warum heißen sie Cookies? Metapher von Lou Montulli (1994):" data-en="Why are they called cookies? Metaphor by Lou Montulli (1994):">Warum heißen sie Cookies? Metapher von Lou Montulli (1994):</strong>
+            <p style="font-size: 0.92rem; color: var(--muted); margin: 0; line-height: 1.6;" data-de="Der Name „Magic Cookie“ stammt vom Netscape-Entwickler Lou Montulli: Krümel eines Cookies bleiben auf dem Rechner bestehen, obwohl der Keks bereits gegessen (die Website geschlossen) wurde. Es sind Textschnipsel, die sich Anmeldeinformationen, Spracheinstellungen oder Warenkörbe merken, aber auch für Tracking genutzt werden können." data-en="The name 'Magic Cookie' was used by Lou Montulli as a metaphor: crumbs of a cookie remain on your computer even though the cookie has been eaten (the website closed). They are text snippets that remember login info, language settings, or shopping carts, but can also be used for tracking.">Der Name „Magic Cookie“ stammt vom Netscape-Entwickler Lou Montulli: Krümel eines Cookies bleiben auf dem Rechner bestehen, obwohl der Keks bereits gegessen (die Website geschlossen) wurde. Es sind Textschnipsel, die sich Anmeldeinformationen, Spracheinstellungen oder Warenkörbe merken, aber auch für Tracking genutzt werden können.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section closing-grid" aria-labelledby="closing-title">
+        <div class="closing-copy" data-reveal>
+          <p class="section-kicker" data-de="Zusammenarbeit" data-en="Collaboration">Zusammenarbeit</p>
+          <h2 id="closing-title" data-de="KI nutzen — aber richtig." data-en="Use AI — the right way.">KI nutzen — aber richtig.</h2>
+          <p data-de="Wenn Texte mit KI-Unterstützung entstehen, braucht es klare Prüfung, saubere Sprache und ein gutes Gefühl für Zielgruppe und Kontext. Wir begleiten dich dabei." data-en="When text is created with AI support, it requires clear review, polished language and a good feel for audience and context. We support you through it.">Wenn Texte mit KI-Unterstützung entstehen, braucht es klare Prüfung, saubere Sprache und ein gutes Gefühl für Zielgruppe und Kontext. Wir begleiten dich dabei.</p>
+        </div>
+
+        <aside class="cta-block" data-reveal>
+          <p class="panel-label" data-de="Verantwortung" data-en="Responsibility">Verantwortung</p>
+          <h3 data-de="Projekt besprechen?" data-en="Discuss your project?">Projekt besprechen?</h3>
+          <p data-de="Lass uns gemeinsam klären, wie KI-Unterstützung in deinem Schreibprojekt sinnvoll und sicher eingesetzt werden kann." data-en="Let's clarify how AI support can be used meaningfully and safely in your writing project.">Lass uns gemeinsam klären, wie KI-Unterstützung in deinem Schreibprojekt sinnvoll und sicher eingesetzt werden kann.</p>
+          <a class="btn" href="Steini_Kontakt.html">
+            <span data-de="Projekt anfragen" data-en="Inquire about project">Projekt anfragen</span>
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const translatable = document.querySelectorAll("[data-de][data-en]");
+      const langButtons = document.querySelectorAll("[data-lang-switch]");
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#site-menu");
+      const revealItems = document.querySelectorAll("[data-reveal]");
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "en" ? "en" : "de";
+        root.lang = nextLang === "en" ? "en" : "de-CH";
+        translatable.forEach((node) => {
+          node.textContent = node.dataset[nextLang];
+        });
+        langButtons.forEach((button) => {
+          const active = button.dataset.langSwitch === nextLang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        localStorage.setItem("syntext-language", nextLang);
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyLanguage(button.dataset.langSwitch));
       });
-    </script>
-		
-<main>
-<article>
-		<h2>KI & Wir</h2>
-<br>
-<hr>
-			<h3>Was bedeutet AI oder KI?</h3>
-			<p>Artificial Intelligence oder Künstliche Intelligenz bezeichnet die gleiche Methodik. Ein Programm, welches Eingaben erkennt, definiert, umsetzt und darüber hinaus lernfähig ist.</p>
-			<h3>Wie funktioniert KI?</h3>
-			<p>Wie bei jeder Arbeit, benötigt man auch bei der Nutzung von KI das passende Arbeitsumfeld und Werkzeug. In einer Bäckerei lässt sich schliesslich auch nur schwer ein Auto reparieren.
-			Das Arbeitsumfeld stellt unser Endgerät dar (PC, Laptop etc.). Als Werkzeuge dienen die benötigten Softwareprogramme, welche die Befehle/Eingaben erkennen und bearbeiten.
-			Interessant hierbei ist das sogenannte "Moravecs Paradoxon", welches besagt, dass logisches Denken nur sehr wenig Rechenleistung erfordert. Hingegen sensorische, motorische und Wahrnehmungsfähigkeiten enorme Rechenfähigkeiten erfordern. Diese Tatsache verblüfft noch mehr, wenn man sie auf das Verhalten mancher unserer Mitmenschen anwendet.</p>
-			<h3>Wie nutzen wir es?</h3>
-			<p>Wie der Mensch, ist KI ebenfalls nicht fehlerfrei, nicht ohne Grund finden sich auf KI-Generatoren oft kleine Anmerkungen wie etwa <em>"KI-Antworten können Fehler enthalten."</em>. 
-			KI erstellt mittlerweile so gut wie alles mit einem einfachen Knopfdruck. Befehl detailliert eingeben, Enter drücken und auf das Ergebns warten. Tönt perfekt - und scheint eine optimale Zeitersparnis zu garantieren.
-			Dennoch sei erwähnt, dass jedes noch so vollständige und perfekt wirkende Ergebnis auf Korrektheit verfiziert werden muss. Auch KI macht Fehler, vor allem bei Bildern, Rechtschreibung und Grammatik. 
-			Machen Sie den Test. Lassen Sie ein komplexes Bild mit Text erstellen und prüfen Sie auf Fehler im Text - ernüchternd, aber auch beruhigend zu wissen, dass am Ende doch der Mensch das letzte Wort hat.
-			Verteufeln wäre jedoch der falsche Ansatz. Zukunft und Entwicklung lassen sich nicht aufhalten und finden immer einen Weg. Erweitern wir also seine Fähigkeiten und Nutzen es als Support und Inspirationsquelle im täglichen Leben.</p>
-			<h3>Cookies</h3>
-			<p>Auch die oft scheinbar aus dem Nichts aufpoppenden Cookies sind nicht so gern gesehen, wie die Namensgeber aus Omas Backstube.
-			Warum Cookies? Der Name "Magic Cookie" stammt vom amerkianischen Netscape-Entwickler Lou Montulli, er verwendete 1994 diese Metapher, um die von ihm entwickelte Technologie für Web-Cookies zu benennen.
-			Metapher: die Krümel eines "Cookies" bleiben auf dem Rechner bestehen, obwohl der Keks bereits gegessen ist, also die Webseite schon wieder geschlossen wurde.</p>
-			<p>Cookies sind Textschnipsel, die von Webseiten auf dem Computer des Nutzers gespeichert werden. Sie dienen dazu, Informationen über das Verhalten des Nutzers auf der Website zu speichern und bei späteren Besuchen wieder abzurufen. 
-			So können Websites sich zum Beispiel an Anmeldeinformationen, Spracheinstellungen oder Artikel im Warenkorb erinnern. Cookies können aber auch für Tracking und personalisierte Werbung verwendet werden, was zu Datenschutzbedenken führen kann.</p>
-	
-</article>
 
-<br>
+      menuToggle?.addEventListener("click", () => {
+        const open = !menu.classList.contains("is-open");
+        menu.classList.toggle("is-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
 
-</main>
-	<footer>
-		<p>© copyright; 2024 Syntext by Steinhardt</p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
-		<p><a target="_blank" href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
-	</footer>
-</div>
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("is-open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      applyLanguage(localStorage.getItem("syntext-language") || "de");
+    })();
+  </script>
 </body>
 </html>
