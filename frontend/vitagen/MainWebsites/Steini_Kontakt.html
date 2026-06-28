@@ -1,152 +1,883 @@
 <!DOCTYPE html>
-<html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>	
-	
+<html lang="de-CH">
 <head>
-		<meta charset="utf-8">														<!-- allgemeine deutsche Formatierung dass auch Umlaute eingegeben werden können -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
-		<title>Kontakt SYNTEXT</title>
-		<link rel="stylesheet" href="demo.css">	
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-<div class="topbar">
-      <nav class="nav">
-        <a href="index.html" class="brand">
-          <div class="brand-mark">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
-            </svg>
-          </div>
-          <span class="brand-name">SYNTEXT</span>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kontakt | SYNTEXT</title>
+  <meta name="description" content="Nehmen Sie Kontakt mit Syntext auf. Wir beraten Sie gerne zu Texten, Bewerbungen, Webauftritten und digitaler Kommunikation.">
+  <meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --ai-purple: #6366f1;
+      --ai-violet: #8b5cf6;
+      --ai-blue: #2563eb;
+      --ai-teal: #0f766e;
+      --ai-cyan: #0ea5e9;
+
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
+
+      --ink: var(--text);
+      --forest: var(--primary);
+      --forest-2: var(--primary2);
+      --paper: var(--bg);
+      --panel: var(--surface);
+      --stone: var(--accent-soft);
+      --stone-2: #e9dcc5;
+      --brass: var(--accent);
+      --teal: var(--ai-teal);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="page"] {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before { top: -6px; }
+    .menu-toggle span::after { top: 6px; }
+
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    /* Section & Content Layout */
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      color: var(--primary);
+      min-height: 1.1em;
+    }
+
+    .hero-lede {
+      max-width: 620px;
+      margin-bottom: 38px;
+      color: #34413d;
+      font-size: clamp(1.06rem, 2vw, 1.22rem);
+      line-height: 1.65;
+      font-weight: 500;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+      gap: 48px;
+      align-items: start;
+      margin-top: 34px;
+    }
+
+    /* Form Styling */
+    .contact-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 42px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.01em;
+    }
+
+    .form-input,
+    .form-select {
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--surface-soft);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: border-color 180ms ease, box-shadow 180ms ease, background-color 180ms ease;
+    }
+
+    .form-input:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(185, 151, 104, 0.15);
+      background: var(--surface);
+    }
+
+    .form-select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23b99768' stroke-width='2.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M19 9l-7 7-7-7'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 46px;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 52px;
+      border: 1px solid transparent;
+      border-radius: var(--radius);
+      padding: 14px 28px;
+      font-weight: 800;
+      line-height: 1;
+      font-size: 0.95rem;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: var(--forest);
+      color: #fffaf0;
+      box-shadow: 0 18px 42px rgba(15, 59, 51, 0.22);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    /* Aside Notes Card */
+    .info-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.72);
+      box-shadow: var(--soft-shadow);
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .info-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: var(--accent);
+    }
+
+    .info-card h2 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0;
+      letter-spacing: -0.03em;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--muted);
+      font-weight: 600;
+      line-height: 1.7;
+      font-size: 0.96rem;
+    }
+
+    /* Footer Styling */
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+      margin-top: 60px;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    /* Reveal animations */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 34px;
+      }
+
+      .contact-card {
+        padding: 28px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+      }
+
+      .section {
+        padding: 48px 0;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+      }
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
+          <a href="Steini_Kontakt.html" aria-current="page" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
 
-        <div class="nav-links" id="nav-links">
-          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
-          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
-          <a href="Steini_About.html" class="nav-item">About</a>
-          <a href="Steini_Shop.html" class="nav-item">Shop</a>
-          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
-          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
         </div>
       </nav>
-    </div>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
-        const links = document.getElementById('nav-links');
+    </header>
 
-        if (btn && links) {
-          btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
-            links.classList.toggle('open');
-          });
-        }
+    <main id="main">
+      <section class="section">
+        <div data-reveal>
+          <p class="eyebrow" data-de="Kontakt" data-en="Contact">Kontakt</p>
+          <h1 id="typewriter"></h1>
+          <p class="hero-lede" data-de="Erzählen Sie kurz, wobei SYNTEXT unterstützen kann. Wir prüfen Ihre Anfrage und melden uns mit dem passenden nächsten Schritt." data-en="Briefly tell us how SYNTEXT can support you. We will review your request and get back to you with the right next step.">Erzählen Sie kurz, wobei SYNTEXT unterstützen kann. Wir prüfen Ihre Anfrage und melden uns mit dem passenden nächsten Schritt.</p>
+        </div>
+
+        <div class="contact-grid">
+          <div class="contact-card" data-reveal>
+            <form method="post" action="kontaktformular.php">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="vorname" data-de="Vorname" data-en="First Name">Vorname</label>
+                  <input class="form-input" type="text" name="prename" id="vorname">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="nachname" data-de="Nachname" data-en="Last Name">Nachname</label>
+                  <input class="form-input" type="text" name="name" id="nachname">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="strasse" data-de="Strasse" data-en="Street">Strasse</label>
+                  <input class="form-input" type="text" name="strasse" id="strasse">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="plzort" data-de="PLZ / Ort" data-en="ZIP / City">PLZ/Ort</label>
+                  <input class="form-input" type="text" name="plzort" id="plzort">
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label" for="firm" data-de="Firma" data-en="Company">Firma</label>
+                  <input class="form-input" type="text" name="firm" id="firm">
+                </div>
+                <div class="form-group">
+                  <label class="form-label" for="telephone" data-de="Telefon" data-en="Phone">Telefon</label>
+                  <input class="form-input" type="text" name="telephon" id="telephone">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="mail" data-de="E-Mail" data-en="Email">E-Mail</label>
+                <input class="form-input" type="email" name="mail" id="mail">
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="products" data-de="Worum geht es?" data-en="What is this about?">Worum geht's?</label>
+                <select class="form-select" name="products" id="products">
+                  <option data-de="Page-Upgrade" data-en="Page-Upgrade">Page-Upgrade</option>
+                  <option data-de="Bewerbungs-Kit" data-en="Application Kit">Bewerbungs-Kit</option>
+                  <option data-de="Impact Copy" data-en="Impact Copy">Impact Copy</option>
+                  <option data-de="ON-PAGE Optimierung" data-en="ON-PAGE Optimization">ON-PAGE Optimierung</option>
+                  <option data-de="Drucksachen" data-en="Printed Materials">Drucksachen</option>
+                  <option data-de="DiMe" data-en="DiMe">DiMe</option>
+                  <option data-de="Sonstiges" data-en="Other">Sonstiges</option>
+                </select>
+              </div>
+
+              <button type="submit" class="btn btn-primary" data-de="Anfrage senden" data-en="Send request">Anfrage senden</button>
+            </form>
+          </div>
+
+          <aside class="info-card" data-reveal>
+            <h2 data-de="Frag uns" data-en="Ask us">Frag uns</h2>
+            <p data-de="Du bist dir noch nicht sicher, was du genau benötigst? Kein Problem – wir bieten dir gerne eine unverbindliche Ersteinschätzung deiner aktuellen Situation an. Auf Wunsch nehmen wir Kontakt mit dir auf und vereinbaren einen Termin für ein kostenloses Orientierungsgespräch. So kannst du fundiert entscheiden – ganz ohne Verpflichtung." data-en="Not sure exactly what you need? No problem – we are happy to offer an initial assessment without obligation. On request, we will get in touch to schedule a free orientation talk. That way you can make a sound decision – completely commitment-free.">Du bist dir noch nicht sicher, was du genau benötigst? Kein Problem – wir bieten dir gerne eine unverbindliche Ersteinschätzung deiner aktuellen Situation an. Auf Wunsch nehmen wir Kontakt mit dir auf und vereinbaren einen Termin für ein kostenloses Orientierungsgespräch. So kannst du fundiert entscheiden – ganz ohne Verpflichtung.</p>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const translatable = document.querySelectorAll("[data-de][data-en]");
+      const langButtons = document.querySelectorAll("[data-lang-switch]");
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#site-menu");
+      const revealItems = document.querySelectorAll("[data-reveal]");
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "en" ? "en" : "de";
+        root.lang = nextLang === "en" ? "en" : "de-CH";
+        translatable.forEach((node) => {
+          node.textContent = node.dataset[nextLang];
+        });
+        langButtons.forEach((button) => {
+          const active = button.dataset.langSwitch === nextLang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        localStorage.setItem("syntext-language", nextLang);
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          applyLanguage(button.dataset.langSwitch);
+          startTypewriter();
+        });
       });
-    </script>
-		
-<main>
-			<h1 id="typewriter"></h1>
 
-<script>
-  const text = "Kontaktformular";
-  const target = document.getElementById("typewriter");
-  let i = 0;
+      menuToggle?.addEventListener("click", () => {
+        const open = !menu.classList.contains("is-open");
+        menu.classList.toggle("is-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
 
-  function typeWriter() {
-    if (i < text.length) {
-      target.innerHTML += text.charAt(i);
-      i++;
-      setTimeout(typeWriter, 100); // Geschwindigkeit in ms
-    }
-  }
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("is-open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
 
-  typeWriter(); // Start
-</script>
-<br>
-<hr>
-<br>
-<form method="post" action="kontaktformular.php">
-    <label for="vorname">Vorname:</label><br>
-    <input type="text" name="prename" id="vorname"><br>
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
 
-    <label for="nachname">Nachname:</label><br>
-    <input type="text" name="name" id="nachname"><br>
+      // Typewriter implementation
+      const typewriterTarget = document.getElementById("typewriter");
+      let typewriterTimer = null;
 
-    <label for="strasse">Strasse:</label><br>
-    <input type="text" name="strasse" id="strasse"><br>
+      function startTypewriter() {
+        if (typewriterTimer) clearTimeout(typewriterTimer);
+        typewriterTarget.innerHTML = "";
+        const lang = localStorage.getItem("syntext-language") || "de";
+        const text = lang === "en" ? "Get in touch" : "Kontakt aufnehmen";
+        let idx = 0;
 
-	<label for="plzort">PLZ/Ort:</label><br>
-    <input type="text" name="plzort" id="plzort"><br>
-	
-    <label for="firm">Firma:</label><br>
-    <input type="text" name="firm" id="firm"><br>
+        function type() {
+          if (idx < text.length) {
+            typewriterTarget.innerHTML += text.charAt(idx);
+            idx++;
+            typewriterTimer = setTimeout(type, 100);
+          }
+        }
+        type();
+      }
 
-    <label for="telephone">Telefon:</label><br>
-    <input type="text" name="telephon" id="telephone"><br>
-
-    <label for="mail">E-Mail:</label><br>
-    <input type="email" name="mail" id="mail"><br>
-<br>
-    <label for="products">Worum geht`s?</label><br><br>
-    <select name="products" id="products">
-      <option>Page-Upgrade</option>
-      <option>Bewerbungs-Kit</option>
-      <option>Impact Copy</option>
-		<option>ON-PAGE Optimierung</option>
-		<option>Drucksachen</option>
-      <option>DiMe</option>
-		<option>Sonstiges</option>
-    </select><br><br>
-<br>
-<br>
-    <input type="submit" value="Senden">
-  </form>
-<br>
-<br>
-<br>	
-	<aside class="fullwidth">
-		<h2>"Frag uns"</h2>
-		<p>Du bist dir noch nicht sicher, was du genau benötigst?
-Kein Problem – wir bieten dir gerne eine unverbindliche Ersteinschätzung deiner aktuellen Situation an. Auf Wunsch nehmen wir Kontakt mit dir auf und vereinbaren einen Termin für ein kostenloses Orientierungsgespräch.
-So kannst du fundiert entscheiden – ganz ohne Verpflichtung.</p>
-	</aside>
-<br>
-<br>
-<br>
-<br>
-</main>
-<br>
-<br>
-	<footer>
-		<p>© copyright; 2024 Syntext by Steinhardt</p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
-		<p><a target="_blank" href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
-	</footer>
-</div>
+      applyLanguage(localStorage.getItem("syntext-language") || "de");
+      startTypewriter();
+    })();
+  </script>
 </body>
 </html>

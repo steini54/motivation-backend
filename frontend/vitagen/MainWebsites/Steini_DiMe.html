@@ -1,119 +1,910 @@
 <!DOCTYPE html>
-<html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>	
-	
+<html lang="de-CH">
 <head>
-		<meta charset="utf-8">		
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
-		<title>DiMe SYNTEXT</title>
-		<link rel="stylesheet" href="demo.css">	
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-</head>																				<!-- link zum css Stylesheet. Hier in demo.css wird alles extern festgehalten -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DiMe – Dein digitales Ich | SYNTEXT</title>
+  <meta name="description" content="DiMe vereint Persönlichkeit und berufliches Profil auf moderne und professionelle Weise.">
+  <meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
 
+      --ink: var(--text);
+      --forest: var(--primary);
+      --paper: var(--bg);
+      --panel: var(--surface);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a[aria-current="page"] {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before { top: -6px; }
+    .menu-toggle span::after { top: 6px; }
+
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 72px 0;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin: 0 0 16px 0;
+      color: var(--accent);
+      font-size: 0.85rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .hero-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: center;
+      margin-bottom: 80px;
+    }
+
+    .hero-layout h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0 0 24px 0;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+    }
+
+    .hero-lede {
+      font-size: 1.15rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin: 0 0 32px 0;
+    }
+
+    .video-showcase {
+      width: 100%;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background: #000;
+      position: relative;
+      aspect-ratio: 16 / 9;
+    }
+
+    .video-showcase video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .dime-logo-center {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 32px;
+    }
+
+    .dime-logo-center img {
+      max-width: 160px;
+      height: auto;
+    }
+
+    .dime-philosophy {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto 60px auto;
+      font-size: 1.25rem;
+      color: var(--text);
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .dime-philosophy strong {
+      color: var(--primary);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+      margin-bottom: 80px;
+    }
+
+    .feature-card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      box-shadow: var(--soft-shadow);
+      transition: transform 200ms ease, box-shadow 200ms ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .feature-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-md);
+      background: rgba(185, 151, 104, 0.12);
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin: 0 0 12px 0;
+    }
+
+    .feature-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .cta-card {
+      background: linear-gradient(135deg, #1f2933, #384252);
+      border-radius: var(--radius-xl);
+      padding: 48px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 40px;
+      align-items: center;
+      color: white;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-card::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(185, 151, 104, 0.15), transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-info h3 {
+      font-size: 1.8rem;
+      margin: 0 0 16px 0;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-info p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 1.05rem;
+      max-width: 500px;
+      line-height: 1.6;
+    }
+
+    .cta-actions {
+      display: flex;
+      gap: 16px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 12px 24px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #ffffff;
+      box-shadow: 0 12px 28px rgba(185, 151, 104, 0.25);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+      color: #ffffff;
+      backdrop-filter: blur(8px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+      margin-top: 60px;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .hero-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        margin-bottom: 48px;
+      }
+
+      .cta-card {
+        grid-template-columns: 1fr;
+        padding: 34px;
+        gap: 28px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .section {
+        padding: 48px 0;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      
+      .hero-layout h1 {
+        font-size: 2.4rem;
+      }
+      
+      .dime-philosophy {
+        font-size: 1.1rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+      }
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
 <body>
-<div id="holder">																	<!-- oberster Layoutcontainer in der Hierarchie. holder oder wrapper. Alles darin wird vereinheitlicht -->
-<div class="topbar">
-      <nav class="nav">
-        <a href="index.html" class="brand">
-          <div class="brand-mark">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
-            </svg>
-          </div>
-          <span class="brand-name">SYNTEXT</span>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
+          <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" aria-current="page" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
 
-        <div class="nav-links" id="nav-links">
-          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
-          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
-          <a href="Steini_About.html" class="nav-item">About</a>
-          <a href="Steini_Shop.html" class="nav-item">Shop</a>
-          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
-          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
         </div>
       </nav>
-    </div>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
-        const links = document.getElementById('nav-links');
+    </header>
 
-        if (btn && links) {
-          btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
-            links.classList.toggle('open');
-          });
-        }
+    <main id="main">
+      <section class="section">
+        
+        <div class="hero-layout" data-reveal>
+          <div class="hero-content">
+            <p class="eyebrow" data-de="Produkt: DiMe" data-en="Product: DiMe">Produkt: DiMe</p>
+            <h1 data-de="DiMe – Dein digitales Ich" data-en="DiMe – Your Digital Self">DiMe – Dein digitales Ich</h1>
+            <p class="hero-lede" data-de="DiMe vereint Persönlichkeit und berufliches Profil auf moderne und professionelle Weise. Es fungiert als digitale Visitenkarte und zugleich als persönliche Microsite, mit allen Vorteilen eines maßgeschneiderten Online-Profils." data-en="DiMe unites personality and professional profile in a modern and professional manner. It functions as a digital business card and a personal microsite, offering all the benefits of a customized online profile.">DiMe vereint Persönlichkeit und berufliches Profil auf moderne und professionelle Weise. Es fungiert als digitale Visitenkarte und zugleich als persönliche Microsite, mit allen Vorteilen eines maßgeschneiderten Online-Profils.</p>
+            <a href="Steini_Kontakt.html" class="btn btn-primary" data-de="DiMe anfragen" data-en="Request your DiMe">DiMe anfragen</a>
+          </div>
+          
+          <div class="video-showcase">
+            <video src="assets/DiMeClip.mp4" autoplay loop muted playsinline controls aria-label="DiMe Showcase Video"></video>
+          </div>
+        </div>
+
+        <div class="dime-logo-center" data-reveal>
+          <img src="assets/Logo-Trans1.png" alt="DiMe Logo" aria-hidden="true">
+        </div>
+
+        <p class="dime-philosophy" data-reveal data-de="Ein DiMe geht weit über die klassischen Informationen einer Visitenkarte hinaus. Geschäftspartner, Kunden oder Interessenten erhalten gezielt ausgewählte Inhalte, die individuell steuerbar und bewusst dosiert sind. Entscheide selbst, welche Informationen Du teilen möchtest – <strong>diskret, souverän und auf den Punkt gebracht.</strong>" data-en="A DiMe goes far beyond the classic information of a business card. Business partners, clients, or prospects receive selectively chosen content that is individually manageable and consciously dosed. You decide which information you want to share – <strong>discreet, confident, and straight to the point.</strong>">Ein DiMe geht weit über die klassischen Informationen einer Visitenkarte hinaus. Geschäftspartner, Kunden oder Interessenten erhalten gezielt ausgewählte Inhalte, die individuell steuerbar und bewusst dosiert sind. Entscheide selbst, welche Informationen Du teilen möchtest – <strong>diskret, souverän und auf den Punkt gebracht.</strong></p>
+
+        <div class="features-grid">
+          
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+            </div>
+            <h3 data-de="Professionelles Auftreten" data-en="Professional Presence">Professionelles Auftreten</h3>
+            <p data-de="Im Stil einer eigenen Website, die Seriosität und Kompetenz auf den ersten Blick vermittelt." data-en="Presented in the style of your own website, conveying reliability and competence at first glance.">Im Stil einer eigenen Website, die Seriosität und Kompetenz auf den ersten Blick vermittelt.</p>
+          </div>
+
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12A10 10 0 1 1 12 2a10 10 0 0 1 10 10z"></path><polyline points="12 6 12 12 16 14"></polyline></svg>
+            </div>
+            <h3 data-de="Jederzeit aktuell" data-en="Always Up to Date">Jederzeit aktuell</h3>
+            <p data-de="Ihre digitale Visitenkarte ist immer auf dem neuesten Stand. Einmal anpassen, überall verfügbar." data-en="Your digital business card is always current. Update once, available everywhere.">Ihre digitale Visitenkarte ist immer auf dem neuesten Stand. Einmal anpassen, überall verfügbar.</p>
+          </div>
+
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <h3 data-de="Ohne App & Login" data-en="No App or Login Needed">Ohne App & Login</h3>
+            <p data-de="Kein Download oder Account nötig. Es funktioniert wie eine öffentliche, sofort zugängliche Website." data-en="No download or account required. It works seamlessly as an instantly accessible public website.">Kein Download oder Account nötig. Es funktioniert wie eine öffentliche, sofort zugängliche Website.</p>
+          </div>
+
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <h3 data-de="Ideal für Bewerbungen" data-en="Ideal for Applications">Ideal für Bewerbungen</h3>
+            <p data-de="Nutzen Sie Ihr DiMe für Bewerbungen, um Talent, Können und Erfahrung eindrucksvoll zu präsentieren." data-en="Use your DiMe for applications to impressively showcase your talent, skills, and experience.">Nutzen Sie Ihr DiMe für Bewerbungen, um Talent, Können und Erfahrung eindrucksvoll zu präsentieren.</p>
+          </div>
+
+          <div class="feature-card" data-reveal>
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 data-de="Netzwerk erweitern" data-en="Expand Your Network">Netzwerk erweitern</h3>
+            <p data-de="Teilen Sie Ihre Kompetenzen mühelos und knüpfen Sie neue Kontakte auf dem direkten Weg." data-en="Share your competencies effortlessly and build new contacts efficiently.">Teilen Sie Ihre Kompetenzen mühelos und knüpfen Sie neue Kontakte auf dem direkten Weg.</p>
+          </div>
+
+        </div>
+
+        <div class="cta-card" data-reveal>
+          <div class="cta-info">
+            <h3 data-de="Heb Dich von der Menge ab" data-en="Stand out from the crowd">Heb Dich von der Menge ab</h3>
+            <p data-de="Lass Dich von unserem Musterbeispiel inspirieren. Bestelle jetzt Dein eigenes DiMe und präsentiere Dich von Deiner besten Seite." data-en="Let our example inspire you. Order your own DiMe now and present yourself at your best.">Lass Dich von unserem Musterbeispiel inspirieren. Bestelle jetzt Dein eigenes DiMe und präsentiere Dich von Deiner besten Seite.</p>
+          </div>
+          <div class="cta-actions">
+            <a href="Steini_Kontakt.html" class="btn btn-primary" data-de="DiMe anfragen" data-en="Request DiMe">DiMe anfragen</a>
+          </div>
+        </div>
+
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      // Setup language translations
+      const storedLang = localStorage.getItem('syntext-language') || 'de';
+      const root = document.documentElement;
+      
+      const updateLanguage = (lang) => {
+        root.lang = lang;
+        localStorage.setItem('syntext-language', lang);
+        
+        document.querySelectorAll('[data-lang-switch]').forEach(btn => {
+          const btnLang = btn.getAttribute('data-lang-switch');
+          if (btnLang === lang) {
+            btn.classList.add('is-active');
+            btn.setAttribute('aria-pressed', 'true');
+          } else {
+            btn.classList.remove('is-active');
+            btn.setAttribute('aria-pressed', 'false');
+          }
+        });
+
+        document.querySelectorAll('[data-de]').forEach(el => {
+          if (lang === 'en' && el.hasAttribute('data-en')) {
+            el.innerHTML = el.getAttribute('data-en');
+          } else {
+            el.innerHTML = el.getAttribute('data-de');
+          }
+        });
+      };
+
+      updateLanguage(storedLang);
+
+      document.querySelectorAll('[data-lang-switch]').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          const lang = e.currentTarget.getAttribute('data-lang-switch');
+          updateLanguage(lang);
+        });
       });
-    </script>
-		
-<main>
-	<div class="logo-wrapper">
-  <img src="images/Logo-Trans1.png" alt="Logo-Bild" class="logo-rotate">
-	</div>
-	<h3>DiMe – Dein digitales Ich</h3>
-		<p>DiMe vereint Persönlichkeit und berufliches Profil auf moderne und professionelle Weise. Es fungiert als digitale Visitenkarte und zugleich als persönliche Microsite, mit allen Vorteilen eines maßgeschneiderten Online-Profils - <strong>schlicht, informativ, funktionell.</strong></p>
-		<p>Dabei geht ein DiMe weit über die klassischen Informationen einer Visitenkarte hinaus: Geschäftspartner, Kunden oder Interessenten erhalten gezielt ausgewählte Inhalte, die individuell steuerbar und bewusst dosiert sind. Entscheide selbst, welche Informationen Du teilen möchtest – <strong>diskret, souverän, auf den Punkt gebracht.</strong></p>
-		<p>Vorteile von DiMe</p>
-			<ul>
-				<li>Professionelles Auftreten, im Stil einer eigenen Website</li>
-				<li>Immer up to Date</li>
-				<li>Digitale Visitenkarten - schlicht und immer aktuell</li>
-				<li>Ohne Login oder Account - wie eine öffentliche Website</li>
-				<li>Nutze es für Bewerbungen</li>
-				<li>Erweitere Dein Netzwerk</li>
-				<li>Nutze Deine Fähigkeiten</li> 
-				<li>Zeig Dein Können und Talent</li>
-				<li>Teile Erfahrungen</li>
-				<li>Ohne App, einfach im Web</li>
-			</ul>
-		<p>Lass Dich von unserem Musterbeispiel inspirieren. Bestelle jetzt Dein eigenes <a target="_blank" href="Steini_Kontakt.html">DiMe</a> und heb Dich von der Menge ab.</p>
-	
-<br>
-	<aside class="fullwidth">
-<div class="video-container">
-  <iframe 
-    src="images/DiMeClip.mp4" 
-    title="Do your DiMe" 
-    frameborder="0" 
-    allowfullscreen
-  ></iframe>
-</div>
-	</aside>
-<br>
-<br>
-</main>
-	<footer>
-		<p>© copyright; 2024 Syntext by Steinhardt</p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
-		<p><a target="_blank" href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
-	</footer>
-</div>
+
+      // Mobile Menu
+      const menuToggle = document.querySelector('.menu-toggle');
+      const siteMenu = document.getElementById('site-menu');
+
+      if (menuToggle && siteMenu) {
+        menuToggle.addEventListener('click', () => {
+          const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+          menuToggle.setAttribute('aria-expanded', !isExpanded);
+          if (!isExpanded) {
+            siteMenu.classList.add('is-open');
+          } else {
+            siteMenu.classList.remove('is-open');
+          }
+        });
+
+        document.addEventListener('click', (e) => {
+          if (siteMenu.classList.contains('is-open') && 
+              !siteMenu.contains(e.target) && 
+              !menuToggle.contains(e.target)) {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            siteMenu.classList.remove('is-open');
+          }
+        });
+      }
+
+      // Intersection Observer for animations
+      const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+      };
+
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, observerOptions);
+
+      document.querySelectorAll('[data-reveal]').forEach(el => {
+        observer.observe(el);
+      });
+
+    })();
+  </script>
 </body>
 </html>

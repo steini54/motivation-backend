@@ -1,144 +1,862 @@
 <!DOCTYPE html>
-<html lang="de">
-	
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-18Q6CWP558');
-</script>
-	
+<html lang="de-CH">
 <head>
-		<meta charset="utf-8">														<!-- allgemeine deutsche Formatierung dass auch Umlaute eingegeben werden können -->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
-		<title>AGB SYNTEXT</title>
-		<link rel="stylesheet" href="demo.css">	
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon">
-</head>																				<!-- link zum css Stylesheet. Hier in demo.css wird alles extern festgehalten -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AGB | SYNTEXT</title>
+  <meta name="description" content="Allgemeine Geschäftsbedingungen von Syntext. Rechtliche Grundlagen und Bedingungen für unsere Dienstleistungen.">
+  <meta name="keywords" content="Texte, Schreiben, Redigieren, Performance, On-Page Optimierung, Grammatikfehler, Struktur der Website, Klickrate erhöhen, Suchmaschinen Ranking"/> 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="images/favicon.ico" type="image/x-icon">
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-18Q6CWP558"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-18Q6CWP558');
+  </script>
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --surface: #ffffff;
+      --surface-soft: #f9fafb;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --primary: #202833;
+      --primary2: #384252;
+      --accent: #b99768;
+      --accent-soft: #f4efe7;
+      --success: #12725a;
+      
+      --ai-purple: #6366f1;
+      --ai-violet: #8b5cf6;
+      --ai-blue: #2563eb;
+      --ai-teal: #0f766e;
+      --ai-cyan: #0ea5e9;
 
+      --shadow: 0 22px 60px rgba(17, 24, 39, 0.08);
+      --soft-shadow: 0 12px 36px rgba(17, 24, 39, 0.055);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius: 12px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --max: 1180px;
+
+      --ink: var(--text);
+      --forest: var(--primary);
+      --forest-2: var(--primary2);
+      --paper: var(--bg);
+      --panel: var(--surface);
+      --stone: var(--accent-soft);
+      --stone-2: #e9dcc5;
+      --brass: var(--accent);
+      --teal: var(--ai-teal);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at 8% 0%, rgba(185, 151, 104, 0.13), transparent 32%),
+        radial-gradient(circle at 88% 9%, rgba(99, 102, 241, 0.07), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .skip-link {
+      position: fixed;
+      left: 16px;
+      top: 12px;
+      z-index: 100;
+      transform: translateY(-140%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      padding: 10px 14px;
+      font-weight: 700;
+      transition: transform 180ms ease;
+    }
+
+    .skip-link:focus {
+      transform: translateY(0);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(23, 32, 29, 0.08);
+      background: rgba(251, 250, 246, 0.86);
+      backdrop-filter: blur(18px);
+    }
+
+    .nav {
+      width: min(var(--max), calc(100% - 32px));
+      min-height: 76px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+
+    .brand-text {
+      display: grid;
+      line-height: 1.05;
+    }
+
+    .brand-name {
+      font-size: 1.02rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+
+    .brand-sub {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .nav-links a {
+      border-radius: var(--radius);
+      padding: 10px 12px;
+      color: #2c3834;
+      font-size: 0.92rem;
+      font-weight: 700;
+      transition: background 180ms ease, color 180ms ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      background: rgba(15, 59, 51, 0.08);
+      color: var(--forest);
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .language-toggle {
+      display: inline-grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.72);
+      padding: 3px;
+    }
+
+    .language-toggle button,
+    .menu-toggle {
+      font: inherit;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+    }
+
+    .language-toggle button {
+      min-width: 42px;
+      border-radius: 6px;
+      padding: 7px 9px;
+      color: var(--muted);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .language-toggle button.is-active {
+      background: var(--forest);
+      color: #fffaf0;
+    }
+
+    .mobile-language-row {
+      display: none;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      background: var(--forest);
+      color: #ffffff;
+      padding: 10px 18px;
+      font-size: 0.92rem;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(31, 41, 51, 0.18);
+      transition: transform 180ms ease, background 180ms ease, box-shadow 180ms ease;
+    }
+
+    .nav-cta:hover,
+    .nav-cta:focus-visible {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px rgba(31, 41, 51, 0.14);
+    }
+
+    .btn svg,
+    .nav-cta svg {
+      width: 18px;
+      height: 18px;
+      flex: 0 0 auto;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--ink);
+      place-items: center;
+    }
+
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      position: relative;
+      transition: background 180ms ease;
+    }
+
+    .menu-toggle span::before,
+    .menu-toggle span::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      width: 18px;
+      height: 2px;
+      background: currentColor;
+      transition: transform 180ms ease, top 180ms ease;
+    }
+
+    .menu-toggle span::before { top: -6px; }
+    .menu-toggle span::after { top: 6px; }
+
+    .menu-toggle[aria-expanded="true"] span {
+      background: transparent;
+    }
+
+    .menu-toggle[aria-expanded="true"] span::before {
+      top: 0;
+      transform: rotate(45deg);
+    }
+
+    .menu-toggle[aria-expanded="true"] span::after {
+      top: 0;
+      transform: rotate(-45deg);
+    }
+
+    /* Section & Content Layout */
+    .section {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 86px 0;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 18px;
+      color: var(--forest);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.13em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: var(--brass);
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      line-height: 0.95;
+      letter-spacing: -0.05em;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .legal-layout {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 48px;
+      align-items: start;
+      margin-top: 48px;
+    }
+
+    .toc-container {
+      position: sticky;
+      top: 110px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      padding: 24px;
+      box-shadow: var(--soft-shadow);
+      max-height: calc(100vh - 150px);
+      overflow-y: auto;
+    }
+
+    .toc-title {
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin: 0 0 16px 0;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toc-list a {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 180ms ease;
+      line-height: 1.35;
+    }
+
+    .toc-list a:hover {
+      color: var(--accent);
+    }
+
+    .legal-content {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .legal-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      padding: 34px;
+      scroll-margin-top: 110px;
+    }
+
+    .legal-card h3 {
+      font-size: 1.22rem;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 0 0 12px 0;
+      letter-spacing: -0.025em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .legal-card h3::before {
+      content: "•";
+      color: var(--accent);
+      font-size: 1.6rem;
+      line-height: 1;
+    }
+
+    .legal-card p {
+      margin: 0;
+      color: var(--text);
+      font-size: 0.98rem;
+      font-weight: 500;
+      line-height: 1.7;
+    }
+
+    /* Footer Styling */
+    .site-footer {
+      border-top: 1px solid var(--line);
+      background: #f2eee5;
+      margin-top: 80px;
+    }
+
+    .footer-inner {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 700;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .footer-links a {
+      color: var(--forest);
+      font-weight: 800;
+    }
+
+    /* Reveal animations */
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 580ms ease, transform 580ms ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Responsive Queries */
+    @media (max-width: 980px) {
+      .menu-toggle {
+        display: grid;
+      }
+
+      .nav {
+        position: relative;
+      }
+
+      .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 100%;
+        margin-top: 8px;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-10px);
+        transition: opacity 200ms ease, transform 200ms ease, visibility 200ms ease;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        background: rgba(251, 250, 246, 0.98);
+        backdrop-filter: blur(18px);
+        padding: 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        display: grid !important;
+        grid-template-columns: 1fr;
+        gap: 4px;
+        pointer-events: none;
+      }
+
+      .nav-links.is-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      .nav-links a {
+        padding: 12px;
+      }
+
+      .nav-cta {
+        display: none;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .legal-layout {
+        grid-template-columns: 1fr;
+        gap: 34px;
+      }
+
+      .toc-container {
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .nav {
+        position: relative;
+        width: min(var(--max), calc(100% - 24px));
+        min-height: 64px;
+        margin: 0 auto;
+        padding: 8px 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      }
+
+      .brand {
+        gap: 8px;
+        min-width: 0;
+      }
+
+      .brand-mark {
+        width: 38px;
+        height: 38px;
+      }
+
+      .brand-name {
+        display: block;
+        font-size: 0.95rem;
+      }
+
+      .brand-sub {
+        display: none;
+      }
+
+      .nav-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .nav-actions > .language-toggle {
+        display: none;
+      }
+
+      .nav-links .mobile-language-row {
+        display: inline-grid;
+        width: fit-content;
+        margin-top: 8px;
+      }
+
+      .language-toggle button {
+        min-width: 32px;
+        padding: 6px 7px;
+      }
+
+      .section {
+        padding: 48px 0;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      
+      .legal-card {
+        padding: 24px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        scroll-behavior: auto !important;
+        transition-duration: 0.001ms !important;
+        animation-duration: 0.001ms !important;
+      }
+      [data-reveal] {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  </style>
+</head>
 <body>
-<div id="holder">																	<!-- oberster Layoutcontainer in der Hierarchie. holder oder wrapper. Alles darin wird vereinheitlicht -->
-<div class="topbar">
-      <nav class="nav">
-        <a href="index.html" class="brand">
-          <div class="brand-mark">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/>
-              <path d="M5 3v4"/>
-              <path d="M19 17v4"/>
-              <path d="M3 5h4"/>
-              <path d="M17 19h4"/>
-            </svg>
-          </div>
-          <span class="brand-name">SYNTEXT</span>
+  <a class="skip-link" href="#main" data-de="Zum Inhalt springen" data-en="Skip to content">Zum Inhalt springen</a>
+  <div class="site-shell">
+    <header class="topbar">
+      <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="index.html" aria-label="SYNTEXT home">
+          <img class="brand-mark" src="assets/SyntextIcon.png" alt="" aria-hidden="true">
+          <span class="brand-text">
+            <span class="brand-name">SYNTEXT</span>
+            <span class="brand-sub">by Steinhardt</span>
+          </span>
         </a>
 
-        <!-- Hamburger Icon -->
-        <button class="hamburger" aria-label="Menu" aria-expanded="false" id="mobile-menu-btn">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+        <div class="nav-links" id="site-menu">
+          <a href="index.html" data-de="Home" data-en="Home">Home</a>
+          <a href="Steini_Dienstleistung.html" data-de="Dienstleistungen" data-en="Services">Dienstleistungen</a>
+          <a href="Steini_Konditionen.html" data-de="Konditionen" data-en="Terms">Konditionen</a>
+          <a href="Steini_Kontakt.html" data-de="Kontakt" data-en="Contact">Kontakt</a>
+          <a href="Steini_About.html" data-de="About" data-en="About">About</a>
+          <a href="Steini_Shop.html" data-de="Shop" data-en="Shop">Shop</a>
+          <a href="Steini_DiMe.html" data-de="DiMe" data-en="DiMe">DiMe</a>
+          <div class="language-toggle mobile-language-row" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
 
-        <div class="nav-links" id="nav-links">
-          <a href="Steini_Dienstleistung.html" class="nav-item">Dienstleistung</a>
-          <a href="Steini_Konditionen.html" class="nav-item">Konditionen</a>
-          <a href="Steini_About.html" class="nav-item">About</a>
-          <a href="Steini_Shop.html" class="nav-item">Shop</a>
-          <a href="Steini_DiMe.html" class="nav-item">DiMe</a>
-          <a href="Steini_Kontakt.html" class="nav-item">Kontakt</a>
+        <div class="nav-actions">
+          <div class="language-toggle" aria-label="Language">
+            <button type="button" class="is-active" data-lang-switch="de" aria-pressed="true">DE</button>
+            <button type="button" data-lang-switch="en" aria-pressed="false">EN</button>
+          </div>
+          <a class="nav-cta" href="/bewerbungs-generator/start.html">
+            <span data-de="VitaGen starten" data-en="Start VitaGen">VitaGen starten</span>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+          <button class="menu-toggle" type="button" aria-label="Menu" aria-controls="site-menu" aria-expanded="false">
+            <span aria-hidden="true"></span>
+          </button>
         </div>
       </nav>
-    </div>
-    
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('mobile-menu-btn');
-        const links = document.getElementById('nav-links');
+    </header>
 
-        if (btn && links) {
-          btn.addEventListener('click', () => {
-            const expanded = btn.getAttribute('aria-expanded') === 'true' || false;
-            btn.setAttribute('aria-expanded', !expanded);
-            links.classList.toggle('open');
-          });
-        }
+    <main id="main">
+      <section class="section">
+        <div data-reveal>
+          <p class="eyebrow" data-de="Rechtliches" data-en="Legal">Rechtliches</p>
+          <h1 data-de="Allgemeine Geschäftsbedingungen" data-en="Terms of Service">Allgemeine Geschäftsbedingungen</h1>
+        </div>
+
+        <div class="legal-layout">
+          <aside class="toc-container" data-reveal>
+            <div class="toc-title" data-de="Inhaltsverzeichnis" data-en="Table of Contents">Inhaltsverzeichnis</div>
+            <ul class="toc-list">
+              <li><a href="#anwendbarkeit">Anwendbarkeit & Umfang</a></li>
+              <li><a href="#angebot">Angebot</a></li>
+              <li><a href="#kaufvertrag">Abschluss eines Kaufvertrags</a></li>
+              <li><a href="#verfuegbarkeit">Verfügbarkeit & Leistungsvorbehalt</a></li>
+              <li><a href="#preise">Preise & Kosten</a></li>
+              <li><a href="#zahlungsbedingungen">Zahlungsbedingungen</a></li>
+              <li><a href="#minderjaehrige">Minderjährigen Schutz</a></li>
+              <li><a href="#eigentumsvorbehalt">Eigentumsvorbehalt</a></li>
+              <li><a href="#nutzungsrechte">Nutzungs- & Verwendungsrechte</a></li>
+              <li><a href="#widerruf">Widerrufs- & Rückgaberecht</a></li>
+              <li><a href="#reklamationen">Reklamationen & Beschwerden</a></li>
+              <li><a href="#haftung">Haftung</a></li>
+              <li><a href="#konto">Registrierung</a></li>
+              <li><a href="#datenschutz">Datenschutz</a></li>
+              <li><a href="#urheberrecht">Urheberrecht</a></li>
+              <li><a href="#copyright">Copyright</a></li>
+              <li><a href="#pruefbericht">Prüfbericht</a></li>
+              <li><a href="#vertragsdauer">Vertragsdauer & Kündigung</a></li>
+              <li><a href="#dime">DiMe</a></li>
+            </ul>
+          </aside>
+
+          <div class="legal-content">
+            <article class="legal-card" id="anwendbarkeit" data-reveal>
+              <h3>Anwendbarkeit und Umfang der AGB</h3>
+              <p>Zusammensetzung der AGB stützen sich auf das Deutsche BGB und das Schweizer ZGB/OR. Es kommt materielles Schweizer Recht zur Anwendung. Gerichtstand sind die ordentlichen Gerichte am Sitz von SYNTEXT. SYNTEXT, im Brüel 6a, CH-8370 Sirnach, Schweiz.</p>
+            </article>
+
+            <article class="legal-card" id="angebot" data-reveal>
+              <h3>Angebot</h3>
+              <p>Alle angebotenen Dienstleistungen der SYNTEXT sind kein rechtlich geltendes Angebot, sondern eine Aufforderung an den Kunden, eine verbindliche Bestellung abzugeben.</p>
+            </article>
+
+            <article class="legal-card" id="kaufvertrag" data-reveal>
+              <h3>Abschluss eines Kaufvertrags</h3>
+              <p>Der Kaufvertrag kommt erst zustande, nachdem beide Vertragsparteien eine übereinstimmende Willenserklärung abgegeben haben. Aus Sicht des Nutzers ist dies eine Anfrage per Mail, Telefon oder Briefpost. SYNTEXT betrachtet eine per E-Mail versendete Bestellbestätigung als Einwilligung. Bei Zahlung durch Vorkasse kommt der Kaufvertrag mit Bestätigung des Eingangs der Vorauszahlung durch SYNTEXT zustande.</p>
+            </article>
+
+            <article class="legal-card" id="verfuegbarkeit" data-reveal>
+              <h3>Verfügbarkeit und Leistungsvorbehalt für Zeitfenster</h3>
+              <p>Der zeitliche Rahmen eines Auftrags kann nach Umfang variieren. Antworten und Bestätigungen werden in spätestens 1-2 Werktagen an den Kunden versendet.</p>
+            </article>
+
+            <article class="legal-card" id="preise" data-reveal>
+              <h3>Preise und Kosten</h3>
+              <p>Ein erstes Beratungsgespräch ist gratis und beinhaltet lediglich eine grobe Analyse und Einschätzung des Objekts (Website, Webseite, Drucksachen). Alle Preise sind incl. MwSt. und werden auf der Rechnung explizit ausgewiesen.</p>
+            </article>
+
+            <article class="legal-card" id="zahlungsbedingungen" data-reveal>
+              <h3>Zahlungsbedingungen/Bonitätsprüfung</h3>
+              <p>Vorauszahlung erlaubt und kann vom Kunden vor der Leistungserbringung erbracht werden; Die Zahlungsfrist beträgt 14 Tage;</p>
+            </article>
+
+            <article class="legal-card" id="minderjaehrige" data-reveal>
+              <h3>Minderjährigen Schutz</h3>
+              <p>Bei Minderjährigen, welche das siebte, aber noch nicht das achtzehnte Lebensjahr vollendet haben ist das Recht der «beeinträchtigten Geschäftsfähigkeit» als auch der «Taschengeldparagraf» anzuwenden.</p>
+            </article>
+
+            <article class="legal-card" id="eigentumsvorbehalt" data-reveal>
+              <h3>Eigentumsvorbehalt</h3>
+              <p>Fertige Prüfberichte bleiben bis zur Zahlung des Kunden im Besitz und Eigentum der SYNTEXT. Erst nach Bezahlung geht die Verantwortung über.</p>
+            </article>
+
+            <article class="legal-card" id="nutzungsrechte" data-reveal>
+              <h3>Nutzungs- und Verwendungsrechte</h3>
+              <p>Mit dem Vertrag und Kauf des erstellten Produkts erwerben Sie zeitlich und örtlich unbeschränkte Nutzungs- und Verwendungsrechte der für Sie erstellten Unterlagen. Ihr "Gut zum Text" überträgt die Verantwortung der Richtigkeit sämtlicher Inhalte (Adressdaten, Namen, Zahlen, Fakten etc.) von uns auf Sie, dem eingetragenen Vertragspartner von SYNTEXT. Für Schadenfälle der Drittanbieter lehnen wir jegliche Verantwortung und Haftung ab.</p>
+            </article>
+
+            <article class="legal-card" id="widerruf" data-reveal>
+              <h3>Widerrufs- und Rückgaberecht für Ware</h3>
+              <p>Bei sofortiger Stornierung ist der Vertrag umgehend als nichtig zu betrachten. Eine Stornierung kann Seitens Kunde und/oder Seiten SYNTEXT eingereicht werden. Eine Stornierung muss per E-Mail an oder von info@syntext.com eingehen respektive ausgehen.</p>
+            </article>
+
+            <article class="legal-card" id="reklamationen" data-reveal>
+              <h3>Reklamationen und Beschwerden</h3>
+              <p>Bei Nichtgefallen behalten wir uns den individuelle Lösungsweg vor. Jede Analyse mit dazugehörigem Prüfbericht findet gemäss der strukturierten SYNTEXT Prüfmatrix statt.</p>
+            </article>
+
+            <article class="legal-card" id="haftung" data-reveal>
+              <h3>Haftung</h3>
+              <p>SYNTEXT trägt lediglich die Verantwortung für die Gestaltung und geleistete Arbeit, nicht für den Inhalt; Wir gewähren keine Garantie für einen sofortigen Effekt;</p>
+            </article>
+
+            <article class="legal-card" id="konto" data-reveal>
+              <h3>Registrierung für ein Konto</h3>
+              <p>Der Kunde kann als Gast bestellen oder alternativ ein Kundenkonto erstellen. Die eingegebenen Daten werden gemäss Datenschutzrichtlinien vertraut behandelt.</p>
+            </article>
+
+            <article class="legal-card" id="datenschutz" data-reveal>
+              <h3>Datenschutz</h3>
+              <p>Sämtliche Kontaktdaten werden vertraulich behandelt und nicht an Dritte weiter gegeben. Ausnahmen: Im Fall einer Insolvenz, Zahlungsausfall oder Betreibung des Kunden, werden die Daten an die zuständige Behörde weitergeleitet. Die Datenschutzbestimmungen können unter folgendem Link abgerufen werden. DATENSCHUTZRICHTLINIEN. Mit der Zustimmung zu diesen AGB erklären Sie, die Datenschutzerklärung gelesen und verstanden zu haben.</p>
+            </article>
+
+            <article class="legal-card" id="urheberrecht" data-reveal>
+              <h3>Urheberrecht</h3>
+              <p>SYNTEXT garantiert Leistungen welche das Urheberrecht in keiner Weise verletzen. KI-Generatoren sind Teil unserer Gesellschaft geworden und werden als Inspirationsquelle genutzt.</p>
+            </article>
+
+            <article class="legal-card" id="copyright" data-reveal>
+              <h3>Copyright</h3>
+              <p>Das Homepage-Layout, die verwendeten Grafiken und Bilder, die Sammlung von Beiträgen sowie einzelne Beiträge sind urheberrechtlich geschützt. Eine Vervielfältigung oder Verwendung ist ohne ausdrückliche Genehmigung der SYNTEXT nicht gestattet. Alle Rechte behält sich das Unternehmen vor.</p>
+            </article>
+
+            <article class="legal-card" id="pruefbericht" data-reveal>
+              <h3>Prüfbericht</h3>
+              <p>Der Prüfbericht wird dem Kunden nach Durchsicht zur freien Verfügung zugestellt. Der Prüfbericht beinhaltet folgende Parameter: Google-HTML Analyse, Grammatik-Check, Farbanalyse, Meta-Daten-Analyse, Benutzerfreundlichkeit (Barrierefreiheit), AGB-Check, Nutzungsbedingungen-Check, Funktions-Check Links und Buttons.</p>
+            </article>
+
+            <article class="legal-card" id="vertragsdauer" data-reveal>
+              <h3>Vertragsdauer und Kündigung</h3>
+              <p>Ein Vertrag entsteht bei einer übereinstimmenden Willenserklärung beider Parteien. Der Kunde gibt seine Bestellung auf der Homepage www.syntext.com per Kontaktformular auf. Mit dem Erhalt der Bestellbestätigung von SYNTEXT via E-Mail kommt ein rechtswirksamer Vertrag zustande. Die AGB sind jederzeit auf der Homepage ersichtlich.</p>
+            </article>
+
+            <article class="legal-card" id="dime" data-reveal>
+              <h3>DiMe</h3>
+              <p>Der Kunde gibt seine Bestellung in Auftrag. Mit dem Erhalt der Bestellbestätigung von SYNTEXT via E-Mail kommt ein rechtswirksamer Vertrag zustande. Der Inhalt des DiMe wird durch den Vertragspartner übermittelt und durch SYNTEXT kreiert. Ein DiMe beinhaltet einen ersten Satz Visitenkarten (100 Stück), ein Jahresbeitrag für die Nutzung der Domain. Der Domaine-Name lautet auf den Namen des DiMe-Nutzers und kann in Varianten angepasst werden um ein eingängiges und individuelles Unikat zu ergeben.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p data-de="© copyright; 2024 Syntext by Steinhardt" data-en="© copyright; 2024 Syntext by Steinhardt">© copyright; 2024 Syntext by Steinhardt</p>
+        <div class="footer-links">
+          <a href="Steini_Impressum.html" data-de="Impressum" data-en="Impressum">Impressum</a>
+          <a href="Steini_Impressum.html" data-de="Disclaimer" data-en="Disclaimer">Disclaimer</a>
+          <a href="Steini_AGB.html" data-de="AGB" data-en="AGB">AGB</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (() => {
+      const root = document.documentElement;
+      const translatable = document.querySelectorAll("[data-de][data-en]");
+      const langButtons = document.querySelectorAll("[data-lang-switch]");
+      const menuToggle = document.querySelector(".menu-toggle");
+      const menu = document.querySelector("#site-menu");
+      const revealItems = document.querySelectorAll("[data-reveal]");
+
+      const applyLanguage = (lang) => {
+        const nextLang = lang === "en" ? "en" : "de";
+        root.lang = nextLang === "en" ? "en" : "de-CH";
+        translatable.forEach((node) => {
+          node.textContent = node.dataset[nextLang];
+        });
+        langButtons.forEach((button) => {
+          const active = button.dataset.langSwitch === nextLang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+        localStorage.setItem("syntext-language", nextLang);
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyLanguage(button.dataset.langSwitch));
       });
-    </script>
-		
-<main>
-	<h1>AGB</h1>
-<br>
-<hr>
-<h3>•	Anwendbarkeit und Umfang der AGB</h3>
-<p>Zusammensetzung der AGB stützen sich auf das Deutsche BGB und das Schweizer ZGB/OR.
-Es kommt materielles Schweizer Recht zur Anwendung. Gerichtstand sind die ordentlichen Gerichte am Sitz von SYNTEXT.
-SYNTEXT, im Brüel 6a, CH-8370 Sirnach, Schweiz.</p>
-<h3>•	Angebot</h3>
-<p>Alle angebotenen Dienstleistungen der SYNTEXT sind kein rechtlich geltendes Angebot, sondern eine Aufforderung an den Kunden, eine verbindliche Bestellung abzugeben.</p>
-<h3>•	Abschluss eines Kaufvertrags</h3>
-<p>Der Kaufvertrag kommt erst zustande, nachdem beide Vertragsparteien eine übereinstimmende Willenserklärung abgegeben haben.
-Aus Sicht des Nutzers ist dies eine Anfrage per Mail, Telefon oder Briefpost.
-SYNTEXT betrachtet eine per E-Mail versendete Bestellbestätigung als Einwilligung.
-Bei Zahlung durch Vorkasse kommt der Kaufvertrag mit Bestätigung des Eingangs der Vorauszahlung durch SYNTEXT zustande.</p>
-<h3>•	Verfügbarkeit und Leistungsvorbehalt für Zeitfenster</h3>
-<p>Der zeitliche Rahmen eines Auftrags kann nach Umfang variieren. 
-Antworten und Bestätigungen werden in spätestens 1-2 Werktagen an den Kunden versendet.</p>
-<h3>•	Preise und Kosten</h3>
-<p>Ein erstes Beratungsgespräch ist gratis und beinhaltet lediglich eine grobe Analyse und Einschätzung des Objekts (Website, Webseite, Drucksachen).</p>
-Alle Preise sind incl. MwSt. und werden auf der Rechnung explizit ausgewiesen.
-<h3>•	Zahlungsbedingungen/Bonitätsprüfung</h3>
-<p>Vorauszahlung erlaubt und kann vom Kunden vor der Leistungserbringung erbracht werden;
-Die Zahlungsfrist beträgt 14 Tage;</p>
-<h3>•	Minderjährigen Schutz</h3>
-<p>Bei Minderjährigen, welche das siebte, aber noch nicht das achtzehnte Lebensjahr vollendet haben ist das Recht der «beeinträchtigten Geschäftsfähigkeit» als auch der «Taschengeldparagraf» anzuwenden.</p>
-<h3>•	Eigentumsvorbehalt</h3>
-<p>Fertige Prüfberichte bleiben bis zur Zahlung des Kunden im Besitz und Eigentum der SYNTEXT. Erst nach Bezahlung geht die Verantwortung über.</p>
-<h3>•	Nutzungs- und Verwendungsrechte</h3>
-<p>Mit dem Vertrag und Kauf des erstellten Produkts erwerben Sie zeitlich und örtlich unbeschränkte Nutzungs- und Verwendungsrechte der für Sie erstellten Unterlagen. 
-Ihr "Gut zum Text" überträgt die Verantwortung der Richtigkeit sämtlicher Inhalte (Adressdaten, Namen, Zahlen, Fakten etc.) von uns auf Sie, dem eingetragenen Vertragspartner von SYNTEXT. Für Schadenfälle der Drittanbieter lehnen wir jegliche Verantwortung und Haftung ab.</p>
-<h3>•	Widerrufs- und Rückgaberecht für Ware</h3>
-<p>Bei sofortiger Stornierung ist der Vertrag umgehend als nichtig zu betrachten.
-Eine Stornierung kann Seitens Kunde und/oder Seiten SYNTEXT eingereicht werden.
-Eine Stornierung muss per E-Mail an oder von info@syntext.com eingehen respektive ausgehen.</p>
-<h3>•	Reklamationen und Beschwerden</h3>
-<p>Bei Nichtgefallen behalten wir uns den individuelle Lösungsweg vor. Jede Analyse mit dazugehörigem Prüfbericht findet gemäss der strukturierten SYNTEXT Prüfmatrix statt.</p>
-<h3>•	Haftung</h3>
-<p>SYNTEXT trägt lediglich die Verantwortung für die Gestaltung und geleistete Arbeit, nicht für den Inhalt;
-Wir gewähren keine Garantie für einen sofortigen Effekt;</p>
-<h3>•	Registrierung für ein Konto</h3>
-<p>Der Kunde kann als Gast bestellen oder alternativ ein Kundenkonto erstellen. Die eingegebenen Daten werden gemäss Datenschutzrichtlinien vertraut behandelt.</p>
-<h3>•	Datenschutz</h3>
-<p>Sämtliche Kontaktdaten werden vertraulich behandelt und nicht an Dritte weiter gegeben. Ausnahmen: Im Fall einer Insolvenz, Zahlungsausfall oder Betreibung des Kunden, werden die Daten an die zuständige Behörde weitergeleitet.
-Die Datenschutzbestimmungen können unter folgendem Link abgerufen werden. DATENSCHUTZRICHTLINIEN. Mit der Zustimmung zu diesen AGB erklären Sie, die Datenschutzerklärung gelesen und verstanden zu haben.</p> 
-<h3>•	Urheberrecht</h3>
-<p>SYNTEXT garantiert Leistungen welche das Urheberrecht in keiner Weise verletzen. KI-Generatoren sind Teil unserer Gesellschaft geworden und werden als Inspirationsquelle genutzt.</p>
-<h3>•	Copyright</h3>
-<p>Das Homepage-Layout, die verwendeten Grafiken und Bilder, die Sammlung von Beiträgen sowie einzelne Beiträge sind urheberrechtlich geschützt. Eine Vervielfältigung oder Verwendung ist ohne ausdrückliche Genehmigung der SYNTEXT nicht gestattet. Alle Rechte behält sich das Unternehmen vor.</p>
-<h3>•	Prüfbericht</h3>
-<p>Der Prüfbericht wird dem Kunden nach Durchsicht zur freien Verfügung zugestellt.
-Der Prüfbericht beinhaltet folgende Parameter:
-Google-HTML Analyse, Grammatik-Check, Farbanalyse, Meta-Daten-Analyse, Benutzerfreundlichkeit (Barrierefreiheit), AGB-Check, Nutzungsbedingungen-Check, Funktions-Check Links und Buttons.</p>
-<h3>•	Vertragsdauer und Kündigung</h3>
-<p>Ein Vertrag entsteht bei einer übereinstimmenden Willenserklärung beider Parteien. 
-Der Kunde gibt seine Bestellung auf der Homepage www.syntext.com per Kontaktformular auf. Mit dem Erhalt der Bestellbestätigung von SYNTEXT via E-Mail kommt ein rechtswirksamer Vertrag zustande. Die AGB sind jederzeit auf der Homepage ersichtlich.</p>
-<h3>•	DiMe</h3>
-<p>Der Kunde gibt seine Bestellung in Auftrag. Mit dem Erhalt der Bestellbestätigung von SYNTEXT via E-Mail kommt ein rechtswirksamer Vertrag zustande. Der Inhalt des DiMe wird durch den Vertragspartner übermittelt und durch SYNTEXT kreiert. Ein DiMe beinhaltet einen ersten Satz Visitenkarten (100 Stück), ein Jahresbeitrag für die Nutzung der Domain. Der Domaine-Name lautet auf den Namen des DiMe-Nutzers und kann in Varianten angepasst werden um ein eingängiges und individuelles Unikat zu ergeben.
-</p>
-	<br>
-</main>
-	<footer>
-		<p>© copyright; 2024 Syntext by Steinhardt</p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Impressum</span></a></p>
-		<p><a target="_blank" href="Steini_Impressum.html"><span class="grautext">Disclaimer</span></a></p>
-		<p><a target="_blank" href="Steini_AGB.html"><span class="grautext">AGB</span></a></p>
-	</footer>
-</div>
+
+      menuToggle?.addEventListener("click", () => {
+        const open = !menu.classList.contains("is-open");
+        menu.classList.toggle("is-open", open);
+        menuToggle.setAttribute("aria-expanded", String(open));
+      });
+
+      menu?.querySelectorAll("a").forEach((link) => {
+        link.addEventListener("click", () => {
+          menu.classList.remove("is-open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        });
+      });
+
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.12 });
+        revealItems.forEach((item) => observer.observe(item));
+      } else {
+        revealItems.forEach((item) => item.classList.add("is-visible"));
+      }
+
+      applyLanguage(localStorage.getItem("syntext-language") || "de");
+    })();
+  </script>
 </body>
 </html>
