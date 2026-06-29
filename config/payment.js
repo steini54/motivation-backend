@@ -2,6 +2,7 @@ const DEFAULT_PRICE_CENTS = 999;
 const DEFAULT_CURRENCY = "chf";
 const DEFAULT_PRODUCT_NAME = "VitaGen PDF Download";
 const DEFAULT_BASE_URL = "https://syntext.ch/bewerbungs-generator";
+const DEFAULT_CHECKOUT_PAYMENT_METHOD_TYPES = ["card", "twint"];
 const STRIPE_API_VERSION = "2026-05-27.dahlia";
 
 function normalizeBaseUrl(value) {
@@ -23,6 +24,10 @@ function parseBoolean(value, fallback = false) {
 }
 
 function parsePaymentMethodTypes(value) {
+  if (value === undefined || value === null || value === "") {
+    return DEFAULT_CHECKOUT_PAYMENT_METHOD_TYPES;
+  }
+
   return String(value || "")
     .split(",")
     .map((method) => method.trim().toLowerCase())

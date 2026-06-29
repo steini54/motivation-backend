@@ -51,7 +51,7 @@ test("payment config defaults to VitaGen one-time CHF checkout", () => {
   assert.equal(config.checkoutCouponId, "");
   assert.equal(config.devDiscountToken, "");
   assert.equal(config.freeCheckout, false);
-  assert.deepEqual(config.checkoutPaymentMethodTypes, []);
+  assert.deepEqual(config.checkoutPaymentMethodTypes, ["card", "twint"]);
   assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), []);
 });
 
@@ -108,6 +108,7 @@ test("payment config rejects missing or unsafe Stripe settings", () => {
     "STRIPE_WEBHOOK_SECRET must start with whsec_",
     "VITAGEN_CURRENCY must be a three-letter currency code",
     "STRIPE_CHECKOUT_COUPON_ID must not contain whitespace",
+    "STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES can include twint only when VITAGEN_CURRENCY is chf",
     "VITAGEN_DEV_DISCOUNT_TOKEN must not contain whitespace",
     "VITAGEN_BASE_URL must be a valid URL",
   ]);
