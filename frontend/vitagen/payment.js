@@ -48,12 +48,72 @@
     }
   }
 
+  function hasMeaningfulText(value) {
+    return typeof value === "string" && value.trim().length > 0;
+  }
+
+  function hasMeaningfulEntries(value) {
+    return Array.isArray(value) && value.some((entry) =>
+      entry &&
+      typeof entry === "object" &&
+      Object.values(entry).some(hasMeaningfulText)
+    );
+  }
+
+  function hasMeaningfulDocumentData(documentData) {
+    if (!documentData || typeof documentData !== "object") {
+      return false;
+    }
+
+    const textFields = [
+      "name",
+      "adresse",
+      "kontakt",
+      "headline",
+      "profil",
+      "posten",
+      "arbeitgeber",
+      "funktion",
+      "stichwoerter",
+      "stichwoerter2",
+      "stichwoerter3",
+      "datum",
+      "unterschrift",
+      "foto",
+    ];
+    const entryFields = ["schulbildung", "beruf", "weiterbildung", "kenntnisse", "hobbys"];
+
+    return (
+      textFields.some((field) => hasMeaningfulText(documentData[field])) ||
+      entryFields.some((field) => hasMeaningfulEntries(documentData[field]))
+    );
+  }
+
   function saveDocumentData(documentData) {
     if (!storageKey || !documentData || typeof documentData !== "object") {
       return;
     }
 
-    localStorage.setItem(storageKey, JSON.stringify(documentData));
+    if (!hasMeaningfulDocumentData(documentData)) {
+      warn("ignored empty document data save", { documentType, storageKey });
+      return;
+    }
+
+    const existingData = loadDocumentData();
+    const mergedData = { ...existingData };
+
+    Object.entries(documentData).forEach(([key, value]) => {
+      if (
+        hasMeaningfulText(value) ||
+        hasMeaningfulEntries(value) ||
+        typeof value === "boolean" ||
+        (typeof value === "number" && Number.isFinite(value))
+      ) {
+        mergedData[key] = value;
+      }
+    });
+
+    localStorage.setItem(storageKey, JSON.stringify(mergedData));
   }
 
   function getPendingCheckout() {
@@ -91,7 +151,11 @@
 
     syncSelectedStyleToDom(pending.styleName);
 
-    if (pending.documentData && typeof pending.documentData === "object") {
+    if (
+      pending.documentData &&
+      typeof pending.documentData === "object" &&
+      hasMeaningfulDocumentData(pending.documentData)
+    ) {
       saveDocumentData(pending.documentData);
       if (typeof window.VitaGenRenderPreview === "function") {
         window.VitaGenRenderPreview({ pulse: false });
@@ -138,6 +202,12 @@
       : "vitagen_motivation_style";
   }
 
+  function getTemplateStorageKey() {
+    return documentType === "lebenslauf"
+      ? "vitagen_lebenslauf_template"
+      : "vitagen_motivation_template";
+  }
+
   function normalizeStyleFile(value) {
     return String(value || "").trim().split(/[\\/]/).pop();
   }
@@ -153,7 +223,7 @@
       return false;
     }
 
-    return availableStyles.length === 0 || availableStyles.includes(styleName);
+    return availableStyles.length === 0 || availableStyles.includes(styleName) || /^[a-z0-9-]+\.css$/i.test(styleName);
   }
 
   function getThemeHrefStyleName() {
@@ -165,8 +235,20 @@
     return normalizeStyleFile(document.getElementById("preview")?.dataset.style);
   }
 
+  function getPreviewTemplateId() {
+    return String(document.getElementById("preview")?.dataset.template || "").trim();
+  }
+
   function getStoredStyleName() {
     return normalizeStyleFile(localStorage.getItem(getStyleStorageKey()));
+  }
+
+  function getStoredTemplateId() {
+    try {
+      return String(localStorage.getItem(getTemplateStorageKey()) || "").trim();
+    } catch {
+      return "";
+    }
   }
 
   function getPendingCheckoutStyleName() {
@@ -590,12 +672,18 @@
   }
 
   async function startCheckout() {
+    let currentDocumentData = null;
     if (typeof window.saveAllFields === "function") {
-      window.saveAllFields();
+      currentDocumentData = window.saveAllFields();
     }
     await waitForBuilderPhotoReady();
 
-    const documentData = loadDocumentData();
+    const documentData =
+      currentDocumentData && typeof currentDocumentData === "object"
+        ? currentDocumentData
+        : window.VitaGenCurrentDocumentData && typeof window.VitaGenCurrentDocumentData === "object"
+          ? window.VitaGenCurrentDocumentData
+          : loadDocumentData();
     const styleName = getSelectedStyleName();
     const documentHash = await createDocumentHash(styleName, documentData);
     const checkoutAttemptId = createCheckoutAttemptId();
@@ -792,7 +880,116 @@
     );
   }
 
-  function createPdfExportPreview(sourcePreview) {
+  function getDocumentRendererType() {
+    return documentType === "lebenslauf" ? "cv" : documentType;
+  }
+
+  function getSelectedTemplateId() {
+    return getPreviewTemplateId() || getStoredTemplateId() || undefined;
+  }
+
+  async function waitForImageElement(image) {
+    if (!image.getAttribute("src")) {
+      return;
+    }
+
+    if (image.complete && image.naturalWidth > 0) {
+      return;
+    }
+
+    await new Promise((resolve) => {
+      image.addEventListener("load", resolve, { once: true });
+      image.addEventListener("error", resolve, { once: true });
+    });
+  }
+
+  function isTransparentColor(value) {
+    return !value || value === "transparent" || /rgba?\([^)]*,\s*0\)/i.test(value);
+  }
+
+  async function rasterizeImageContain(image) {
+    await waitForImageElement(image);
+
+    if (!image.naturalWidth || !image.naturalHeight) {
+      return;
+    }
+
+    const rect = image.getBoundingClientRect();
+    const width = Math.max(1, Math.round(rect.width));
+    const height = Math.max(1, Math.round(rect.height));
+
+    if (!width || !height) {
+      return;
+    }
+
+    const scale = Math.min(4, Math.max(2, window.devicePixelRatio || 2));
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.max(1, Math.round(width * scale));
+    canvas.height = Math.max(1, Math.round(height * scale));
+
+    const context = canvas.getContext("2d");
+    if (!context) {
+      return;
+    }
+
+    const styles = window.getComputedStyle(image);
+    if (!isTransparentColor(styles.backgroundColor)) {
+      context.fillStyle = styles.backgroundColor;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+    }
+
+    const imageRatio = image.naturalWidth / image.naturalHeight;
+    const boxRatio = canvas.width / canvas.height;
+    let drawWidth = canvas.width;
+    let drawHeight = drawWidth / imageRatio;
+
+    if (drawHeight > canvas.height) {
+      drawHeight = canvas.height;
+      drawWidth = drawHeight * imageRatio;
+    }
+
+    const drawX = (canvas.width - drawWidth) / 2;
+    const drawY = (canvas.height - drawHeight) / 2;
+    context.imageSmoothingEnabled = true;
+    context.imageSmoothingQuality = "high";
+    context.drawImage(image, drawX, drawY, drawWidth, drawHeight);
+
+    image.src = canvas.toDataURL("image/png");
+    image.style.objectFit = "fill";
+    await image.decode?.().catch(() => {});
+  }
+
+  async function normalizeExportImages(root) {
+    const images = Array.from(root.querySelectorAll("img"));
+
+    images.forEach((image) => {
+      image.style.objectFit = "contain";
+      image.style.objectPosition = "center center";
+      image.style.maxWidth = image.style.maxWidth || "100%";
+      image.style.maxHeight = image.style.maxHeight || "100%";
+    });
+
+    await Promise.all(
+      images.map((image) =>
+        rasterizeImageContain(image).catch((error) => {
+          warn("image could not be rasterized for PDF export", error?.message || error);
+        })
+      )
+    );
+  }
+
+  function removeExportOnlyPreviewArtifacts(root) {
+    root.querySelectorAll(".document-watermark, .watermark").forEach((element) => {
+      element.remove();
+    });
+    root.querySelectorAll(".page-break").forEach((element) => {
+      element.style.display = "none";
+      element.style.breakBefore = "auto";
+      element.style.pageBreakBefore = "auto";
+    });
+  }
+
+  async function createPdfExportPreview(sourcePreview) {
     const host = document.createElement("div");
     host.className = "vitagen-pdf-export-host";
     Object.assign(host.style, {
@@ -808,8 +1005,11 @@
     });
 
     const preview = sourcePreview.cloneNode(true);
-    preview.id = "preview-pdf-export";
+    preview.id = "preview";
     preview.classList.add("pdf-export-preview");
+    Object.entries(sourcePreview.dataset || {}).forEach(([key, value]) => {
+      preview.dataset[key] = value;
+    });
     Object.assign(preview.style, {
       width: `${A4_WIDTH_MM}mm`,
       maxWidth: "none",
@@ -820,19 +1020,14 @@
       transform: "none",
     });
 
-    preview.querySelectorAll(".document-watermark, .watermark").forEach((element) => {
-      element.remove();
-    });
-    preview.querySelectorAll(".page-break").forEach((element) => {
-      element.style.display = "none";
-      element.style.breakBefore = "auto";
-      element.style.pageBreakBefore = "auto";
-    });
-
     host.appendChild(preview);
     document.body.appendChild(host);
+    removeExportOnlyPreviewArtifacts(preview);
+    await normalizeExportImages(preview);
 
-    const pageElements = Array.from(preview.querySelectorAll(".document-page"));
+    const renderedPages = Array.from(preview.querySelectorAll(".document-page"));
+    const legacyPages = Array.from(preview.querySelectorAll(".cv, .anschreiben"));
+    const pageElements = renderedPages.length ? renderedPages : legacyPages.length ? legacyPages : [preview];
     pageElements.forEach((element) => {
       Object.assign(element.style, {
         width: `${A4_WIDTH_MM}mm`,
@@ -854,6 +1049,13 @@
       throw new Error("PDF export library could not be loaded.");
     }
 
+    if (typeof window.saveAllFields === "function") {
+      window.saveAllFields();
+    }
+    if (typeof window.VitaGenRenderPreview === "function") {
+      window.VitaGenRenderPreview({ pulse: false });
+    }
+
     const preview = document.getElementById("preview");
     if (!preview) {
       throw new Error("Preview document could not be found.");
@@ -863,7 +1065,7 @@
     await waitForDocumentFonts();
     await waitForPreviewImages(preview);
 
-    const exportPreview = createPdfExportPreview(preview);
+    const exportPreview = await createPdfExportPreview(preview);
 
     try {
       if (exportPreview.pageElements.length === 0) {
@@ -1039,13 +1241,21 @@
     close: closeModal,
   };
 
-  log("script loaded", {
-    path: window.location.pathname,
-    documentType,
-    storageKey,
-    scriptSrc: script?.getAttribute("src") || "",
-  });
+  function initializePayment() {
+    log("script loaded", {
+      path: window.location.pathname,
+      documentType,
+      storageKey,
+      scriptSrc: script?.getAttribute("src") || "",
+    });
 
-  installStripePaymentUi();
-  handleCheckoutReturn();
+    installStripePaymentUi();
+    handleCheckoutReturn();
+  }
+
+  if (document.readyState === "loading") {
+    window.addEventListener("DOMContentLoaded", initializePayment, { once: true });
+  } else {
+    initializePayment();
+  }
 })();

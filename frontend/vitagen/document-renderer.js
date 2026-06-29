@@ -22,7 +22,8 @@
     "editorial-mono-mint.css": "editorial-mono",
     "editorial-mono-rose.css": "editorial-mono",
   };
-  const BODY_WORD_LIMIT = 270;
+  const BODY_CHAR_LIMIT = 1500;
+  const BODY_WORD_LIMIT = 250;
   const CV_SAFE_BOTTOM_PX = 18;
   const CV_MIN_BODY_CHUNK_WORDS = 36;
 
@@ -116,9 +117,38 @@
     return value;
   }
 
+  const DOCUMENT_META_FIELDS = new Set(["motivationTextLength", "stichwoerter2_is_ai"]);
+  let renderUsesSampleFallbacks = true;
+
+  function hasMeaningfulDocumentData(data) {
+    if (!data || typeof data !== "object") {
+      return false;
+    }
+
+    return Object.entries(data).some(([key, value]) => {
+      if (DOCUMENT_META_FIELDS.has(key)) {
+        return false;
+      }
+
+      if (typeof value === "string") {
+        return value.trim().length > 0;
+      }
+
+      if (Array.isArray(value)) {
+        return value.some((entry) => hasMeaningfulDocumentData(entry));
+      }
+
+      if (value && typeof value === "object") {
+        return hasMeaningfulDocumentData(value);
+      }
+
+      return false;
+    });
+  }
+
   function text(value, fallback = "") {
     const clean = String(value || "").trim();
-    return clean || fallback;
+    return clean || (renderUsesSampleFallbacks ? fallback : "");
   }
 
   function cvTemplateId(options = {}) {
@@ -173,6 +203,49 @@
       .filter(Boolean);
   }
 
+  function limitTextAtReadableBoundary(value, maxLength) {
+    const source = String(value || "")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+
+    if (source.length <= maxLength) {
+      return { text: source, wasLimited: false };
+    }
+
+    const slice = source.slice(0, maxLength).trimEnd();
+    const minimumBoundary = Math.floor(maxLength * 0.62);
+    const punctuationBoundary = Math.max(
+      slice.lastIndexOf(". "),
+      slice.lastIndexOf("! "),
+      slice.lastIndexOf("? "),
+      slice.lastIndexOf(".\n"),
+      slice.lastIndexOf("!\n"),
+      slice.lastIndexOf("?\n")
+    );
+    const wordBoundary = slice.lastIndexOf(" ");
+    const boundary =
+      punctuationBoundary >= minimumBoundary
+        ? punctuationBoundary + 1
+        : wordBoundary >= minimumBoundary
+          ? wordBoundary
+          : slice.length;
+
+    return {
+      text: slice.slice(0, boundary).trim(),
+      wasLimited: true,
+    };
+  }
+
+  function limitMotivationBodyLines(lines) {
+    const joined = (lines || []).join("\n\n");
+    const limited = limitTextAtReadableBoundary(joined, BODY_CHAR_LIMIT);
+    return {
+      lines: splitParagraphs(limited.text, ""),
+      wasLimited: limited.wasLimited,
+    };
+  }
+
   function isGreetingLine(line) {
     return /^(sehr geehrte|dear\s|to whom it may concern)/i.test(line.trim());
   }
@@ -223,13 +296,18 @@
     const greeting = text(data.stichwoerter, t(language, "greeting"));
     const rawBody = splitParagraphs(data.stichwoerter2, t(language, "motivationBody"));
     const bodyLines = removeDuplicateLetterParts(rawBody, signature);
-    const bodyParagraphs = bodyLines.length ? bodyLines.slice(0, 3) : [t(language, "motivationBody")];
+    const limitedBody = limitMotivationBodyLines(bodyLines);
+    const bodyParagraphs = limitedBody.lines.length
+      ? limitedBody.lines.slice(0, 3)
+      : renderUsesSampleFallbacks
+        ? [t(language, "motivationBody")]
+        : [];
     const rawClosing = splitParagraphs(data.stichwoerter3, "");
     const closingLines = removeDuplicateLetterParts(rawClosing, signature);
     const closingNote = closingLines[0] || "";
     const bodyWordCount = bodyParagraphs.reduce((count, paragraph) => count + words(paragraph).length, 0);
 
-    if (bodyWordCount > BODY_WORD_LIMIT || rawBody.length > 3) {
+    if (limitedBody.wasLimited || bodyWordCount > BODY_WORD_LIMIT || rawBody.length > 3) {
       warnings.push(t(language, "motivationWarning"));
     }
 
@@ -243,7 +321,7 @@
     });
     const templateClass = templateId === "existing" ? "" : ` letter-template--${templateId}`;
     const content = node("article", { className: `document-content anschreiben letter-content${templateClass}` });
-    const header = node("header", { className: "letterhead" }, [
+    const header = node("header", { className: data.foto ? "letterhead has-document-photo" : "letterhead" }, [
       node("div", { className: "letter-identity" }, [
         node("h1", { id: "pv-name", text: text(data.name, t(language, "name")) }),
         node("p", { id: "pv-kontakt", text: role.toUpperCase() }),
@@ -402,11 +480,13 @@
     const sections = [];
     const profile = text(data.profil, t(language, "defaultProfile"));
     if (isExistingTemplate) {
-      sections.push({
-        key: "profile",
-        title: t(language, "profile"),
-        entries: [{ title: "", meta: "", body: profile }],
-      });
+      if (profile || renderUsesSampleFallbacks) {
+        sections.push({
+          key: "profile",
+          title: t(language, "profile"),
+          entries: [{ title: "", meta: "", body: profile }],
+        });
+      }
     }
 
     const work = cleanEntries(data.beruf).map((entry) => ({
@@ -419,7 +499,11 @@
     sections.push({
       key: "work",
       title: t(language, "work"),
-      entries: work.length ? work : [{ title: t(language, "position"), meta: "", body: t(language, "addNow") }],
+      entries: work.length
+        ? work
+        : renderUsesSampleFallbacks
+          ? [{ title: t(language, "position"), meta: "", body: t(language, "addNow") }]
+          : [],
     });
 
     const education = cleanEntries(data.schulbildung).map((entry) => ({
@@ -433,7 +517,11 @@
       sections.push({
         key: "education",
         title: t(language, "education"),
-        entries: education.length ? education : [{ title: t(language, "education"), meta: "", body: t(language, "addNow") }],
+        entries: education.length
+          ? education
+          : renderUsesSampleFallbacks
+            ? [{ title: t(language, "education"), meta: "", body: t(language, "addNow") }]
+            : [],
       });
     }
 
@@ -732,7 +820,7 @@
   }
 
   function sidebarEntryModels(entries, fallback) {
-    return entries.length ? entries : [fallback];
+    return entries.length ? entries : renderUsesSampleFallbacks ? [fallback] : [];
   }
 
   function educationSidebarEntryModels(data, language) {
@@ -920,7 +1008,9 @@
 
     return entries.length
       ? entries.slice(0, 3)
-      : [makeSidebarEntry(t(language, "education"), "", t(language, "addNow"))];
+      : renderUsesSampleFallbacks
+        ? [makeSidebarEntry(t(language, "education"), "", t(language, "addNow"))]
+        : [];
   }
 
   function trainingSidebarEntries(data, language) {
@@ -957,7 +1047,11 @@
     const skills = cleanEntries(data.kenntnisse).map((entry) => entry.kenntnisse).filter(Boolean);
     const interests = cleanEntries(data.hobbys).map((entry) => entry.hobbys).filter(Boolean);
     const sidebar = node("aside", {
-      className: pageNumber === 1 ? "cv-side" : "cv-side cv-side--compact",
+      className: [
+        "cv-side",
+        pageNumber > 1 ? "cv-side--compact" : "",
+        pageNumber === 1 && data.foto ? "has-document-photo" : "",
+      ].filter(Boolean).join(" "),
     });
 
     if (sidebarHasBlocks(sidebarModel)) {
@@ -1001,10 +1095,10 @@
             : []
         ),
         buildCvSidebarSection(t(language, "skills"), [
-          node("div", { id: "pv-kenntnisse", className: "pill-list" }, makePills(skills.length ? skills : ["MS Office", "Organisation", "Kommunikation"], 14)),
+          node("div", { id: "pv-kenntnisse", className: "pill-list" }, makePills(skills.length ? skills : renderUsesSampleFallbacks ? ["MS Office", "Organisation", "Kommunikation"] : [], 14)),
         ]),
         buildCvSidebarSection(t(language, "interests"), [
-          node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : ["Lesen", "Sport"], 8)),
+          node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : renderUsesSampleFallbacks ? ["Lesen", "Sport"] : [], 8)),
         ])
       );
 
@@ -1030,11 +1124,11 @@
         ]),
         node("div", { className: "cv-block" }, [
           node("h3", { text: t(language, "skills") }),
-          node("div", { id: "pv-kenntnisse", className: "pill-list" }, makePills(skills.length ? skills : ["MS Office", "Organisation", "Kommunikation"], 12)),
+          node("div", { id: "pv-kenntnisse", className: "pill-list" }, makePills(skills.length ? skills : renderUsesSampleFallbacks ? ["MS Office", "Organisation", "Kommunikation"] : [], 12)),
         ]),
         node("div", { className: "cv-block" }, [
           node("h3", { text: t(language, "interests") }),
-          node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : ["Lesen", "Sport"], 6)),
+          node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : renderUsesSampleFallbacks ? ["Lesen", "Sport"] : [], 6)),
         ])
       );
     } else {
@@ -1118,9 +1212,16 @@
   }
 
   function renderDocument(options) {
-    const result = options.type === "cv" || options.type === "lebenslauf" ? buildCv(options) : buildMotivation(options);
-    result.documentHash = documentHash(options, result.pageCount, result.warnings);
-    return result;
+    const previousSampleFallbackState = renderUsesSampleFallbacks;
+    renderUsesSampleFallbacks = !hasMeaningfulDocumentData(options.data);
+
+    try {
+      const result = options.type === "cv" || options.type === "lebenslauf" ? buildCv(options) : buildMotivation(options);
+      result.documentHash = documentHash(options, result.pageCount, result.warnings);
+      return result;
+    } finally {
+      renderUsesSampleFallbacks = previousSampleFallbackState;
+    }
   }
 
   function renderInto(target, options) {
