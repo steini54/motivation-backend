@@ -208,6 +208,15 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       params.invoice_creation = { enabled: true };
     }
 
+    if (
+      Array.isArray(config.checkoutPaymentMethodTypes) &&
+      config.checkoutPaymentMethodTypes.length > 0 &&
+      !developerDiscount &&
+      !config.freeCheckout
+    ) {
+      params.payment_method_types = config.checkoutPaymentMethodTypes;
+    }
+
     if (developerDiscount) {
       params.discounts = [{ coupon: config.checkoutCouponId }];
     }

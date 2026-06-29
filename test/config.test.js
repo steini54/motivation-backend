@@ -51,7 +51,31 @@ test("payment config defaults to VitaGen one-time CHF checkout", () => {
   assert.equal(config.checkoutCouponId, "");
   assert.equal(config.devDiscountToken, "");
   assert.equal(config.freeCheckout, false);
+  assert.deepEqual(config.checkoutPaymentMethodTypes, []);
   assert.deepEqual(validatePaymentConfig(config, { requireWebhook: true }), []);
+});
+
+test("payment config supports explicit Stripe Checkout payment methods", () => {
+  const config = getPaymentConfig({
+    STRIPE_SECRET_KEY: "sk_test_123",
+    VITAGEN_CURRENCY: "chf",
+    STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES: "card,twint",
+  });
+
+  assert.deepEqual(config.checkoutPaymentMethodTypes, ["card", "twint"]);
+  assert.deepEqual(validatePaymentConfig(config), []);
+});
+
+test("payment config rejects TWINT for non-CHF checkout", () => {
+  const config = getPaymentConfig({
+    STRIPE_SECRET_KEY: "sk_test_123",
+    VITAGEN_CURRENCY: "eur",
+    STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES: "card,twint",
+  });
+
+  assert.deepEqual(validatePaymentConfig(config), [
+    "STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES can include twint only when VITAGEN_CURRENCY is chf",
+  ]);
 });
 
 test("payment config supports an optional server-side checkout coupon", () => {

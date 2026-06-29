@@ -323,6 +323,51 @@ test("Stripe checkout uses a fresh idempotency key for every checkout attempt", 
   assert.match(receivedOptions[1].idempotencyKey, /attempt_second_002/);
 });
 
+test("Stripe checkout can request configured payment methods such as TWINT", async () => {
+  let receivedParams = null;
+  const payment = createPaymentService({
+    config: {
+      secretKey: "sk_test_123",
+      webhookSecret: "whsec_123",
+      priceId: "",
+      currency: "chf",
+      priceCents: 999,
+      productName: "VitaGen PDF Download",
+      baseUrl: "https://syntext.ch/bewerbungs-generator",
+      invoiceCreation: true,
+      stripeApiVersion: "2026-05-27.dahlia",
+      checkoutCouponId: "",
+      devDiscountToken: "",
+      checkoutPaymentMethodTypes: ["card", "twint"],
+    },
+    stripeClient: {
+      checkout: {
+        sessions: {
+          async create(params) {
+            receivedParams = params;
+            return {
+              id: "cs_test_twint",
+              url: "https://checkout.stripe.com/c/pay/cs_test_twint",
+            };
+          },
+        },
+      },
+      webhooks: { constructEvent() {} },
+    },
+  });
+
+  await payment.createCheckoutSession({
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash: "d".repeat(64),
+    checkoutAttemptId: "attempt_twint_001",
+    returnUrl: "https://syntext.ch/bewerbungs-generator/motivation/formular.html",
+  });
+
+  assert.deepEqual(receivedParams.payment_method_types, ["card", "twint"]);
+  assert.equal(receivedParams.line_items[0].price_data.currency, "chf");
+});
+
 test("Stripe checkout can create a no-cost session behind an explicit env flag", async () => {
   let receivedParams = null;
   const payment = createPaymentService({

@@ -22,6 +22,13 @@ function parseBoolean(value, fallback = false) {
   return ["1", "true", "yes", "on"].includes(String(value).toLowerCase());
 }
 
+function parsePaymentMethodTypes(value) {
+  return String(value || "")
+    .split(",")
+    .map((method) => method.trim().toLowerCase())
+    .filter(Boolean);
+}
+
 function getPaymentConfig(env = process.env) {
   return {
     secretKey: env.STRIPE_SECRET_KEY || "",
@@ -36,6 +43,9 @@ function getPaymentConfig(env = process.env) {
     checkoutCouponId: (env.STRIPE_CHECKOUT_COUPON_ID || "").trim(),
     devDiscountToken: (env.VITAGEN_DEV_DISCOUNT_TOKEN || "").trim(),
     freeCheckout: parseBoolean(env.VITAGEN_FREE_CHECKOUT, false),
+    checkoutPaymentMethodTypes: parsePaymentMethodTypes(
+      env.STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES
+    ),
   };
 }
 
@@ -72,6 +82,17 @@ function validatePaymentConfig(config, { requireWebhook = false } = {}) {
 
   if (config.checkoutCouponId && /\s/.test(config.checkoutCouponId)) {
     errors.push("STRIPE_CHECKOUT_COUPON_ID must not contain whitespace");
+  }
+
+  if (config.checkoutPaymentMethodTypes.some((method) => /\s/.test(method))) {
+    errors.push("STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES must be a comma-separated list without whitespace inside method names");
+  }
+
+  if (
+    config.checkoutPaymentMethodTypes.includes("twint") &&
+    config.currency !== "chf"
+  ) {
+    errors.push("STRIPE_CHECKOUT_PAYMENT_METHOD_TYPES can include twint only when VITAGEN_CURRENCY is chf");
   }
 
   if (config.devDiscountToken && /\s/.test(config.devDiscountToken)) {
