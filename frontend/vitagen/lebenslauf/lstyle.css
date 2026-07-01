@@ -1304,6 +1304,15 @@ textarea:focus {
   margin: 2px 0 0;
 }
 
+.timeline-item ul.cv-entry-list {
+  margin: 2px 0 0;
+  padding-left: 1.15em;
+}
+
+.timeline-item ul.cv-entry-list li {
+  margin: 0;
+}
+
 .pill-list {
   display: flex;
   flex-wrap: wrap;

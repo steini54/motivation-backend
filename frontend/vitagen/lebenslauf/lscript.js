@@ -228,6 +228,7 @@ const UI_TRANSLATIONS = {
     "Bis": "Bis",
     "Ort / Land optional": "Ort / Land optional",
     "Taetigkeit / Aufgaben": "Taetigkeit / Aufgaben",
+    "Eine Aufgabe pro Zeile. Bindestrich oder Nummerierung ist optional.": "Eine Aufgabe pro Zeile. Bindestrich oder Nummerierung ist optional.",
     "Schule": "Schule",
     "Ort / Land": "Ort / Land",
     "Titel": "Titel",
@@ -409,6 +410,7 @@ const UI_TRANSLATIONS = {
     "Bis": "To",
     "Ort / Land optional": "City / country optional",
     "Taetigkeit / Aufgaben": "Activities / responsibilities",
+    "Eine Aufgabe pro Zeile. Bindestrich oder Nummerierung ist optional.": "One responsibility per line. Dashes or numbering are optional.",
     "Schule": "School",
     "Ort / Land": "City / country",
     "Titel": "Title",
@@ -468,7 +470,12 @@ const SECTION_CONFIG = {
     { className: "beruf-von", label: "Von" },
     { className: "beruf-bis", label: "Bis" },
     { className: "beruf-firma", label: "Ort / Land optional" },
-    { className: "beruf-aufgaben", label: "Taetigkeit / Aufgaben", type: "textarea" },
+    {
+      className: "beruf-aufgaben",
+      label: "Taetigkeit / Aufgaben",
+      placeholder: "Eine Aufgabe pro Zeile. Bindestrich oder Nummerierung ist optional.",
+      type: "textarea",
+    },
   ],
   schulbildung: [
     { className: "schule", label: "Schule" },
@@ -868,6 +875,7 @@ function createEntry(section, data = {}) {
     const input = document.createElement(field.type === "textarea" ? "textarea" : "input");
     input.className = field.className;
     if (field.type !== "textarea") input.type = "text";
+    if (field.placeholder) input.setAttribute("placeholder", translateValue(field.placeholder));
     input.value = data[field.className] || "";
     label.appendChild(input);
     body.appendChild(label);

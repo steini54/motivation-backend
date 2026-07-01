@@ -203,6 +203,53 @@
       .filter(Boolean);
   }
 
+  function listItemText(value) {
+    const match = String(value || "")
+      .trim()
+      .match(/^(?:(?:[-*]|\u2022|\u2013|\u2014)\s*|\d+[.)]\s+)(.+)$/);
+    return match ? match[1].trim() : "";
+  }
+
+  function hasListSyntax(value) {
+    return String(value || "")
+      .split(/\r?\n/)
+      .some((line) => listItemText(line));
+  }
+
+  function taskListItems(value) {
+    return String(value || "")
+      .split(/\r?\n/)
+      .map((line) => line.trim())
+      .filter(Boolean)
+      .map((line) => listItemText(line) || line)
+      .filter(Boolean);
+  }
+
+  function renderLetterBodyBlocks(paragraphs) {
+    const blocks = [];
+    let listItems = [];
+
+    const flushList = () => {
+      if (!listItems.length) return;
+      blocks.push(node("ul", { className: "letter-body-list" }, listItems.map((item) => node("li", { text: item }))));
+      listItems = [];
+    };
+
+    paragraphs.forEach((paragraph) => {
+      const item = listItemText(paragraph);
+      if (item) {
+        listItems.push(item);
+        return;
+      }
+
+      flushList();
+      blocks.push(node("p", { text: paragraph }));
+    });
+
+    flushList();
+    return blocks;
+  }
+
   function limitTextAtReadableBoundary(value, maxLength) {
     const source = String(value || "")
       .replace(/[ \t]+\n/g, "\n")
@@ -359,7 +406,7 @@
       node(
         "div",
         { id: "pv-stichwoerter2", className: "letter-body" },
-        bodyParagraphs.map((paragraph) => node("p", { text: paragraph }))
+        renderLetterBodyBlocks(bodyParagraphs)
       ),
       node("div", { className: "letter-spacer", "aria-hidden": "true" }),
       node("footer", { className: "closing-block doc-signature" }, [
@@ -565,12 +612,22 @@
   }
 
   function renderCvEntry(entry, sectionKey) {
+    const bodyClassName = sectionKey === "profile" ? "cv-entry-desc cv-profile-text" : "cv-entry-desc";
+    const taskItems = sectionKey === "work" ? taskListItems(entry.body) : [];
+    const shouldRenderTaskList = taskItems.length > 1 || (taskItems.length === 1 && hasListSyntax(entry.body));
+
     return node("div", { className: "timeline-item cv-entry" }, [
       entry.title ? node("strong", { className: "cv-entry-title", text: entry.title }) : null,
       entry.meta ? node("span", { className: "cv-entry-meta", text: entry.meta }) : null,
-      entry.body
+      shouldRenderTaskList
+        ? node(
+            "ul",
+            { className: `${bodyClassName} cv-entry-list` },
+            taskItems.map((item) => node("li", { text: item }))
+          )
+        : entry.body
         ? node("p", {
-            className: sectionKey === "profile" ? "cv-entry-desc cv-profile-text" : "cv-entry-desc",
+            className: bodyClassName,
             text: entry.body,
           })
         : null,

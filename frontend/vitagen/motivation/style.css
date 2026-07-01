@@ -1085,6 +1085,18 @@ select:focus {
   line-height: 1.5;
 }
 
+.preview-paper.document-rendered .letter-body ul {
+  margin: 0;
+  padding-left: 5mm;
+  color: #1f2933;
+  font-size: 11pt;
+  line-height: 1.5;
+}
+
+.preview-paper.document-rendered .letter-body li {
+  margin: 0;
+}
+
 .preview-paper.document-rendered .letter-spacer {
   flex: 1 1 auto;
   min-height: 10mm;
