@@ -153,6 +153,10 @@ const UI_TRANSLATIONS = {
     "Hobbys": "Hobbys",
     "Optional, kurz und professionell.": "Optional, kurz und professionell.",
     "Hobby hinzufuegen": "Hobby hinzufuegen",
+    "Sprachen": "Sprachen",
+    "Sprachkenntnisse kompakt erfassen.": "Sprachkenntnisse kompakt erfassen.",
+    "Sprache hinzufuegen": "Sprache hinzufuegen",
+    "Sprache": "Sprache",
     "Datum und Signatur fuer den CV.": "Datum und Signatur fuer den CV.",
     "Datum": "Datum",
     "Zuerich, 18.06.2026": "Zuerich, 18.06.2026",
@@ -335,6 +339,10 @@ const UI_TRANSLATIONS = {
     "Hobbys": "Hobbies",
     "Optional, kurz und professionell.": "Optional, short, and professional.",
     "Hobby hinzufuegen": "Add hobby",
+    "Sprachen": "Languages",
+    "Sprachkenntnisse kompakt erfassen.": "Enter language skills compactly.",
+    "Sprache hinzufuegen": "Add language",
+    "Sprache": "Language",
     "Datum und Signatur fuer den CV.": "Date and signature for the CV.",
     "Datum": "Date",
     "Zuerich, 18.06.2026": "Zurich, 18.06.2026",
@@ -493,6 +501,7 @@ const SECTION_CONFIG = {
   ],
   kenntnisse: [{ className: "kenntnisse", label: "Kenntnis" }],
   hobbys: [{ className: "hobbys", label: "Hobby" }],
+  sprachen: [{ className: "sprachen", label: "Sprache" }],
 };
 
 function getStoredData() {
@@ -827,6 +836,9 @@ function getEntryTitle(section, data = {}) {
   }
   if (section === "hobbys") {
     return data.hobbys || translateValue("Hobby");
+  }
+  if (section === "sprachen") {
+    return data.sprachen || translateValue("Sprache");
   }
   return translateValue("Eintrag");
 }

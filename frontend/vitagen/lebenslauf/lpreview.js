@@ -73,6 +73,7 @@ fillSection("pv-beruf", saved.beruf);
 fillSection("pv-weiterbildung", saved.weiterbildung);
 fillSection("pv-kenntnisse", saved.kenntnisse);
 fillSection("pv-hobbys", saved.hobbys);
+fillSection("pv-sprachen", saved.sprachen);
 
 document.getElementById("pv-datum").textContent = saved.datum || "";
 document.getElementById("pv-unterschrift").textContent = saved.unterschrift || "";

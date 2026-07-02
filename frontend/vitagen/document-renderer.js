@@ -54,6 +54,7 @@
       training: "Weiterbildung",
       skills: "Kenntnisse",
       interests: "Interessen",
+      languages: "Sprachen",
       contact: "Kontakt",
       cvLabel: "Lebenslauf",
       position: "Position",
@@ -91,6 +92,7 @@
       training: "Further training",
       skills: "Skills",
       interests: "Interests",
+      languages: "Languages",
       contact: "Contact",
       cvLabel: "CV",
       position: "Position",
@@ -601,6 +603,15 @@
       });
     }
 
+    const languages = cleanEntries(data.sprachen).map((entry) => entry.sprachen).filter(Boolean);
+    if (languages.length > 6) {
+      sections.push({
+        key: "languages-extra",
+        title: t(language, "languages"),
+        entries: [{ title: "", meta: "", body: languages.slice(6).join(", ") }],
+      });
+    }
+
     return sections;
   }
 
@@ -957,6 +968,7 @@
   function cvSidebarUnits(data, language, templateId = "existing") {
     const skills = cleanEntries(data.kenntnisse).map((entry) => entry.kenntnisse).filter(Boolean);
     const interests = cleanEntries(data.hobbys).map((entry) => entry.hobbys).filter(Boolean);
+    const languages = cleanEntries(data.sprachen).map((entry) => entry.sprachen).filter(Boolean);
     const units = [];
 
     if (data.foto) {
@@ -1024,6 +1036,18 @@
         itemType: "pill",
         listClassName: "pill-list muted",
         id: "pv-hobbys",
+        item,
+      });
+    });
+
+    (languages.length ? languages : ["Deutsch", "Englisch"]).forEach((item) => {
+      units.push({
+        type: "section-item",
+        key: "languages",
+        title: t(language, "languages"),
+        itemType: "pill",
+        listClassName: "pill-list muted",
+        id: "pv-sprachen",
         item,
       });
     });
@@ -1103,6 +1127,7 @@
   function buildCvSidebar(data, language, pageNumber, pageCount, templateId = "existing", sidebarModel = null) {
     const skills = cleanEntries(data.kenntnisse).map((entry) => entry.kenntnisse).filter(Boolean);
     const interests = cleanEntries(data.hobbys).map((entry) => entry.hobbys).filter(Boolean);
+    const languages = cleanEntries(data.sprachen).map((entry) => entry.sprachen).filter(Boolean);
     const sidebar = node("aside", {
       className: [
         "cv-side",
@@ -1156,6 +1181,9 @@
         ]),
         buildCvSidebarSection(t(language, "interests"), [
           node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : renderUsesSampleFallbacks ? ["Lesen", "Sport"] : [], 8)),
+        ]),
+        buildCvSidebarSection(t(language, "languages"), [
+          node("div", { id: "pv-sprachen", className: "pill-list muted" }, makePills(languages.length ? languages : renderUsesSampleFallbacks ? ["Deutsch", "Englisch"] : [], 8)),
         ])
       );
 
@@ -1186,6 +1214,10 @@
         node("div", { className: "cv-block" }, [
           node("h3", { text: t(language, "interests") }),
           node("div", { id: "pv-hobbys", className: "pill-list muted" }, makePills(interests.length ? interests : renderUsesSampleFallbacks ? ["Lesen", "Sport"] : [], 6)),
+        ]),
+        node("div", { className: "cv-block" }, [
+          node("h3", { text: t(language, "languages") }),
+          node("div", { id: "pv-sprachen", className: "pill-list muted" }, makePills(languages.length ? languages : renderUsesSampleFallbacks ? ["Deutsch", "Englisch"] : [], 6)),
         ])
       );
     } else {
