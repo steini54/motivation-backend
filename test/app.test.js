@@ -1,7 +1,41 @@
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const { createApp } = require("../app");
+const { createApp: createRawApp } = require("../app");
+
+const paymentService = {
+  async verifyPremiumAccess(input = {}) {
+    return {
+      id: input.sessionId || "cs_test_paid",
+      paymentStatus: "paid",
+      documentType: input.documentType || "motivation",
+      accessId: input.accessId || "access_test_document_001",
+    };
+  },
+};
+
+const premiumAssetService = {
+  async protectImage(dataUrl) {
+    return {
+      previewDataUrl: dataUrl,
+      protectedAsset: "protected_test_ai_photo",
+    };
+  },
+  unlockImage() {
+    return {
+      buffer: Buffer.from("image"),
+      mimeType: "image/png",
+    };
+  },
+};
+
+function createApp(options = {}) {
+  return createRawApp({
+    paymentService,
+    premiumAssetService,
+    ...options,
+  });
+}
 
 async function withServer(app, callback) {
   const server = app.listen(0, "127.0.0.1");
@@ -183,7 +217,94 @@ test("generate-ai-photo preserves the frontend response contract", async () => {
 
       assert.equal(response.status, 200);
       assert.equal(body.aiFoto, "data:image/png;base64,aW1hZ2U=");
+      assert.equal(body.protectedAsset, "protected_test_ai_photo");
       assert.equal(body.quality.verified, true);
+    }
+  );
+});
+
+test("final AI photo download requires verified Premium access", async () => {
+  let verified = false;
+  await withServer(
+    createRawApp({
+      aiService: service,
+      paymentService: {
+        async verifyPremiumAccess(input) {
+          verified = true;
+          assert.equal(input.sessionId, "cs_test_paid");
+          assert.equal(input.accessId, "access_test_document_001");
+          return {
+            id: input.sessionId,
+            paymentStatus: "paid",
+            documentType: input.documentType,
+            accessId: input.accessId,
+          };
+        },
+      },
+      premiumAssetService,
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/premium-assets/ai-photo`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          protectedAsset: "protected_test_ai_photo",
+          sessionId: "cs_test_paid",
+          documentType: "motivation",
+          accessId: "access_test_document_001",
+        }),
+      });
+
+      assert.equal(response.status, 200);
+      assert.equal(response.headers.get("content-type"), "image/png");
+      assert.equal(Buffer.from(await response.arrayBuffer()).toString(), "image");
+      assert.equal(verified, true);
+    }
+  );
+});
+
+test("generate-text rejects unpaid Premium requests before calling AI", async () => {
+  let calls = 0;
+  const unpaidError = new Error("Payment has not been completed yet.");
+  unpaidError.status = 402;
+  const unpaidPayment = {
+    async verifyPremiumAccess() {
+      throw unpaidError;
+    },
+  };
+  const guardedService = {
+    ...service,
+    async generateApplicationText() {
+      calls += 1;
+      return "must not run";
+    },
+  };
+
+  await withServer(
+    createRawApp({
+      aiService: guardedService,
+      paymentService: unpaidPayment,
+      premiumAssetService,
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const response = await fetch(`${url}/generate-text`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          stichpunkte: "Teamarbeit",
+          funktion: "Projektleiter",
+          sessionId: "cs_test_unpaid",
+          documentType: "motivation",
+          accessId: "access_test_document_001",
+        }),
+      });
+
+      assert.equal(response.status, 402);
+      assert.equal(calls, 0);
     }
   );
 });

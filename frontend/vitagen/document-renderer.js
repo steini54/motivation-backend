@@ -3,6 +3,8 @@
 
   const DEFAULT_STYLE = "swiss-line.css";
   const CV_TEMPLATE_BY_STYLE = {
+    "simple-free-blue.css": "simple-free",
+    "simple-free-gray.css": "simple-free",
     "aqua-arc-default.css": "aqua-arc",
     "aqua-arc-soft.css": "aqua-arc",
     "aqua-arc-contrast.css": "aqua-arc",
@@ -22,8 +24,7 @@
     "editorial-mono-mint.css": "editorial-mono",
     "editorial-mono-rose.css": "editorial-mono",
   };
-  const BODY_CHAR_LIMIT = 1500;
-  const BODY_WORD_LIMIT = 250;
+  const BODY_CHAR_LIMIT = 1748;
   const CV_SAFE_BOTTOM_PX = 18;
   const CV_MIN_BODY_CHUNK_WORDS = 36;
 
@@ -119,7 +120,11 @@
     return value;
   }
 
-  const DOCUMENT_META_FIELDS = new Set(["motivationTextLength", "stichwoerter2_is_ai"]);
+  const DOCUMENT_META_FIELDS = new Set([
+    "motivationTextLength",
+    "stichwoerter2_is_ai",
+    "foto_is_ai",
+  ]);
   let renderUsesSampleFallbacks = true;
 
   function hasMeaningfulDocumentData(data) {
@@ -263,27 +268,26 @@
     }
 
     const slice = source.slice(0, maxLength).trimEnd();
-    const minimumBoundary = Math.floor(maxLength * 0.62);
-    const punctuationBoundary = Math.max(
-      slice.lastIndexOf(". "),
-      slice.lastIndexOf("! "),
-      slice.lastIndexOf("? "),
-      slice.lastIndexOf(".\n"),
-      slice.lastIndexOf("!\n"),
-      slice.lastIndexOf("?\n")
-    );
-    const wordBoundary = slice.lastIndexOf(" ");
-    const boundary =
-      punctuationBoundary >= minimumBoundary
-        ? punctuationBoundary + 1
-        : wordBoundary >= minimumBoundary
-          ? wordBoundary
-          : slice.length;
 
     return {
-      text: slice.slice(0, boundary).trim(),
+      text: closeTextAtLimit(slice, maxLength),
       wasLimited: true,
     };
+  }
+
+  function closeTextAtLimit(value, maxLength) {
+    const source = String(value || "").trim();
+    if (!source || /[.!?]$/.test(source)) {
+      return source;
+    }
+
+    const withoutTrailingSeparator = source.replace(/[,:;]+$/, "");
+    const withPeriod = `${withoutTrailingSeparator}.`;
+    if (withPeriod.length <= maxLength) {
+      return withPeriod;
+    }
+
+    return source;
   }
 
   function limitMotivationBodyLines(lines) {
@@ -347,16 +351,15 @@
     const bodyLines = removeDuplicateLetterParts(rawBody, signature);
     const limitedBody = limitMotivationBodyLines(bodyLines);
     const bodyParagraphs = limitedBody.lines.length
-      ? limitedBody.lines.slice(0, 3)
+      ? limitedBody.lines
       : renderUsesSampleFallbacks
         ? [t(language, "motivationBody")]
         : [];
     const rawClosing = splitParagraphs(data.stichwoerter3, "");
     const closingLines = removeDuplicateLetterParts(rawClosing, signature);
     const closingNote = closingLines[0] || "";
-    const bodyWordCount = bodyParagraphs.reduce((count, paragraph) => count + words(paragraph).length, 0);
 
-    if (limitedBody.wasLimited || bodyWordCount > BODY_WORD_LIMIT || rawBody.length > 3) {
+    if (limitedBody.wasLimited) {
       warnings.push(t(language, "motivationWarning"));
     }
 

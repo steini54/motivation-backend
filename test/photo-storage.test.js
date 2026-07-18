@@ -97,3 +97,16 @@ test("photo storage migrates legacy data URLs and revokes object URLs", async ()
   listeners.get("unload")();
   assert.deepEqual(revokedUrls, ["blob:test-1"]);
 });
+
+test("photo storage persists and clears protected AI photo assets", async () => {
+  const { storage } = loadPhotoStorage();
+
+  await storage.saveProtectedPhotoAsset("encrypted-ai-photo-token");
+  assert.equal(
+    await storage.getProtectedPhotoAsset(),
+    "encrypted-ai-photo-token"
+  );
+
+  await storage.clearProtectedPhotoAsset();
+  assert.equal(await storage.getProtectedPhotoAsset(), undefined);
+});

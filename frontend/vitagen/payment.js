@@ -12,6 +12,92 @@
   const MIN_CANVAS_SCALE = 3;
   const MAX_CANVAS_SCALE = 5;
   const LOG_PREFIX = "[VitaGen Payment]";
+  const PENDING_ACTION_KEY = "vitagen_pending_premium_action";
+
+  function createAccessId() {
+    if (window.crypto?.randomUUID) {
+      return window.crypto.randomUUID();
+    }
+
+    return `access_${Date.now().toString(36)}_${Math.random()
+      .toString(36)
+      .slice(2, 14)}`;
+  }
+
+  function readAccessState() {
+    return window.VitaGenAccess?.readStoredAccess(documentType, localStorage) || {};
+  }
+
+  function writeAccessState(nextState) {
+    return (
+      window.VitaGenAccess?.writeStoredAccess(
+        documentType,
+        nextState,
+        localStorage
+      ) || nextState
+    );
+  }
+
+  function getCurrentAccessState() {
+    const stored = readAccessState();
+    const builderState =
+      typeof window.VitaGenGetAccessState === "function"
+        ? window.VitaGenGetAccessState()
+        : null;
+    const state = {
+      ...stored,
+      ...(builderState || {}),
+      accessId: stored.accessId || createAccessId(),
+    };
+    return writeAccessState(state);
+  }
+
+  function updatePaidAccess(sessionId) {
+    const state = getCurrentAccessState();
+    return writeAccessState({
+      ...state,
+      accessId: state.accessId,
+      paymentStatus: "paid",
+      paymentSessionId: sessionId,
+    });
+  }
+
+  function clearPaidAccess() {
+    const state = getCurrentAccessState();
+    return writeAccessState({
+      ...state,
+      paymentStatus: "unpaid",
+      paymentSessionId: "",
+    });
+  }
+
+  function getPremiumAuthorization() {
+    const state = getCurrentAccessState();
+    return {
+      sessionId: state.paymentSessionId || "",
+      documentType,
+      accessId: state.accessId,
+    };
+  }
+
+  function setPendingPremiumAction(action = "download-pdf", reason = "") {
+    const value = { action, reason };
+    sessionStorage.setItem(PENDING_ACTION_KEY, JSON.stringify(value));
+    return value;
+  }
+
+  function getPendingPremiumAction() {
+    try {
+      const value = JSON.parse(sessionStorage.getItem(PENDING_ACTION_KEY) || "{}");
+      return value && typeof value === "object" ? value : {};
+    } catch {
+      return {};
+    }
+  }
+
+  function clearPendingPremiumAction() {
+    sessionStorage.removeItem(PENDING_ACTION_KEY);
+  }
 
   function log(message, details) {
     if (details) {
@@ -131,6 +217,8 @@
       styleName: snapshot.styleName,
       documentHash: snapshot.documentHash,
       checkoutAttemptId: snapshot.checkoutAttemptId,
+      accessId: snapshot.accessId,
+      premiumAction: snapshot.premiumAction,
     };
 
     try {
@@ -661,13 +749,72 @@
     }
   }
 
-  function openPaymentFlow() {
+  async function ensurePremiumAccess({ action = "premium-action", reason = "" } = {}) {
+    if (await verifyStoredPremiumAccess()) {
+      return true;
+    }
+
+    setPendingPremiumAction(action, reason);
+    setStatus(
+      reason === "ai_text"
+        ? "KI-Text ist eine Premium-Funktion. Bitte zuerst freischalten."
+        : reason === "ai_photo"
+          ? "Das finale KI-Foto ist eine Premium-Funktion. Bitte zuerst freischalten."
+          : "Dieses Dokument benoetigt Premium-Zugriff."
+    );
+    openModal();
+    return false;
+  }
+
+  async function openPaymentFlow() {
     log("payment trigger received", {
       hasModal: Boolean(document.getElementById("buyModal")),
       hasPayButton: Boolean(document.getElementById("payBtn")),
       hasStoredData: Boolean(localStorage.getItem(storageKey)),
     });
-    setStatus("");
+
+    let currentDocumentData = null;
+    if (typeof window.saveAllFields === "function") {
+      currentDocumentData = window.saveAllFields();
+    }
+    const documentData =
+      currentDocumentData && typeof currentDocumentData === "object"
+        ? currentDocumentData
+        : window.VitaGenCurrentDocumentData || loadDocumentData();
+    const state = getCurrentAccessState();
+
+    if (state.documentTier === "free") {
+      try {
+        setStatus("Kostenloses Dokument wird vorbereitet...");
+        await verifyFreeDocument(documentData);
+        await downloadCleanPreviewPdf();
+        setStatus("Kostenlose PDF wurde heruntergeladen.");
+      } catch (error) {
+        setStatus(error.message || "Die kostenlose PDF konnte nicht erstellt werden.", true);
+      }
+      return;
+    }
+
+    if (await verifyStoredPremiumAccess()) {
+      try {
+        setStatus("Premium-Zugriff bestaetigt. PDF wird vorbereitet...");
+        await downloadCleanPreviewPdf();
+        setStatus("PDF download started.");
+      } catch (error) {
+        setStatus(error.message || "Die PDF konnte nicht erstellt werden.", true);
+      }
+      return;
+    }
+
+    setPendingPremiumAction("download-pdf", "premium_document");
+    const reasons =
+      window.VitaGenAccess?.describeDocumentAccess(state, getLanguage())?.detail ||
+      "";
+    setStatus(
+      reasons
+        ? `Premium erforderlich: ${reasons}`
+        : "Premium-Zugriff erforderlich."
+    );
     openModal();
   }
 
@@ -687,6 +834,8 @@
     const styleName = getSelectedStyleName();
     const documentHash = await createDocumentHash(styleName, documentData);
     const checkoutAttemptId = createCheckoutAttemptId();
+    const accessState = getCurrentAccessState();
+    const premiumAction = getPendingPremiumAction();
 
     log("starting Stripe Checkout session", {
       documentType,
@@ -702,6 +851,8 @@
       styleName,
       documentHash,
       checkoutAttemptId,
+      accessId: accessState.accessId,
+      premiumAction,
       documentData,
     });
 
@@ -713,6 +864,7 @@
         styleName,
         documentHash,
         checkoutAttemptId,
+        accessId: accessState.accessId,
         returnUrl: getReturnUrl(),
         developerDiscountToken: getDeveloperDiscountToken(),
         ...getBuyerDetails(documentData),
@@ -729,19 +881,16 @@
 
   async function verifyPaidCheckoutSession(sessionId) {
     const pending = restorePendingCheckoutSnapshot();
-    const documentData = loadDocumentData();
-    const styleName = pending.styleName || getSelectedStyleName();
-    const documentHash =
-      pending.documentHash || (await createDocumentHash(styleName, documentData));
+    const accessState = getCurrentAccessState();
+    const accessId = pending.accessId || accessState.accessId;
 
-    const response = await fetch(`${API_BASE_URL}/checkout/verify-session`, {
+    const response = await fetch(`${API_BASE_URL}/checkout/verify-access`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         sessionId,
         documentType,
-        styleName,
-        documentHash,
+        accessId,
       }),
     });
     const data = await response.json().catch(() => ({}));
@@ -750,6 +899,43 @@
       throw new Error(data.error || "Payment could not be verified.");
     }
 
+    updatePaidAccess(sessionId);
+    return data;
+  }
+
+  async function verifyStoredPremiumAccess() {
+    const state = getCurrentAccessState();
+    if (!state.paymentSessionId || state.paymentStatus !== "paid") {
+      return false;
+    }
+
+    try {
+      await verifyPaidCheckoutSession(state.paymentSessionId);
+      return true;
+    } catch (error) {
+      clearPaidAccess();
+      warn("stored premium access is no longer valid", error?.message || error);
+      return false;
+    }
+  }
+
+  async function verifyFreeDocument(documentData) {
+    const accessState = getCurrentAccessState();
+    const response = await fetch(`${API_BASE_URL}/document/verify-free`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        documentType,
+        selectedTemplateId:
+          accessState.selectedTemplateId || getPreviewTemplateId() || getStoredTemplateId(),
+        styleName: getSelectedStyleName(),
+        documentData,
+      }),
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok || !data.allowed) {
+      throw new Error(data.error || "This document requires Premium access.");
+    }
     return data;
   }
 
@@ -1043,6 +1229,85 @@
     return { host, preview, pageElements };
   }
 
+  async function fetchUnlockedAiPhoto() {
+    const protectedAsset = await window.PhotoStorage?.getProtectedPhotoAsset?.();
+    if (!protectedAsset) {
+      const existing = await window.PhotoStorage?.getSelectedPhoto?.();
+      if (existing instanceof Blob && existing.type.startsWith("image/")) {
+        return existing;
+      }
+      throw new Error("Protected AI photo data could not be found.");
+    }
+
+    const response = await fetch(`${API_BASE_URL}/premium-assets/ai-photo`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        protectedAsset,
+        ...getPremiumAuthorization(),
+      }),
+    });
+    if (!response.ok) {
+      const data = await response.json().catch(() => ({}));
+      throw new Error(data.error || "AI photo access could not be verified.");
+    }
+    return response.blob();
+  }
+
+  async function applyUnlockedAiPhoto(blob) {
+    if (!(blob instanceof Blob) || !blob.type.startsWith("image/")) {
+      throw new Error("The unlocked AI photo is invalid.");
+    }
+
+    await window.PhotoStorage?.saveSelectedPhoto?.(blob);
+    const selectedImage = document.querySelector(
+      ".generated-option.selected img, #foto-container.selected img"
+    );
+    if (selectedImage && window.PhotoStorage?.createPhotoUrl) {
+      selectedImage.src = window.PhotoStorage.createPhotoUrl(blob);
+      selectedImage.photoBlob = blob;
+      selectedImage.aiGenerated = true;
+      if (typeof window.selectImage === "function") {
+        window.selectImage(selectedImage, { persist: false });
+      }
+      await selectedImage.decode?.().catch(() => {});
+    }
+    return blob;
+  }
+
+  async function unlockSelectedAiPhotoForExport() {
+    const accessState = getCurrentAccessState();
+    if (!accessState.aiPhotoUsed) {
+      return null;
+    }
+    return applyUnlockedAiPhoto(await fetchUnlockedAiPhoto());
+  }
+
+  async function downloadAiPhoto({ skipAuthorizationCheck = false } = {}) {
+    if (
+      !skipAuthorizationCheck &&
+      !(await ensurePremiumAccess({
+        action: "download-ai-photo",
+        reason: "ai_photo",
+      }))
+    ) {
+      return false;
+    }
+
+    const blob = await applyUnlockedAiPhoto(await fetchUnlockedAiPhoto());
+    const extension =
+      blob.type === "image/png" ? "png" : blob.type === "image/webp" ? "webp" : "jpg";
+    const objectUrl = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = objectUrl;
+    link.download = `VitaGen-AI-Foto.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
+    return true;
+  }
+
   async function downloadCleanPreviewPdf() {
     const JsPdf = window.jspdf?.jsPDF;
     if (typeof window.html2canvas !== "function" || typeof JsPdf !== "function") {
@@ -1052,6 +1317,14 @@
     if (typeof window.saveAllFields === "function") {
       window.saveAllFields();
     }
+    const accessState = getCurrentAccessState();
+    if (
+      accessState.documentTier === "premium" &&
+      !(await verifyStoredPremiumAccess())
+    ) {
+      throw new Error("Premium access must be verified before downloading.");
+    }
+    await unlockSelectedAiPhotoForExport();
     if (typeof window.VitaGenRenderPreview === "function") {
       window.VitaGenRenderPreview({ pulse: false });
     }
@@ -1118,6 +1391,7 @@
   async function handleCheckoutReturn() {
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
+    const pendingAction = getPendingPremiumAction();
 
     if (params.get("checkout") === "cancel") {
       setStatus("Payment was cancelled. You can try again when ready.");
@@ -1130,13 +1404,15 @@
     }
 
     try {
-      updateCompleteOrderModal("pending");
-      setStatus("Payment confirmed. Preparing your PDF...");
+      if (!pendingAction.action || pendingAction.action === "download-pdf") {
+        updateCompleteOrderModal("pending");
+      }
+      setStatus("Payment confirmed. Premium access is being verified...");
       const data = await verifyPaidCheckoutSession(sessionId);
       log("Stripe Checkout return verified", {
         paymentStatus: data.paymentStatus,
         documentType: data.documentType,
-        styleName: data.styleName,
+        accessId: data.accessId,
       });
 
       if (data.paymentStatus !== "paid") {
@@ -1147,17 +1423,33 @@
         return;
       }
 
-      await downloadCleanPreviewPdf();
-      updateCompleteOrderModal("ready");
-      setStatus("PDF download started.");
+      if (pendingAction.action === "generate-text") {
+        setStatus("Premium access confirmed. AI text generation is continuing.");
+        window.dispatchEvent(
+          new CustomEvent("vitagen:premium-access-granted", {
+            detail: { action: pendingAction.action },
+          })
+        );
+      } else if (pendingAction.action === "download-ai-photo") {
+        await downloadAiPhoto({ skipAuthorizationCheck: true });
+        setStatus("AI photo download started.");
+      } else {
+        await downloadCleanPreviewPdf();
+        updateCompleteOrderModal("ready");
+        setStatus("PDF download started.");
+      }
+
       sessionStorage.removeItem("vitagen_pending_checkout");
+      clearPendingPremiumAction();
       const url = new URL(window.location.href);
       url.searchParams.delete("checkout");
       url.searchParams.delete("session_id");
       window.history.replaceState({}, "", url.toString());
     } catch (error) {
       errorLog("Paid PDF download failed", error?.message || error);
-      updateCompleteOrderModal("error");
+      if (!pendingAction.action || pendingAction.action === "download-pdf") {
+        updateCompleteOrderModal("error");
+      }
       setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
     }
   }
@@ -1192,6 +1484,9 @@
     document.addEventListener("click", (event) => {
       const trigger = event.target?.closest?.("[data-trigger-buy], [data-payment-trigger]");
       if (!trigger) {
+        return;
+      }
+      if (event.defaultPrevented) {
         return;
       }
 
@@ -1239,6 +1534,9 @@
   window.VitaGenPayment = {
     open: openPaymentFlow,
     close: closeModal,
+    downloadAiPhoto,
+    ensurePremiumAccess,
+    getPremiumAuthorization,
   };
 
   function initializePayment() {

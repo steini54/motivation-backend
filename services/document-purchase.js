@@ -43,6 +43,8 @@ const STYLE_NAMES = new Set([
   "nordic-panel.css",
   "pearl-classic.css",
   "soft-sand.css",
+  "simple-free-blue.css",
+  "simple-free-gray.css",
   "swiss-line.css",
   "teal-balance.css",
   "terracotta-arch.css",
@@ -77,6 +79,14 @@ function normalizeDocumentHash(value) {
     throw createPaymentError(400, "INVALID_DOCUMENT_HASH", "Invalid document hash.");
   }
   return hash;
+}
+
+function normalizeAccessId(value) {
+  const accessId = String(value || "").trim();
+  if (!/^[A-Za-z0-9_-]{16,96}$/.test(accessId)) {
+    throw createPaymentError(400, "INVALID_ACCESS_ID", "Invalid document access ID.");
+  }
+  return accessId;
 }
 
 function normalizeEmail(value) {
@@ -134,6 +144,7 @@ module.exports = {
   canonicalize,
   createDocumentHash,
   createPaymentError,
+  normalizeAccessId,
   normalizeBuyerName,
   normalizeDocumentHash,
   normalizeDocumentType,

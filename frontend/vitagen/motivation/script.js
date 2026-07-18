@@ -1,7 +1,10 @@
 const AI_API_BASE_URL = "https://motivation-backend-production-2800.up.railway.app";
 
 let aiImageCount = 0;
+let selectedPhotoIsAi = false;
 const MAX_IMAGES = 3;
+const MOTIVATION_TEXT_MAX_CHARS = 1748;
+const MOTIVATION_TEXT_WARNING_CHARS = 1300;
 const STYLE_STORAGE_KEY = "vitagen_motivation_style";
 const TEMPLATE_STORAGE_KEY = "vitagen_motivation_template";
 const LANGUAGE_STORAGE_KEY = "vitagen_language";
@@ -25,13 +28,23 @@ const EXISTING_TEMPLATE_STYLES = [
 const MOTIVATION_TEMPLATES = [
   {
     id: "existing",
+    tier: "premium",
     name: "Modern Clean",
     description: "Modern clean layout",
     defaultStyle: DEFAULT_STYLE,
     styles: EXISTING_TEMPLATE_STYLES,
   },
   {
+    id: "simple-free",
+    tier: "free",
+    name: "Simple Professional",
+    description: "Clean application letter",
+    defaultStyle: "simple-free-blue.css",
+    styles: ["simple-free-blue.css", "simple-free-gray.css"],
+  },
+  {
     id: "aqua-arc",
+    tier: "premium",
     name: "Aqua Arc",
     description: "Clean teal letter",
     defaultStyle: "aqua-arc-default.css",
@@ -39,6 +52,7 @@ const MOTIVATION_TEMPLATES = [
   },
   {
     id: "corporate-axis",
+    tier: "premium",
     name: "Corporate Axis",
     description: "Corporate geometric letter",
     defaultStyle: "corporate-axis-default.css",
@@ -46,6 +60,7 @@ const MOTIVATION_TEMPLATES = [
   },
   {
     id: "editorial-mono",
+    tier: "premium",
     name: "Editorial Mono",
     description: "Editorial monochrome letter",
     defaultStyle: "editorial-mono-default.css",
@@ -54,6 +69,8 @@ const MOTIVATION_TEMPLATES = [
 ];
 const DOCUMENT_STYLES = MOTIVATION_TEMPLATES.flatMap((template) => template.styles);
 const STYLE_META = {
+  "simple-free-blue.css": { name: "Simple Blue", tone: "Free", thumb: "simple-free-blue" },
+  "simple-free-gray.css": { name: "Simple Gray", tone: "Free", thumb: "simple-free-gray" },
   "swiss-line.css": { name: "Swiss Line", tone: "Empfohlen", thumb: "swiss" },
   "charcoal-frame.css": { name: "Charcoal Frame", tone: "Kontrast", thumb: "charcoal" },
   "cobalt-ribbon.css": { name: "Cobalt Ribbon", tone: "Dynamisch", thumb: "cobalt" },
@@ -126,6 +143,8 @@ const UI_TRANSLATIONS = {
     "Bereit fur KI-Foto": "Bereit fuer KI-Foto",
     "Professionelles Foto generieren": "Professionelles Foto generieren",
     "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.",
+    "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.": "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.",
+    "KI-Foto herunterladen": "KI-Foto herunterladen",
     "Angaben zur Bewerbung": "Angaben zur Bewerbung",
     "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.": "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.",
     "Bewerbung als...": "Bewerbung als...",
@@ -149,6 +168,11 @@ const UI_TRANSLATIONS = {
     "Motivationstext": "Motivationstext",
     "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.": "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.",
     "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...": "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...",
+    "Max. 1748 Zeichen, damit Abschluss und Signatur auf einer Seite sichtbar bleiben.": "Max. 1748 Zeichen, damit Abschluss und Signatur auf einer Seite sichtbar bleiben.",
+    "{count} / {max} Zeichen": "{count} / {max} Zeichen",
+    "Bitte kuerzer halten: Abschluss und Signatur muessen auf einer Seite sichtbar bleiben.": "Bitte kuerzer halten: Abschluss und Signatur muessen auf einer Seite sichtbar bleiben.",
+    "Der Motivationstext wurde gekuerzt, damit Abschluss und Signatur sichtbar bleiben.": "Der Motivationstext wurde gekuerzt, damit Abschluss und Signatur sichtbar bleiben.",
+    "Text gekuerzt": "Text gekuerzt",
     "KI Hilfe zum Fliesstext erstellen": "KI Hilfe zum Fliesstext erstellen",
     "Briefdetails": "Briefdetails",
     "Begruessung, Abschluss und Signatur fuer den finalen Brief.": "Begruessung, Abschluss und Signatur fuer den finalen Brief.",
@@ -308,6 +332,8 @@ const UI_TRANSLATIONS = {
     "Bereit fur KI-Foto": "Ready for AI photo",
     "Professionelles Foto generieren": "Generate professional photo",
     "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "After selection, the photo appears directly in the live preview.",
+    "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.": "You can preview an AI-generated photo, but Premium is required to download the image or final PDF.",
+    "KI-Foto herunterladen": "Download AI photo",
     "Angaben zur Bewerbung": "Application details",
     "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.": "Role and employer are used for the subject, letterhead, and AI text.",
     "Bewerbung als...": "Applying as...",
@@ -331,6 +357,11 @@ const UI_TRANSLATIONS = {
     "Motivationstext": "Motivation text",
     "Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.": "Enter notes or revise an existing text.",
     "Erfahrung, Motivation, passende Staerken, konkrete Beispiele...": "Experience, motivation, relevant strengths, concrete examples...",
+    "Max. 1748 Zeichen, damit Abschluss und Signatur auf einer Seite sichtbar bleiben.": "Max. 1748 characters so the closing and signature stay visible on one page.",
+    "{count} / {max} Zeichen": "{count} / {max} characters",
+    "Bitte kuerzer halten: Abschluss und Signatur muessen auf einer Seite sichtbar bleiben.": "Keep it shorter: the closing and signature must remain visible on one page.",
+    "Der Motivationstext wurde gekuerzt, damit Abschluss und Signatur sichtbar bleiben.": "The motivation text was shortened so the closing and signature remain visible.",
+    "Text gekuerzt": "Text shortened",
     "KI Hilfe zum Fliesstext erstellen": "Create text with AI help",
     "Briefdetails": "Letter details",
     "Begruessung, Abschluss und Signatur fuer den finalen Brief.": "Greeting, closing, and signature for the final letter.",
@@ -469,12 +500,35 @@ function setStoredData(data) {
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
 }
 
+function hasMeaningfulText(value) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function hasMeaningfulDocumentData(data) {
+  if (!data || typeof data !== "object") return false;
+  return [
+    "name",
+    "adresse",
+    "kontakt",
+    "posten",
+    "arbeitgeber",
+    "funktion",
+    "stichwoerter",
+    "stichwoerter2",
+    "stichwoerter3",
+    "datum",
+    "unterschrift",
+    "foto",
+  ].some((field) => hasMeaningfulText(data[field]));
+}
+
 function getSelectedPhotoSrc() {
   return document.querySelector(".generated-option.selected img, #foto-container.selected img")?.src || "";
 }
 
 function clearStoredPhotoState({ resetUi = true } = {}) {
   const data = getStoredData();
+  selectedPhotoIsAi = Boolean(data.foto_is_ai);
   if (data.foto) {
     if (
       typeof data.foto === "string" &&
@@ -490,6 +544,11 @@ function clearStoredPhotoState({ resetUi = true } = {}) {
   }
 
   if (!resetUi) return;
+
+  selectedPhotoIsAi = false;
+  delete data.foto_is_ai;
+  setStoredData(data);
+  window.PhotoStorage?.clearProtectedPhotoAsset?.().catch(() => {});
 
   aiImageCount = 0;
   updateCounter();
@@ -547,6 +606,11 @@ function persistSelectedPhoto(element) {
   return setPhotoReady((async () => {
     const blob = await window.PhotoStorage.blobFromImageElement(element);
     await window.PhotoStorage.saveSelectedPhoto(blob);
+    if (selectedPhotoIsAi && element.protectedAsset) {
+      await window.PhotoStorage.saveProtectedPhotoAsset?.(element.protectedAsset);
+    } else if (!selectedPhotoIsAi) {
+      await window.PhotoStorage.clearProtectedPhotoAsset?.();
+    }
   })());
 }
 
@@ -564,6 +628,10 @@ async function restoreSelectedPhoto() {
   const img = renderUploadPreview(window.PhotoStorage.createPhotoUrl(blob), true);
   if (img) {
     img.photoBlob = blob;
+    img.aiGenerated = selectedPhotoIsAi;
+    if (selectedPhotoIsAi) {
+      img.protectedAsset = await window.PhotoStorage.getProtectedPhotoAsset?.();
+    }
     selectImage(img, { persist: false });
   }
 }
@@ -670,6 +738,8 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
   updateCounter();
   renderTemplateOptions(getSelectedTemplate());
   renderStyleOptions(getSelectedStyle());
+  syncDocumentAccess(window.VitaGenCurrentDocumentData || getStoredData());
+  updateMotivationTextLimitState(document.getElementById("stichwoerter2")?.value || "");
 }
 
 function installLanguageSwitch() {
@@ -700,8 +770,97 @@ function setTextWithBreaks(element, value, fallback = "") {
   });
 }
 
+function normalizeMotivationTextWhitespace(value = "") {
+  return String(value || "")
+    .replace(/[ \t]+\n/g, "\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
+}
+
+function closeTextAtLimit(value, maxLength) {
+  const source = String(value || "").trim();
+  if (!source || /[.!?]$/.test(source)) {
+    return source;
+  }
+
+    const withoutTrailingSeparator = source.replace(/[,:;]+$/, "");
+    const withPeriod = `${withoutTrailingSeparator}.`;
+    if (withPeriod.length <= maxLength) {
+      return withPeriod;
+    }
+
+  return source;
+}
+
+function limitMotivationText(value = "", { compact = true } = {}) {
+  const source = compact ? normalizeMotivationTextWhitespace(value) : String(value || "");
+
+  if (source.length <= MOTIVATION_TEXT_MAX_CHARS) {
+    return { text: source, wasLimited: false };
+  }
+
+  const slice = source.slice(0, MOTIVATION_TEXT_MAX_CHARS).trimEnd();
+
+  return {
+    text: closeTextAtLimit(slice, MOTIVATION_TEXT_MAX_CHARS),
+    wasLimited: true,
+  };
+}
+
+function motivationTextForDocument(value = "") {
+  return limitMotivationText(value, { compact: true }).text;
+}
+
+function updateMotivationTextLimitState(value) {
+  const row = document.getElementById("motivationTextLimit");
+  const hint = document.getElementById("motivationTextLimitHint");
+  const counter = document.getElementById("motivationTextCounter");
+  const count = String(value || "").length;
+  const isWarning = count >= MOTIVATION_TEXT_WARNING_CHARS;
+
+  if (row) {
+    row.classList.toggle("is-warning", isWarning);
+  }
+
+  if (hint) {
+    hint.textContent = t(
+      isWarning
+        ? "Bitte kuerzer halten: Abschluss und Signatur muessen auf einer Seite sichtbar bleiben."
+        : "Max. 1748 Zeichen, damit Abschluss und Signatur auf einer Seite sichtbar bleiben."
+    );
+  }
+
+  if (counter) {
+    counter.textContent = t("{count} / {max} Zeichen", {
+      count: String(Math.min(count, MOTIVATION_TEXT_MAX_CHARS)),
+      max: String(MOTIVATION_TEXT_MAX_CHARS),
+    });
+  }
+}
+
+function enforceMotivationTextFieldLimit({ showToastOnLimit = false } = {}) {
+  const field = document.getElementById("stichwoerter2");
+  if (!field) return "";
+
+  const limited = limitMotivationText(field.value, { compact: false });
+  if (limited.wasLimited || limited.text !== field.value) {
+    field.value = limited.text;
+    if (limited.wasLimited && showToastOnLimit) {
+      showToast(
+        "Der Motivationstext wurde gekuerzt, damit Abschluss und Signatur sichtbar bleiben.",
+        "warning",
+        "Text gekuerzt"
+      );
+    }
+  }
+
+  updateMotivationTextLimitState(field.value);
+  return field.value;
+}
+
 function getCurrentFormData() {
   const stored = getStoredData();
+  const motivationTextSource = document.getElementById("stichwoerter2")?.value || stored.stichwoerter2 || "";
   const data = {
     ...stored,
     name: document.getElementById("name")?.value || stored.name || "",
@@ -711,7 +870,7 @@ function getCurrentFormData() {
     arbeitgeber: document.getElementById("arbeitgeber")?.value || stored.arbeitgeber || "",
     funktion: document.getElementById("funktion")?.value || stored.funktion || "",
     stichwoerter: document.getElementById("stichwoerter")?.value || stored.stichwoerter || "",
-    stichwoerter2: document.getElementById("stichwoerter2")?.value || stored.stichwoerter2 || "",
+    stichwoerter2: motivationTextForDocument(motivationTextSource),
     stichwoerter3: document.getElementById("stichwoerter3")?.value || stored.stichwoerter3 || "",
     motivationTextLength: document.getElementById("motivationTextLength")?.value || stored.motivationTextLength || "standard",
     datum: document.getElementById("datum")?.value || stored.datum || "",
@@ -780,6 +939,7 @@ function renderTemplateOptions(activeTemplateId = getSelectedTemplate()) {
       <span class="template-thumb template-thumb--${template.id}" aria-hidden="true"></span>
       <strong>${translateValue(template.name)}</strong>
       <small>${translateValue(template.description)}</small>
+      <span class="template-tier template-tier--${template.tier}">${template.tier === "free" ? "Free" : "Premium"}</span>
     `;
     button.addEventListener("click", () => applyDocumentTemplate(template.id));
     container.appendChild(button);
@@ -846,6 +1006,7 @@ function syncLivePreview({ pulse = true } = {}) {
   const preview = document.getElementById("preview");
   if (!preview || !window.VitaGenDocumentRenderer) return;
   const data = getCurrentFormData();
+  window.VitaGenCurrentDocumentData = data;
   const result = window.VitaGenDocumentRenderer.renderInto(preview, {
     type: "motivation",
     data,
@@ -855,6 +1016,7 @@ function syncLivePreview({ pulse = true } = {}) {
     watermark: true,
   });
   window.VitaGenLastRenderResult = result;
+  syncDocumentAccess(data);
   updateDocumentWarnings(result);
   fitPreviewFrame();
 
@@ -983,6 +1145,9 @@ function installLivePreview() {
 
   fields.forEach(id => {
     document.getElementById(id)?.addEventListener("input", () => {
+      if (id === "stichwoerter2") {
+        enforceMotivationTextFieldLimit({ showToastOnLimit: true });
+      }
       saveAllFields();
       syncLivePreview();
     });
@@ -1086,27 +1251,109 @@ function updateAiGeneratedTextState(isAi) {
   }
 }
 
+function updatePreviewDownloadCopy(state) {
+  const card = document.querySelector(".modal-payment-card");
+  const copy = window.VitaGenAccess?.getPreviewDownloadCopy(
+    state,
+    currentLanguage
+  );
+  if (!card || !copy) return;
+
+  const title = card.querySelector("h3");
+  const description = card.querySelector("p");
+  const benefit = card.querySelector("li:last-child");
+  const action = card.querySelector("[data-trigger-buy], [data-payment-trigger]");
+  if (title) title.textContent = copy.title;
+  if (description) description.textContent = copy.description;
+  if (benefit) benefit.textContent = copy.benefit;
+  if (action) action.textContent = copy.action;
+}
+
+function syncDocumentAccess(data = window.VitaGenCurrentDocumentData || getStoredData()) {
+  if (!window.VitaGenAccess) return null;
+  const storedAccess = window.VitaGenAccess.readStoredAccess("motivation", localStorage);
+  const state = window.VitaGenAccess.stateFromDocument({
+    documentType: "motivation",
+    selectedTemplateId: getSelectedTemplate(),
+    styleName: getSelectedStyle(),
+    documentData: data,
+    paymentStatus: storedAccess.paymentStatus,
+  });
+  const nextState = { ...storedAccess, ...state };
+  window.VitaGenAccess.writeStoredAccess("motivation", nextState, localStorage);
+
+  const status = document.getElementById("documentTierStatus");
+  const copy = window.VitaGenAccess.describeDocumentAccess(nextState, currentLanguage);
+  if (status) {
+    status.dataset.tier = nextState.documentTier;
+    status.querySelector("[data-document-tier-title]").textContent = copy.title;
+    status.querySelector("[data-document-tier-detail]").textContent = copy.detail;
+  }
+  const buyButton = document.getElementById("buyBtn");
+  if (buyButton) {
+    buyButton.textContent =
+      nextState.documentTier === "free"
+        ? currentLanguage === "en"
+          ? "Download free PDF"
+          : "Kostenlose PDF herunterladen"
+        : currentLanguage === "en"
+          ? "Unlock premium PDF"
+          : "Premium-PDF freischalten";
+  }
+  updatePreviewDownloadCopy(nextState);
+  window.dispatchEvent(new CustomEvent("vitagen:accesschange", { detail: nextState }));
+  return nextState;
+}
+
+window.VitaGenGetAccessState = () =>
+  syncDocumentAccess(window.VitaGenCurrentDocumentData || getStoredData());
+
 function saveAllFields() {
   const data = getStoredData();
   const isAi = data.stichwoerter2_is_ai || false;
+  enforceMotivationTextFieldLimit();
 
-  data.name = document.getElementById("name")?.value || "";
-  data.adresse = document.getElementById("adresse")?.value || "";
-  data.kontakt = document.getElementById("kontakt")?.value || "";
-  data.posten = document.getElementById("posten")?.value || "";
-  data.arbeitgeber = document.getElementById("arbeitgeber")?.value || "";
-  data.funktion = document.getElementById("funktion")?.value || "";
-  data.stichwoerter = document.getElementById("stichwoerter")?.value || "";
-  data.stichwoerter2 = document.getElementById("stichwoerter2")?.value || "";
-  data.stichwoerter3 = document.getElementById("stichwoerter3")?.value || "";
-  data.motivationTextLength = document.getElementById("motivationTextLength")?.value || "standard";
-  data.datum = document.getElementById("datum")?.value || "";
-  data.unterschrift = document.getElementById("unterschrift")?.value || "";
-  delete data.foto;
+  [
+    "name",
+    "adresse",
+    "kontakt",
+    "posten",
+    "arbeitgeber",
+    "funktion",
+    "stichwoerter",
+    "stichwoerter3",
+    "datum",
+    "unterschrift",
+  ].forEach((id) => {
+    const element = document.getElementById(id);
+    if (element) {
+      data[id] = element.value || "";
+    }
+  });
+
+  const bodyElement = document.getElementById("stichwoerter2");
+  if (bodyElement) {
+    data.stichwoerter2 = motivationTextForDocument(bodyElement.value || "");
+  }
+
+  const lengthElement = document.getElementById("motivationTextLength");
+  if (lengthElement) {
+    data.motivationTextLength = lengthElement.value || "standard";
+  }
+
+  const selectedPhoto = getSelectedPhotoSrc();
+  if (selectedPhoto) {
+    data.foto = window.PhotoStorage?.STORAGE_MARKER || selectedPhoto;
+    data.foto_is_ai = selectedPhotoIsAi;
+  } else if (!selectedPhotoIsAi) {
+    delete data.foto_is_ai;
+  }
 
   data.stichwoerter2_is_ai = isAi && (data.stichwoerter2.trim() !== "");
 
-  setStoredData(data);
+  if (hasMeaningfulDocumentData(data)) {
+    setStoredData(data);
+  }
   updateAiGeneratedTextState(data.stichwoerter2_is_ai);
   return data;
 }
@@ -1190,7 +1437,7 @@ function renderUploadPreview(src, selected = false) {
   return img;
 }
 
-function createGeneratedOption(src) {
+function createGeneratedOption(src, protectedAsset) {
   const container = document.getElementById("foto-auswahl");
   if (!container) return;
 
@@ -1202,6 +1449,8 @@ function createGeneratedOption(src) {
   const img = document.createElement("img");
   img.src = src;
   img.alt = t("KI Foto Variante {count}", { count: aiImageCount });
+  img.aiGenerated = true;
+  img.protectedAsset = protectedAsset;
 
   const label = document.createElement("span");
   label.textContent = translateValue("Variante");
@@ -1225,6 +1474,11 @@ function selectImage(element, { persist = true } = {}) {
   });
 
   const generatedOption = element.closest(".generated-option");
+  selectedPhotoIsAi = Boolean(element.aiGenerated || generatedOption);
+  const downloadButton = document.getElementById("downloadAiPhotoBtn");
+  if (downloadButton) {
+    downloadButton.hidden = !selectedPhotoIsAi;
+  }
   if (generatedOption) {
     generatedOption.classList.add("selected");
   } else {
@@ -1259,13 +1513,25 @@ window.addEventListener("DOMContentLoaded", () => {
     "datum",
     "unterschrift"
   ];
+  let savedNeedsUpdate = false;
 
   fields.forEach(id => {
     const el = document.getElementById(id);
     if (el && saved[id]) {
-      el.value = saved[id];
+      const value = id === "stichwoerter2" ? motivationTextForDocument(saved[id]) : saved[id];
+      el.value = value;
+      if (id === "stichwoerter2" && value !== saved[id]) {
+        saved[id] = value;
+        savedNeedsUpdate = true;
+      }
     }
   });
+
+  if (savedNeedsUpdate) {
+    setStoredData(saved);
+  }
+
+  updateMotivationTextLimitState(document.getElementById("stichwoerter2")?.value || "");
 
   updateAiGeneratedTextState(saved.stichwoerter2_is_ai);
 
@@ -1349,6 +1615,8 @@ if (fileInput) {
       renderOptionPlaceholders();
       setPhotoStatus("Noch nicht generiert");
       saveSourcePhotoForReuse(file);
+      selectedPhotoIsAi = false;
+      window.PhotoStorage?.clearProtectedPhotoAsset?.().catch(() => {});
 
       const img = renderUploadPreview(e.target.result, true);
       if (img) {
@@ -1368,6 +1636,25 @@ const changePhotoBtn = document.getElementById("changePhotoBtn");
 if (changePhotoBtn && fileInput) {
   changePhotoBtn.addEventListener("click", () => {
     fileInput.click();
+  });
+}
+
+const downloadAiPhotoBtn = document.getElementById("downloadAiPhotoBtn");
+
+if (downloadAiPhotoBtn) {
+  downloadAiPhotoBtn.addEventListener("click", async () => {
+    if (!selectedPhotoIsAi || !window.VitaGenPayment?.downloadAiPhoto) {
+      return;
+    }
+    try {
+      await window.VitaGenPayment.downloadAiPhoto();
+    } catch (error) {
+      showToast(
+        error.message || "Das KI-Foto konnte nicht heruntergeladen werden.",
+        "error",
+        "Download fehlgeschlagen"
+      );
+    }
   });
 }
 
@@ -1411,7 +1698,7 @@ if (aiBtn) {
       if (result.aiFoto) {
         aiImageCount++;
         updateCounter();
-        createGeneratedOption(result.aiFoto);
+        createGeneratedOption(result.aiFoto, result.protectedAsset);
         setPhotoStatus(aiImageCount === MAX_IMAGES ? "3 professionelle Varianten verfuegbar" : "Option bereit zur Auswahl");
         aiBtn.innerText = aiImageCount > 0 ? translateValue("Weitere Option generieren") : originalButtonText;
         showToast("Professionelle Foto-Option wurde erstellt.", "success", "KI-Foto bereit");
@@ -1467,9 +1754,18 @@ if (textBtn) {
       return;
     }
 
-    const originalButtonText = textBtn.innerText;
+    const premiumAllowed = await window.VitaGenPayment?.ensurePremiumAccess?.({
+      action: "generate-text",
+      reason: "ai_text",
+    });
+    if (!premiumAllowed) {
+      return;
+    }
+
+    const textButtonLabel = textBtn.querySelector("span:first-child") || textBtn;
+    const originalButtonText = textButtonLabel.textContent;
     textBtn.disabled = true;
-    textBtn.innerText = translateValue("Generiere Text...");
+    textButtonLabel.textContent = translateValue("Generiere Text...");
 
     const wrapper = document.getElementById("stichwoerter2")?.closest(".textarea-wrapper");
     if (wrapper) {
@@ -1490,17 +1786,20 @@ if (textBtn) {
           arbeitgeber: data.arbeitgeber,
           greeting: data.stichwoerter,
           closing: data.stichwoerter3,
+          ...window.VitaGenPayment.getPremiumAuthorization(),
         })
       });
 
       if (!response.ok) {
-        throw new Error(`Text generation failed with status ${response.status}`);
+        const failure = await response.json().catch(() => ({}));
+        throw new Error(failure.error || `Text generation failed with status ${response.status}`);
       }
 
       const result = await response.json();
 
       if (result.text) {
-        document.getElementById("stichwoerter2").value = result.text;
+        const limitedText = limitMotivationText(result.text, { compact: true });
+        document.getElementById("stichwoerter2").value = limitedText.text;
         
         // Save the AI generation flag to local storage
         const saved = getStoredData();
@@ -1509,7 +1808,13 @@ if (textBtn) {
 
         saveAllFields();
         syncLivePreview();
-        showToast("Motivationstext wurde erstellt und bleibt editierbar.", "success", "KI-Text bereit");
+        showToast(
+          limitedText.wasLimited
+            ? "Der Motivationstext wurde gekuerzt, damit Abschluss und Signatur sichtbar bleiben."
+            : "Motivationstext wurde erstellt und bleibt editierbar.",
+          limitedText.wasLimited ? "warning" : "success",
+          limitedText.wasLimited ? "Text gekuerzt" : "KI-Text bereit"
+        );
       } else {
         showToast("Der Server hat keinen Text zurueckgegeben.", "error", "Kein Text erhalten");
       }
@@ -1518,10 +1823,16 @@ if (textBtn) {
       showToast("Der Motivationstext konnte nicht generiert werden. Bitte versuchen Sie es erneut.", "error", "Generierung fehlgeschlagen");
     } finally {
       textBtn.disabled = false;
-      textBtn.innerText = originalButtonText;
+      textButtonLabel.textContent = originalButtonText;
       if (wrapper) {
         wrapper.classList.remove("is-generating");
       }
     }
   });
 }
+
+window.addEventListener("vitagen:premium-access-granted", (event) => {
+  if (event.detail?.action === "generate-text") {
+    document.getElementById("generateTextBtn")?.click();
+  }
+});

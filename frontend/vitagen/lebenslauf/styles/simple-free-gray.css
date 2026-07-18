@@ -1,0 +1,23 @@
+@import url("_base.css");
+
+:root {
+  --cv-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-title-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-paper: #ffffff;
+  --cv-ink: #202124;
+  --cv-muted: #62666b;
+  --cv-accent: #3f464d;
+  --cv-accent-2: #a6aaae;
+  --cv-soft: #f4f4f4;
+  --cv-rule: #d7d7d7;
+  --cv-cover-bg: #ffffff;
+  --cv-cover-ink: #202124;
+  --cv-cover-muted: #62666b;
+  --cv-cover-accent: #3f464d;
+  --cv-sidebar-bg: #f4f4f4;
+  --cv-section-transform: none;
+  --cv-section-letter: 0;
+  --cv-photo-radius: 2mm;
+  --cv-photo-shadow: none;
+  --cv-photo-border: 1px solid #d7d7d7;
+}

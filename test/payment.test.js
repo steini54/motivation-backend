@@ -49,6 +49,14 @@ function createFakePaymentService(overrides = {}) {
           input.documentType === "lebenslauf" ? "Lebenslauf.pdf" : "Bewerbung.pdf",
       };
     },
+    async verifyPremiumAccess(input) {
+      return {
+        id: input.sessionId,
+        paymentStatus: "paid",
+        documentType: input.documentType,
+        accessId: input.accessId,
+      };
+    },
     constructWebhookEvent(rawBody, signature) {
       assert.ok(Buffer.isBuffer(rawBody));
       assert.equal(signature, "signed");
@@ -92,6 +100,8 @@ test("payment style allowlist matches the current VitaGen style set", () => {
     "nordic-panel.css",
     "pearl-classic.css",
     "soft-sand.css",
+    "simple-free-blue.css",
+    "simple-free-gray.css",
     "swiss-line.css",
     "teal-balance.css",
     "terracotta-arch.css",
@@ -722,4 +732,68 @@ test("Stripe return URLs support localhost and production only", () => {
       ),
     /Invalid payment return URL/
   );
+});
+
+test("Stripe premium access is bound to a stable document access ID", async () => {
+  let createdParams;
+  const accessId = "access_document_checkout_001";
+  const documentHash = "a".repeat(64);
+  const config = {
+    currency: "chf",
+    priceCents: 990,
+    priceId: "",
+    productName: "VitaGen PDF Download",
+    baseUrl: "https://syntext.ch/bewerbungs-generator",
+    invoiceCreation: true,
+    stripeApiVersion: "2026-05-27.dahlia",
+    checkoutCouponId: "",
+    devDiscountToken: "",
+    freeCheckout: false,
+    checkoutPaymentMethodTypes: ["card", "twint"],
+  };
+  const stripeClient = {
+    checkout: {
+      sessions: {
+        async create(params) {
+          createdParams = params;
+          return {
+            id: "cs_test_access_001",
+            url: "https://checkout.stripe.com/c/pay/cs_test_access_001",
+          };
+        },
+        async retrieve() {
+          return {
+            id: "cs_test_access_001",
+            payment_status: "paid",
+            currency: "chf",
+            amount_total: 990,
+            metadata: {
+              document_type: "motivation",
+              style_name: "swiss-line.css",
+              document_hash: documentHash,
+              access_id: accessId,
+            },
+          };
+        },
+      },
+    },
+  };
+  const payment = createPaymentService({ stripeClient, config });
+
+  await payment.createCheckoutSession({
+    documentType: "motivation",
+    styleName: "swiss-line.css",
+    documentHash,
+    accessId,
+    checkoutAttemptId: "attempt_access_001",
+  });
+  const verification = await payment.verifyPremiumAccess({
+    sessionId: "cs_test_access_001",
+    documentType: "motivation",
+    accessId,
+  });
+
+  assert.equal(createdParams.metadata.access_id, accessId);
+  assert.equal(verification.paymentStatus, "paid");
+  assert.equal(verification.accessId, accessId);
 });

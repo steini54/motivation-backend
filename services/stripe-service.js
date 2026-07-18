@@ -7,6 +7,7 @@ const {
 const {
   DOCUMENT_TYPES,
   createPaymentError,
+  normalizeAccessId,
   normalizeBuyerName,
   normalizeDocumentHash,
   normalizeDocumentType,
@@ -165,6 +166,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const customerEmail = normalizeEmail(input.customerEmail);
     const buyerName = normalizeBuyerName(input.buyerName);
     const checkoutAttemptId = createCheckoutAttemptId(input.checkoutAttemptId);
+    const accessId = input.accessId ? normalizeAccessId(input.accessId) : "";
     const developerDiscount = shouldApplyDeveloperDiscount(input.developerDiscountToken);
     const returnUrl = normalizeReturnUrl(
       input.returnUrl,
@@ -177,6 +179,10 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       style_name: styleName,
       document_hash: documentHash,
     };
+
+    if (accessId) {
+      metadata.access_id = accessId;
+    }
 
     if (buyerName) {
       metadata.buyer_name = buyerName;
@@ -288,6 +294,47 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     };
   }
 
+  async function verifyPremiumAccess(input = {}) {
+    const session = await retrieveCheckoutSession(input.sessionId);
+    const documentType = normalizeDocumentType(input.documentType);
+    const accessId = normalizeAccessId(input.accessId);
+
+    if (session.payment_status !== "paid") {
+      throw createPaymentError(
+        402,
+        "PAYMENT_NOT_PAID",
+        "Payment has not been completed yet."
+      );
+    }
+
+    if (session.currency && session.currency.toLowerCase() !== config.currency) {
+      throw createPaymentError(403, "PAYMENT_CURRENCY_MISMATCH", "Payment currency mismatch.");
+    }
+
+    if (Number.isInteger(session.amount_total) && !isAllowedAmountTotal(session)) {
+      throw createPaymentError(403, "PAYMENT_AMOUNT_MISMATCH", "Payment amount mismatch.");
+    }
+
+    const metadata = session.metadata || {};
+    if (
+      metadata.document_type !== documentType ||
+      metadata.access_id !== accessId
+    ) {
+      throw createPaymentError(
+        403,
+        "PAYMENT_ACCESS_MISMATCH",
+        "Payment does not match this document access."
+      );
+    }
+
+    return {
+      id: session.id,
+      paymentStatus: session.payment_status,
+      documentType,
+      accessId,
+    };
+  }
+
   function constructWebhookEvent(rawBody, signature) {
     if (!config.webhookSecret) {
       throw createPaymentError(503, "WEBHOOK_NOT_CONFIGURED", "Stripe webhook is not configured.");
@@ -331,6 +378,7 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     createCheckoutSession,
     retrieveCheckoutSession,
     verifyPaidSession,
+    verifyPremiumAccess,
     constructWebhookEvent,
     handleWebhookEvent,
   };

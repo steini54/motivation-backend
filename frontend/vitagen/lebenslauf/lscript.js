@@ -1,6 +1,7 @@
 const AI_API_BASE_URL = "https://motivation-backend-production-2800.up.railway.app";
 
 let aiImageCount = 0;
+let selectedPhotoIsAi = false;
 const MAX_IMAGES = 3;
 const STORAGE_KEY = "vitagen_lebenslauf";
 const STYLE_STORAGE_KEY = "vitagen_lebenslauf_style";
@@ -26,13 +27,23 @@ const EXISTING_TEMPLATE_STYLES = [
 const CV_TEMPLATES = [
   {
     id: "existing",
+    tier: "premium",
     name: "Modern Split",
     description: "Modern split-column layout",
     defaultStyle: DEFAULT_STYLE,
     styles: EXISTING_TEMPLATE_STYLES,
   },
   {
+    id: "simple-free",
+    tier: "free",
+    name: "Simple Professional",
+    description: "Clean application layout",
+    defaultStyle: "simple-free-blue.css",
+    styles: ["simple-free-blue.css", "simple-free-gray.css"],
+  },
+  {
     id: "aqua-arc",
+    tier: "premium",
     name: "Aqua Arc",
     description: "Clean teal two-column CV",
     defaultStyle: "aqua-arc-default.css",
@@ -40,6 +51,7 @@ const CV_TEMPLATES = [
   },
   {
     id: "corporate-axis",
+    tier: "premium",
     name: "Corporate Axis",
     description: "Corporate geometric layout",
     defaultStyle: "corporate-axis-default.css",
@@ -47,6 +59,7 @@ const CV_TEMPLATES = [
   },
   {
     id: "editorial-mono",
+    tier: "premium",
     name: "Editorial Mono",
     description: "Editorial monochrome layout",
     defaultStyle: "editorial-mono-default.css",
@@ -55,6 +68,8 @@ const CV_TEMPLATES = [
 ];
 const DOCUMENT_STYLES = CV_TEMPLATES.flatMap((template) => template.styles);
 const STYLE_META = {
+  "simple-free-blue.css": { name: "Simple Blue", tone: "Free", thumb: "simple-free-blue" },
+  "simple-free-gray.css": { name: "Simple Gray", tone: "Free", thumb: "simple-free-gray" },
   "swiss-line.css": { name: "Swiss Line", tone: "Empfohlen", thumb: "swiss" },
   "charcoal-frame.css": { name: "Charcoal Frame", tone: "Kontrast", thumb: "charcoal" },
   "cobalt-ribbon.css": { name: "Cobalt Ribbon", tone: "Dynamisch", thumb: "cobalt" },
@@ -139,6 +154,8 @@ const UI_TRANSLATIONS = {
     "Noch nicht generiert": "Noch nicht generiert",
     "Professionelles Foto generieren": "Professionelles Foto generieren",
     "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.",
+    "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.": "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.",
+    "KI-Foto herunterladen": "KI-Foto herunterladen",
     "Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.": "Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.",
     "Beruflicher Werdegang": "Beruflicher Werdegang",
     "Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.": "Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.",
@@ -325,6 +342,8 @@ const UI_TRANSLATIONS = {
     "Noch nicht generiert": "Not generated yet",
     "Professionelles Foto generieren": "Generate professional photo",
     "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "After selection, the photo appears directly in the live preview.",
+    "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.": "You can preview an AI-generated photo, but Premium is required to download the image or final PDF.",
+    "KI-Foto herunterladen": "Download AI photo",
     "Nach der Auswahl erscheint das Foto direkt in der CV-Vorschau.": "After selection, the photo appears directly in the CV preview.",
     "Beruflicher Werdegang": "Professional experience",
     "Stationen koennen hinzugefuegt, geloescht und direkt in der Vorschau geprueft werden.": "Entries can be added, deleted, and checked directly in the preview.",
@@ -516,12 +535,35 @@ function setStoredData(data) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
+function hasMeaningfulText(value) {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function hasMeaningfulEntries(value) {
+  return Array.isArray(value) && value.some((entry) =>
+    entry &&
+    typeof entry === "object" &&
+    Object.values(entry).some(hasMeaningfulText)
+  );
+}
+
+function hasMeaningfulDocumentData(data) {
+  if (!data || typeof data !== "object") return false;
+  return (
+    ["name", "adresse", "kontakt", "headline", "profil", "datum", "unterschrift", "foto"]
+      .some((field) => hasMeaningfulText(data[field])) ||
+    ["schulbildung", "beruf", "weiterbildung", "kenntnisse", "hobbys"]
+      .some((field) => hasMeaningfulEntries(data[field]))
+  );
+}
+
 function getSelectedPhotoSrc() {
   return document.querySelector(".generated-option.selected img, #foto-container.selected img")?.src || "";
 }
 
 function clearStoredPhotoState({ resetUi = true } = {}) {
   const data = getStoredData();
+  selectedPhotoIsAi = Boolean(data.foto_is_ai);
   if (data.foto) {
     if (
       typeof data.foto === "string" &&
@@ -537,6 +579,11 @@ function clearStoredPhotoState({ resetUi = true } = {}) {
   }
 
   if (!resetUi) return;
+
+  selectedPhotoIsAi = false;
+  delete data.foto_is_ai;
+  setStoredData(data);
+  window.PhotoStorage?.clearProtectedPhotoAsset?.().catch(() => {});
 
   aiImageCount = 0;
   updateCounter();
@@ -594,6 +641,11 @@ function persistSelectedPhoto(element) {
   return setPhotoReady((async () => {
     const blob = await window.PhotoStorage.blobFromImageElement(element);
     await window.PhotoStorage.saveSelectedPhoto(blob);
+    if (selectedPhotoIsAi && element.protectedAsset) {
+      await window.PhotoStorage.saveProtectedPhotoAsset?.(element.protectedAsset);
+    } else if (!selectedPhotoIsAi) {
+      await window.PhotoStorage.clearProtectedPhotoAsset?.();
+    }
   })());
 }
 
@@ -611,6 +663,10 @@ async function restoreSelectedPhoto() {
   const img = renderUploadPreview(window.PhotoStorage.createPhotoUrl(blob), true);
   if (img) {
     img.photoBlob = blob;
+    img.aiGenerated = selectedPhotoIsAi;
+    if (selectedPhotoIsAi) {
+      img.protectedAsset = await window.PhotoStorage.getProtectedPhotoAsset?.();
+    }
     selectImage(img, { persist: false });
   }
 }
@@ -717,6 +773,7 @@ function applyLanguage(language = localStorage.getItem(LANGUAGE_STORAGE_KEY) || 
   updateCounter();
   renderTemplateOptions(getSelectedTemplate());
   renderStyleOptions(getSelectedStyle());
+  syncDocumentAccess(window.VitaGenCurrentDocumentData || getStoredData());
 }
 
 function installLanguageSwitch() {
@@ -781,6 +838,7 @@ function renderTemplateOptions(activeTemplateId = getSelectedTemplate()) {
       <span class="template-thumb template-thumb--${template.id}" aria-hidden="true"></span>
       <strong>${translateValue(template.name)}</strong>
       <small>${translateValue(template.description)}</small>
+      <span class="template-tier template-tier--${template.tier}">${template.tier === "free" ? "Free" : "Premium"}</span>
     `;
     button.addEventListener("click", () => applyDocumentTemplate(template.id));
     container.appendChild(button);
@@ -936,23 +994,94 @@ function ensureEntry(section) {
 }
 
 function saveFormData() {
-  const data = {};
+  const data = getStoredData();
 
   SIMPLE_FIELDS.forEach((id) => {
-    data[id] = document.getElementById(id)?.value || "";
+    const element = document.getElementById(id);
+    if (element) {
+      data[id] = element.value || "";
+    }
   });
 
   Object.keys(SECTION_CONFIG).forEach((section) => {
-    data[section] = getEntriesData(section);
+    if (document.querySelector(`.${section}-entries`)) {
+      data[section] = getEntriesData(section);
+    }
   });
 
-  setStoredData(data);
-
   const selectedPhoto = getSelectedPhotoSrc();
+  if (selectedPhoto) {
+    data.foto = window.PhotoStorage?.STORAGE_MARKER || selectedPhoto;
+    data.foto_is_ai = selectedPhotoIsAi;
+  } else if (!selectedPhotoIsAi) {
+    delete data.foto_is_ai;
+  }
+
+  if (hasMeaningfulDocumentData(data)) {
+    setStoredData(data);
+  }
+
   return selectedPhoto ? { ...data, foto: selectedPhoto } : data;
 }
 
 window.saveAllFields = saveFormData;
+
+function updatePreviewDownloadCopy(state) {
+  const card = document.querySelector(".modal-payment-card");
+  const copy = window.VitaGenAccess?.getPreviewDownloadCopy(
+    state,
+    currentLanguage
+  );
+  if (!card || !copy) return;
+
+  const title = card.querySelector("h3");
+  const description = card.querySelector("p");
+  const benefit = card.querySelector("li:last-child");
+  const action = card.querySelector("[data-trigger-buy], [data-payment-trigger]");
+  if (title) title.textContent = copy.title;
+  if (description) description.textContent = copy.description;
+  if (benefit) benefit.textContent = copy.benefit;
+  if (action) action.textContent = copy.action;
+}
+
+function syncDocumentAccess(data = window.VitaGenCurrentDocumentData || getStoredData()) {
+  if (!window.VitaGenAccess) return null;
+  const storedAccess = window.VitaGenAccess.readStoredAccess("lebenslauf", localStorage);
+  const state = window.VitaGenAccess.stateFromDocument({
+    documentType: "lebenslauf",
+    selectedTemplateId: getSelectedTemplate(),
+    styleName: getSelectedStyle(),
+    documentData: data,
+    paymentStatus: storedAccess.paymentStatus,
+  });
+  const nextState = { ...storedAccess, ...state };
+  window.VitaGenAccess.writeStoredAccess("lebenslauf", nextState, localStorage);
+
+  const status = document.getElementById("documentTierStatus");
+  const copy = window.VitaGenAccess.describeDocumentAccess(nextState, currentLanguage);
+  if (status) {
+    status.dataset.tier = nextState.documentTier;
+    status.querySelector("[data-document-tier-title]").textContent = copy.title;
+    status.querySelector("[data-document-tier-detail]").textContent = copy.detail;
+  }
+  const buyButton = document.getElementById("buyBtn");
+  if (buyButton) {
+    buyButton.textContent =
+      nextState.documentTier === "free"
+        ? currentLanguage === "en"
+          ? "Download free PDF"
+          : "Kostenlose PDF herunterladen"
+        : currentLanguage === "en"
+          ? "Unlock premium PDF"
+          : "Premium-PDF freischalten";
+  }
+  updatePreviewDownloadCopy(nextState);
+  window.dispatchEvent(new CustomEvent("vitagen:accesschange", { detail: nextState }));
+  return nextState;
+}
+
+window.VitaGenGetAccessState = () =>
+  syncDocumentAccess(window.VitaGenCurrentDocumentData || getStoredData());
 
 function applyDocumentStyle(styleName = DEFAULT_STYLE) {
   const normalized = normalizeDocumentStyle(styleName);
@@ -1082,6 +1211,7 @@ function syncLivePreview({ pulse = true } = {}) {
   const preview = document.getElementById("preview");
   if (!preview || !window.VitaGenDocumentRenderer) return;
   const data = saveFormData();
+  window.VitaGenCurrentDocumentData = data;
   const result = window.VitaGenDocumentRenderer.renderInto(preview, {
     type: "cv",
     data,
@@ -1091,6 +1221,7 @@ function syncLivePreview({ pulse = true } = {}) {
     watermark: true,
   });
   window.VitaGenLastRenderResult = result;
+  syncDocumentAccess(data);
   updateDocumentWarnings(result);
   fitPreviewFrame();
 
@@ -1258,7 +1389,7 @@ function renderUploadPreview(src, selected = false) {
   return img;
 }
 
-function createGeneratedOption(src) {
+function createGeneratedOption(src, protectedAsset) {
   const container = document.getElementById("foto-auswahl");
   if (!container) return;
 
@@ -1270,6 +1401,8 @@ function createGeneratedOption(src) {
   const img = document.createElement("img");
   img.src = src;
   img.alt = t("KI Foto Variante {count}", { count: aiImageCount });
+  img.aiGenerated = true;
+  img.protectedAsset = protectedAsset;
 
   const label = document.createElement("span");
   label.textContent = translateValue("Variante");
@@ -1290,6 +1423,11 @@ function selectImage(element, { persist = true } = {}) {
   document.querySelectorAll("#foto-container, .generated-option").forEach((item) => item.classList.remove("selected"));
 
   const generatedOption = element.closest(".generated-option");
+  selectedPhotoIsAi = Boolean(element.aiGenerated || generatedOption);
+  const downloadButton = document.getElementById("downloadAiPhotoBtn");
+  if (downloadButton) {
+    downloadButton.hidden = !selectedPhotoIsAi;
+  }
   if (generatedOption) {
     generatedOption.classList.add("selected");
   } else {
@@ -1385,6 +1523,7 @@ function installPhotoListeners() {
   const fileInput = document.getElementById("foto-upload");
   const changePhotoBtn = document.getElementById("changePhotoBtn");
   const aiBtn = document.getElementById("aiFotoBtn");
+  const downloadAiPhotoBtn = document.getElementById("downloadAiPhotoBtn");
 
   fileInput?.addEventListener("change", (event) => {
     const file = event.target.files[0];
@@ -1396,6 +1535,8 @@ function installPhotoListeners() {
       renderOptionPlaceholders();
       setPhotoStatus("Noch nicht generiert");
       saveSourcePhotoForReuse(file);
+      selectedPhotoIsAi = false;
+      window.PhotoStorage?.clearProtectedPhotoAsset?.().catch(() => {});
       const img = renderUploadPreview(loadEvent.target.result, true);
       if (img) {
         img.photoBlob = file;
@@ -1409,6 +1550,21 @@ function installPhotoListeners() {
   });
 
   changePhotoBtn?.addEventListener("click", () => fileInput?.click());
+
+  downloadAiPhotoBtn?.addEventListener("click", async () => {
+    if (!selectedPhotoIsAi || !window.VitaGenPayment?.downloadAiPhoto) {
+      return;
+    }
+    try {
+      await window.VitaGenPayment.downloadAiPhoto();
+    } catch (error) {
+      showToast(
+        error.message || "Das KI-Foto konnte nicht heruntergeladen werden.",
+        "error",
+        "Download fehlgeschlagen"
+      );
+    }
+  });
 
   aiBtn?.addEventListener("click", async () => {
     if (aiImageCount >= MAX_IMAGES) {
@@ -1443,7 +1599,7 @@ function installPhotoListeners() {
       if (result.aiFoto) {
         aiImageCount++;
         updateCounter();
-        createGeneratedOption(result.aiFoto);
+        createGeneratedOption(result.aiFoto, result.protectedAsset);
         setPhotoStatus(aiImageCount === MAX_IMAGES ? "3 professionelle Varianten verfuegbar" : "Option bereit zur Auswahl");
         aiBtn.innerText = aiImageCount > 0 ? translateValue("Weitere Option generieren") : originalButtonText;
         showToast("Professionelle Foto-Option wurde erstellt.", "success", "KI-Foto bereit");

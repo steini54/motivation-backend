@@ -7,6 +7,7 @@ const { rateLimit } = require("express-rate-limit");
 const { getAiErrorCode } = require("./services/ai-retry");
 const { createDocumentHash } = require("./services/document-purchase");
 const { createCleanPdfBuffer } = require("./services/pdf-service");
+const VitaGenAccess = require("./frontend/vitagen/access-control");
 
 const DEFAULT_ALLOWED_ORIGINS = [
   "http://syntext.ch",
@@ -227,11 +228,13 @@ function createApp({
   aiProvider = "gemini",
   geminiService = null,
   paymentService = null,
+  premiumAssetService = null,
   env = process.env,
   logger = console,
 } = {}) {
   const service = aiService || geminiService;
   const payment = paymentService;
+  const premiumAssets = premiumAssetService;
   const app = express();
   const upload = createUpload(env);
 
@@ -268,7 +271,7 @@ function createApp({
     }
   );
 
-  app.use(express.json({ limit: env.JSON_BODY_LIMIT || "8mb" }));
+  app.use(express.json({ limit: env.JSON_BODY_LIMIT || "12mb" }));
 
   const configuredRateLimit = Number.parseInt(env.AI_RATE_LIMIT || "20", 10);
   const aiLimiter = rateLimit({
@@ -312,6 +315,34 @@ function createApp({
     });
   });
 
+  app.post("/document/verify-free", paymentLimiter, (req, res) => {
+    const state = VitaGenAccess.stateFromDocument({
+      documentType: req.body?.documentType,
+      selectedTemplateId: req.body?.selectedTemplateId,
+      styleName: req.body?.styleName,
+      documentData: req.body?.documentData,
+    });
+
+    if (!state.documentType) {
+      res.status(400).json({ error: "Invalid document type." });
+      return;
+    }
+
+    if (state.documentTier !== "free") {
+      res.status(403).json({
+        error: "This document contains Premium content.",
+        premiumReasons: state.premiumReasons,
+      });
+      return;
+    }
+
+    res.json({
+      allowed: true,
+      documentTier: state.documentTier,
+      selectedTemplateTier: state.selectedTemplateTier,
+    });
+  });
+
   app.post("/checkout/create-session", paymentLimiter, async (req, res) => {
     if (!payment) {
       res.status(503).json({ error: "Payment service is not configured." });
@@ -341,6 +372,26 @@ function createApp({
         documentType: verification.documentType,
         styleName: verification.styleName,
         documentHash: verification.documentHash,
+      });
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
+      res.status(mapped.status).json(mapped.body);
+    }
+  });
+
+  app.post("/checkout/verify-access", paymentLimiter, async (req, res) => {
+    if (!payment?.verifyPremiumAccess) {
+      res.status(503).json({ error: "Payment service is not configured." });
+      return;
+    }
+
+    try {
+      const verification = await payment.verifyPremiumAccess(req.body);
+      res.json({
+        id: verification.id,
+        paymentStatus: verification.paymentStatus,
+        documentType: verification.documentType,
+        accessId: verification.accessId,
       });
     } catch (error) {
       const mapped = classifyPaymentError(error);
@@ -427,14 +478,23 @@ function createApp({
         return;
       }
 
+      if (!premiumAssets) {
+        res.status(503).json({
+          error: "Premium AI photo protection is not configured.",
+        });
+        return;
+      }
+
       try {
         const result = await service.editApplicationPhoto({
           buffer: req.file.buffer,
           mimeType: req.file.mimetype,
         });
+        const protectedImage = await premiumAssets.protectImage(result.dataUrl);
 
         res.json({
-          aiFoto: result.dataUrl,
+          aiFoto: protectedImage.previewDataUrl,
+          protectedAsset: protectedImage.protectedAsset,
           quality: result.quality,
           image: result.image,
           message: "Application photo generated successfully.",
@@ -462,6 +522,23 @@ function createApp({
       return;
     }
 
+    if (!payment?.verifyPremiumAccess) {
+      res.status(503).json({ error: "Payment service is not configured." });
+      return;
+    }
+
+    try {
+      await payment.verifyPremiumAccess({
+        sessionId: req.body?.sessionId,
+        documentType: req.body?.documentType,
+        accessId: req.body?.accessId,
+      });
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
+      res.status(mapped.status).json(mapped.body);
+      return;
+    }
+
     try {
       const text = await service.generateApplicationText({
         stichpunkte,
@@ -478,6 +555,39 @@ function createApp({
     } catch (error) {
       logAiError(logger, "/generate-text", aiProvider, error);
       const mapped = classifyAiError(error);
+      res.status(mapped.status).json(mapped.body);
+    }
+  });
+
+  app.post("/premium-assets/ai-photo", paymentLimiter, async (req, res) => {
+    if (!payment?.verifyPremiumAccess || !premiumAssets) {
+      res.status(503).json({ error: "Premium asset service is not configured." });
+      return;
+    }
+
+    try {
+      await payment.verifyPremiumAccess({
+        sessionId: req.body?.sessionId,
+        documentType: req.body?.documentType,
+        accessId: req.body?.accessId,
+      });
+      const image = premiumAssets.unlockImage(req.body?.protectedAsset);
+      const extension =
+        image.mimeType === "image/png"
+          ? "png"
+          : image.mimeType === "image/webp"
+            ? "webp"
+            : "jpg";
+
+      res.setHeader("Content-Type", image.mimeType);
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="VitaGen-AI-Foto.${extension}"`
+      );
+      res.setHeader("Cache-Control", "no-store");
+      res.send(image.buffer);
+    } catch (error) {
+      const mapped = classifyPaymentError(error);
       res.status(mapped.status).json(mapped.body);
     }
   });

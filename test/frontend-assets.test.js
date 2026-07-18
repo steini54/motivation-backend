@@ -42,6 +42,8 @@ const cvTemplateStyleNames = [
   "editorial-mono-rose.css",
   "editorial-mono-sepia.css",
   "editorial-mono-warm.css",
+  "simple-free-blue.css",
+  "simple-free-gray.css",
 ];
 const cvStyleNames = [...styleNames, ...cvTemplateStyleNames];
 const documentStyleNames = cvStyleNames;
@@ -91,8 +93,10 @@ test("motivation builder exposes existing styles, templates, and dynamic variant
   ).sort();
 
   assert.deepEqual(carouselStyles, styleNames.slice().sort());
-  assert.deepEqual(templateIds, ["aqua-arc", "corporate-axis", "editorial-mono", "existing"].sort());
+  assert.deepEqual(templateIds, ["aqua-arc", "corporate-axis", "editorial-mono", "existing", "simple-free"].sort());
   assert.match(script, /const MOTIVATION_TEMPLATES = \[/);
+  assert.match(script, /id: "simple-free"/);
+  assert.match(script, /styles: \["simple-free-blue\.css", "simple-free-gray\.css"\]/);
   assert.match(script, /id: "aqua-arc"/);
   assert.match(script, /id: "corporate-axis"/);
   assert.match(script, /id: "editorial-mono"/);
@@ -125,8 +129,10 @@ test("lebenslauf builder keeps preview, styles, payment, and AI photo on one pag
   ).sort();
 
   assert.deepEqual(carouselStyles, styleNames.slice().sort());
-  assert.deepEqual(templateIds, ["aqua-arc", "corporate-axis", "editorial-mono", "existing"].sort());
+  assert.deepEqual(templateIds, ["aqua-arc", "corporate-axis", "editorial-mono", "existing", "simple-free"].sort());
   assert.match(script, /const CV_TEMPLATES = \[/);
+  assert.match(script, /id: "simple-free"/);
+  assert.match(script, /styles: \["simple-free-blue\.css", "simple-free-gray\.css"\]/);
   assert.match(script, /id: "aqua-arc"/);
   assert.match(script, /id: "corporate-axis"/);
   assert.match(script, /id: "editorial-mono"/);
@@ -315,6 +321,7 @@ test("motivation letter body typography uses 11pt and supports templates", () =>
   assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--aqua-arc/);
   assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--corporate-axis/);
   assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--editorial-mono/);
+  assert.match(motivationCss, /\.preview-paper\.document-rendered \.letter-template--simple-free/);
   assert.match(renderer, /letter-template--\$\{templateId\}/);
 });
 
@@ -350,6 +357,8 @@ test("builder photo state persists blobs without storing base64 in localStorage"
     assert.match(script, /PhotoStorage\.saveSourcePhoto/);
     assert.match(script, /PhotoStorage\.getSourcePhoto/);
     assert.match(script, /PhotoStorage\.migrateLegacyPhoto/);
+    assert.match(script, /PhotoStorage\.saveProtectedPhotoAsset/);
+    assert.match(script, /PhotoStorage\.getProtectedPhotoAsset/);
     assert.match(script, /await pendingPhotoMigration/);
     assert.match(script, /delete data\.foto/);
     assert.match(script, /clearStoredPhotoState\(\{ resetUi: false \}\)/);
@@ -357,6 +366,37 @@ test("builder photo state persists blobs without storing base64 in localStorage"
     assert.doesNotMatch(script, /data\.foto = element\.src/);
     assert.doesNotMatch(script, /if \(saved\.foto\) \{\s*renderUploadPreview/s);
   }
+});
+
+test("free and Premium access controls are wired into both builders", () => {
+  const accessControl = fs.readFileSync(
+    path.join(vitagenPath, "access-control.js"),
+    "utf8"
+  );
+  const paymentScript = fs.readFileSync(
+    path.join(vitagenPath, "payment.js"),
+    "utf8"
+  );
+
+  for (const folder of [frontendPath, lebenslaufPath]) {
+    const html = fs.readFileSync(
+      path.join(folder, folder === frontendPath ? "formular.html" : "lebensformular.html"),
+      "utf8"
+    );
+    assert.match(html, /id="documentTierStatus"/);
+    assert.match(html, /template-tier--free">Free/);
+    assert.match(html, /feature-tier-badge">Premium/);
+    assert.match(html, /src="\/bewerbungs-generator\/access-control\.js"/);
+  }
+
+  assert.match(accessControl, /FREE_TEMPLATE_ID = "simple-free"/);
+  assert.match(accessControl, /premium_template/);
+  assert.match(accessControl, /ai_text/);
+  assert.match(accessControl, /ai_photo/);
+  assert.match(paymentScript, /\/document\/verify-free/);
+  assert.match(paymentScript, /\/checkout\/verify-access/);
+  assert.match(paymentScript, /ensurePremiumAccess/);
+  assert.match(paymentScript, /getPremiumAuthorization/);
 });
 
 test("frontend preserves production markup and routes AI to Railway", () => {
@@ -372,11 +412,19 @@ test("frontend preserves production markup and routes AI to Railway", () => {
     path.join(frontendPath, "script.js"),
     "utf8"
   );
+  const previewScript = fs.readFileSync(
+    path.join(frontendPath, "preview.js"),
+    "utf8"
+  );
+  const documentRenderer = fs.readFileSync(
+    path.join(vitagenPath, "document-renderer.js"),
+    "utf8"
+  );
 
   assert.doesNotMatch(formHtml, /api-config\.js/);
   assert.match(
     formHtml,
-    /<script src="\/bewerbungs-generator\/motivation\/photo-storage\.js"><\/script>\s*<script src="\/bewerbungs-generator\/document-renderer\.js"><\/script>\s*<script src="script\.js"><\/script>/
+    /<script src="\/bewerbungs-generator\/motivation\/photo-storage\.js"><\/script>\s*<script src="\/bewerbungs-generator\/access-control\.js"><\/script>\s*<script src="\/bewerbungs-generator\/document-renderer\.js"><\/script>\s*<script src="script\.js"><\/script>/
   );
   assert.match(previewHtml, /id="buyBtn"/);
   assert.match(previewHtml, /id="buyModal"/);
@@ -384,6 +432,8 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   assert.match(formHtml, /PDF ohne Wasserzeichen/);
   assert.match(formHtml, /Finale PDF freischalten/);
   assert.match(formHtml, /id="payBtn"[^>]*>Weiter zur sicheren Zahlung<\/button>/);
+  assert.match(formHtml, /id="stichwoerter2"[^>]*maxlength="1748"/);
+  assert.match(formHtml, /id="motivationTextLimitHint"/);
   assert.match(formHtml, /data-trigger-buy/);
   assert.match(formHtml, /src="\/bewerbungs-generator\/payment\.js" data-document-type="motivation"/);
   assert.match(formHtml, /html2canvas\/1\.4\.1\/html2canvas\.min\.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H"/);
@@ -401,6 +451,10 @@ test("frontend preserves production markup and routes AI to Railway", () => {
   );
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-ai-photo`/);
   assert.match(script, /`\$\{AI_API_BASE_URL\}\/generate-text`/);
+  assert.match(script, /const MOTIVATION_TEXT_MAX_CHARS = 1748/);
+  assert.match(script, /enforceMotivationTextFieldLimit/);
+  assert.match(previewScript, /const MOTIVATION_TEXT_MAX_CHARS = 1748/);
+  assert.match(documentRenderer, /const BODY_CHAR_LIMIT = 1748/);
   assert.match(script, /aiBtn\.disabled = true/);
   assert.match(script, /textBtn\.disabled = true/);
   assert.match(script, /finally \{/);
@@ -421,7 +475,7 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   );
 
   assert.match(paymentScript, /checkout\/create-session/);
-  assert.match(paymentScript, /checkout\/verify-session/);
+  assert.match(paymentScript, /checkout\/verify-access/);
   assert.match(paymentScript, /VitaGenPayment/);
   assert.match(paymentScript, /\[VitaGen Payment\]/);
   assert.match(paymentScript, /delegated payment trigger clicked/);
@@ -448,6 +502,10 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.match(paymentScript, /MAX_CANVAS_SCALE = 5/);
   assert.match(paymentScript, /waitForBuilderPhotoReady/);
   assert.match(paymentScript, /createPdfExportPreview/);
+  assert.match(paymentScript, /sourcePreview\.cloneNode\(true\)/);
+  assert.match(paymentScript, /rasterizeImageContain/);
+  assert.match(paymentScript, /window\.VitaGenRenderPreview\(\{ pulse: false \}\)/);
+  assert.doesNotMatch(paymentScript, /renderInto\(preview,\s*\{/);
   assert.match(paymentScript, /toDataURL\("image\/png"\)/);
   assert.match(paymentScript, /addImage\(imageData, "PNG"/);
   assert.match(paymentScript, /querySelectorAll\("\.document-watermark, \.watermark"\)/);

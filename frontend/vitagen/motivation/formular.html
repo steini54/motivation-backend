@@ -63,6 +63,7 @@
                 <h2>Bewerbungsfoto vorbereiten</h2>
                 <p>KI-Funktion: Aus einem normalen Foto wird eine professionelle Bewerbungsfoto-Variante.</p>
                 <span class="ai-mini">KI-Fotoassistent</span>
+                <span class="feature-tier-badge">Premium</span>
               </div>
             </div>
             <div id="counter" class="counter photo-count-pill">KI-Funktion - 0 / 3 generiert</div>
@@ -110,7 +111,11 @@
 
               <div class="photo-actions">
                 <button type="button" id="aiFotoBtn" class="ai-button photo-button">Professionelles Foto generieren</button>
-                <p>Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.</p>
+                <div>
+                  <p>Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.</p>
+                  <p class="premium-feature-note">KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.</p>
+                  <button type="button" id="downloadAiPhotoBtn" class="ai-photo-download" hidden>KI-Foto herunterladen</button>
+                </div>
               </div>
             </div>
           </div>
@@ -148,7 +153,7 @@
               <span class="ai-icon"></span>
             </span>
             <div>
-              <p class="card-kicker">KI-Textassistent</p>
+              <p class="card-kicker">KI-Textassistent <span class="feature-tier-badge">Premium</span></p>
               <h2>Motivationstext formulieren</h2>
               <p>Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.</p>
             </div>
@@ -185,7 +190,7 @@
             <label id="pv-fliesstext" for="stichwoerter2">Motivationstext</label>
             <p class="hint">Stichwoerter eingeben oder vorhandenen Text ueberarbeiten lassen.</p>
             <div class="textarea-wrapper">
-              <textarea id="stichwoerter2" name="stichwoerter2" rows="7" placeholder="Erfahrung, Motivation, passende Staerken, konkrete Beispiele..."></textarea>
+              <textarea id="stichwoerter2" name="stichwoerter2" rows="7" maxlength="1748" aria-describedby="motivationTextLimitHint motivationTextCounter" placeholder="Erfahrung, Motivation, passende Staerken, konkrete Beispiele..."></textarea>
               <div id="ai-skeleton-loader" class="ai-skeleton-loader">
                 <div class="ai-loader-header">
                   <img src="../assets/Ai icon.png" class="ai-loader-icon" alt="AI Icon">
@@ -207,13 +212,17 @@
                 </div>
               </div>
             </div>
+            <div id="motivationTextLimit" class="text-limit-row">
+              <p id="motivationTextLimitHint" class="text-limit-hint">Max. 1748 Zeichen, damit Abschluss und Signatur auf einer Seite sichtbar bleiben.</p>
+              <span id="motivationTextCounter" class="text-limit-counter" aria-live="polite">0 / 1748 Zeichen</span>
+            </div>
             <div id="ai-text-badge" class="ai-text-badge" style="display: none;">
               <span class="ai-badge-sparkle"></span>
               <span>Generiert mit KI · Editierbar</span>
             </div>
           </div>
 
-          <button type="button" id="generateTextBtn" class="ai-button text-button">KI Hilfe zum Fliesstext erstellen</button>
+          <button type="button" id="generateTextBtn" class="ai-button text-button"><span>KI Hilfe zum Fliesstext erstellen</span><span class="feature-tier-badge feature-tier-badge--button">Premium</span></button>
         </section>
 
         <section class="form-card">
@@ -294,6 +303,7 @@
               <p>Das Template bestimmt Layout, Struktur und Briefcharakter.</p>
             </div>
             <div class="template-scroll" role="list" data-template-options>
+              <button type="button" class="template-chip" data-template="simple-free"><span class="template-thumb template-thumb--simple-free"></span><strong>Simple Professional</strong><small>Clean application letter</small><span class="template-tier template-tier--free">Free</span></button>
               <button type="button" class="template-chip active" data-template="existing"><span class="template-thumb template-thumb--existing"></span><strong>Modern Clean</strong><small>Modern clean layout</small></button>
               <button type="button" class="template-chip" data-template="aqua-arc"><span class="template-thumb template-thumb--aqua-arc"></span><strong>Aqua Arc</strong><small>Clean teal letter</small></button>
               <button type="button" class="template-chip" data-template="corporate-axis"><span class="template-thumb template-thumb--corporate-axis"></span><strong>Corporate Axis</strong><small>Corporate geometric letter</small></button>
@@ -381,6 +391,10 @@
           </section>
 
           <section class="download-card">
+            <div id="documentTierStatus" class="document-tier-status" aria-live="polite">
+              <strong data-document-tier-title>Premium-Dokument</strong>
+              <span data-document-tier-detail>Premium-Template ausgewaehlt</span>
+            </div>
             <h3>PDF ohne Wasserzeichen vorbereiten</h3>
             <p>Pruefe zuerst die Vorschau. Der Preis erscheint erst, wenn die PDF ohne Wasserzeichen angefordert wird.</p>
             <button type="button" id="buyBtn" class="download-button">PDF ohne Wasserzeichen vorbereiten</button>
@@ -441,6 +455,7 @@
   <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
   <script src="/bewerbungs-generator/shared-navbar.js"></script>
   <script src="/bewerbungs-generator/motivation/photo-storage.js"></script>
+  <script src="/bewerbungs-generator/access-control.js"></script>
   <script src="/bewerbungs-generator/document-renderer.js"></script>
   <script src="script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha384-ZZ1pncU3bQe8y31yfZdMFdSpttDoPmOZg2wguVK9almUodir1PghgT0eY7Mrty8H" crossorigin="anonymous" referrerpolicy="no-referrer"></script>

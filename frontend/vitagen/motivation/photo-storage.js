@@ -6,6 +6,7 @@
   const STORE_NAME = "photos";
   const SOURCE_PHOTO_KEY = "source-application-photo";
   const SELECTED_PHOTO_KEY = "selected-application-photo";
+  const PROTECTED_PHOTO_ASSET_KEY = "selected-ai-photo-protected-asset";
   const STORAGE_MARKER = "indexeddb:selected-application-photo";
   const objectUrls = new Set();
 
@@ -117,6 +118,29 @@
     );
   }
 
+  async function saveProtectedPhotoAsset(value) {
+    const protectedAsset = String(value || "").trim();
+    if (!protectedAsset) {
+      throw new TypeError("A protected AI photo asset is required.");
+    }
+
+    await runTransaction("readwrite", (store) =>
+      store.put(protectedAsset, PROTECTED_PHOTO_ASSET_KEY)
+    );
+  }
+
+  async function getProtectedPhotoAsset() {
+    return runTransaction("readonly", (store) =>
+      store.get(PROTECTED_PHOTO_ASSET_KEY)
+    );
+  }
+
+  async function clearProtectedPhotoAsset() {
+    await runTransaction("readwrite", (store) =>
+      store.delete(PROTECTED_PHOTO_ASSET_KEY)
+    );
+  }
+
   async function migrateLegacyPhoto(photoValue) {
     if (typeof photoValue !== "string" || !photoValue.startsWith("data:image/")) {
       return null;
@@ -136,13 +160,16 @@
   global.PhotoStorage = {
     STORAGE_MARKER,
     blobFromImageElement,
+    clearProtectedPhotoAsset,
     clearSelectedPhoto,
     createPhotoUrl,
     dataUrlToBlob,
     getSourcePhoto,
     getSelectedPhoto,
+    getProtectedPhotoAsset,
     migrateLegacyPhoto,
     saveSourcePhoto,
     saveSelectedPhoto,
+    saveProtectedPhotoAsset,
   };
 })(window);
