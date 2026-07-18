@@ -58,7 +58,7 @@ Use Premium template or feature
 |---|---|
 | Free template + manual text + normal uploaded photo/no photo | Free |
 | Premium template + manual text | Premium |
-| Free template + AI-generated text | Premium |
+| Free template + AI-generated text | Premium at PDF download |
 | Premium template + AI-generated text | Premium |
 | Free template + AI-generated photo | Premium |
 | Premium template + AI-generated photo | Premium |
@@ -99,6 +99,9 @@ It must support the existing CV fields where available:
 
 Requirements:
 
+- The Free CV uses the `Essential Column` visual: a white information column,
+  thin divider, plain text lists, and no filled Modern Split sidebar.
+- It provides `Essential Blue` and `Essential Graphite` style variants.
 - Empty sections must not leave broken spacing.
 - Long content must not overlap or break the layout.
 - Preview and PDF must be visually consistent.
@@ -120,6 +123,9 @@ It must support:
 
 Requirements:
 
+- The Free letter uses the `Classic Letter` visual: a traditional serif body,
+  compact ruled letterhead, and simple subject treatment distinct from Modern Clean.
+- It provides `Classic Blue` and `Classic Graphite` style variants.
 - Preview and PDF must match.
 - Signature spacing must remain balanced.
 - Existing text-length validation/warning must continue working.
@@ -198,13 +204,16 @@ Recalculate the document tier when:
 - the user returns from checkout;
 - the page is refreshed or restored.
 
-If all active Premium conditions are removed, the document may return to Free, except where previously generated AI text is still being used.
+If all active Premium conditions are removed, the document returns to Free.
+Previously generated AI text remains a Premium condition only while that content,
+or a substantial portion of it, is still present in the document.
 
 ---
 
 ## 5. AI Text Logic
 
-AI text generation is a Premium action.
+AI text generation can be tried before payment. The document becomes Premium
+while the generated content is being used.
 
 This includes all existing buttons for:
 
@@ -218,19 +227,22 @@ This includes all existing buttons for:
 Required flow:
 
 1. User presses an AI text button.
-2. Check whether the current Premium action/document has valid payment.
-3. If unpaid, open the existing payment flow before executing the AI request.
-4. After backend payment confirmation, allow the AI request.
-5. Apply the generated result to the form/preview.
-6. Mark the document as Premium.
+2. Generate and apply the result immediately without opening checkout.
+3. Store a compact local fingerprint of the generated result.
+4. Mark the document as Premium while the same or substantially similar content remains.
+5. Return the document to Free if the generated text is cleared or replaced with distinct manual text.
+6. Detect a copied generated result when it is pasted back into the document.
+7. Require payment only when the user requests the final PDF download.
 
 Manual typing remains Free when the Free template is selected.
 
 ### Security requirement
 
-Do not protect AI text only by hiding or disabling frontend buttons.
-
-The backend AI endpoint must reject unpaid Premium requests.
+The normal application flow must compare the current text with locally stored
+AI fingerprints. Clearing the result must restore Free status, while pasting the
+same result or retaining a substantial part of it must preserve Premium status.
+This is provenance enforcement for the current browser document, not a substitute
+for authenticated server-side document storage.
 
 ---
 
@@ -307,7 +319,7 @@ Payment must be verified server-side.
 Required:
 
 - Premium PDF generation requires backend payment verification.
-- AI text endpoints require Premium payment authorization.
+- AI text usage must mark the current document as Premium.
 - Final AI image download requires Premium payment authorization.
 - Premium asset URLs must not provide unrestricted direct access.
 - Frontend labels are UX only, not security controls.
@@ -354,9 +366,13 @@ Test every AI text button.
 
 Expected:
 
-- payment is required before generation;
-- unpaid backend requests are rejected;
-- paid AI output is inserted correctly.
+- AI output is generated and inserted before payment;
+- AI use marks the current document as Premium;
+- clearing the generated text restores Free status;
+- replacing it with distinct manual text remains Free;
+- pasting the generated text back restores Premium status;
+- lightly editing while retaining substantial generated content remains Premium;
+- checkout appears only when the final PDF is requested.
 
 ### AI photo
 
@@ -414,7 +430,7 @@ Test at minimum:
    - Free CV download;
    - Free motivation letter download;
    - Premium template checkout;
-   - AI text payment;
+   - AI text generation followed by Premium PDF checkout;
    - AI photo preview;
    - Premium image/PDF download.
 8. Keep a rollback copy available.
@@ -431,7 +447,8 @@ The feature is complete when:
 - Every AI feature is clearly labeled Premium.
 - Free template + manual content downloads without payment.
 - Premium templates require payment before final download.
-- AI text requires payment before generation.
+- AI text can be generated before payment and makes the document Premium only
+  while generated content is still used.
 - AI photo can be previewed before payment.
 - AI photo and Premium PDFs cannot be downloaded before payment.
 - Successful payment unlocks the correct final output.

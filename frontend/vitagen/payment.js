@@ -8,11 +8,12 @@
   const filename = script?.dataset.filename || "VitaGen.pdf";
   const A4_WIDTH_MM = 210;
   const A4_HEIGHT_MM = 297;
-  const TARGET_CANVAS_WIDTH_PX = 2480;
-  const MIN_CANVAS_SCALE = 3;
-  const MAX_CANVAS_SCALE = 5;
+  const TARGET_CANVAS_WIDTH_PX = 1800;
+  const MIN_CANVAS_SCALE = 2;
+  const MAX_CANVAS_SCALE = 3;
   const LOG_PREFIX = "[VitaGen Payment]";
   const PENDING_ACTION_KEY = "vitagen_pending_premium_action";
+  let pdfExportInProgress = false;
 
   function createAccessId() {
     if (window.crypto?.randomUUID) {
@@ -446,6 +447,35 @@
     return labels[getLanguage()] || labels.de;
   }
 
+  function getPdfExportLabels() {
+    const labels = {
+      de: {
+        title: "PDF wird erstellt",
+        lead: "Bitte lassen Sie dieses Fenster geoeffnet.",
+        preparing: "Dokument und Bilder werden vorbereitet...",
+        validating: "Download-Berechtigung wird geprueft...",
+        rendering: (page, total) => `PDF-Seite ${page} von ${total} wird erstellt...`,
+        saving: "PDF ist fertig und der Download wird gestartet...",
+        ready: "Der PDF-Download wurde gestartet.",
+        error: "Die PDF konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        close: "Schliessen",
+      },
+      en: {
+        title: "Creating PDF",
+        lead: "Please keep this window open.",
+        preparing: "Preparing the document and images...",
+        validating: "Checking download access...",
+        rendering: (page, total) => `Creating PDF page ${page} of ${total}...`,
+        saving: "The PDF is ready and the download is starting...",
+        ready: "The PDF download has started.",
+        error: "The PDF could not be created. Please try again.",
+        close: "Close",
+      },
+    };
+
+    return labels[getLanguage()] || labels.de;
+  }
+
   function ensureCompleteOrderStyles() {
     if (document.getElementById("vitagenCompleteOrderStyles")) {
       return;
@@ -677,13 +707,80 @@
 
     const message = state === "ready" ? labels.ready : state === "error" ? labels.error : labels.pending;
     const downloadButton = modal.querySelector("[data-complete-order-download]");
+    const closeButton = modal.querySelector("[data-complete-order-close]");
+    modal.dataset.mode = "order";
     modal.querySelector("[data-complete-order-title]").textContent = labels.title;
     modal.querySelector("[data-complete-order-lead]").textContent = labels.lead;
     modal.querySelector("[data-complete-order-message]").textContent = message;
-    modal.querySelector("[data-complete-order-close]").textContent = labels.close;
+    closeButton.textContent = labels.close;
+    closeButton.hidden = false;
     downloadButton.textContent = labels.button;
+    downloadButton.hidden = false;
     downloadButton.disabled = state === "pending";
     window.setTimeout(() => downloadButton.focus(), 0);
+  }
+
+  function updatePdfExportModal(state = "pending", progress = {}) {
+    const labels = getPdfExportLabels();
+    const modal = ensureCompleteOrderModal();
+    const downloadButton = modal.querySelector("[data-complete-order-download]");
+    const closeButton = modal.querySelector("[data-complete-order-close]");
+    let message = labels.preparing;
+
+    if (state === "ready") {
+      message = labels.ready;
+    } else if (state === "error") {
+      message = progress.message || labels.error;
+    } else if (progress.phase === "validating") {
+      message = labels.validating;
+    } else if (progress.phase === "rendering") {
+      message = labels.rendering(progress.page, progress.total);
+    } else if (progress.phase === "saving") {
+      message = labels.saving;
+    }
+
+    modal.dataset.mode = "pdf-export";
+    modal.classList.remove("pending", "ready", "error");
+    modal.classList.add(state);
+    modal.classList.add("open");
+    modal.setAttribute("aria-hidden", "false");
+    modal.querySelector("[data-complete-order-title]").textContent = labels.title;
+    modal.querySelector("[data-complete-order-lead]").textContent = labels.lead;
+    modal.querySelector("[data-complete-order-message]").textContent = message;
+    downloadButton.hidden = true;
+    closeButton.textContent = labels.close;
+    closeButton.hidden = state === "pending";
+
+    if (state !== "pending") {
+      window.setTimeout(() => closeButton.focus(), 0);
+    }
+  }
+
+  function setPdfTriggerDisabled(disabled) {
+    document
+      .querySelectorAll("#buyBtn, [data-trigger-buy], [data-payment-trigger]")
+      .forEach((button) => {
+        if (disabled && !button.disabled) {
+          button.dataset.pdfExportDisabled = "true";
+          button.disabled = true;
+        } else if (!disabled && button.dataset.pdfExportDisabled === "true") {
+          button.disabled = false;
+          delete button.dataset.pdfExportDisabled;
+        }
+      });
+  }
+
+  function waitForUiPaint() {
+    return new Promise((resolve) => {
+      if (typeof window.requestAnimationFrame !== "function") {
+        window.setTimeout(resolve, 0);
+        return;
+      }
+
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(resolve);
+      });
+    });
   }
 
   function getBuyerDetails(documentData) {
@@ -697,6 +794,22 @@
     return localStorage.getItem("vitagen_dev_discount_token")?.trim() || undefined;
   }
 
+  function waitForPromise(promise, timeoutMs) {
+    return new Promise((resolve, reject) => {
+      const timer = window.setTimeout(resolve, timeoutMs);
+      Promise.resolve(promise).then(
+        (value) => {
+          window.clearTimeout(timer);
+          resolve(value);
+        },
+        (error) => {
+          window.clearTimeout(timer);
+          reject(error);
+        }
+      );
+    });
+  }
+
   async function waitForBuilderPhotoReady() {
     const ready = window.VitaGenPhotoReady;
     if (!ready || typeof ready.then !== "function") {
@@ -704,7 +817,7 @@
     }
 
     try {
-      await ready;
+      await waitForPromise(ready, 8000);
     } catch (error) {
       warn("builder photo readiness failed; continuing with current preview", error);
     }
@@ -716,7 +829,7 @@
     }
 
     try {
-      await document.fonts.ready;
+      await waitForPromise(document.fonts.ready, 5000);
     } catch (error) {
       warn("document fonts did not finish loading before export", error);
     }
@@ -749,23 +862,6 @@
     }
   }
 
-  async function ensurePremiumAccess({ action = "premium-action", reason = "" } = {}) {
-    if (await verifyStoredPremiumAccess()) {
-      return true;
-    }
-
-    setPendingPremiumAction(action, reason);
-    setStatus(
-      reason === "ai_text"
-        ? "KI-Text ist eine Premium-Funktion. Bitte zuerst freischalten."
-        : reason === "ai_photo"
-          ? "Das finale KI-Foto ist eine Premium-Funktion. Bitte zuerst freischalten."
-          : "Dieses Dokument benoetigt Premium-Zugriff."
-    );
-    openModal();
-    return false;
-  }
-
   async function openPaymentFlow() {
     log("payment trigger received", {
       hasModal: Boolean(document.getElementById("buyModal")),
@@ -784,25 +880,15 @@
     const state = getCurrentAccessState();
 
     if (state.documentTier === "free") {
-      try {
-        setStatus("Kostenloses Dokument wird vorbereitet...");
-        await verifyFreeDocument(documentData);
-        await downloadCleanPreviewPdf();
-        setStatus("Kostenlose PDF wurde heruntergeladen.");
-      } catch (error) {
-        setStatus(error.message || "Die kostenlose PDF konnte nicht erstellt werden.", true);
-      }
+      await runPdfDownloadWithStatus({
+        documentData,
+        verifyFree: true,
+      });
       return;
     }
 
     if (await verifyStoredPremiumAccess()) {
-      try {
-        setStatus("Premium-Zugriff bestaetigt. PDF wird vorbereitet...");
-        await downloadCleanPreviewPdf();
-        setStatus("PDF download started.");
-      } catch (error) {
-        setStatus(error.message || "Die PDF konnte nicht erstellt werden.", true);
-      }
+      await runPdfDownloadWithStatus({ documentData });
       return;
     }
 
@@ -953,13 +1039,25 @@
 
     await Promise.all(
       images.map((img) => {
-        if (img.complete && img.naturalWidth > 0) {
+        if (img.complete) {
           return Promise.resolve();
         }
 
         return new Promise((resolve) => {
-          img.addEventListener("load", resolve, { once: true });
-          img.addEventListener("error", resolve, { once: true });
+          let timer;
+          const finish = () => {
+            window.clearTimeout(timer);
+            img.removeEventListener("load", finish);
+            img.removeEventListener("error", finish);
+            resolve();
+          };
+
+          timer = window.setTimeout(finish, 5000);
+          img.addEventListener("load", finish, { once: true });
+          img.addEventListener("error", finish, { once: true });
+          if (img.complete) {
+            finish();
+          }
         });
       })
     );
@@ -1284,14 +1382,13 @@
   }
 
   async function downloadAiPhoto({ skipAuthorizationCheck = false } = {}) {
-    if (
-      !skipAuthorizationCheck &&
-      !(await ensurePremiumAccess({
-        action: "download-ai-photo",
-        reason: "ai_photo",
-      }))
-    ) {
-      return false;
+    if (!skipAuthorizationCheck && !(await verifyStoredPremiumAccess())) {
+      const message =
+        getLanguage() === "en"
+          ? "Unlock the Premium PDF from the PDF download button first."
+          : "Bitte zuerst das Premium-PDF ueber den PDF-Download-Button freischalten.";
+      setStatus(message, true);
+      throw new Error(message);
     }
 
     const blob = await applyUnlockedAiPhoto(await fetchUnlockedAiPhoto());
@@ -1308,12 +1405,13 @@
     return true;
   }
 
-  async function downloadCleanPreviewPdf() {
+  async function downloadCleanPreviewPdf({ onProgress = () => {} } = {}) {
     const JsPdf = window.jspdf?.jsPDF;
     if (typeof window.html2canvas !== "function" || typeof JsPdf !== "function") {
       throw new Error("PDF export library could not be loaded.");
     }
 
+    onProgress({ phase: "preparing" });
     if (typeof window.saveAllFields === "function") {
       window.saveAllFields();
     }
@@ -1356,8 +1454,15 @@
       const pdfPageWidth = pdf.internal.pageSize.getWidth();
       const pdfPageHeight = pdf.internal.pageSize.getHeight();
       let isFirstPage = true;
+      const totalPages = exportPreview.pageElements.length;
 
-      for (const pageElement of exportPreview.pageElements) {
+      for (const [pageIndex, pageElement] of exportPreview.pageElements.entries()) {
+        onProgress({
+          phase: "rendering",
+          page: pageIndex + 1,
+          total: totalPages,
+        });
+        await waitForUiPaint();
         const pageRect = pageElement.getBoundingClientRect();
         const canvasScale = getCanvasScale(pageRect.width);
         const canvas = await window.html2canvas(pageElement, {
@@ -1377,14 +1482,61 @@
           pdf.addPage("a4", "portrait");
         }
 
-        const imageData = canvas.toDataURL("image/png");
-        pdf.addImage(imageData, "PNG", 0, 0, pdfPageWidth, pdfPageHeight);
+        const imageData = canvas.toDataURL("image/jpeg", 0.94);
+        pdf.addImage(imageData, "JPEG", 0, 0, pdfPageWidth, pdfPageHeight);
+        canvas.width = 1;
+        canvas.height = 1;
         isFirstPage = false;
       }
 
+      onProgress({ phase: "saving" });
+      await waitForUiPaint();
       pdf.save(filename);
     } finally {
       exportPreview.host.remove();
+    }
+  }
+
+  async function runPdfDownloadWithStatus({
+    documentData,
+    verifyFree = false,
+  } = {}) {
+    if (pdfExportInProgress) {
+      updatePdfExportModal("pending", { phase: "preparing" });
+      return false;
+    }
+
+    pdfExportInProgress = true;
+    setPdfTriggerDisabled(true);
+    updatePdfExportModal("pending", { phase: "preparing" });
+    await waitForUiPaint();
+
+    try {
+      if (verifyFree) {
+        updatePdfExportModal("pending", { phase: "validating" });
+        await verifyFreeDocument(documentData);
+      }
+
+      await downloadCleanPreviewPdf({
+        onProgress: (progress) => updatePdfExportModal("pending", progress),
+      });
+      updatePdfExportModal("ready");
+      setStatus(
+        verifyFree
+          ? "Kostenlose PDF wurde heruntergeladen."
+          : "PDF download started."
+      );
+      return true;
+    } catch (error) {
+      errorLog("PDF download failed", error?.message || error);
+      updatePdfExportModal("error", {
+        message: error.message || undefined,
+      });
+      setStatus(error.message || "Die PDF konnte nicht erstellt werden.", true);
+      return false;
+    } finally {
+      pdfExportInProgress = false;
+      setPdfTriggerDisabled(false);
     }
   }
 
@@ -1424,12 +1576,8 @@
       }
 
       if (pendingAction.action === "generate-text") {
-        setStatus("Premium access confirmed. AI text generation is continuing.");
-        window.dispatchEvent(
-          new CustomEvent("vitagen:premium-access-granted", {
-            detail: { action: pendingAction.action },
-          })
-        );
+        setStatus("Payment confirmed. AI text can now be generated directly.");
+        document.getElementById("generateTextBtn")?.click();
       } else if (pendingAction.action === "download-ai-photo") {
         await downloadAiPhoto({ skipAuthorizationCheck: true });
         setStatus("AI photo download started.");
@@ -1535,7 +1683,6 @@
     open: openPaymentFlow,
     close: closeModal,
     downloadAiPhoto,
-    ensurePremiumAccess,
     getPremiumAuthorization,
   };
 

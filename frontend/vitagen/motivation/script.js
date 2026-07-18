@@ -37,8 +37,8 @@ const MOTIVATION_TEMPLATES = [
   {
     id: "simple-free",
     tier: "free",
-    name: "Simple Professional",
-    description: "Clean application letter",
+    name: "Classic Letter",
+    description: "Traditional single-page letter",
     defaultStyle: "simple-free-blue.css",
     styles: ["simple-free-blue.css", "simple-free-gray.css"],
   },
@@ -69,8 +69,8 @@ const MOTIVATION_TEMPLATES = [
 ];
 const DOCUMENT_STYLES = MOTIVATION_TEMPLATES.flatMap((template) => template.styles);
 const STYLE_META = {
-  "simple-free-blue.css": { name: "Simple Blue", tone: "Free", thumb: "simple-free-blue" },
-  "simple-free-gray.css": { name: "Simple Gray", tone: "Free", thumb: "simple-free-gray" },
+  "simple-free-blue.css": { name: "Classic Blue", tone: "Free", thumb: "simple-free-blue" },
+  "simple-free-gray.css": { name: "Classic Graphite", tone: "Free", thumb: "simple-free-gray" },
   "swiss-line.css": { name: "Swiss Line", tone: "Empfohlen", thumb: "swiss" },
   "charcoal-frame.css": { name: "Charcoal Frame", tone: "Kontrast", thumb: "charcoal" },
   "cobalt-ribbon.css": { name: "Cobalt Ribbon", tone: "Dynamisch", thumb: "cobalt" },
@@ -154,6 +154,7 @@ const UI_TRANSLATIONS = {
     "Adresse Arbeitgeber": "Adresse Arbeitgeber",
     "Firma, Ansprechperson, Strasse, Ort": "Firma, Ansprechperson, Strasse, Ort",
     "KI-Textassistent": "KI-Textassistent",
+    "Direkt testbar: Erst der PDF-Download wird kostenpflichtig, wenn KI-Text verwendet wurde.": "Direkt testbar: Erst der PDF-Download wird kostenpflichtig, wenn KI-Text verwendet wurde.",
     "Motivationstext formulieren": "Motivationstext formulieren",
     "Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.": "Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.",
     "Tonvorschlaege": "Tonvorschlaege",
@@ -343,6 +344,7 @@ const UI_TRANSLATIONS = {
     "Adresse Arbeitgeber": "Employer address",
     "Firma, Ansprechperson, Strasse, Ort": "Company, contact person, street, city",
     "KI-Textassistent": "AI text assistant",
+    "Direkt testbar: Erst der PDF-Download wird kostenpflichtig, wenn KI-Text verwendet wurde.": "Try it directly: payment is required only when downloading a PDF that uses AI text.",
     "Motivationstext formulieren": "Write motivation text",
     "Notiere Stichwoerter zu Erfahrung, Motivation und Staerken. Der Text bleibt danach editierbar.": "Add notes about experience, motivation, and strengths. The text remains editable afterward.",
     "Tonvorschlaege": "Tone suggestions",
@@ -498,6 +500,39 @@ function getStoredData() {
 
 function setStoredData(data) {
   localStorage.setItem("vitagen_motivation", JSON.stringify(data));
+}
+
+function getAiTextSignatures(data = {}) {
+  return window.VitaGenAccess?.normalizeAiTextSignatures?.(
+    data.stichwoerter2_ai_signatures
+  ) || [];
+}
+
+function isAiGeneratedTextInUse(text, data = {}) {
+  return Boolean(
+    window.VitaGenAccess?.usesAiGeneratedText?.(
+      text,
+      getAiTextSignatures(data)
+    )
+  );
+}
+
+function migrateLegacyAiTextAttribution(data = {}) {
+  const signatures = getAiTextSignatures(data);
+  if (
+    signatures.length > 0 ||
+    !data.stichwoerter2_is_ai ||
+    !hasMeaningfulText(data.stichwoerter2)
+  ) {
+    return false;
+  }
+
+  data.stichwoerter2_ai_signatures =
+    window.VitaGenAccess?.addAiTextSignature?.(
+      signatures,
+      data.stichwoerter2
+    ) || signatures;
+  return data.stichwoerter2_ai_signatures.length > 0;
 }
 
 function hasMeaningfulText(value) {
@@ -860,7 +895,10 @@ function enforceMotivationTextFieldLimit({ showToastOnLimit = false } = {}) {
 
 function getCurrentFormData() {
   const stored = getStoredData();
-  const motivationTextSource = document.getElementById("stichwoerter2")?.value || stored.stichwoerter2 || "";
+  const motivationTextField = document.getElementById("stichwoerter2");
+  const motivationTextSource = motivationTextField
+    ? motivationTextField.value
+    : stored.stichwoerter2 || "";
   const data = {
     ...stored,
     name: document.getElementById("name")?.value || stored.name || "",
@@ -876,6 +914,11 @@ function getCurrentFormData() {
     datum: document.getElementById("datum")?.value || stored.datum || "",
     unterschrift: document.getElementById("unterschrift")?.value || stored.unterschrift || ""
   };
+  data.stichwoerter2_ai_signatures = getAiTextSignatures(stored);
+  data.stichwoerter2_is_ai = isAiGeneratedTextInUse(
+    data.stichwoerter2,
+    data
+  );
   delete data.foto;
 
   const selectedPhoto = getSelectedPhotoSrc();
@@ -1277,6 +1320,7 @@ function syncDocumentAccess(data = window.VitaGenCurrentDocumentData || getStore
     selectedTemplateId: getSelectedTemplate(),
     styleName: getSelectedStyle(),
     documentData: data,
+    aiTextUsed: Boolean(data.stichwoerter2_is_ai),
     paymentStatus: storedAccess.paymentStatus,
   });
   const nextState = { ...storedAccess, ...state };
@@ -1310,7 +1354,6 @@ window.VitaGenGetAccessState = () =>
 
 function saveAllFields() {
   const data = getStoredData();
-  const isAi = data.stichwoerter2_is_ai || false;
   enforceMotivationTextFieldLimit();
 
   [
@@ -1349,9 +1392,17 @@ function saveAllFields() {
     delete data.foto_is_ai;
   }
 
-  data.stichwoerter2_is_ai = isAi && (data.stichwoerter2.trim() !== "");
+  migrateLegacyAiTextAttribution(data);
+  data.stichwoerter2_ai_signatures = getAiTextSignatures(data);
+  data.stichwoerter2_is_ai = isAiGeneratedTextInUse(
+    data.stichwoerter2,
+    data
+  );
 
-  if (hasMeaningfulDocumentData(data)) {
+  if (
+    hasMeaningfulDocumentData(data) ||
+    data.stichwoerter2_ai_signatures.length > 0
+  ) {
     setStoredData(data);
   }
   updateAiGeneratedTextState(data.stichwoerter2_is_ai);
@@ -1499,6 +1550,7 @@ window.addEventListener("DOMContentLoaded", () => {
   installLanguageSwitch();
   clearStoredPhotoState({ resetUi: false });
   const saved = getStoredData();
+  let savedNeedsUpdate = migrateLegacyAiTextAttribution(saved);
   const fields = [
     "name",
     "adresse",
@@ -1513,8 +1565,6 @@ window.addEventListener("DOMContentLoaded", () => {
     "datum",
     "unterschrift"
   ];
-  let savedNeedsUpdate = false;
-
   fields.forEach(id => {
     const el = document.getElementById(id);
     if (el && saved[id]) {
@@ -1526,6 +1576,15 @@ window.addEventListener("DOMContentLoaded", () => {
       }
     }
   });
+
+  const aiTextIsInUse = isAiGeneratedTextInUse(
+    saved.stichwoerter2,
+    saved
+  );
+  if (saved.stichwoerter2_is_ai !== aiTextIsInUse) {
+    saved.stichwoerter2_is_ai = aiTextIsInUse;
+    savedNeedsUpdate = true;
+  }
 
   if (savedNeedsUpdate) {
     setStoredData(saved);
@@ -1754,14 +1813,6 @@ if (textBtn) {
       return;
     }
 
-    const premiumAllowed = await window.VitaGenPayment?.ensurePremiumAccess?.({
-      action: "generate-text",
-      reason: "ai_text",
-    });
-    if (!premiumAllowed) {
-      return;
-    }
-
     const textButtonLabel = textBtn.querySelector("span:first-child") || textBtn;
     const originalButtonText = textButtonLabel.textContent;
     textBtn.disabled = true;
@@ -1786,7 +1837,6 @@ if (textBtn) {
           arbeitgeber: data.arbeitgeber,
           greeting: data.stichwoerter,
           closing: data.stichwoerter3,
-          ...window.VitaGenPayment.getPremiumAuthorization(),
         })
       });
 
@@ -1800,9 +1850,13 @@ if (textBtn) {
       if (result.text) {
         const limitedText = limitMotivationText(result.text, { compact: true });
         document.getElementById("stichwoerter2").value = limitedText.text;
-        
-        // Save the AI generation flag to local storage
+
         const saved = getStoredData();
+        saved.stichwoerter2_ai_signatures =
+          window.VitaGenAccess?.addAiTextSignature?.(
+            saved.stichwoerter2_ai_signatures,
+            limitedText.text
+          ) || [];
         saved.stichwoerter2_is_ai = true;
         setStoredData(saved);
 
@@ -1830,9 +1884,3 @@ if (textBtn) {
     }
   });
 }
-
-window.addEventListener("vitagen:premium-access-granted", (event) => {
-  if (event.detail?.action === "generate-text") {
-    document.getElementById("generateTextBtn")?.click();
-  }
-});

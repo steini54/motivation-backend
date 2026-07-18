@@ -1,23 +1,29 @@
 @import url("_base.css");
 
 :root {
-  --cv-font: Arial, "Helvetica Neue", sans-serif;
-  --cv-title-font: Arial, "Helvetica Neue", sans-serif;
+  --cv-font: "Segoe UI", Arial, "Helvetica Neue", sans-serif;
+  --cv-title-font: "Segoe UI", Arial, "Helvetica Neue", sans-serif;
   --cv-paper: #ffffff;
-  --cv-ink: #202124;
-  --cv-muted: #62666b;
-  --cv-accent: #3f464d;
-  --cv-accent-2: #a6aaae;
-  --cv-soft: #f4f4f4;
-  --cv-rule: #d7d7d7;
+  --cv-ink: #232629;
+  --cv-muted: #686d72;
+  --cv-accent: #343a40;
+  --cv-accent-2: #aeb3b7;
+  --cv-primary: #343a40;
+  --cv-soft: #f7f7f7;
+  --cv-rule: #d2d4d6;
+  --cv-bg: #ffffff;
   --cv-cover-bg: #ffffff;
-  --cv-cover-ink: #202124;
-  --cv-cover-muted: #62666b;
-  --cv-cover-accent: #3f464d;
-  --cv-sidebar-bg: #f4f4f4;
-  --cv-section-transform: none;
-  --cv-section-letter: 0;
-  --cv-photo-radius: 2mm;
+  --cv-cover-ink: #232629;
+  --cv-cover-muted: #686d72;
+  --cv-cover-accent: #343a40;
+  --cv-main-padding: 0;
+  --cv-sidebar-bg: #ffffff;
+  --cv-sidebar-text: #232629;
+  --cv-sidebar-muted: #686d72;
+  --cv-photo-bg: #f7f7f7;
+  --cv-section-transform: uppercase;
+  --cv-section-letter: 0.08em;
+  --cv-photo-radius: 0;
   --cv-photo-shadow: none;
-  --cv-photo-border: 1px solid #d7d7d7;
+  --cv-photo-border: 1px solid #aeb3b7;
 }

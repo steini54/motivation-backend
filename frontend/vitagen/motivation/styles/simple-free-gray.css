@@ -1,23 +1,25 @@
 @import url("_base.css");
 
 :root {
-  --letter-font: Arial, "Helvetica Neue", sans-serif;
+  --letter-font: Georgia, "Times New Roman", serif;
   --letter-title-font: Arial, "Helvetica Neue", sans-serif;
   --letter-paper: #ffffff;
-  --letter-ink: #202124;
-  --letter-muted: #62666b;
-  --letter-accent: #3f464d;
-  --letter-accent-2: #a6aaae;
-  --letter-soft: #f4f4f4;
-  --letter-rule: #d7d7d7;
+  --letter-ink: #252729;
+  --letter-muted: #6b6e71;
+  --letter-accent: #343a40;
+  --letter-accent-2: #aeb3b7;
+  --letter-soft: #f7f7f7;
+  --letter-rule: #d2d4d6;
   --letter-cover-bg: #ffffff;
-  --letter-cover-ink: #202124;
-  --letter-cover-muted: #62666b;
-  --letter-cover-accent: #3f464d;
+  --letter-cover-ink: #252729;
+  --letter-cover-muted: #6b6e71;
+  --letter-cover-accent: #343a40;
+  --letter-main-padding: 20mm 24mm 18mm;
   --letter-letterhead-bg: transparent;
-  --letter-letterhead-border: 0;
+  --letter-letterhead-border: 0 solid transparent;
   --letter-letterhead-padding: 0;
-  --letter-photo-radius: 2mm;
+  --letter-letterhead-radius: 0;
+  --letter-photo-radius: 0;
   --letter-photo-shadow: none;
-  --letter-photo-border: 1px solid #d7d7d7;
+  --letter-photo-border: 1px solid #aeb3b7;
 }

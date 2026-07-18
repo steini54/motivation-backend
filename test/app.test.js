@@ -265,20 +265,18 @@ test("final AI photo download requires verified Premium access", async () => {
   );
 });
 
-test("generate-text rejects unpaid Premium requests before calling AI", async () => {
+test("generate-text remains available before payment and calls AI", async () => {
   let calls = 0;
-  const unpaidError = new Error("Payment has not been completed yet.");
-  unpaidError.status = 402;
   const unpaidPayment = {
     async verifyPremiumAccess() {
-      throw unpaidError;
+      throw new Error("payment verification must not run");
     },
   };
   const guardedService = {
     ...service,
     async generateApplicationText() {
       calls += 1;
-      return "must not run";
+      return "Generated before payment.";
     },
   };
 
@@ -303,8 +301,11 @@ test("generate-text rejects unpaid Premium requests before calling AI", async ()
         }),
       });
 
-      assert.equal(response.status, 402);
-      assert.equal(calls, 0);
+      assert.equal(response.status, 200);
+      assert.deepEqual(await response.json(), {
+        text: "Generated before payment.",
+      });
+      assert.equal(calls, 1);
     }
   );
 });

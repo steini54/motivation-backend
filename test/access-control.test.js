@@ -65,6 +65,76 @@ test("Premium template and AI features produce explicit reasons", () => {
   assert.deepEqual(aiPhoto.premiumReasons, ["ai_photo"]);
 });
 
+test("AI text attribution follows the content still used in the document", () => {
+  const generatedText = [
+    "I bring several years of experience in customer service and operational coordination.",
+    "My structured approach helps teams resolve issues efficiently while maintaining clear communication.",
+    "I am motivated to contribute these strengths and continue developing in the advertised role.",
+  ].join(" ");
+  const signatures = VitaGenAccess.addAiTextSignature([], generatedText);
+  const premiumState = VitaGenAccess.stateFromDocument({
+    documentType: "motivation",
+    selectedTemplateId: "simple-free",
+    styleName: "simple-free-blue.css",
+    documentData: {
+      stichwoerter2: generatedText,
+      stichwoerter2_is_ai: false,
+      stichwoerter2_ai_signatures: signatures,
+    },
+  });
+  const clearedState = VitaGenAccess.stateFromDocument({
+    documentType: "motivation",
+    selectedTemplateId: "simple-free",
+    styleName: "simple-free-blue.css",
+    documentData: {
+      stichwoerter2: "",
+      stichwoerter2_is_ai: false,
+      stichwoerter2_ai_signatures: signatures,
+    },
+  });
+  const manualState = VitaGenAccess.stateFromDocument({
+    documentType: "motivation",
+    selectedTemplateId: "simple-free",
+    styleName: "simple-free-blue.css",
+    documentData: {
+      stichwoerter2:
+        "This letter was written manually and describes a different background in logistics.",
+      stichwoerter2_is_ai: false,
+      stichwoerter2_ai_signatures: signatures,
+    },
+  });
+
+  assert.equal(premiumState.documentTier, "premium");
+  assert.equal(premiumState.aiTextUsed, true);
+  assert.equal(clearedState.documentTier, "free");
+  assert.equal(clearedState.aiTextUsed, false);
+  assert.equal(manualState.documentTier, "free");
+  assert.equal(manualState.aiTextUsed, false);
+});
+
+test("copying or lightly editing generated text keeps AI attribution", () => {
+  const generatedText = [
+    "I bring several years of experience in customer service and operational coordination.",
+    "My structured approach helps teams resolve issues efficiently while maintaining clear communication.",
+    "I am motivated to contribute these strengths and continue developing in the advertised role.",
+  ].join(" ");
+  const signatures = VitaGenAccess.addAiTextSignature([], generatedText);
+  const lightlyEdited = generatedText.replace(
+    "several years",
+    "more than five years"
+  );
+
+  assert.equal(
+    VitaGenAccess.usesAiGeneratedText(generatedText, signatures),
+    true
+  );
+  assert.equal(
+    VitaGenAccess.usesAiGeneratedText(lightlyEdited, signatures),
+    true
+  );
+  assert.equal(VitaGenAccess.usesAiGeneratedText("", signatures), false);
+});
+
 test("preview download copy follows the derived document tier", () => {
   const freeCopy = VitaGenAccess.getPreviewDownloadCopy(
     {
@@ -90,6 +160,12 @@ test("preview download copy follows the derived document tier", () => {
 });
 
 test("backend free verification rejects Premium state", async () => {
+  const generatedText = [
+    "I bring several years of experience in customer service and operational coordination.",
+    "My structured approach helps teams resolve issues efficiently while maintaining clear communication.",
+  ].join(" ");
+  const signatures = VitaGenAccess.addAiTextSignature([], generatedText);
+
   await withServer(
     createApp({ env: {}, logger: { error() {} } }),
     async (url) => {
@@ -111,8 +187,23 @@ test("backend free verification rejects Premium state", async () => {
           selectedTemplateId: "simple-free",
           styleName: "simple-free-blue.css",
           documentData: {
-            stichwoerter2: "Generated letter",
-            stichwoerter2_is_ai: true,
+            stichwoerter2: generatedText,
+            stichwoerter2_is_ai: false,
+            stichwoerter2_ai_signatures: signatures,
+          },
+        }),
+      });
+      const clearedResponse = await fetch(`${url}/document/verify-free`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          documentType: "motivation",
+          selectedTemplateId: "simple-free",
+          styleName: "simple-free-blue.css",
+          documentData: {
+            stichwoerter2: "",
+            stichwoerter2_is_ai: false,
+            stichwoerter2_ai_signatures: signatures,
           },
         }),
       });
@@ -121,6 +212,8 @@ test("backend free verification rejects Premium state", async () => {
       assert.equal((await freeResponse.json()).allowed, true);
       assert.equal(premiumResponse.status, 403);
       assert.deepEqual((await premiumResponse.json()).premiumReasons, ["ai_text"]);
+      assert.equal(clearedResponse.status, 200);
+      assert.equal((await clearedResponse.json()).allowed, true);
     }
   );
 });

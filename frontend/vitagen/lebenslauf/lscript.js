@@ -36,8 +36,8 @@ const CV_TEMPLATES = [
   {
     id: "simple-free",
     tier: "free",
-    name: "Simple Professional",
-    description: "Clean application layout",
+    name: "Essential Column",
+    description: "Simple two-column resume",
     defaultStyle: "simple-free-blue.css",
     styles: ["simple-free-blue.css", "simple-free-gray.css"],
   },
@@ -68,8 +68,8 @@ const CV_TEMPLATES = [
 ];
 const DOCUMENT_STYLES = CV_TEMPLATES.flatMap((template) => template.styles);
 const STYLE_META = {
-  "simple-free-blue.css": { name: "Simple Blue", tone: "Free", thumb: "simple-free-blue" },
-  "simple-free-gray.css": { name: "Simple Gray", tone: "Free", thumb: "simple-free-gray" },
+  "simple-free-blue.css": { name: "Essential Blue", tone: "Free", thumb: "simple-free-blue" },
+  "simple-free-gray.css": { name: "Essential Graphite", tone: "Free", thumb: "simple-free-gray" },
   "swiss-line.css": { name: "Swiss Line", tone: "Empfohlen", thumb: "swiss" },
   "charcoal-frame.css": { name: "Charcoal Frame", tone: "Kontrast", thumb: "charcoal" },
   "cobalt-ribbon.css": { name: "Cobalt Ribbon", tone: "Dynamisch", thumb: "cobalt" },

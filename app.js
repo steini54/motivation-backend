@@ -522,23 +522,6 @@ function createApp({
       return;
     }
 
-    if (!payment?.verifyPremiumAccess) {
-      res.status(503).json({ error: "Payment service is not configured." });
-      return;
-    }
-
-    try {
-      await payment.verifyPremiumAccess({
-        sessionId: req.body?.sessionId,
-        documentType: req.body?.documentType,
-        accessId: req.body?.accessId,
-      });
-    } catch (error) {
-      const mapped = classifyPaymentError(error);
-      res.status(mapped.status).json(mapped.body);
-      return;
-    }
-
     try {
       const text = await service.generateApplicationText({
         stichpunkte,

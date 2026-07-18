@@ -22,6 +22,10 @@
     AI_PHOTO: "ai_photo",
   });
   const DOCUMENT_TYPES = new Set(["lebenslauf", "motivation"]);
+  const AI_TEXT_SIGNATURE_VERSION = 1;
+  const AI_TEXT_SHINGLE_SIZE = 5;
+  const AI_TEXT_SIGNATURE_LIMIT = 4;
+  const AI_TEXT_SHINGLE_LIMIT = 512;
 
   function normalizeDocumentType(value) {
     const documentType = String(value || "").trim().toLowerCase();
@@ -41,6 +45,148 @@
       normalizeTemplateId(templateId) === FREE_TEMPLATE_ID &&
       FREE_STYLE_NAMES.includes(normalizeStyleName(styleName))
     );
+  }
+
+  function normalizeAiAttributionText(value) {
+    const text = String(value || "");
+    const normalized =
+      typeof text.normalize === "function" ? text.normalize("NFKC") : text;
+    return normalized
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, " ")
+      .trim()
+      .replace(/\s+/g, " ");
+  }
+
+  function hashAiAttributionValue(value) {
+    const text = String(value || "");
+    let hash = 0x811c9dc5;
+    for (let index = 0; index < text.length; index += 1) {
+      hash ^= text.charCodeAt(index);
+      hash = Math.imul(hash, 0x01000193);
+    }
+    return (hash >>> 0).toString(36);
+  }
+
+  function createAiTextSignature(value) {
+    const normalized = normalizeAiAttributionText(value);
+    if (!normalized) {
+      return null;
+    }
+
+    const tokens = normalized.split(" ");
+    const shingles = [];
+    const seen = new Set();
+    const shingleCount = Math.max(1, tokens.length - AI_TEXT_SHINGLE_SIZE + 1);
+
+    for (
+      let index = 0;
+      index < shingleCount && shingles.length < AI_TEXT_SHINGLE_LIMIT;
+      index += 1
+    ) {
+      const shingle =
+        tokens.length < AI_TEXT_SHINGLE_SIZE
+          ? normalized
+          : tokens.slice(index, index + AI_TEXT_SHINGLE_SIZE).join(" ");
+      const hash = hashAiAttributionValue(shingle);
+      if (!seen.has(hash)) {
+        seen.add(hash);
+        shingles.push(hash);
+      }
+    }
+
+    return {
+      v: AI_TEXT_SIGNATURE_VERSION,
+      textHash: hashAiAttributionValue(normalized),
+      tokenCount: tokens.length,
+      shingles,
+    };
+  }
+
+  function normalizeAiTextSignatures(value) {
+    if (!Array.isArray(value)) {
+      return [];
+    }
+
+    const signatures = [];
+    const seen = new Set();
+    for (const entry of value) {
+      if (
+        !entry ||
+        Number(entry.v) !== AI_TEXT_SIGNATURE_VERSION ||
+        typeof entry.textHash !== "string" ||
+        !/^[a-z0-9]{1,16}$/i.test(entry.textHash) ||
+        !Array.isArray(entry.shingles)
+      ) {
+        continue;
+      }
+
+      const shingles = Array.from(
+        new Set(
+          entry.shingles
+            .filter((hash) => typeof hash === "string" && /^[a-z0-9]+$/i.test(hash))
+            .slice(0, AI_TEXT_SHINGLE_LIMIT)
+        )
+      );
+      const signature = {
+        v: AI_TEXT_SIGNATURE_VERSION,
+        textHash: entry.textHash,
+        tokenCount: Math.max(0, Number.parseInt(entry.tokenCount, 10) || 0),
+        shingles,
+      };
+
+      if (!seen.has(signature.textHash)) {
+        seen.add(signature.textHash);
+        signatures.push(signature);
+      }
+      if (signatures.length >= AI_TEXT_SIGNATURE_LIMIT) {
+        break;
+      }
+    }
+    return signatures;
+  }
+
+  function addAiTextSignature(signatures, value) {
+    const nextSignature = createAiTextSignature(value);
+    const existing = normalizeAiTextSignatures(signatures);
+    if (!nextSignature) {
+      return existing;
+    }
+
+    return [
+      nextSignature,
+      ...existing.filter((entry) => entry.textHash !== nextSignature.textHash),
+    ].slice(0, AI_TEXT_SIGNATURE_LIMIT);
+  }
+
+  function usesAiGeneratedText(value, signatures) {
+    const current = createAiTextSignature(value);
+    if (!current) {
+      return false;
+    }
+
+    return normalizeAiTextSignatures(signatures).some((source) => {
+      if (source.textHash === current.textHash) {
+        return true;
+      }
+
+      if (source.shingles.length < 4 || current.shingles.length < 4) {
+        return false;
+      }
+
+      const sourceShingles = new Set(source.shingles);
+      const matches = current.shingles.reduce(
+        (count, shingle) => count + (sourceShingles.has(shingle) ? 1 : 0),
+        0
+      );
+      if (matches < 6) {
+        return false;
+      }
+
+      const currentOverlap = matches / current.shingles.length;
+      const sourceOverlap = matches / source.shingles.length;
+      return currentOverlap >= 0.4 || sourceOverlap >= 0.3;
+    });
   }
 
   function evaluateDocumentAccess(input = {}) {
@@ -86,9 +232,14 @@
         : {};
     const hasPhoto = Boolean(String(data.foto || "").trim());
 
+    const aiTextUsed = usesAiGeneratedText(
+      data.stichwoerter2,
+      data.stichwoerter2_ai_signatures
+    );
+
     return evaluateDocumentAccess({
       ...input,
-      aiTextUsed: Boolean(data.stichwoerter2_is_ai || input.aiTextUsed),
+      aiTextUsed: Boolean(aiTextUsed || data.stichwoerter2_is_ai || input.aiTextUsed),
       aiPhotoUsed: Boolean(data.foto_is_ai || input.aiPhotoUsed),
       normalPhotoUsed: Boolean((hasPhoto || input.normalPhotoUsed) && !data.foto_is_ai),
     });
@@ -205,15 +356,19 @@
     FREE_STYLE_NAMES,
     FREE_TEMPLATE_ID,
     PREMIUM_REASON_CODES,
+    addAiTextSignature,
+    createAiTextSignature,
     describeDocumentAccess,
     evaluateDocumentAccess,
     getPreviewDownloadCopy,
     getStorageKey,
     isFreeTemplate,
     normalizeDocumentType,
+    normalizeAiTextSignatures,
     normalizeStyleName,
     readStoredAccess,
     stateFromDocument,
+    usesAiGeneratedText,
     writeStoredAccess,
   });
 });
