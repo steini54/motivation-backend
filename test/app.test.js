@@ -10,6 +10,8 @@ const paymentService = {
       paymentStatus: "paid",
       documentType: input.documentType || "motivation",
       accessId: input.accessId || "access_test_document_001",
+      styleName: input.styleName || "swiss-line.css",
+      documentHash: input.documentHash || "a".repeat(64),
     };
   },
 };
@@ -233,11 +235,15 @@ test("final AI photo download requires verified Premium access", async () => {
           verified = true;
           assert.equal(input.sessionId, "cs_test_paid");
           assert.equal(input.accessId, "access_test_document_001");
+          assert.equal(input.styleName, "swiss-line.css");
+          assert.equal(input.documentHash, "a".repeat(64));
           return {
             id: input.sessionId,
             paymentStatus: "paid",
             documentType: input.documentType,
             accessId: input.accessId,
+            styleName: input.styleName,
+            documentHash: input.documentHash,
           };
         },
       },
@@ -254,6 +260,8 @@ test("final AI photo download requires verified Premium access", async () => {
           sessionId: "cs_test_paid",
           documentType: "motivation",
           accessId: "access_test_document_001",
+          styleName: "swiss-line.css",
+          documentHash: "a".repeat(64),
         }),
       });
 
@@ -261,6 +269,56 @@ test("final AI photo download requires verified Premium access", async () => {
       assert.equal(response.headers.get("content-type"), "image/png");
       assert.equal(Buffer.from(await response.arrayBuffer()).toString(), "image");
       assert.equal(verified, true);
+    }
+  );
+});
+
+test("Premium access verification is bound to the current style and document hash", async () => {
+  let verifiedInput;
+  await withServer(
+    createRawApp({
+      aiService: service,
+      paymentService: {
+        async verifyPremiumAccess(input) {
+          verifiedInput = input;
+          return {
+            id: input.sessionId,
+            paymentStatus: "paid",
+            documentType: input.documentType,
+            accessId: input.accessId,
+            styleName: input.styleName,
+            documentHash: input.documentHash,
+          };
+        },
+      },
+      premiumAssetService,
+      env: {},
+      logger: { error() {} },
+    }),
+    async (url) => {
+      const body = {
+        sessionId: "cs_test_paid",
+        documentType: "lebenslauf",
+        accessId: "access_test_document_001",
+        styleName: "swiss-line.css",
+        documentHash: "b".repeat(64),
+      };
+      const response = await fetch(`${url}/checkout/verify-access`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+
+      assert.equal(response.status, 200);
+      assert.deepEqual(verifiedInput, body);
+      assert.deepEqual(await response.json(), {
+        id: body.sessionId,
+        paymentStatus: "paid",
+        documentType: body.documentType,
+        accessId: body.accessId,
+        styleName: body.styleName,
+        documentHash: body.documentHash,
+      });
     }
   );
 });

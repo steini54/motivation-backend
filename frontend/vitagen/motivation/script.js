@@ -143,8 +143,7 @@ const UI_TRANSLATIONS = {
     "Bereit fur KI-Foto": "Bereit fuer KI-Foto",
     "Professionelles Foto generieren": "Professionelles Foto generieren",
     "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.",
-    "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.": "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.",
-    "KI-Foto herunterladen": "KI-Foto herunterladen",
+    "KI-Fotos koennen kostenlos angesehen werden. Eine finale PDF mit KI-Foto erfordert Premium.": "KI-Fotos koennen kostenlos angesehen werden. Eine finale PDF mit KI-Foto erfordert Premium.",
     "Angaben zur Bewerbung": "Angaben zur Bewerbung",
     "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.": "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.",
     "Bewerbung als...": "Bewerbung als...",
@@ -333,8 +332,7 @@ const UI_TRANSLATIONS = {
     "Bereit fur KI-Foto": "Ready for AI photo",
     "Professionelles Foto generieren": "Generate professional photo",
     "Nach der Auswahl erscheint das Foto direkt in der Live-Vorschau.": "After selection, the photo appears directly in the live preview.",
-    "KI-Fotos koennen kostenlos angesehen werden. Download und finale PDF erfordern Premium.": "You can preview an AI-generated photo, but Premium is required to download the image or final PDF.",
-    "KI-Foto herunterladen": "Download AI photo",
+    "KI-Fotos koennen kostenlos angesehen werden. Eine finale PDF mit KI-Foto erfordert Premium.": "You can preview an AI-generated photo, but a final PDF using it requires Premium.",
     "Angaben zur Bewerbung": "Application details",
     "Rolle und Arbeitgeber werden fuer Betreff, Briefkopf und KI-Text genutzt.": "Role and employer are used for the subject, letterhead, and AI text.",
     "Bewerbung als...": "Applying as...",
@@ -672,16 +670,30 @@ async function restoreSelectedPhoto() {
 }
 
 async function getPhotoForGeneration() {
-  const file = document.getElementById("foto-upload")?.files?.[0];
-  if (file) {
-    return file;
+  const photoStorage = window.PhotoStorage;
+  try {
+    const file = document.getElementById("foto-upload")?.files?.[0];
+    if (file) {
+      return photoStorage?.createUploadFile
+        ? photoStorage.createUploadFile(file)
+        : file;
+    }
+
+    if (!photoStorage?.getGenerationSourcePhoto) {
+      return null;
+    }
+
+    const restoredPhoto = await photoStorage.getGenerationSourcePhoto({
+      selectedPhotoIsAi,
+    });
+    return restoredPhoto && photoStorage.createUploadFile
+      ? photoStorage.createUploadFile(restoredPhoto)
+      : restoredPhoto;
+  } catch (error) {
+    console.warn("[VitaGen Photo]", "Could not prepare the source photo", error);
   }
 
-  if (!window.PhotoStorage?.getSourcePhoto) {
-    return null;
-  }
-
-  return window.PhotoStorage.getSourcePhoto();
+  return null;
 }
 
 function normalizeLanguage(language) {
@@ -1349,8 +1361,7 @@ function syncDocumentAccess(data = window.VitaGenCurrentDocumentData || getStore
   return nextState;
 }
 
-window.VitaGenGetAccessState = () =>
-  syncDocumentAccess(window.VitaGenCurrentDocumentData || getStoredData());
+window.VitaGenGetAccessState = () => syncDocumentAccess(saveAllFields());
 
 function saveAllFields() {
   const data = getStoredData();
@@ -1490,7 +1501,7 @@ function renderUploadPreview(src, selected = false) {
 
 function createGeneratedOption(src, protectedAsset) {
   const container = document.getElementById("foto-auswahl");
-  if (!container) return;
+  if (!container) return null;
 
   const option = document.createElement("button");
   option.type = "button";
@@ -1515,6 +1526,8 @@ function createGeneratedOption(src, protectedAsset) {
   } else {
     container.appendChild(option);
   }
+  selectImage(img);
+  return img;
 }
 
 function selectImage(element, { persist = true } = {}) {
@@ -1526,10 +1539,6 @@ function selectImage(element, { persist = true } = {}) {
 
   const generatedOption = element.closest(".generated-option");
   selectedPhotoIsAi = Boolean(element.aiGenerated || generatedOption);
-  const downloadButton = document.getElementById("downloadAiPhotoBtn");
-  if (downloadButton) {
-    downloadButton.hidden = !selectedPhotoIsAi;
-  }
   if (generatedOption) {
     generatedOption.classList.add("selected");
   } else {
@@ -1698,25 +1707,6 @@ if (changePhotoBtn && fileInput) {
   });
 }
 
-const downloadAiPhotoBtn = document.getElementById("downloadAiPhotoBtn");
-
-if (downloadAiPhotoBtn) {
-  downloadAiPhotoBtn.addEventListener("click", async () => {
-    if (!selectedPhotoIsAi || !window.VitaGenPayment?.downloadAiPhoto) {
-      return;
-    }
-    try {
-      await window.VitaGenPayment.downloadAiPhoto();
-    } catch (error) {
-      showToast(
-        error.message || "Das KI-Foto konnte nicht heruntergeladen werden.",
-        "error",
-        "Download fehlgeschlagen"
-      );
-    }
-  });
-}
-
 const aiBtn = document.getElementById("aiFotoBtn");
 
 if (aiBtn) {
@@ -1740,7 +1730,7 @@ if (aiBtn) {
     setPhotoLoading(true);
 
     const formData = new FormData();
-    formData.append("photo", file, file.name || "application-photo.jpg");
+    formData.append("photo", file, file.name);
 
     try {
       const response = await fetch(`${AI_API_BASE_URL}/generate-ai-photo`, {
@@ -1749,7 +1739,10 @@ if (aiBtn) {
       });
 
       if (!response.ok) {
-        throw new Error(`Photo generation failed with status ${response.status}`);
+        const failure = await response.json().catch(() => ({}));
+        throw new Error(
+          failure.error || `Photo generation failed with status ${response.status}`
+        );
       }
 
       const result = await response.json();
@@ -1768,7 +1761,7 @@ if (aiBtn) {
     } catch (err) {
       console.error("KI Foto Fehler:", err);
       setPhotoStatus("Generierung fehlgeschlagen");
-      showToast("Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.", "error", "Generierung fehlgeschlagen");
+      showToast(err.message || "Das Foto konnte nicht generiert werden. Bitte versuchen Sie es erneut.", "error", "Generierung fehlgeschlagen");
     } finally {
       setPhotoLoading(false);
       aiBtn.disabled = false;

@@ -298,6 +298,8 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const session = await retrieveCheckoutSession(input.sessionId);
     const documentType = normalizeDocumentType(input.documentType);
     const accessId = normalizeAccessId(input.accessId);
+    const styleName = normalizeStyleName(input.styleName);
+    const documentHash = normalizeDocumentHash(input.documentHash);
 
     if (session.payment_status !== "paid") {
       throw createPaymentError(
@@ -318,7 +320,9 @@ function createPaymentService({ stripeClient, config, logger = console }) {
     const metadata = session.metadata || {};
     if (
       metadata.document_type !== documentType ||
-      metadata.access_id !== accessId
+      metadata.access_id !== accessId ||
+      metadata.style_name !== styleName ||
+      metadata.document_hash !== documentHash
     ) {
       throw createPaymentError(
         403,
@@ -332,6 +336,8 @@ function createPaymentService({ stripeClient, config, logger = console }) {
       paymentStatus: session.payment_status,
       documentType,
       accessId,
+      styleName,
+      documentHash,
     };
   }
 

@@ -14,6 +14,7 @@
   const LOG_PREFIX = "[VitaGen Payment]";
   const PENDING_ACTION_KEY = "vitagen_pending_premium_action";
   let pdfExportInProgress = false;
+  let preparedPdfDownload = null;
 
   function createAccessId() {
     if (window.crypto?.randomUUID) {
@@ -39,12 +40,22 @@
     );
   }
 
-  function getCurrentAccessState() {
+  function getCurrentAccessState(documentData = null) {
     const stored = readAccessState();
+    const hasCurrentDocument =
+      documentData && typeof documentData === "object";
     const builderState =
-      typeof window.VitaGenGetAccessState === "function"
-        ? window.VitaGenGetAccessState()
-        : null;
+      hasCurrentDocument && window.VitaGenAccess?.stateFromDocument
+        ? window.VitaGenAccess.stateFromDocument({
+            documentType,
+            selectedTemplateId: getSelectedTemplateId(),
+            styleName: getSelectedStyleName(),
+            documentData,
+            paymentStatus: stored.paymentStatus,
+          })
+        : typeof window.VitaGenGetAccessState === "function"
+          ? window.VitaGenGetAccessState()
+          : null;
     const state = {
       ...stored,
       ...(builderState || {}),
@@ -53,13 +64,17 @@
     return writeAccessState(state);
   }
 
-  function updatePaidAccess(sessionId) {
+  function updatePaidAccess(sessionId, binding = {}) {
     const state = getCurrentAccessState();
     return writeAccessState({
       ...state,
       accessId: state.accessId,
       paymentStatus: "paid",
       paymentSessionId: sessionId,
+      paymentStyleName: normalizeStyleFile(binding.styleName),
+      paymentDocumentHash: String(binding.documentHash || "")
+        .trim()
+        .toLowerCase(),
     });
   }
 
@@ -69,6 +84,8 @@
       ...state,
       paymentStatus: "unpaid",
       paymentSessionId: "",
+      paymentStyleName: "",
+      paymentDocumentHash: "",
     });
   }
 
@@ -78,6 +95,10 @@
       sessionId: state.paymentSessionId || "",
       documentType,
       accessId: state.accessId,
+      styleName: normalizeStyleFile(state.paymentStyleName),
+      documentHash: String(state.paymentDocumentHash || "")
+        .trim()
+        .toLowerCase(),
     };
   }
 
@@ -273,16 +294,78 @@
     return value ?? null;
   }
 
-  async function createDocumentHash(styleName, documentData) {
-    const payload = JSON.stringify(
-      canonicalize({ documentType, styleName, documentData })
-    );
-    const bytes = new TextEncoder().encode(payload);
+  async function createSha256Hex(value) {
+    const bytes =
+      value instanceof ArrayBuffer
+        ? value
+        : value instanceof Uint8Array
+          ? value
+          : new TextEncoder().encode(String(value || ""));
     const digest = await crypto.subtle.digest("SHA-256", bytes);
 
     return Array.from(new Uint8Array(digest))
       .map((byte) => byte.toString(16).padStart(2, "0"))
       .join("");
+  }
+
+  async function getStablePhotoReference(documentData) {
+    if (!documentData?.foto) {
+      return "";
+    }
+
+    try {
+      if (documentData.foto_is_ai) {
+        const protectedAsset =
+          await window.PhotoStorage?.getProtectedPhotoAsset?.();
+        return protectedAsset
+          ? `ai:${await createSha256Hex(protectedAsset)}`
+          : "ai:stored-photo";
+      }
+
+      const selectedPhoto = await window.PhotoStorage?.getSelectedPhoto?.();
+      if (selectedPhoto instanceof Blob && selectedPhoto.size > 0) {
+        return `upload:${await createSha256Hex(
+          await selectedPhoto.arrayBuffer()
+        )}`;
+      }
+    } catch (error) {
+      warn("photo fingerprint could not be created", error?.message || error);
+    }
+
+    return documentData.foto_is_ai ? "ai:stored-photo" : "upload:stored-photo";
+  }
+
+  async function createDocumentHash(styleName, documentData) {
+    const hashDocumentData = {
+      ...(documentData && typeof documentData === "object"
+        ? documentData
+        : {}),
+    };
+    if (hashDocumentData.foto) {
+      hashDocumentData.foto =
+        await getStablePhotoReference(hashDocumentData);
+    }
+    const payload = JSON.stringify(
+      canonicalize({
+        documentType,
+        styleName,
+        documentData: hashDocumentData,
+      })
+    );
+    return createSha256Hex(payload);
+  }
+
+  function createAccessVerificationData(documentData) {
+    const verificationData = {
+      ...(documentData && typeof documentData === "object"
+        ? documentData
+        : {}),
+    };
+    if (verificationData.foto) {
+      verificationData.foto =
+        window.PhotoStorage?.STORAGE_MARKER || "stored-application-photo";
+    }
+    return verificationData;
   }
 
   function getStyleStorageKey() {
@@ -456,8 +539,9 @@
         validating: "Download-Berechtigung wird geprueft...",
         rendering: (page, total) => `PDF-Seite ${page} von ${total} wird erstellt...`,
         saving: "PDF ist fertig und der Download wird gestartet...",
-        ready: "Der PDF-Download wurde gestartet.",
+        ready: "Die PDF ist fertig. Falls der Download nicht automatisch startet, laden Sie sie hier manuell herunter.",
         error: "Die PDF konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
+        button: "PDF manuell herunterladen",
         close: "Schliessen",
       },
       en: {
@@ -467,13 +551,49 @@
         validating: "Checking download access...",
         rendering: (page, total) => `Creating PDF page ${page} of ${total}...`,
         saving: "The PDF is ready and the download is starting...",
-        ready: "The PDF download has started.",
+        ready: "Your PDF is ready. If the download does not start automatically, download it here manually.",
         error: "The PDF could not be created. Please try again.",
+        button: "Download PDF manually",
         close: "Close",
       },
     };
 
     return labels[getLanguage()] || labels.de;
+  }
+
+  function clearPreparedPdfDownload() {
+    if (preparedPdfDownload?.url) {
+      URL.revokeObjectURL(preparedPdfDownload.url);
+    }
+    preparedPdfDownload = null;
+  }
+
+  function preparePdfDownload(blob) {
+    if (!(blob instanceof Blob) || blob.size === 0) {
+      throw new Error("The generated PDF is empty.");
+    }
+
+    clearPreparedPdfDownload();
+    preparedPdfDownload = {
+      url: URL.createObjectURL(blob),
+      filename,
+    };
+    return preparedPdfDownload;
+  }
+
+  function triggerPreparedPdfDownload() {
+    if (!preparedPdfDownload?.url) {
+      return false;
+    }
+
+    const link = document.createElement("a");
+    link.href = preparedPdfDownload.url;
+    link.download = preparedPdfDownload.filename;
+    link.style.display = "none";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    return true;
   }
 
   function ensureCompleteOrderStyles() {
@@ -682,15 +802,34 @@
 
     modal.querySelector("[data-complete-order-download]")?.addEventListener("click", async () => {
       const button = modal.querySelector("[data-complete-order-download]");
+      const isPdfExport = modal.dataset.mode === "pdf-export";
+
+      if (triggerPreparedPdfDownload()) {
+        return;
+      }
+
       button.disabled = true;
-      updateCompleteOrderModal("pending");
+      if (isPdfExport) {
+        updatePdfExportModal("pending");
+      } else {
+        updateCompleteOrderModal("pending");
+      }
+
       try {
         await downloadCleanPreviewPdf();
-        updateCompleteOrderModal("ready");
+        if (isPdfExport) {
+          updatePdfExportModal("ready");
+        } else {
+          updateCompleteOrderModal("ready");
+        }
       } catch (error) {
-        errorLog("Manual paid PDF download failed", error?.message || error);
-        updateCompleteOrderModal("error");
-        setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
+        errorLog("Manual PDF download failed", error?.message || error);
+        if (isPdfExport) {
+          updatePdfExportModal("error", { message: error.message });
+        } else {
+          updateCompleteOrderModal("error");
+        }
+        setStatus(error.message || "The PDF could not be downloaded.", true);
       }
     });
 
@@ -747,11 +886,15 @@
     modal.querySelector("[data-complete-order-title]").textContent = labels.title;
     modal.querySelector("[data-complete-order-lead]").textContent = labels.lead;
     modal.querySelector("[data-complete-order-message]").textContent = message;
-    downloadButton.hidden = true;
+    downloadButton.textContent = labels.button;
+    downloadButton.hidden = state !== "ready";
+    downloadButton.disabled = state !== "ready";
     closeButton.textContent = labels.close;
     closeButton.hidden = state === "pending";
 
-    if (state !== "pending") {
+    if (state === "ready") {
+      window.setTimeout(() => downloadButton.focus(), 0);
+    } else if (state !== "pending") {
       window.setTimeout(() => closeButton.focus(), 0);
     }
   }
@@ -869,6 +1012,7 @@
       hasStoredData: Boolean(localStorage.getItem(storageKey)),
     });
 
+    await waitForBuilderPhotoReady();
     let currentDocumentData = null;
     if (typeof window.saveAllFields === "function") {
       currentDocumentData = window.saveAllFields();
@@ -877,18 +1021,32 @@
       currentDocumentData && typeof currentDocumentData === "object"
         ? currentDocumentData
         : window.VitaGenCurrentDocumentData || loadDocumentData();
-    const state = getCurrentAccessState();
+    let accessResolution;
+    try {
+      accessResolution = await resolveDocumentAccess(documentData);
+    } catch (error) {
+      errorLog("document access verification failed", error?.message || error);
+      setStatus(
+        error.message || "Download access could not be verified.",
+        true
+      );
+      openModal();
+      return;
+    }
 
-    if (state.documentTier === "free") {
+    const state = getCurrentAccessState(documentData);
+    if (accessResolution.documentTier === "free") {
       await runPdfDownloadWithStatus({
         documentData,
-        verifyFree: true,
+        freeAccessVerified: true,
       });
       return;
     }
 
-    if (await verifyStoredPremiumAccess()) {
-      await runPdfDownloadWithStatus({ documentData });
+    if (await verifyStoredPremiumAccess(documentData)) {
+      await runPdfDownloadWithStatus({
+        documentData,
+      });
       return;
     }
 
@@ -920,7 +1078,7 @@
     const styleName = getSelectedStyleName();
     const documentHash = await createDocumentHash(styleName, documentData);
     const checkoutAttemptId = createCheckoutAttemptId();
-    const accessState = getCurrentAccessState();
+    const accessState = getCurrentAccessState(documentData);
     const premiumAction = getPendingPremiumAction();
 
     log("starting Stripe Checkout session", {
@@ -939,7 +1097,7 @@
       checkoutAttemptId,
       accessId: accessState.accessId,
       premiumAction,
-      documentData,
+      documentData: loadDocumentData(),
     });
 
     const response = await fetch(`${API_BASE_URL}/checkout/create-session`, {
@@ -965,10 +1123,21 @@
     window.location.href = data.url;
   }
 
-  async function verifyPaidCheckoutSession(sessionId) {
-    const pending = restorePendingCheckoutSnapshot();
+  async function verifyPaidCheckoutSession(sessionId, binding = {}) {
     const accessState = getCurrentAccessState();
-    const accessId = pending.accessId || accessState.accessId;
+    const accessId = binding.accessId || accessState.accessId;
+    const styleName = normalizeStyleFile(
+      binding.styleName || accessState.paymentStyleName
+    );
+    const documentHash = String(
+      binding.documentHash || accessState.paymentDocumentHash || ""
+    )
+      .trim()
+      .toLowerCase();
+
+    if (!styleName || !/^[a-f0-9]{64}$/.test(documentHash)) {
+      throw new Error("The payment does not match the current document.");
+    }
 
     const response = await fetch(`${API_BASE_URL}/checkout/verify-access`, {
       method: "POST",
@@ -977,6 +1146,8 @@
         sessionId,
         documentType,
         accessId,
+        styleName,
+        documentHash,
       }),
     });
     const data = await response.json().catch(() => ({}));
@@ -985,18 +1156,42 @@
       throw new Error(data.error || "Payment could not be verified.");
     }
 
-    updatePaidAccess(sessionId);
+    updatePaidAccess(sessionId, {
+      styleName: data.styleName || styleName,
+      documentHash: data.documentHash || documentHash,
+    });
     return data;
   }
 
-  async function verifyStoredPremiumAccess() {
-    const state = getCurrentAccessState();
+  async function verifyStoredPremiumAccess(documentData = null) {
+    const state = getCurrentAccessState(documentData);
     if (!state.paymentSessionId || state.paymentStatus !== "paid") {
       return false;
     }
 
+    const styleName = getSelectedStyleName();
+    const documentHash = await createDocumentHash(
+      styleName,
+      documentData || loadDocumentData()
+    );
+    const storedStyleName = normalizeStyleFile(state.paymentStyleName);
+    const storedDocumentHash = String(state.paymentDocumentHash || "")
+      .trim()
+      .toLowerCase();
+    if (
+      (storedStyleName && storedStyleName !== styleName) ||
+      (storedDocumentHash && storedDocumentHash !== documentHash)
+    ) {
+      clearPaidAccess();
+      return false;
+    }
+
     try {
-      await verifyPaidCheckoutSession(state.paymentSessionId);
+      await verifyPaidCheckoutSession(state.paymentSessionId, {
+        accessId: state.accessId,
+        styleName,
+        documentHash,
+      });
       return true;
     } catch (error) {
       clearPaidAccess();
@@ -1005,8 +1200,9 @@
     }
   }
 
-  async function verifyFreeDocument(documentData) {
-    const accessState = getCurrentAccessState();
+  async function resolveDocumentAccess(documentData) {
+    const accessState = getCurrentAccessState(documentData);
+    const styleName = getSelectedStyleName();
     const response = await fetch(`${API_BASE_URL}/document/verify-free`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -1014,15 +1210,40 @@
         documentType,
         selectedTemplateId:
           accessState.selectedTemplateId || getPreviewTemplateId() || getStoredTemplateId(),
-        styleName: getSelectedStyleName(),
-        documentData,
+        styleName,
+        documentData: createAccessVerificationData(documentData),
       }),
     });
     const data = await response.json().catch(() => ({}));
-    if (!response.ok || !data.allowed) {
-      throw new Error(data.error || "This document requires Premium access.");
+
+    if (response.ok && data.allowed) {
+      return {
+        ...data,
+        documentTier: "free",
+        premiumReasons: [],
+        styleName,
+      };
     }
-    return data;
+
+    if (response.status === 403 && Array.isArray(data.premiumReasons)) {
+      return {
+        ...data,
+        documentTier: "premium",
+        styleName,
+      };
+    }
+
+    throw new Error(data.error || "Download access could not be verified.");
+  }
+
+  async function verifyFreeDocument(documentData) {
+    const resolution = await resolveDocumentAccess(documentData);
+    if (resolution.documentTier !== "free") {
+      throw new Error(
+        resolution.error || "This document requires Premium access."
+      );
+    }
+    return resolution;
   }
 
   async function waitForPreviewImages(preview) {
@@ -1373,56 +1594,39 @@
     return blob;
   }
 
-  async function unlockSelectedAiPhotoForExport() {
-    const accessState = getCurrentAccessState();
+  async function unlockSelectedAiPhotoForExport(accessState = getCurrentAccessState()) {
     if (!accessState.aiPhotoUsed) {
       return null;
     }
     return applyUnlockedAiPhoto(await fetchUnlockedAiPhoto());
   }
 
-  async function downloadAiPhoto({ skipAuthorizationCheck = false } = {}) {
-    if (!skipAuthorizationCheck && !(await verifyStoredPremiumAccess())) {
-      const message =
-        getLanguage() === "en"
-          ? "Unlock the Premium PDF from the PDF download button first."
-          : "Bitte zuerst das Premium-PDF ueber den PDF-Download-Button freischalten.";
-      setStatus(message, true);
-      throw new Error(message);
-    }
-
-    const blob = await applyUnlockedAiPhoto(await fetchUnlockedAiPhoto());
-    const extension =
-      blob.type === "image/png" ? "png" : blob.type === "image/webp" ? "webp" : "jpg";
-    const objectUrl = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = objectUrl;
-    link.download = `VitaGen-AI-Foto.${extension}`;
-    document.body.appendChild(link);
-    link.click();
-    link.remove();
-    window.setTimeout(() => URL.revokeObjectURL(objectUrl), 1000);
-    return true;
-  }
-
-  async function downloadCleanPreviewPdf({ onProgress = () => {} } = {}) {
+  async function downloadCleanPreviewPdf({
+    onProgress = () => {},
+    freeAccessVerified = false,
+  } = {}) {
+    clearPreparedPdfDownload();
     const JsPdf = window.jspdf?.jsPDF;
     if (typeof window.html2canvas !== "function" || typeof JsPdf !== "function") {
       throw new Error("PDF export library could not be loaded.");
     }
 
     onProgress({ phase: "preparing" });
+    await waitForBuilderPhotoReady();
+    let currentDocumentData =
+      window.VitaGenCurrentDocumentData || loadDocumentData();
     if (typeof window.saveAllFields === "function") {
-      window.saveAllFields();
+      currentDocumentData = window.saveAllFields() || currentDocumentData;
     }
-    const accessState = getCurrentAccessState();
+    const accessState = getCurrentAccessState(currentDocumentData);
     if (
+      !freeAccessVerified &&
       accessState.documentTier === "premium" &&
-      !(await verifyStoredPremiumAccess())
+      !(await verifyStoredPremiumAccess(currentDocumentData))
     ) {
       throw new Error("Premium access must be verified before downloading.");
     }
-    await unlockSelectedAiPhotoForExport();
+    await unlockSelectedAiPhotoForExport(accessState);
     if (typeof window.VitaGenRenderPreview === "function") {
       window.VitaGenRenderPreview({ pulse: false });
     }
@@ -1432,7 +1636,6 @@
       throw new Error("Preview document could not be found.");
     }
 
-    await waitForBuilderPhotoReady();
     await waitForDocumentFonts();
     await waitForPreviewImages(preview);
 
@@ -1491,7 +1694,14 @@
 
       onProgress({ phase: "saving" });
       await waitForUiPaint();
-      pdf.save(filename);
+      const pdfBlob = pdf.output("blob");
+      preparePdfDownload(pdfBlob);
+      try {
+        triggerPreparedPdfDownload();
+      } catch (error) {
+        warn("Automatic PDF download was blocked", error?.message || error);
+      }
+      return preparedPdfDownload;
     } finally {
       exportPreview.host.remove();
     }
@@ -1500,6 +1710,7 @@
   async function runPdfDownloadWithStatus({
     documentData,
     verifyFree = false,
+    freeAccessVerified = false,
   } = {}) {
     if (pdfExportInProgress) {
       updatePdfExportModal("pending", { phase: "preparing" });
@@ -1519,12 +1730,13 @@
 
       await downloadCleanPreviewPdf({
         onProgress: (progress) => updatePdfExportModal("pending", progress),
+        freeAccessVerified: freeAccessVerified || verifyFree,
       });
       updatePdfExportModal("ready");
       setStatus(
         verifyFree
-          ? "Kostenlose PDF wurde heruntergeladen."
-          : "PDF download started."
+          ? "Kostenlose PDF ist fertig."
+          : "PDF is ready."
       );
       return true;
     } catch (error) {
@@ -1543,7 +1755,6 @@
   async function handleCheckoutReturn() {
     const params = new URLSearchParams(window.location.search);
     const sessionId = params.get("session_id");
-    const pendingAction = getPendingPremiumAction();
 
     if (params.get("checkout") === "cancel") {
       setStatus("Payment was cancelled. You can try again when ready.");
@@ -1556,11 +1767,14 @@
     }
 
     try {
-      if (!pendingAction.action || pendingAction.action === "download-pdf") {
-        updateCompleteOrderModal("pending");
-      }
+      const pending = restorePendingCheckoutSnapshot();
+      updateCompleteOrderModal("pending");
       setStatus("Payment confirmed. Premium access is being verified...");
-      const data = await verifyPaidCheckoutSession(sessionId);
+      const data = await verifyPaidCheckoutSession(sessionId, {
+        accessId: pending.accessId,
+        styleName: pending.styleName,
+        documentHash: pending.documentHash,
+      });
       log("Stripe Checkout return verified", {
         paymentStatus: data.paymentStatus,
         documentType: data.documentType,
@@ -1575,17 +1789,9 @@
         return;
       }
 
-      if (pendingAction.action === "generate-text") {
-        setStatus("Payment confirmed. AI text can now be generated directly.");
-        document.getElementById("generateTextBtn")?.click();
-      } else if (pendingAction.action === "download-ai-photo") {
-        await downloadAiPhoto({ skipAuthorizationCheck: true });
-        setStatus("AI photo download started.");
-      } else {
-        await downloadCleanPreviewPdf();
-        updateCompleteOrderModal("ready");
-        setStatus("PDF download started.");
-      }
+      await downloadCleanPreviewPdf();
+      updateCompleteOrderModal("ready");
+      setStatus("PDF is ready.");
 
       sessionStorage.removeItem("vitagen_pending_checkout");
       clearPendingPremiumAction();
@@ -1595,9 +1801,7 @@
       window.history.replaceState({}, "", url.toString());
     } catch (error) {
       errorLog("Paid PDF download failed", error?.message || error);
-      if (!pendingAction.action || pendingAction.action === "download-pdf") {
-        updateCompleteOrderModal("error");
-      }
+      updateCompleteOrderModal("error");
       setStatus(error.message || "Payment was successful, but the PDF could not be downloaded.", true);
     }
   }
@@ -1682,9 +1886,10 @@
   window.VitaGenPayment = {
     open: openPaymentFlow,
     close: closeModal,
-    downloadAiPhoto,
     getPremiumAuthorization,
   };
+
+  window.addEventListener("pagehide", clearPreparedPdfDownload);
 
   function initializePayment() {
     log("script loaded", {

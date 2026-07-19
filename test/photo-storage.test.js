@@ -23,6 +23,7 @@ function loadPhotoStorage() {
   let nextUrlId = 1;
 
   const window = {
+    File,
     indexedDB: new IDBFactory(),
     URL: {
       createObjectURL() {
@@ -39,6 +40,7 @@ function loadPhotoStorage() {
 
   vm.runInNewContext(photoStorageSource, {
     Blob,
+    File,
     fetch,
     window,
   });
@@ -67,6 +69,66 @@ test("photo storage saves, restores, and clears selected image blobs", async () 
 
   await storage.clearSelectedPhoto();
   assert.equal(await storage.getSelectedPhoto(), undefined);
+});
+
+test("photo storage uses the visible persisted upload instead of a stale source", async () => {
+  const { storage } = loadPhotoStorage();
+  await storage.saveSourcePhoto(
+    new Blob(["stale-source"], { type: "image/jpeg" })
+  );
+  const persistedUpload = new Blob(["persisted-source"], {
+    type: "image/png",
+  });
+
+  await storage.saveSelectedPhoto(persistedUpload);
+  const restored = await storage.getGenerationSourcePhoto({
+    selectedPhotoIsAi: false,
+  });
+  const backfilledSource = await storage.getSourcePhoto();
+
+  assert.equal(await restored.text(), "persisted-source");
+  assert.equal(await backfilledSource.text(), "persisted-source");
+  assert.equal(restored.type, "image/png");
+});
+
+test("photo storage reuses the original source when the selected photo is AI", async () => {
+  const { storage } = loadPhotoStorage();
+  await storage.saveSourcePhoto(
+    new Blob(["original-source"], { type: "image/jpeg" })
+  );
+  await storage.saveSelectedPhoto(
+    new Blob(["ai-preview"], { type: "image/png" })
+  );
+
+  const source = await storage.getGenerationSourcePhoto({
+    selectedPhotoIsAi: true,
+  });
+
+  assert.equal(await source.text(), "original-source");
+  assert.equal(source.type, "image/jpeg");
+});
+
+test("photo storage does not reuse an AI preview when its source is missing", async () => {
+  const { storage } = loadPhotoStorage();
+  await storage.saveSelectedPhoto(
+    new Blob(["ai-preview"], { type: "image/png" })
+  );
+
+  assert.equal(
+    await storage.getGenerationSourcePhoto({ selectedPhotoIsAi: true }),
+    null
+  );
+});
+
+test("photo storage creates MIME-correct upload files", () => {
+  const { storage } = loadPhotoStorage();
+  const upload = storage.createUploadFile(
+    new Blob(["png"], { type: "image/png" })
+  );
+
+  assert.equal(upload.name, "application-photo.png");
+  assert.equal(upload.type, "image/png");
+  assert.equal(upload.size, 3);
 });
 
 test("photo storage rejects non-image blobs", async () => {

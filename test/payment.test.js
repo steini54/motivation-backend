@@ -55,6 +55,8 @@ function createFakePaymentService(overrides = {}) {
         paymentStatus: "paid",
         documentType: input.documentType,
         accessId: input.accessId,
+        styleName: input.styleName,
+        documentHash: input.documentHash,
       };
     },
     constructWebhookEvent(rawBody, signature) {
@@ -734,7 +736,7 @@ test("Stripe return URLs support localhost and production only", () => {
   );
 });
 
-test("Stripe premium access is bound to a stable document access ID", async () => {
+test("Stripe premium access is bound to the access ID and exact document", async () => {
   let createdParams;
   const accessId = "access_document_checkout_001";
   const documentHash = "a".repeat(64);
@@ -791,9 +793,35 @@ test("Stripe premium access is bound to a stable document access ID", async () =
     sessionId: "cs_test_access_001",
     documentType: "motivation",
     accessId,
+    styleName: "swiss-line.css",
+    documentHash,
   });
 
   assert.equal(createdParams.metadata.access_id, accessId);
   assert.equal(verification.paymentStatus, "paid");
   assert.equal(verification.accessId, accessId);
+  assert.equal(verification.styleName, "swiss-line.css");
+  assert.equal(verification.documentHash, documentHash);
+
+  await assert.rejects(
+    payment.verifyPremiumAccess({
+      sessionId: "cs_test_access_001",
+      documentType: "motivation",
+      accessId,
+      styleName: "swiss-line.css",
+      documentHash: "b".repeat(64),
+    }),
+    /Payment does not match this document access/
+  );
+
+  await assert.rejects(
+    payment.verifyPremiumAccess({
+      sessionId: "cs_test_access_001",
+      documentType: "motivation",
+      accessId,
+      styleName: "simple-free-blue.css",
+      documentHash,
+    }),
+    /Payment does not match this document access/
+  );
 });

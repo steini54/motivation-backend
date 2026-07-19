@@ -392,7 +392,11 @@ test("builder photo state persists blobs without storing base64 in localStorage"
     assert.match(script, /PhotoStorage\.saveSelectedPhoto/);
     assert.match(script, /PhotoStorage\.getSelectedPhoto/);
     assert.match(script, /PhotoStorage\.saveSourcePhoto/);
-    assert.match(script, /PhotoStorage\.getSourcePhoto/);
+    assert.match(script, /photoStorage\.getGenerationSourcePhoto/);
+    assert.match(script, /selectedPhotoIsAi,/);
+    assert.match(script, /photoStorage\.createUploadFile/);
+    assert.match(script, /formData\.append\("photo", file, file\.name\)/);
+    assert.match(script, /failure\.error \|\|/);
     assert.match(script, /PhotoStorage\.migrateLegacyPhoto/);
     assert.match(script, /PhotoStorage\.saveProtectedPhotoAsset/);
     assert.match(script, /PhotoStorage\.getProtectedPhotoAsset/);
@@ -403,6 +407,31 @@ test("builder photo state persists blobs without storing base64 in localStorage"
     assert.doesNotMatch(script, /data\.foto = element\.src/);
     assert.doesNotMatch(script, /if \(saved\.foto\) \{\s*renderUploadPreview/s);
   }
+});
+
+test("AI photo results become Premium selections without a separate image download", () => {
+  const paymentScript = fs.readFileSync(
+    path.join(vitagenPath, "payment.js"),
+    "utf8"
+  );
+
+  for (const [folder, scriptName, htmlName] of [
+    [frontendPath, "script.js", "formular.html"],
+    [lebenslaufPath, "lscript.js", "lebensformular.html"],
+  ]) {
+    const script = fs.readFileSync(path.join(folder, scriptName), "utf8");
+    const html = fs.readFileSync(path.join(folder, htmlName), "utf8");
+
+    assert.match(
+      script,
+      /function createGeneratedOption[\s\S]*?selectImage\(img\);\s*return img;/
+    );
+    assert.doesNotMatch(script, /downloadAiPhoto/);
+    assert.doesNotMatch(html, /downloadAiPhotoBtn|ai-photo-download/);
+  }
+
+  assert.doesNotMatch(paymentScript, /function downloadAiPhoto/);
+  assert.doesNotMatch(paymentScript, /download-ai-photo/);
 });
 
 test("free and Premium access controls are wired into both builders", () => {
@@ -434,6 +463,13 @@ test("free and Premium access controls are wired into both builders", () => {
   assert.match(accessControl, /function usesAiGeneratedText/);
   assert.match(paymentScript, /\/document\/verify-free/);
   assert.match(paymentScript, /\/checkout\/verify-access/);
+  assert.match(paymentScript, /function resolveDocumentAccess/);
+  assert.match(paymentScript, /response\.status === 403/);
+  assert.match(paymentScript, /paymentStyleName/);
+  assert.match(paymentScript, /paymentDocumentHash/);
+  assert.match(paymentScript, /function getStablePhotoReference/);
+  assert.match(paymentScript, /selectedPhoto\.arrayBuffer\(\)/);
+  assert.match(paymentScript, /getProtectedPhotoAsset/);
   assert.doesNotMatch(paymentScript, /ensurePremiumAccess/);
   assert.match(paymentScript, /getPremiumAuthorization/);
 
@@ -555,6 +591,11 @@ test("Stripe payment layer is shared and loaded after preview scripts", () => {
   assert.doesNotMatch(paymentScript, /renderInto\(preview,\s*\{/);
   assert.match(paymentScript, /toDataURL\("image\/jpeg", 0\.94\)/);
   assert.match(paymentScript, /addImage\(imageData, "JPEG"/);
+  assert.match(paymentScript, /pdf\.output\("blob"\)/);
+  assert.match(paymentScript, /URL\.createObjectURL\(blob\)/);
+  assert.match(paymentScript, /triggerPreparedPdfDownload/);
+  assert.match(paymentScript, /downloadButton\.hidden = state !== "ready"/);
+  assert.doesNotMatch(paymentScript, /pdf\.save\(/);
   assert.match(paymentScript, /PDF wird erstellt/);
   assert.match(paymentScript, /img\.complete/);
   assert.match(paymentScript, /waitForPromise\(ready, 8000\)/);

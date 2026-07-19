@@ -392,6 +392,8 @@ function createApp({
         paymentStatus: verification.paymentStatus,
         documentType: verification.documentType,
         accessId: verification.accessId,
+        styleName: verification.styleName,
+        documentHash: verification.documentHash,
       });
     } catch (error) {
       const mapped = classifyPaymentError(error);
@@ -553,6 +555,8 @@ function createApp({
         sessionId: req.body?.sessionId,
         documentType: req.body?.documentType,
         accessId: req.body?.accessId,
+        styleName: req.body?.styleName,
+        documentHash: req.body?.documentHash,
       });
       const image = premiumAssets.unlockImage(req.body?.protectedAsset);
       const extension =

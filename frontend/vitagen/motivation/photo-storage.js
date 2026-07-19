@@ -8,6 +8,11 @@
   const SELECTED_PHOTO_KEY = "selected-application-photo";
   const PROTECTED_PHOTO_ASSET_KEY = "selected-ai-photo-protected-asset";
   const STORAGE_MARKER = "indexeddb:selected-application-photo";
+  const IMAGE_EXTENSIONS = Object.freeze({
+    "image/jpeg": "jpg",
+    "image/png": "png",
+    "image/webp": "webp",
+  });
   const objectUrls = new Set();
 
   function openDatabase() {
@@ -68,6 +73,34 @@
     return url;
   }
 
+  function isImageBlob(value) {
+    return (
+      value instanceof Blob &&
+      value.size > 0 &&
+      Object.hasOwn(IMAGE_EXTENSIONS, value.type.toLowerCase())
+    );
+  }
+
+  function createUploadFile(blob, baseName = "application-photo") {
+    if (!isImageBlob(blob)) {
+      throw new TypeError("A supported JPEG, PNG, or WebP image is required.");
+    }
+
+    const mimeType = blob.type.toLowerCase();
+    const extension = IMAGE_EXTENSIONS[mimeType];
+    const safeBaseName =
+      String(baseName || "application-photo")
+        .trim()
+        .replace(/\.[a-z0-9]+$/i, "")
+        .replace(/[^a-z0-9_-]+/gi, "-")
+        .replace(/^-+|-+$/g, "") || "application-photo";
+
+    return new global.File([blob], `${safeBaseName}.${extension}`, {
+      type: mimeType,
+      lastModified: Date.now(),
+    });
+  }
+
   async function dataUrlToBlob(dataUrl) {
     const response = await fetch(dataUrl);
     return response.blob();
@@ -83,7 +116,7 @@
   }
 
   async function saveSelectedPhoto(blob) {
-    if (!(blob instanceof Blob) || !blob.type.startsWith("image/")) {
+    if (!isImageBlob(blob)) {
       throw new TypeError("A valid image Blob is required.");
     }
 
@@ -93,7 +126,7 @@
   }
 
   async function saveSourcePhoto(blob) {
-    if (!(blob instanceof Blob) || !blob.type.startsWith("image/")) {
+    if (!isImageBlob(blob)) {
       throw new TypeError("A valid source image Blob is required.");
     }
 
@@ -104,6 +137,24 @@
 
   async function getSourcePhoto() {
     return runTransaction("readonly", (store) => store.get(SOURCE_PHOTO_KEY));
+  }
+
+  async function getGenerationSourcePhoto({
+    selectedPhotoIsAi = false,
+  } = {}) {
+    const selectedPhoto = await getSelectedPhoto();
+
+    if (!selectedPhotoIsAi && isImageBlob(selectedPhoto)) {
+      await saveSourcePhoto(selectedPhoto);
+      return selectedPhoto;
+    }
+
+    const sourcePhoto = await getSourcePhoto();
+    if (isImageBlob(sourcePhoto)) {
+      return sourcePhoto;
+    }
+
+    return null;
   }
 
   async function getSelectedPhoto() {
@@ -163,7 +214,9 @@
     clearProtectedPhotoAsset,
     clearSelectedPhoto,
     createPhotoUrl,
+    createUploadFile,
     dataUrlToBlob,
+    getGenerationSourcePhoto,
     getSourcePhoto,
     getSelectedPhoto,
     getProtectedPhotoAsset,

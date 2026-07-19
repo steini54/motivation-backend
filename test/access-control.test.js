@@ -65,6 +65,41 @@ test("Premium template and AI features produce explicit reasons", () => {
   assert.deepEqual(aiPhoto.premiumReasons, ["ai_photo"]);
 });
 
+test("switching between a normal and AI photo recalculates Free and Premium", () => {
+  const common = {
+    documentType: "lebenslauf",
+    selectedTemplateId: "simple-free",
+    styleName: "simple-free-blue.css",
+  };
+  const freeBefore = VitaGenAccess.stateFromDocument({
+    ...common,
+    documentData: {
+      foto: "indexeddb:selected-application-photo",
+      foto_is_ai: false,
+    },
+  });
+  const premiumWithAi = VitaGenAccess.stateFromDocument({
+    ...common,
+    documentData: {
+      foto: "indexeddb:selected-application-photo",
+      foto_is_ai: true,
+    },
+  });
+  const freeAgain = VitaGenAccess.stateFromDocument({
+    ...common,
+    documentData: {
+      foto: "indexeddb:selected-application-photo",
+      foto_is_ai: false,
+    },
+  });
+
+  assert.equal(freeBefore.documentTier, "free");
+  assert.equal(premiumWithAi.documentTier, "premium");
+  assert.deepEqual(premiumWithAi.premiumReasons, ["ai_photo"]);
+  assert.equal(freeAgain.documentTier, "free");
+  assert.deepEqual(freeAgain.premiumReasons, []);
+});
+
 test("AI text attribution follows the content still used in the document", () => {
   const generatedText = [
     "I bring several years of experience in customer service and operational coordination.",
