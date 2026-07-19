@@ -348,18 +348,50 @@ test("Free templates have dedicated visual structures instead of Premium recolor
     path.join(lebenslaufPath, "styles", "simple-free-blue.css"),
     "utf8"
   );
+  const cvGray = fs.readFileSync(
+    path.join(lebenslaufPath, "styles", "simple-free-gray.css"),
+    "utf8"
+  );
 
   assert.match(cvCss, /\.cv-template--simple-free \{\s*grid-template-columns: 30% 1fr;/);
   assert.match(cvCss, /\.cv-template--simple-free \.pill-list span::before/);
   assert.match(cvCss, /\.cv-template--simple-free \.timeline-item::before \{\s*display: none;/);
+  assert.match(
+    cvCss,
+    /\.cv-template--simple-free \.cv-main \{[\s\S]*background: var\(--cv-main-bg, var\(--cv-primary\)\);/
+  );
+  assert.match(
+    cvCss,
+    /\.cv-template--simple-free \.cv-template-hero h1 \{\s*color: var\(--cv-main-text, #ffffff\);/
+  );
   assert.match(cvBlue, /--cv-sidebar-bg: #ffffff;/);
   assert.match(cvBlue, /--cv-main-padding: 0;/);
+  assert.match(cvBlue, /--cv-main-bg: #24546b;/);
+  assert.match(cvBlue, /--cv-main-text: #ffffff;/);
+  assert.match(cvGray, /--cv-main-bg: #343a40;/);
+  assert.match(cvGray, /--cv-main-text: #ffffff;/);
 
   assert.match(motivationCss, /\.letter-template--simple-free \.letterhead \{/);
   assert.match(motivationCss, /grid-template-columns: minmax\(0, 1fr\) auto;/);
   assert.match(motivationCss, /\.letter-template--simple-free::before/);
   assert.match(motivationBlue, /--letter-font: Georgia, "Times New Roman", serif;/);
   assert.match(motivationBlue, /--letter-main-padding: 20mm 24mm 18mm;/);
+});
+
+test("standalone previews reuse the canonical document renderer", () => {
+  const cvHtml = fs.readFileSync(path.join(lebenslaufPath, "lpreview.html"), "utf8");
+  const cvScript = fs.readFileSync(path.join(lebenslaufPath, "lpreview.js"), "utf8");
+  const motivationHtml = fs.readFileSync(path.join(frontendPath, "preview.html"), "utf8");
+  const motivationScript = fs.readFileSync(path.join(frontendPath, "preview.js"), "utf8");
+
+  assert.match(cvHtml, /id="theme-style"[^>]+media="not all"/);
+  assert.match(motivationHtml, /id="theme-style"[^>]+media="not all"/);
+  assert.match(cvHtml, /id="preview" class="preview-paper"/);
+  assert.match(motivationHtml, /id="preview" class="preview-paper"/);
+  assert.match(cvScript, /renderer\.renderInto\(preview, \{\s*type: "cv",/);
+  assert.match(motivationScript, /renderer\.renderInto\(preview, \{\s*type: "motivation",/);
+  assert.match(cvScript, /window\.VitaGenRenderPreview = \(\) => renderCanonicalPreview\(\);/);
+  assert.match(motivationScript, /window\.VitaGenRenderPreview = \(\) => renderCanonicalPreview\(\);/);
 });
 
 test("motivation renderer does not invent an empty closing sentence", () => {

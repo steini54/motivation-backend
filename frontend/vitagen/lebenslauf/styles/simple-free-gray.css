@@ -21,6 +21,11 @@
   --cv-sidebar-text: #232629;
   --cv-sidebar-muted: #686d72;
   --cv-photo-bg: #f7f7f7;
+  --cv-main-bg: #343a40;
+  --cv-main-text: #ffffff;
+  --cv-main-muted: #e7e9ea;
+  --cv-main-accent: #f2f3f4;
+  --cv-main-rule: rgba(255, 255, 255, 0.32);
   --cv-section-transform: uppercase;
   --cv-section-letter: 0.08em;
   --cv-photo-radius: 0;

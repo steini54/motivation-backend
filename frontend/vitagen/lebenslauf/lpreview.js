@@ -1,16 +1,45 @@
 console.log("lpreview.js loaded");
 
 const saved = JSON.parse(localStorage.getItem("vitagen_lebenslauf") || "{}");
+let resolvedPhotoUrl =
+  saved.foto && saved.foto !== window.PhotoStorage?.STORAGE_MARKER
+    ? saved.foto
+    : "";
 
 document.getElementById("pv-name").textContent = saved.name || "";
 document.getElementById("pv-adresse").textContent = saved.adresse || "";
 document.getElementById("pv-kontakt").textContent = saved.kontakt || "";
 
 const fotoEl = document.getElementById("pv-foto");
-if (saved.foto && fotoEl) {
+if (saved.foto && saved.foto !== window.PhotoStorage?.STORAGE_MARKER && fotoEl) {
   fotoEl.src = saved.foto;
   fotoEl.style.display = "block";
 }
+
+async function restoreStoredPhoto() {
+  if (!fotoEl || !window.PhotoStorage?.getSelectedPhoto || !window.PhotoStorage?.createPhotoUrl) {
+    return;
+  }
+
+  if (saved.foto && saved.foto !== window.PhotoStorage.STORAGE_MARKER) {
+    return;
+  }
+
+  try {
+    const blob = await window.PhotoStorage.getSelectedPhoto();
+    if (blob instanceof Blob && blob.type.startsWith("image/")) {
+      resolvedPhotoUrl = window.PhotoStorage.createPhotoUrl(blob);
+      fotoEl.src = resolvedPhotoUrl;
+      fotoEl.style.display = "block";
+      await fotoEl.decode().catch(() => {});
+      renderCanonicalPreview();
+    }
+  } catch (error) {
+    console.error("Photo could not be loaded from IndexedDB:", error);
+  }
+}
+
+restoreStoredPhoto();
 
 function fillSection(containerId, entries) {
   const container = document.getElementById(containerId);
@@ -91,9 +120,8 @@ const themeLink = document.getElementById("theme-style");
 const styleButtons = Array.from(document.querySelectorAll(".style-switch button"));
 
 function applyPreviewStyle(file) {
-  const selectedFile = styleButtons.some((button) => button.dataset.style === file)
-    ? file
-    : DEFAULT_STYLE;
+  const cleanFile = String(file || DEFAULT_STYLE).trim().split(/[\\/]/).pop();
+  const selectedFile = cleanFile.endsWith(".css") ? cleanFile : DEFAULT_STYLE;
 
   if (themeLink) {
     themeLink.href = "styles/" + selectedFile;
@@ -105,6 +133,7 @@ function applyPreviewStyle(file) {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+  renderCanonicalPreview(selectedFile);
 }
 
 if (themeLink && styleButtons.length > 0) {
@@ -116,3 +145,55 @@ if (themeLink && styleButtons.length > 0) {
     });
   });
 }
+
+function getStoredPreviewData() {
+  try {
+    return JSON.parse(localStorage.getItem("vitagen_lebenslauf") || "{}");
+  } catch (error) {
+    console.error("Stored CV data could not be read:", error);
+    return {};
+  }
+}
+
+function getCurrentPreviewStyle(fallback = "") {
+  const previewStyle = document.getElementById("preview")?.dataset.style;
+  const hrefStyle = themeLink?.getAttribute("href")?.split(/[\\/]/).pop();
+  return (
+    String(fallback || previewStyle || localStorage.getItem(STYLE_STORAGE_KEY) || hrefStyle || DEFAULT_STYLE)
+      .trim()
+      .split(/[\\/]/)
+      .pop() || DEFAULT_STYLE
+  );
+}
+
+function renderCanonicalPreview(styleName = "") {
+  const preview = document.getElementById("preview");
+  const renderer = window.VitaGenDocumentRenderer;
+  if (!preview || !renderer?.renderInto) {
+    return null;
+  }
+
+  const data = getStoredPreviewData();
+  const photoMarker = window.PhotoStorage?.STORAGE_MARKER;
+  if (photoMarker && data.foto === photoMarker) {
+    data.foto = resolvedPhotoUrl;
+  } else if (data.foto) {
+    resolvedPhotoUrl = data.foto;
+  }
+
+  const language = localStorage.getItem("vitagen_language") === "en" ? "en" : "de";
+  const selectedStyle = getCurrentPreviewStyle(styleName);
+  window.VitaGenCurrentDocumentData = data;
+  window.VitaGenCurrentDocumentResult = renderer.renderInto(preview, {
+    type: "cv",
+    data,
+    styleName: selectedStyle,
+    language,
+    watermark: true,
+  });
+  document.documentElement.lang = language;
+  return window.VitaGenCurrentDocumentResult;
+}
+
+window.VitaGenRenderPreview = () => renderCanonicalPreview();
+renderCanonicalPreview();
